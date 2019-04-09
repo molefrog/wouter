@@ -1,0 +1,45 @@
+{
+  "name": "low-carb-router",
+  "version": "1.0.0",
+  "description": "A minimalistic routing for React. Nothing extra, just HOOKS.",
+  "main": "index.js",
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molefrog/low-card-router.git"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0"
+  },
+  "keywords": [
+    "react",
+    "router",
+    "tiny",
+    "minimal",
+    "routing",
+    "hooks",
+    "route"
+  ],
+  "author": "Alexey Taktarov <molefrog@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/molefrog/low-card-router/issues"
+  },
+  "homepage": "https://github.com/molefrog/low-card-router#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "jest": "^24.7.1",
+    "react-dom": "^16.8.6",
+    "react-test-renderer": "^16.8.6"
+  }
+}

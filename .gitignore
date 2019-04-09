@@ -3,6 +3,10 @@ npm-debug.log*
 node_modules/
 .npm
 
+# ignore package-lock.json since it's a package
+# see https://github.com/sindresorhus/ama/issues/479#issuecomment-310661514
+/package-lock.json
+
 # bundler
 dist/
 .cache
