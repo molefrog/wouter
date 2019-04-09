@@ -1,10 +1,26 @@
-import React, { useRef, useMemo, useEffect, useState, useContext } from "react";
+import React, {
+  useRef,
+  useMemo,
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+  createElement as h
+} from "react";
+
+// default history based on History API
+import createHistory from "./history";
 
 const RouterCtx = React.createContext();
 
 export const buildRouter = (options = {}) => {
+  const matchFn = (pattern, path) => {
+    return [pattern === path, {}];
+  };
+
   return {
-    history: options.history || {}
+    history: options.history || createHistory(),
+    matchFn: options.matchFn || matchFn
   };
 };
 
@@ -41,4 +57,39 @@ export const useRouter = () => {
   );
 
   return router;
+};
+
+export const useLocation = () => {
+  const history = useRouter().history;
+  const [location, update] = useState(history.path());
+
+  // subscribe to history updates
+  useEffect(() => history.subscribe(x => update(x)), [history]);
+  const pushLocation = useCallback(y => history.push(y), [history]);
+
+  return [location, pushLocation];
+};
+
+export const useRoute = pattern => {
+  const router = useRouter();
+  const [path] = useLocation();
+
+  return router.matchFn(pattern, path);
+};
+
+export const Route = props => {
+  const { children, path } = props;
+  const [matches, params] = useRoute(props.path);
+
+  if (!matches) {
+    return null;
+  }
+
+  // React-Router style `component` prop
+  if (props.component) {
+    return h(props.component, { params: params });
+  }
+
+  // support render prop or plain children
+  return typeof children === "function" ? children(params) : children;
 };
