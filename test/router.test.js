@@ -17,7 +17,7 @@ it("can be implicitly created", () => {
   expect(router).toBeInstanceOf(Object);
 });
 
-xit("can be customized via a top-level <Router /> component", () => {
+it("can be customized via a top-level <Router /> component", () => {
   const WithRouter = props => <div />;
 
   const App = () => {
