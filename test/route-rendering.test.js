@@ -32,13 +32,13 @@ it("works with render props", () => {
   expect(result.findByType("h1").props.children).toBe("Hello!");
 });
 
-xit("passes a match param object to the render function", () => {
+it("passes a match param object to the render function", () => {
   const result = testRouteRender(
     "/users/alex",
-    <Route path="/users/:name">{params => <h1>hi, {params.name}!</h1>}</Route>
+    <Route path="/users/:name">{params => <h1>{params.name}</h1>}</Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("hi, alex!");
+  expect(result.findByType("h1").props.children).toBe("alex");
 });
 
 it("renders nothing when there is not match", () => {

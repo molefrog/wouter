@@ -1,3 +1,4 @@
+import pathToRegexp from "path-to-regexp";
 import React, {
   useRef,
   useMemo,
@@ -8,19 +9,14 @@ import React, {
   createElement as h
 } from "react";
 
-// default history based on History API
-import createHistory from "./history";
+import makeHistory from "./history";
 
 const RouterCtx = React.createContext();
 
 export const buildRouter = (options = {}) => {
-  const matchFn = (pattern, path) => {
-    return [pattern === path, {}];
-  };
-
   return {
-    history: options.history || createHistory(),
-    matchFn: options.matchFn || matchFn
+    history: options.history || makeHistory(),
+    matchFn: options.matchFn || makeMatcher()
   };
 };
 
@@ -92,4 +88,29 @@ export const Route = props => {
 
   // support render prop or plain children
   return typeof children === "function" ? children(params) : children;
+};
+
+// creates a matcher function
+const makeMatcher = () => {
+  let cache = {};
+
+  // obtains a cached regexp version of the pattern
+  const convertToRgx = pattern => {
+    if (cache[pattern]) return cache[pattern];
+    let keys = [];
+    return (cache[pattern] = [pathToRegexp(pattern, keys), keys]);
+  };
+
+  return (pattern, path) => {
+    const [rgx, keys] = convertToRgx(pattern);
+    const out = rgx.exec(path);
+
+    if (!out) return [false, null];
+
+    // formats an object with matched params
+    let params = {};
+    for (let i = 0; i < keys.length; ++i) params[keys[i].name] = out[i + 1];
+
+    return [true, params];
+  };
 };

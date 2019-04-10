@@ -2,19 +2,19 @@
   "name": "low-carb-router",
   "version": "1.0.0",
   "description": "A minimalistic routing for React. Nothing extra, just HOOKS.",
+  "author": "Alexey Taktarov <molefrog@gmail.com>",
   "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
   "babel": {
     "presets": [
       "@babel/preset-env",
       "@babel/preset-react"
     ]
   },
-  "scripts": {
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/molefrog/low-card-router.git"
+  "dependencies": {
+    "path-to-regexp": "^3.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0"
@@ -28,8 +28,11 @@
     "hooks",
     "route"
   ],
-  "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molefrog/low-card-router.git"
+  },
   "bugs": {
     "url": "https://github.com/molefrog/low-card-router/issues"
   },
