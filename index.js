@@ -1,17 +1,18 @@
 import pathToRegexp from "path-to-regexp";
-import React, {
+import {
   useRef,
   useMemo,
   useEffect,
   useState,
   useContext,
   useCallback,
-  createElement as h
+  createElement as h,
+  createContext
 } from "react";
 
 import makeHistory from "./history";
 
-const RouterCtx = React.createContext();
+const RouterCtx = createContext();
 
 export const buildRouter = (options = {}) => {
   return {
@@ -34,11 +35,10 @@ export const Router = props => {
     }
   }
 
-  return (
-    <RouterCtx.Provider value={getRouter()}>
-      {props.children}
-    </RouterCtx.Provider>
-  );
+  return h(RouterCtx.Provider, {
+    value: getRouter(),
+    children: props.children
+  });
 };
 
 export const useRouter = () => {
