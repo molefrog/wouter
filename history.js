@@ -2,10 +2,10 @@ export default function createHistory() {
   monkeyPatchHistoryEvents();
 
   return {
-    path: () => window.location.pathname,
-    push: to => window.history.replaceState({}, null, to),
+    path: () => location.pathname,
+    push: to => history.replaceState({}, null, to),
     subscribe: cb => {
-      const handler = () => cb(window.location.pathname);
+      const handler = () => cb(location.pathname);
       return on(handler, "popState", "pushState", "replaceState");
     }
   };
