@@ -6,8 +6,10 @@ import {
   useState,
   useContext,
   useCallback,
-  createElement as h,
-  createContext
+  createContext,
+  isValidElement,
+  cloneElement,
+  createElement as h
 } from "react";
 
 import makeHistory from "./history";
@@ -88,6 +90,26 @@ export const Route = props => {
 
   // support render prop or plain children
   return typeof children === "function" ? children(params) : children;
+};
+
+export const Link = props => {
+  const href = props.href || props.to;
+  const child = props.children;
+
+  const [, navigate] = useLocation();
+  const onClick = useCallback(
+    event => {
+      event.preventDefault();
+      navigate(href);
+    },
+    [href]
+  );
+
+  // wraps children in `a` if needed
+  const extraProps = { href, onClick, to: null };
+  const jsx = isValidElement(child) ? child : h("a", props);
+
+  return cloneElement(jsx, extraProps);
 };
 
 // creates a matcher function
