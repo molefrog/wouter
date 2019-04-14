@@ -9,8 +9,10 @@
   },
   "babel": {
     "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-react-jsx"
     ]
   },
   "dependencies": {
@@ -38,10 +40,10 @@
   },
   "homepage": "https://github.com/molefrog/low-card-router#readme",
   "devDependencies": {
+    "jest": "^24.7.1",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
-    "jest": "^24.7.1",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
     "nanoevents": "^1.0.8",
     "react-dom": "^16.8.6",
     "react-test-renderer": "^16.8.6"
