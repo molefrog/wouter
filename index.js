@@ -102,14 +102,16 @@ const makeMatcher = () => {
   };
 
   return (pattern, path) => {
-    const [rgx, keys] = convertToRgx(pattern);
-    const out = rgx.exec(path);
+    const [regexp, keys] = convertToRgx(pattern);
+    const out = regexp.exec(path);
 
     if (!out) return [false, null];
 
     // formats an object with matched params
-    let params = {};
-    for (let i = 0; i < keys.length; ++i) params[keys[i].name] = out[i + 1];
+    const params = keys.reduce((params, key, i) => {
+      params[key.name] = out[i + 1];
+      return params;
+    }, {});
 
     return [true, params];
   };
