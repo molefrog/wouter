@@ -1,12 +1,26 @@
 {
-  "name": "low-carb-router",
+  "name": "wouter",
   "version": "1.0.0",
   "description": "A minimalistic routing for React. Nothing extra, just HOOKS.",
-  "author": "Alexey Taktarov <molefrog@gmail.com>",
-  "main": "index.js",
+  "keywords": [
+    "react",
+    "router",
+    "tiny",
+    "routing",
+    "hooks"
+  ],
   "scripts": {
     "test": "jest"
   },
+  "author": "Alexey Taktarov <molefrog@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "path-to-regexp": "^3.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0"
+  },
+  "repository": "molefrog/wouter",
   "babel": {
     "presets": [
       "@babel/preset-env"
@@ -15,30 +29,6 @@
       "@babel/plugin-transform-react-jsx"
     ]
   },
-  "dependencies": {
-    "path-to-regexp": "^3.0.0"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0"
-  },
-  "keywords": [
-    "react",
-    "router",
-    "tiny",
-    "minimal",
-    "routing",
-    "hooks",
-    "route"
-  ],
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/molefrog/low-card-router.git"
-  },
-  "bugs": {
-    "url": "https://github.com/molefrog/low-card-router/issues"
-  },
-  "homepage": "https://github.com/molefrog/low-card-router#readme",
   "devDependencies": {
     "jest": "^24.7.1",
     "@babel/core": "^7.4.3",
