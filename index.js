@@ -1,4 +1,6 @@
-import pathToRegexp from "path-to-regexp";
+import makeHistory from "./history";
+import makeMatcher from "./matcher";
+
 import {
   useRef,
   useMemo,
@@ -11,8 +13,6 @@ import {
   cloneElement,
   createElement as h
 } from "react";
-
-import makeHistory from "./history";
 
 const RouterCtx = createContext();
 
@@ -110,33 +110,6 @@ export const Link = props => {
   const jsx = isValidElement(child) ? child : h("a", props);
 
   return cloneElement(jsx, extraProps);
-};
-
-// creates a matcher function
-const makeMatcher = () => {
-  let cache = {};
-
-  // obtains a cached regexp version of the pattern
-  const convertToRgx = pattern => {
-    if (cache[pattern]) return cache[pattern];
-    let keys = [];
-    return (cache[pattern] = [pathToRegexp(pattern, keys), keys]);
-  };
-
-  return (pattern, path) => {
-    const [regexp, keys] = convertToRgx(pattern);
-    const out = regexp.exec(path);
-
-    if (!out) return [false, null];
-
-    // formats an object with matched params
-    const params = keys.reduce((params, key, i) => {
-      params[key.name] = out[i + 1];
-      return params;
-    }, {});
-
-    return [true, params];
-  };
 };
 
 export default useRoute;
