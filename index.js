@@ -138,3 +138,5 @@ const makeMatcher = () => {
     return [true, params];
   };
 };
+
+export default useRoute;
