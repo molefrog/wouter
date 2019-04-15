@@ -15,9 +15,6 @@
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
-  "dependencies": {
-    "path-to-regexp": "^3.0.0"
-  },
   "peerDependencies": {
     "react": "^16.8.0"
   },
@@ -25,7 +22,7 @@
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1 KB"
+      "limit": "1.5 KB"
     }
   ],
   "babel": {
