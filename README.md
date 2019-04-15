@@ -2,12 +2,12 @@
 
 [![Build Status](https://travis-ci.org/molefrog/wouter.svg?branch=master)](https://travis-ci.org/molefrog/wouter)
 
-A tiny routing solution for modern React apps that relies on Hooks. Perfect for small and hackathon projects.
+A tiny routing solution for modern React apps that relies on Hooks. A router you wanted so bad in your pet project. 
 
-  - Mimics `react-router`'s best practices, although the library is not a drop-in replacement.
   - A top-level `Router` component is **fully optional**!
-  - Out of the box only supports History API, customization is possible via a `Router` component.
+  - Mimics `react-router`'s best practices, although the library is not a drop-in replacement.
   - Small, **2KB** gzipped (vs 17KB `react-router`) with plans to get it down to 1KB. This is currently work in progress, [help is appreciated](https://github.com/molefrog/wouter/issues/1).
+  - Out of the box only supports History API, customization is possible via a `Router` component.
   
 ## How to get started?
 Check out this demo app below in order to get started:
@@ -17,24 +17,15 @@ import { Link, Route } from "wouter";
 
 const App = () => (
   <div>
-    <nav>
-      <Link href="/inbox">Inbox</Link>
-      <Link href="/settings">
-        {/* a link element can be customized */}
-        <a className="link-red">Settings</a>
-      </Link>
-    </nav>
+    <Link href="/users/1">
+      <a className="link">Profile</a>
+    </Link>
 
-    <main>
-      <Route path="/users/:id">
-        {params => <div>User ID: {params.id}</div>}
-      </Route>
-      
-      {/* React-Router's way of describing routes */}
-      <Route path="/inbox" component={InboxPage} />
-      
-      <Route path="/settings">Settings Page</Route>
-    </main>
+    <Route path="/about">About Us</Route>
+    <Route path="/users/:name">
+      {params => <div>Hello, {params.name}!</div>}
+    </Route>
+    <Route path="/inbox" component={InboxPage} />
   </div>
 );
 ```
