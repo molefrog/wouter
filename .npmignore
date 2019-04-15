@@ -1,3 +1,4 @@
 test/
 dist/
 .cache
+.travis.yml
