@@ -7,7 +7,7 @@ A tiny routing solution for modern React apps that relies on Hooks. Perfect for 
   - Mimics `react-router`'s best practices, although the library is not a drop-in replacement.
   - A top-level `Router` component is **fully optional**!
   - Out of the box only supports History API, customization is possible via a `Router` component.
-  - Small, **3KB** gzipped (vs 17KB `react-router`) with plans to get it down to 1KB (this is currently work in progress, your [help is welcome](https://github.com/molefrog/wouter/pulls)!).
+  - Small, **2KB** gzipped (vs 17KB `react-router`) with plans to get it down to 1KB. This is currently work in progress, [help is appreciated](https://github.com/molefrog/wouter/issues/1).
   
 ## How to get started?
 Check out this demo app below in order to get started:
@@ -62,7 +62,7 @@ const AnimatedRoute = () => {
 By default `wouter` creates an internal History object that observes the changes of the current location. If you need a custom history observer, for example for hash-based routing you can implement your [own history](https://github.com/molefrog/wouter/blob/master/history.js).
 
 ```js
-import { Router, Route,  useRouter } from "wouter"
+import { Router, Route, useRouter } from "wouter"
 
 const App => (
   <Router history={myHashHistory}>
