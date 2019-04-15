@@ -33,3 +33,49 @@ it("supports named segments", () => {
   expect(success).toBe(true);
   expect(params).toMatchObject({ id: "12", name: "carrot" });
 });
+
+it("ignores a slash at the end", () => {
+  const match = createMatcher();
+
+  expect(match("/orders/new", "/orders/new")[0]).toBe(true);
+  expect(match("/orders/new", "/orders/new/")[0]).toBe(true);
+  expect(match("/orders/new/", "/orders/new/")[0]).toBe(true);
+
+  // when trailing slash is explicitly specified, it is required!
+  expect(match("/orders/new/", "/orders/new")[0]).toBe(false);
+});
+
+describe("additional segment modifiers", () => {
+  it("an asterisk matches 0 or more groups", () => {
+    const match = createMatcher();
+    const ptr = "/u/:any*/rest";
+
+    expect(match(ptr, "/u/foo/rest")).toMatchObject([true, { any: "foo" }]);
+    expect(match(ptr, "/u/rest")).toMatchObject([true, { any: undefined }]);
+    expect(match(ptr, "/u/foo/bar/baz/rest")).toMatchObject([
+      true,
+      { any: "foo/bar/baz" }
+    ]);
+  });
+
+  it("a plus sign matches 1 or more groups", () => {
+    const match = createMatcher();
+    const ptr = "/u/:any+/rest";
+
+    expect(match(ptr, "/u/foo/rest")).toMatchObject([true, { any: "foo" }]);
+    expect(match(ptr, "/u/rest")).toMatchObject([false, null]);
+    expect(match(ptr, "/u/foo/bar/baz/rest")).toMatchObject([
+      true,
+      { any: "foo/bar/baz" }
+    ]);
+  });
+
+  it("a question mark matches 0 or 1 groups", () => {
+    const match = createMatcher();
+    const ptr = "/u/:any?/rest";
+
+    expect(match(ptr, "/u/foo/rest")).toMatchObject([true, { any: "foo" }]);
+    expect(match(ptr, "/u/rest")).toMatchObject([true, { any: undefined }]);
+    expect(match(ptr, "/u/foo/bar/baz/rest")).toMatchObject([false, null]);
+  });
+});
