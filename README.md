@@ -33,7 +33,7 @@ const App = () => (
 
 ### The power of HOOKS!
 
-`wouter` relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus it makes creating cutom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
+**wouter** relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus it makes creating cutom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
 
 ```js
 import { useRoute } from "wouter";
@@ -45,6 +45,51 @@ const AnimatedRoute = () => {
 
   return <Transition in={match}>This is user ID: {params.id}</Transition>;
 };
+```
+
+### Matching Dynamic Segments
+
+Just like in React Router you can make dynamic matches either with `Route` component or `useRoute` hook.
+`useRoute` returns a second parameter which is a hash of all dynamic segments matched. Similarily, the
+`Route` component passes these parameters down to its children via a function prop.
+
+```js
+import { useRoute } from "wouter";
+
+// /users/alex => [true, { name: "alex "}]
+// /anything   => [false, null]
+const [match, params] = useRoute("/users/:name");
+
+// or with Route component
+<Route path="/users/:name">
+  {params => {
+    /* { name: "alex" } */
+  }}
+</Route>;
+```
+
+**wouter** implements a limited subset of [`path-to-regexp` package](https://github.com/pillarjs/path-to-regexp)
+used by React Router or Express, and it supports the following patterns:
+
+- Named dynamic segments: `/users/:foo`.
+- Dynamic segments with modifiers: `/foo/:bar*`, `/foo/baz?` or `/foo/bar+`.
+
+The library was designed to be as small as possible, so most of the additional matching feature were left out.
+If you do need to have `path-to-regexp`-like functionality you can customize a matcher function:
+
+```js
+import { Router } from "wouter";
+import createMatcher from "wouter/matcher";
+
+import pathToRegexp from "path-to-regexp";
+
+const App = () => (
+  <Router matcher={createMatcher(pathToRegexp)}>
+  
+    {/* segment constraints aren't supported by wouter */}
+    <Route path="/users/:id(\d+)" />}
+  </Router>
+);
 ```
 
 ### Working with History
