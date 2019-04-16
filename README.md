@@ -33,7 +33,7 @@ const App = () => (
 
 ### The power of HOOKS!
 
-**wouter** relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus it makes creating cutom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
+**wouter** relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus it makes creating custom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
 
 ```js
 import { useRoute } from "wouter";
