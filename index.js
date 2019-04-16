@@ -19,7 +19,7 @@ const RouterCtx = createContext();
 export const buildRouter = (options = {}) => {
   return {
     history: options.history || makeHistory(),
-    matchFn: options.matchFn || makeMatcher()
+    matcher: options.matcher || makeMatcher()
   };
 };
 
@@ -72,7 +72,7 @@ export const useRoute = pattern => {
   const router = useRouter();
   const [path] = useLocation();
 
-  return router.matchFn(pattern, path);
+  return router.matcher(pattern, path);
 };
 
 export const Route = props => {
