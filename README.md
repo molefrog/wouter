@@ -74,7 +74,8 @@ used by React Router or Express, and it supports the following patterns:
 - Named dynamic segments: `/users/:foo`.
 - Dynamic segments with modifiers: `/foo/:bar*`, `/foo/baz?` or `/foo/bar+`.
 
-The library was designed to be as small as possible, so most of the additional matching feature were left out.
+The library was designed to be as small as possible, so most of the additional matching feature were left out
+(see [this issue](https://github.com/molefrog/wouter/issues/1) for more info).
 If you do need to have `path-to-regexp`-like functionality you can customize a matcher function:
 
 ```js
@@ -85,7 +86,6 @@ import pathToRegexp from "path-to-regexp";
 
 const App = () => (
   <Router matcher={createMatcher(pathToRegexp)}>
-  
     {/* segment constraints aren't supported by wouter */}
     <Route path="/users/:id(\d+)" />}
   </Router>
