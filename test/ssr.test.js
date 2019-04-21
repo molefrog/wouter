@@ -5,7 +5,7 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Route, Router, useRoute } from "../index";
+import { Route, Router, useRoute, Link } from "../index";
 import staticHistory from "../extra/static-history";
 
 describe("server-side rendering", () => {
@@ -15,7 +15,7 @@ describe("server-side rendering", () => {
         <Route path="/users/baz">foo</Route>
         <Route path="/users/:any*">bar</Route>
         <Route path="/users/:id">{params => params.id}</Route>
-        <Route path="/about">baaaz</Route>
+        <Route path="/about">should not be rendered</Route>
       </Router>
     );
 
@@ -37,5 +37,18 @@ describe("server-side rendering", () => {
 
     const rendered = renderToStaticMarkup(<App />);
     expect(rendered).toBe("Welcome to intro!");
+  });
+
+  it("renders valid and accessible link elements", () => {
+    const App = () => (
+      <Router history={staticHistory("/")}>
+        <Link href="/users/1" title="Profile">
+          Mark
+        </Link>
+      </Router>
+    );
+
+    const rendered = renderToStaticMarkup(<App />);
+    expect(rendered).toBe(`<a href="/users/1" title="Profile">Mark</a>`);
   });
 });
