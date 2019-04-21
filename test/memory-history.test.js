@@ -1,7 +1,12 @@
 import memoryHistory from "../extra/memory-history";
 
 describe("memoryHistory", () => {
-  it("is initialized with path", () => {
+  it("has default / path", () => {
+    const history = memoryHistory();
+    expect(history.path()).toBe("/");
+  });
+
+  it("can be initialized with path", () => {
     const history = memoryHistory("/foo");
     expect(history.path()).toBe("/foo");
   });
