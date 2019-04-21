@@ -1,6 +1,7 @@
-const memoryHistory = path => {
-  let listeners = {};
-  let id = -1;
+// creates in-memory history object
+const memoryHistory = (path = "/") => {
+  let listeners = {},
+    id = -1;
 
   return {
     path: () => path,
