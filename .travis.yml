@@ -1,7 +1,5 @@
 language: node_js
 cache: npm
-before_script:
-  - npm install react
 node_js:
   - node
 git:
