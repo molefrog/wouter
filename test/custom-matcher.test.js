@@ -2,7 +2,7 @@ import React from "react";
 import TestRenderer from "react-test-renderer";
 
 import { Router, Route } from "../index.js";
-import memoryHistory from "./memory-history";
+import memoryHistory from "../extra/memory-history";
 
 const customMatcher = (pattern, path) => {
   const reversed = path
