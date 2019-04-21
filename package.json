@@ -38,7 +38,6 @@
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.4.3",
     "jest": "^24.7.1",
-    "nanoevents": "^1.0.8",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-test-renderer": "^16.8.6",
