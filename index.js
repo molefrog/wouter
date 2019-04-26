@@ -88,7 +88,7 @@ export const Route = props => {
   const { children, path } = props;
   const [matches, params] = useRoute(props.path);
 
-  if (!matches) {
+  if (!matches && !props.match) {
     return null;
   }
 
@@ -131,7 +131,7 @@ export const Switch = ({ children, location }) => {
   // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/modules/Switch.js
   Children.forEach(children, child => {
     if (!element && isValidElement(child)) {
-      const [match] = matcher(child.props.path, originalLocation || location);
+      const [match] = matcher(child.props.path, location || originalLocation);
       if (match) element = child;
     }
   });
