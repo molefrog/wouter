@@ -11,8 +11,13 @@ import {
   createContext,
   isValidElement,
   cloneElement,
-  createElement as h
+  createElement as h,
+  Children
 } from "react";
+
+/*
+ * Part 1, Hooks API: useRouter, useRoute and useLocation
+ */
 
 const RouterCtx = createContext();
 
@@ -21,26 +26,6 @@ export const buildRouter = (options = {}) => {
     history: options.history || makeHistory(),
     matcher: options.matcher || makeMatcher()
   };
-};
-
-export const Router = props => {
-  const ref = useRef(null);
-
-  // this little trick allows to avoid having unnecessary
-  // calls to potentially expensive `buildRouter` method.
-  // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  function getRouter() {
-    if (ref.current !== null) {
-      return ref.current;
-    } else {
-      return (ref.current = buildRouter(props));
-    }
-  }
-
-  return h(RouterCtx.Provider, {
-    value: getRouter(),
-    children: props.children
-  });
 };
 
 export const useRouter = () => {
@@ -73,6 +58,30 @@ export const useRoute = pattern => {
   const [path] = useLocation();
 
   return router.matcher(pattern, path);
+};
+
+/*
+ * Part 2, Low Carb Router API: Router, Route, Link, Switch
+ */
+
+export const Router = props => {
+  const ref = useRef(null);
+
+  // this little trick allows to avoid having unnecessary
+  // calls to potentially expensive `buildRouter` method.
+  // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
+  function getRouter() {
+    if (ref.current !== null) {
+      return ref.current;
+    } else {
+      return (ref.current = buildRouter(props));
+    }
+  }
+
+  return h(RouterCtx.Provider, {
+    value: getRouter(),
+    children: props.children
+  });
 };
 
 export const Route = props => {
@@ -110,6 +119,24 @@ export const Link = props => {
   const jsx = isValidElement(child) ? child : h("a", props);
 
   return cloneElement(jsx, extraProps);
+};
+
+export const Switch = ({ children, location }) => {
+  const { matcher } = useRouter();
+  const [originalLocation] = useLocation();
+
+  let element = null;
+
+  // this looks similar to Switch implementation from React Router
+  // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/modules/Switch.js
+  Children.forEach(children, child => {
+    if (!element && isValidElement(child)) {
+      const [match] = matcher(child.props.path, originalLocation || location);
+      if (match) element = child;
+    }
+  });
+
+  return element ? cloneElement(element, { match: true }) : null;
 };
 
 export default useRoute;
