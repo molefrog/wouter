@@ -139,4 +139,11 @@ export const Switch = ({ children, location }) => {
   return element ? cloneElement(element, { match: true }) : null;
 };
 
+export const Redirect = props => {
+  const router = useRouter();
+  useEffect(() => router.history.push(prop.href || props.to));
+
+  return null;
+};
+
 export default useRoute;
