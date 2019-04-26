@@ -2,12 +2,14 @@
 
 [![Build Status](https://travis-ci.org/molefrog/wouter.svg?branch=master)](https://travis-ci.org/molefrog/wouter)
 
+<img src="logo.svg" align="right" width="200" alt="Wouter Logo by Katya Vakulenko">
+     
 A tiny routing solution for modern React apps that relies on Hooks. A router you wanted so bad in your pet project!
 
-- Zero dependency, only **1.04KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router);
-- A top-level `<Router />` component is **fully optional**;
-- Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices, however the library isn't a drop-in replacement;
-- Out of the box only supports History API, customization is possible via a `<Router />` component.
+- Zero dependency, only **1.04KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
+- A top-level `<Router />` component is **fully optional**.
+- Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices, however the library isn't a drop-in replacement.
+- Out of the box only supports History API, customization is possible via a `<Router />` component.
 
 ## How to get started?
 
@@ -121,4 +123,4 @@ Feel free to participate in development of the library, your feedback is much ap
 
 ## Acknowledgements
 
-Special thanks to [Katya Vakulenko](https://katyavakulenko.com/) for making a wonderful logo for the project!
+Special thanks to [Katya Vakulenko](https://katyavakulenko.com/) for creating a project logo.
