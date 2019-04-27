@@ -110,6 +110,9 @@ export const Link = props => {
     event => {
       event.preventDefault();
       navigate(href);
+      if (props.onClick) {
+        props.onClick();
+      }
     },
     [href]
   );
