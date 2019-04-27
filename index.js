@@ -1,5 +1,5 @@
-import makeHistory from "./history";
-import makeMatcher from "./matcher";
+import makeHistory from "./history.js";
+import makeMatcher from "./matcher.js";
 
 import {
   useRef,
