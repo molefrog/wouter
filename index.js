@@ -114,7 +114,7 @@ export const Link = props => {
         props.onClick();
       }
     },
-    [href]
+    [href, props.onClick]
   );
 
   // wraps children in `a` if needed
