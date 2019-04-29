@@ -124,6 +124,16 @@ export const Link = props => {
   return cloneElement(jsx, extraProps);
 };
 
+export const NavLink = props => {
+  if (typeof props.children !== 'function') {
+    throw Error('children should be a function')
+  }
+  const href = props.href || props.to;
+  const [match] = useRoute(href);
+  const child = props.children(match);
+  return Link({ ...props, children: child });
+}
+
 export const Switch = ({ children, location }) => {
   const { matcher } = useRouter();
   const [originalLocation] = useLocation();
