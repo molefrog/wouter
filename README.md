@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/molefrog/wouter.svg?branch=master)](https://travis-ci.org/molefrog/wouter)
 
 <img src="logo.svg" align="right" width="200" alt="Wouter Logo by Katya Vakulenko">
-     
+
 A tiny routing solution for modern React apps that relies on Hooks. A router you wanted so bad in your pet project!
 
 - Zero dependency, only **1.04KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
