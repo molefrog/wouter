@@ -10,7 +10,7 @@
     "hooks"
   ],
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest --verbose --coverage",
     "size": "size-limit"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
