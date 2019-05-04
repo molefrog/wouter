@@ -1,6 +1,6 @@
 # wouter
 
-[![Build Status](https://travis-ci.org/molefrog/wouter.svg?branch=master)](https://travis-ci.org/molefrog/wouter)
+[![Build Status](https://travis-ci.org/molefrog/wouter.svg?branch=master)](https://travis-ci.org/molefrog/wouter) [![codecov](https://codecov.io/gh/molefrog/wouter/branch/master/graph/badge.svg)](https://codecov.io/gh/molefrog/wouter) 
 
 <img src="logo.svg" align="right" width="200" alt="Wouter Logo by Katya Vakulenko">
 
