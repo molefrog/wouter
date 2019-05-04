@@ -4,3 +4,5 @@ node_js:
   - node
 git:
   depth: 5
+after_success:
+  - codecov
