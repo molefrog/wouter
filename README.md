@@ -6,7 +6,7 @@
 
 A tiny routing solution for modern React apps that relies on Hooks. A router you wanted so bad in your pet project!
 
-- Zero dependency, only **1.04KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
+- Zero dependency, only **1.18KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
 - A top-level `<Router />` component is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices, however the library isn't a drop-in replacement.
 - Out of the box only supports History API, customization is possible via a `<Router />` component.
@@ -33,6 +33,15 @@ const App = () => (
 );
 ```
 
+### ⚠️ This library comes untranspiled, please read this!
+**TL;DR** Want to support IE11 → make sure you transpile `node_modules`.
+
+The library is written in pure ES6 and it doesn't come with transpiled sources, while only stable features like arrow functions and destructuring assignment are used. There is a [huge debate going on](https://gist.github.com/Rich-Harris/51e1bf24e7c093469ef7a0983bad94cb) it the community on whether or not library authors should ship untranspiled code. 
+
+Wouter was designed to be as small as possible and the decision to ship untranspiled code was made intentionally. We don't use unstable things like generators or async functions, that said it should work fine on the [majority of the browser](https://caniuse.com/#feat=es6). If you'd like to aim platforms like IE11, please make sure you run Babel over your `node_modules`. 
+
+
+## Wouter API
 ### The power of HOOKS!
 
 **wouter** relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus it makes creating custom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
@@ -116,10 +125,6 @@ const Foo = () => {
   return <div onClick={() => router.history.push("/orders")}>My Orders</div>
 }
 ```
-
-## Your feedback is welcome
-
-Feel free to participate in development of the library, your feedback is much appreciated.
 
 ## Acknowledgements
 
