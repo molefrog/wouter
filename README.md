@@ -126,6 +126,22 @@ const Foo = () => {
 }
 ```
 
+## FAQ and Code Recipes
+### A default route
+
+One of the common patterns in application routing is having a default route that will be shown as a fallback, in case no other route matches (for example, if you need to render 404 message). In **wouter** this can easily be done as a combination of `<Switch />` component and catch-all route:
+
+```js
+import { Switch, Route } from "wouter";
+
+<Switch>
+  <Route path="/about">...</Route>
+  <Route path="/:rest*">404, not found!</Route>
+</Switch>
+```
+
+**[▶ Demo Sandbox](https://codesandbox.io/s/oqk302k2y)**
+
 ## Acknowledgements
 
 Special thanks to [Katya Vakulenko](https://katyavakulenko.com/) for creating a project logo.
