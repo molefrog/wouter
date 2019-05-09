@@ -33,10 +33,26 @@
       "@babel/plugin-transform-react-jsx"
     ]
   },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "jest": true
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.4.3",
+    "eslint": "^5.16.0",
     "jest": "^24.7.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
