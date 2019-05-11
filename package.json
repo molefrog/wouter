@@ -9,6 +9,12 @@
     "routing",
     "hooks"
   ],
+  "files": [
+    "index.js",
+    "history.js",
+    "matcher.js",
+    "extra/"
+  ],
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit"
