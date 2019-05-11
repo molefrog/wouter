@@ -60,14 +60,20 @@
           "varsIgnorePattern": "^_",
           "argsIgnorePattern": "^_"
         }
-      ]
-    }
+      ],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    },
+    "plugins": [
+      "react-hooks"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.4.3",
     "eslint": "^5.16.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "jest": "^24.7.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
