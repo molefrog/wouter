@@ -103,24 +103,23 @@ export const Route = props => {
 };
 
 export const Link = props => {
-  const href = props.href || props.to;
-  const child = props.children;
-
   const [, navigate] = useLocation();
-  const onClick = useCallback(
+
+  const href = props.href || props.to;
+  const { children, onClick } = props.children;
+
+  const onClickHandler = useCallback(
     event => {
       event.preventDefault();
       navigate(href);
-      if (props.onClick) {
-        props.onClick();
-      }
+      onClick && onClick();
     },
-    [href, props.onClick]
+    [href, onClick, navigate]
   );
 
   // wraps children in `a` if needed
-  const extraProps = { href, onClick, to: null };
-  const jsx = isValidElement(child) ? child : h("a", props);
+  const extraProps = { href, onClick: onClickHandler, to: null };
+  const jsx = isValidElement(children) ? children : h("a", props);
 
   return cloneElement(jsx, extraProps);
 };
