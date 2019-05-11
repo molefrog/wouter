@@ -85,7 +85,6 @@ export const Router = props => {
 };
 
 export const Route = props => {
-  const { children, path } = props;
   const [matches, params] = useRoute(props.path);
 
   if (!matches && !props.match) {
@@ -98,7 +97,9 @@ export const Route = props => {
   }
 
   // support render prop or plain children
-  return typeof children === "function" ? children(params) : children;
+  return typeof props.children === "function"
+    ? props.children(params)
+    : props.children;
 };
 
 export const Link = props => {
