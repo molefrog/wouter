@@ -1,9 +1,17 @@
 import React from "react";
-import TestRenderer from "react-test-renderer";
+import { render } from "react-testing-library";
 
 import { Redirect } from "../index.js";
 
 it("renders nothing", () => {
-  const rendered = TestRenderer.create(<Redirect to="/users" />).root;
-  expect(rendered.children.length).toBe(0);
+  const { container, unmount } = render(<Redirect to="/users" />);
+  expect(container.childNodes.length).toBe(0);
+  unmount();
+});
+
+it("results in change of current location", () => {
+  const { unmount } = render(<Redirect to="/users" />);
+
+  expect(location.pathname).toBe("/users");
+  unmount();
 });
