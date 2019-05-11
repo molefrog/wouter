@@ -38,7 +38,7 @@ const rxForSegment = (repeat, optional, prefix) => {
 };
 
 const pathToRegexp = (pattern, keys) => {
-  const groupRx = /:([A-Za-z0-9_]+)([\?\+\*]?)/g;
+  const groupRx = /:([A-Za-z0-9_]+)([?+*]?)/g;
 
   let match = null,
     lastIndex = 0,
