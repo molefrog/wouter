@@ -108,7 +108,7 @@ export const Link = props => {
   const href = props.href || props.to;
   const { children, onClick } = props.children;
 
-  const onClickHandler = useCallback(
+  const handleClick = useCallback(
     event => {
       event.preventDefault();
       navigate(href);
@@ -118,7 +118,7 @@ export const Link = props => {
   );
 
   // wraps children in `a` if needed
-  const extraProps = { href, onClick: onClickHandler, to: null };
+  const extraProps = { href, onClick: handleClick, to: null };
   const jsx = isValidElement(children) ? children : h("a", props);
 
   return cloneElement(jsx, extraProps);
