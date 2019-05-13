@@ -2,7 +2,7 @@ import React from "react";
 import TestRenderer from "react-test-renderer";
 
 import { Router, Route } from "../index.js";
-import memoryHistory from "../extra/memory-history";
+import { memoryLocation } from "./test-utils.js";
 
 const customMatcher = (pattern, path) => {
   const reversed = path
@@ -15,10 +15,8 @@ const customMatcher = (pattern, path) => {
 };
 
 const routeMatches = (pattern, path) => {
-  const history = memoryHistory(path);
-
   const instance = TestRenderer.create(
-    <Router history={history} matcher={customMatcher}>
+    <Router hook={memoryLocation(path)} matcher={customMatcher}>
       <Route path={pattern}>
         <h1>it worked!</h1>
       </Route>
