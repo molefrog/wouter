@@ -6,7 +6,7 @@ export default function createHistory() {
     push: to => history.replaceState({}, null, to),
     subscribe: cb => {
       const handler = () => cb(location.pathname);
-      return on(handler, "popState", "pushState", "replaceState");
+      return on(handler, "popstate", "pushState", "replaceState");
     }
   };
 }
