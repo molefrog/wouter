@@ -65,4 +65,15 @@ describe("`update` second parameter", () => {
     expect(location.pathname).toBe("/about");
     unmount();
   });
+
+  it("saves a new entry in the History object", () => {
+    const { result, unmount } = renderHook(() => useLocation());
+    const update = result.current[1];
+
+    const histBefore = history.length;
+    act(() => update("/about"));
+
+    expect(history.length).toBe(histBefore + 1);
+    unmount();
+  });
 });
