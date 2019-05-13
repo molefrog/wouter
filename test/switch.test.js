@@ -12,6 +12,11 @@ const testRouteRender = (initialPath, jsx) => {
   return instance;
 };
 
+it("works well when nothing is provided", () => {
+  const result = testRouteRender("/users/12", <Switch />);
+  expect(result.children[0].children.length).toBe(0);
+});
+
 it("always renders no more than 1 matched children", () => {
   const result = testRouteRender(
     "/users/12",
@@ -62,4 +67,3 @@ it("allows to specify which routes to render via `location` prop", () => {
   expect(rendered.length).toBe(1);
   expect(rendered[0].type).toBe(Route);
 });
-
