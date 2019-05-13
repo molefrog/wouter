@@ -6,12 +6,12 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { Route, Router, useRoute, Link } from "../index";
-import staticHistory from "../extra/static-history";
+import staticLocationHook from "../static-location.js";
 
 describe("server-side rendering", () => {
   it("works via staticHistory", () => {
     const App = () => (
-      <Router history={staticHistory("/users/baz")}>
+      <Router hook={staticLocationHook("/users/baz")}>
         <Route path="/users/baz">foo</Route>
         <Route path="/users/:any*">bar</Route>
         <Route path="/users/:id">{params => params.id}</Route>
@@ -30,7 +30,7 @@ describe("server-side rendering", () => {
     };
 
     const App = () => (
-      <Router history={staticHistory("/pages/intro")}>
+      <Router hook={staticLocationHook("/pages/intro")}>
         <HookRoute />
       </Router>
     );
@@ -41,7 +41,7 @@ describe("server-side rendering", () => {
 
   it("renders valid and accessible link elements", () => {
     const App = () => (
-      <Router history={staticHistory("/")}>
+      <Router hook={staticLocationHook("/")}>
         <Link href="/users/1" title="Profile">
           Mark
         </Link>

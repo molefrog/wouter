@@ -2,12 +2,12 @@ import React from "react";
 import TestRenderer from "react-test-renderer";
 
 import { Router, Route } from "../index.js";
-import memoryHistory from "../extra/memory-history";
+import { memoryLocation } from "./test-utils.js";
 
 const testRouteRender = (initialPath, jsx) => {
-  const history = memoryHistory(initialPath);
-  const instance = TestRenderer.create(<Router history={history}>{jsx}</Router>)
-    .root;
+  const instance = TestRenderer.create(
+    <Router hook={memoryLocation(initialPath)}>{jsx}</Router>
+  ).root;
 
   return instance;
 };

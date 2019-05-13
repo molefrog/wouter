@@ -1,4 +1,4 @@
-import makeHistory from "./history.js";
+import locationHook from "./use-location.js";
 import makeMatcher from "./matcher.js";
 
 import {
@@ -22,7 +22,7 @@ const RouterCtx = createContext();
 
 export const buildRouter = (options = {}) => {
   return {
-    history: options.history || makeHistory(),
+    hook: options.hook || locationHook,
     matcher: options.matcher || makeMatcher()
   };
 };
@@ -41,16 +41,7 @@ export const useRouter = () => {
   return router;
 };
 
-export const useLocation = () => {
-  const history = useRouter().history;
-  const [location, update] = useState(history.path());
-
-  // subscribe to history updates
-  useEffect(() => history.subscribe(x => update(x)), [history]);
-  const pushLocation = useCallback(y => history.push(y), [history]);
-
-  return [location, pushLocation];
-};
+export const useLocation = () => useRouter().hook();
 
 export const useRoute = pattern => {
   const router = useRouter();
