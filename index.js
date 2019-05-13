@@ -9,7 +9,6 @@ import {
   useContext,
   useCallback,
   createContext,
-  isValidElement,
   cloneElement,
   createElement as h
 } from "react";
@@ -118,7 +117,7 @@ export const Link = props => {
 
   // wraps children in `a` if needed
   const extraProps = { href, onClick: handleClick, to: null };
-  const jsx = isValidElement(children) ? children : h("a", props);
+  const jsx = children && children.props ? children : h("a", props);
 
   return cloneElement(jsx, extraProps);
 };

@@ -42,6 +42,14 @@ it("works for any other elements as well", () => {
   expect(link.textContent).toBe("Click Me");
 });
 
+it("still creates a plain link when nothing is passed", () => {
+  const { container } = render(<Link href="/about" />);
+  const link = container.firstChild;
+
+  expect(link.tagName).toBe("A");
+  expect(link.getAttribute("href")).toBe("/about");
+});
+
 it("supports `to` prop as an alias to `href`", () => {
   const { container } = render(<Link to="/about">Hello</Link>);
   const link = container.firstChild;
