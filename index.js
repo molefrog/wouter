@@ -143,8 +143,8 @@ export const Switch = ({ children, location }) => {
 };
 
 export const Redirect = props => {
-  const router = useRouter();
-  useEffect(() => router.history.push(props.href || props.to));
+  const [, push] = useLocation();
+  useEffect(() => push(props.href || props.to));
 
   return null;
 };
