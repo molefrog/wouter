@@ -106,7 +106,7 @@ export const Link = props => {
   const [, navigate] = useLocation();
 
   const href = props.href || props.to;
-  const { children, onClick } = props.children;
+  const { children, onClick } = props;
 
   const handleClick = useCallback(
     event => {
