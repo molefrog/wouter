@@ -1,5 +1,5 @@
 import { renderHook, act } from "react-hooks-testing-library";
-import { useLocation } from "../index.js";
+import useLocation from "../use-location.js";
 
 it("returns a pair [value, update]", () => {
   const { result, unmount } = renderHook(() => useLocation());
