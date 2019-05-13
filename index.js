@@ -11,8 +11,7 @@ import {
   createContext,
   isValidElement,
   cloneElement,
-  createElement as h,
-  Children
+  createElement as h
 } from "react";
 
 /*
@@ -128,18 +127,25 @@ export const Switch = ({ children, location }) => {
   const { matcher } = useRouter();
   const [originalLocation] = useLocation();
 
-  let element = null;
+  // make sure the `children` prop is always an array
+  // this is a bit hacky, because it returns [[]], in
+  // case of an empty array, but this case should be
+  // properly handled below in the loop.
+  children = children && children.length ? children : [children];
 
-  // this looks similar to Switch implementation from React Router
-  // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/modules/Switch.js
-  Children.forEach(children, child => {
-    if (!element && isValidElement(child)) {
-      const [match] = matcher(child.props.path, location || originalLocation);
-      if (match) element = child;
-    }
-  });
+  for (const element of children) {
+    if (
+      element &&
+      // normally `React.isValidElement` checks if an element is
+      // valid React element with object.$$typeof === REACT_ELEMENT_TYPE
+      // but we can assume that anything that has `props` is an element here.
+      element.props &&
+      matcher(element.props.path, location || originalLocation)[0]
+    )
+      return cloneElement(element, { match: true });
+  }
 
-  return element ? cloneElement(element, { match: true }) : null;
+  return null;
 };
 
 export const Redirect = props => {
