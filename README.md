@@ -127,7 +127,7 @@ const Foo = () => {
 ```
 
 ## FAQ and Code Recipes
-### A default route
+### How do I make a default/fallback route?
 
 One of the common patterns in application routing is having a default route that will be shown as a fallback, in case no other route matches (for example, if you need to render 404 message). In **wouter** this can easily be done as a combination of `<Switch />` component and catch-all route:
 
@@ -141,6 +141,9 @@ import { Switch, Route } from "wouter";
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/oqk302k2y)**
+
+### Can I use _wouter_ in my TypeScript project?
+Yes! Although the project isn't written in TypeScript there is a [type definition package](https://www.npmjs.com/package/@types/wouter) available through [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). Simply add `npm install --save-dev @types/wouter` to your project and develop safely with types.
 
 ## Acknowledgements
 
