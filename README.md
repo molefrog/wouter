@@ -145,6 +145,28 @@ import { Switch, Route } from "wouter";
 ### Can I use _wouter_ in my TypeScript project?
 Yes! Although the project isn't written in TypeScript there is a [type definition package](https://www.npmjs.com/package/@types/wouter) available through [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). Simply add `npm install --save-dev @types/wouter` to your project and develop safely with types.
 
+### Is there a support for server-side rendering (SSR)?
+Yes! In order to render your app on a server you'll need to tell the router that the current location comes from the request rather than the browser history. In **wouter** you can achieve that by passing the static history to the top-level `<Router />` component:
+
+```js
+import staticHistory from "wouter/extra/static-history";
+import { renderToString } from "react-dom/server";
+
+import App from "./app";
+
+const handleRequest = (req, res) => {
+  const prerendered = renderToString(
+    <Router history={staticHistory(req.path)}>
+      <App />
+    </Router>
+  );
+  
+  // respond with prerendered html
+}
+```
+
+Make sure you replace the static history with the real one when you hydrate your app on a client.
+
 ## Acknowledgements
 
 Special thanks to [Katya Vakulenko](https://katyavakulenko.com/) for creating a project logo.
