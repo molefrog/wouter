@@ -4,6 +4,7 @@
   "description": "A minimalistic routing for React. Nothing extra, just HOOKS.",
   "keywords": [
     "react",
+    "preact",
     "router",
     "tiny",
     "routing",
@@ -13,7 +14,8 @@
     "index.js",
     "history.js",
     "matcher.js",
-    "extra/"
+    "extra/",
+    "preact/"
   ],
   "scripts": {
     "test": "jest --verbose --coverage",
@@ -22,7 +24,8 @@
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
   "peerDependencies": {
-    "react": "^16.8.0"
+    "react": "^16.8.0",
+    "preact": "^10.0.0-beta.1"
   },
   "repository": "molefrog/wouter",
   "size-limit": [
@@ -75,6 +78,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "jest": "^24.7.1",
+    "preact": "^10.0.0-beta.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-hooks-testing-library": "^0.5.0",

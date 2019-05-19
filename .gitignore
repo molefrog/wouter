@@ -18,3 +18,7 @@ dist/
 
 # test coverage
 coverage/
+
+# preact
+preact/*
+!preact/react-deps.js
