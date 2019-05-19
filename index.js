@@ -135,11 +135,7 @@ export const Switch = ({ children, location }) => {
 
   for (const element of children) {
     if (
-      element &&
-      // normally `React.isValidElement` checks if an element is
-      // valid React element with object.$$typeof === REACT_ELEMENT_TYPE
-      // but we can assume that anything that has `props` is an element here.
-      element.props &&
+      isValidElement(element) &&
       matcher(element.props.path, location || originalLocation)[0]
     )
       return cloneElement(element, { match: true });
