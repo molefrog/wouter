@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "test": "jest --verbose --coverage",
-    "size": "size-limit"
+    "size": "size-limit",
+    "prepublish": "node scripts/copy.js"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
@@ -75,6 +76,7 @@
     "@babel/core": "^7.4.3",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.4.3",
+    "copyfiles": "^2.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "jest": "^24.7.1",
