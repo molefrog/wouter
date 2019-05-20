@@ -2,7 +2,7 @@
 import { h } from "preact";
 import { render, cleanup, fireEvent } from "preact-testing-library";
 import { Router, Route, Link, Switch } from "../index.js";
-import memoryHistory from "../preact/extra/memory-history";
+import memoryHistory from "../extra/memory-history";
 
 const testRouteRender = (initialPath, node) => {
   const history = memoryHistory(initialPath);
