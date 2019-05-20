@@ -20,7 +20,7 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "prepublish": "node scripts/copy.js"
+    "prepublishOnly": "copyfiles index.js history.js matcher.js \"extra/**\" preact/"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
