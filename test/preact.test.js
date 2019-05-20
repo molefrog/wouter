@@ -1,5 +1,5 @@
 /** @jsx h */
-import {h} from 'preact';
+import { h } from "preact";
 import { render, cleanup, fireEvent } from "preact-testing-library";
 import { Router, Route, Link, Switch } from "../index.js";
 import memoryHistory from "../preact/extra/memory-history";
@@ -20,33 +20,33 @@ jest.mock("../react-deps.js", () => {
 afterEach(cleanup);
 
 describe("Preact", () => {
-  describe('Route', () => {
-    it('renders correctly', () => {
-      const {container} = testRouteRender(
-        "/foo", 
+  describe("Route", () => {
+    it("renders correctly", () => {
+      const { container } = testRouteRender(
+        "/foo",
         <Route path="/foo">
           <h1>Hello!</h1>
         </Route>
       );
 
       const route = container.firstChild;
-    
+
       expect(route.textContent).toBe("Hello!");
-    })
+    });
 
     it("passes a match params object to the render function", () => {
-      const {container} = testRouteRender(
+      const { container } = testRouteRender(
         "/users/alex",
         <Route path="/users/:name">{params => <h1>{params.name}</h1>}</Route>
       );
-    
+
       const route = container.firstChild;
-    
+
       expect(route.textContent).toBe("alex");
     });
 
     it("renders nothing when there is not match", () => {
-      const {container} = testRouteRender(
+      const { container } = testRouteRender(
         "/bar",
         <Route path="/foo">
           <div>Hi!</div>
@@ -54,20 +54,20 @@ describe("Preact", () => {
       );
 
       const route = container.firstChild;
-    
+
       expect(route).toBeNull();
     });
   });
 
-  describe('Switch', () => {
+  describe("Switch", () => {
     it("works well when nothing is provided", () => {
-      const {container} = testRouteRender("/users/12", <Switch />);
+      const { container } = testRouteRender("/users/12", <Switch />);
 
       expect(container.firstChild).toBeNull();
     });
 
     it("always renders no more than 1 matched children", () => {
-      const {container} = testRouteRender(
+      const { container } = testRouteRender(
         "/users/alex",
         <Switch>
           <Route path="/users/home">
@@ -85,21 +85,20 @@ describe("Preact", () => {
       const route = container.firstChild;
 
       expect(route.tagName).toBe("H2");
-      expect(route.textContent).toBe("Hello, Alex!")
+      expect(route.textContent).toBe("Hello, Alex!");
     });
-
   });
 
-  describe('Link', () => {
+  describe("Link", () => {
     it("renders a link with proper attributes", () => {
       const { container } = render(
         <Link href="/preact">
           <a className="link">Click Me</a>
         </Link>
       );
-    
+
       const link = container.firstChild;
-    
+
       expect(link.tagName).toBe("A");
       expect(link.className).toBe("link");
       expect(link.getAttribute("href")).toBe("/preact");
@@ -108,13 +107,13 @@ describe("Preact", () => {
 
     it("accepts an `onClick` prop, fired after the navigation", () => {
       const clickHandler = jest.fn();
-    
+
       const { getByTestId } = render(
         <Link href="/" onClick={clickHandler}>
           <a data-testid="link" />
         </Link>
       );
-    
+
       fireEvent.click(getByTestId("link"));
       expect(clickHandler).toHaveBeenCalledTimes(1);
     });
