@@ -1,7 +1,7 @@
 import {
   createContext,
   cloneElement,
-  createElement,
+  createElement
 } from "preact";
 import {
   useRef,
@@ -11,7 +11,7 @@ import {
   useContext,
   useCallback
 } from 'preact/hooks';
-import {isValidElement} from 'preact/compat'
+import {isValidElement} from 'preact/compat';
   
 export {
   useRef,
