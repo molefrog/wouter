@@ -142,6 +142,22 @@ import { Switch, Route } from "wouter";
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/oqk302k2y)**
 
+### How do I make a link active for the current route?
+
+There are cases when you need to highlight an active link, for example in the navigation bar. While this functionality isn't provided out-of-the-box, you can easily write your own `<Link />` wrapper and detect if the path is active by using `useRoute` hook. The `useRoute(pattern)` hook returns a pair of `[match, params]`, where `match` is a boolean value that tells if the pattern matches current location:
+
+```js
+const [isActive] = useRoute(props.href);
+
+return (
+  <Link {...props}>
+    <a className={isActive ? "active" : ""}>{props.children}</a>
+  </Link>
+);
+```
+
+**[▶ Demo Sandbox](https://codesandbox.io/s/5zjpj19yz4)**
+
 ### Can I use _wouter_ in my TypeScript project?
 Yes! Although the project isn't written in TypeScript there is a [type definition package](https://www.npmjs.com/package/@types/wouter) available through [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). Simply add `npm install --save-dev @types/wouter` to your project and develop safely with types.
 
