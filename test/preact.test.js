@@ -1,132 +1,79 @@
 /** @jsx h */
-import { h } from "preact";
+import { h, Fragment, options } from "preact";
+import { act, teardown } from "preact/test-utils";
 import { render, cleanup, fireEvent } from "preact-testing-library";
+
 import { Router, Route, Link, Switch } from "../index.js";
-import memoryHistory from "../extra/memory-history";
 
-const testRouteRender = (initialPath, node) => {
-  const history = memoryHistory(initialPath);
-  const result = render(<Router history={history}>{node}</Router>);
+// make the library use Preact exports
+jest.mock("../react-deps.js", () => require("../preact/react-deps.js"));
 
-  return result;
-};
+describe("Preact support", () => {
+  beforeEach(() => history.replaceState(0, 0, "/"));
 
-jest.mock("../react-deps.js", () => {
-  const preactDeps = require("../preact/react-deps.js");
+  afterEach(cleanup);
+  afterEach(teardown);
 
-  return preactDeps;
-});
+  it("renders properly and reacts on navigation", () => {
+    const fn = jest.fn();
+    let renderResult = null;
 
-afterEach(cleanup);
+    act(() => {
+      renderResult = render(
+        <Fragment>
+          <nav>
+            <Link href="/albums/all" onClick={fn} data-testid="index-link">
+              The Best Albums Ever
+            </Link>
+            <Link to="/albums/london-calling">
+              <a data-testid="featured-link">
+                Featured Now: London Calling, Clash
+              </a>
+            </Link>
+          </nav>
 
-describe("Preact", () => {
-  describe("Route", () => {
-    it("renders correctly", () => {
-      const { container } = testRouteRender(
-        "/foo",
-        <Route path="/foo">
-          <h1>Hello!</h1>
-        </Route>
+          <main data-testid="routes">
+            <Switch>
+              Welcome to the list of {100} greatest albums of all time!
+              <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
+              <Route path="/albums/:name">
+                {params => `Album ${params.name}`}
+              </Route>
+              <Route path="/:anything*">Nothing was found!</Route>
+            </Switch>
+          </main>
+        </Fragment>
       );
-
-      const route = container.firstChild;
-
-      expect(route.textContent).toBe("Hello!");
     });
 
-    it("passes a match params object to the render function", () => {
-      const { container } = testRouteRender(
-        "/users/alex",
-        <Route path="/users/:name">{params => <h1>{params.name}</h1>}</Route>
-      );
+    const { container, getByTestId } = renderResult;
 
-      const route = container.firstChild;
+    const routesEl = getByTestId("routes");
 
-      expect(route.textContent).toBe("alex");
-    });
+    // default route should be rendered
+    expect(routesEl.textContent).toBe("Nothing was found!");
 
-    it("renders nothing when there is not match", () => {
-      const { container } = testRouteRender(
-        "/bar",
-        <Route path="/foo">
-          <div>Hi!</div>
-        </Route>
-      );
+    // link renders as A element
+    const indexLink = getByTestId("index-link");
+    expect(indexLink.tagName).toBe("A");
 
-      const route = container.firstChild;
+    act(() => fireEvent.click(indexLink));
 
-      expect(route).toBeNull();
-    });
-  });
+    // performs a navigation when the link is clicked
+    expect(location.pathname).toBe("/albums/all");
 
-  describe("Switch", () => {
-    it("works well when nothing is provided", () => {
-      const { container } = testRouteRender("/users/12", <Switch />);
+    // Link accepts an `onClick` prop, fired after the navigation
+    expect(fn).toHaveBeenCalledTimes(1);
 
-      expect(container.firstChild).toBeNull();
-    });
+    // always renders no more than 1 matched children in Switch
+    expect(routesEl.textContent).toBe("Rolling Stones Best 100 Albums");
 
-    it("always renders no more than 1 matched children", () => {
-      const { container } = testRouteRender(
-        "/users/alex",
-        <Switch>
-          <Route path="/users/home">
-            <h1 />
-          </Route>
-          <Route path="/users/:name">
-            <h2>Hello, Alex!</h2>
-          </Route>
-          <Route path="/users/:rest*">
-            <h3 />
-          </Route>
-        </Switch>
-      );
+    const featuredLink = getByTestId("featured-link");
+    expect(featuredLink.getAttribute("href")).toBe("/albums/london-calling");
 
-      const route = container.firstChild;
+    act(() => fireEvent.click(featuredLink));
 
-      expect(route.tagName).toBe("H2");
-      expect(route.textContent).toBe("Hello, Alex!");
-    });
-  });
-
-  describe("Link", () => {
-    it("renders a link with proper attributes", () => {
-      const { container } = render(
-        <Link href="/preact">
-          <a className="link">Click Me</a>
-        </Link>
-      );
-
-      const link = container.firstChild;
-
-      expect(link.tagName).toBe("A");
-      expect(link.className).toBe("link");
-      expect(link.getAttribute("href")).toBe("/preact");
-      expect(link.textContent).toBe("Click Me");
-    });
-
-    it("accepts an `onClick` prop, fired after the navigation", () => {
-      const clickHandler = jest.fn();
-
-      const { getByTestId } = render(
-        <Link href="/" onClick={clickHandler}>
-          <a data-testid="link" />
-        </Link>
-      );
-
-      fireEvent.click(getByTestId("link"));
-      expect(clickHandler).toHaveBeenCalledTimes(1);
-    });
-
-    it("performs a navigation when the link is clicked", () => {
-      const { getByTestId } = render(
-        <Link href="/goo-baz">
-          <a data-testid="link" />
-        </Link>
-      );
-
-      fireEvent.click(getByTestId("link"));
-      expect(location.pathname).toBe("/goo-baz");
-    });
+    expect(location.pathname).toBe("/albums/london-calling");
+    expect(routesEl.textContent).toBe("Album london-calling");
   });
 });
