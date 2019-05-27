@@ -54,6 +54,24 @@ it("ignores mixed children", () => {
   expect(rendered[0].type).toBe(Route);
 });
 
+it("ignores other elements", () => {
+  const Dummy = props => props.children;
+
+  const result = testRouteRender(
+    "/",
+    <Switch>
+      <b>Bold</b>
+      <Dummy>Component</Dummy>
+      <Route path="/">route</Route>
+    </Switch>
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(rendered[0].type).toBe(Route);
+});
+
 it("allows to specify which routes to render via `location` prop", () => {
   const result = testRouteRender(
     "/something-different",

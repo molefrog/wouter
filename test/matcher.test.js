@@ -4,6 +4,18 @@ it("exports a factory function", () => {
   expect(createMatcher).toBeInstanceOf(Function);
 });
 
+describe("edge cases", () => {
+  it("works for falsey patterns", () => {
+    const match = createMatcher();
+
+    expect(() => {
+      match(null, "foo");
+      match(undefined, "foo");
+      match("", "foo");
+    }).not.toThrow();
+  });
+});
+
 describe("return values", () => {
   it("returns match success as a first arg", () => {
     const match = createMatcher();

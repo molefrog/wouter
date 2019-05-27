@@ -10,7 +10,7 @@ export default function makeMatcher(makeRegexpFn = pathToRegexp) {
   };
 
   return (pattern, path) => {
-    const [regexp, keys] = getRegexp(pattern);
+    const [regexp, keys] = getRegexp(pattern || "");
     const out = regexp.exec(path);
 
     if (!out) return [false, null];
