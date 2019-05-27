@@ -136,6 +136,11 @@ export const Switch = ({ children, location }) => {
   for (const element of children) {
     if (
       isValidElement(element) &&
+      // we don't require an element to be of type Route,
+      // but we do require it to contain a truthy `path` prop.
+      // this allows to use different components that wrap Route
+      // inside of a switch, for example <AnimatedRoute />.
+      element.props.path &&
       matcher(element.props.path, location || originalLocation)[0]
     )
       return cloneElement(element, { match: true });
