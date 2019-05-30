@@ -1,5 +1,6 @@
 # wouter
 
+[![npm](https://img.shields.io/npm/v/wouter.svg?color=%2356C838)](https://www.npmjs.com/package/wouter)
 [![Build Status](https://travis-ci.org/molefrog/wouter.svg?branch=master)](https://travis-ci.org/molefrog/wouter) [![codecov](https://codecov.io/gh/molefrog/wouter/branch/master/graph/badge.svg)](https://codecov.io/gh/molefrog/wouter)
 
 <img src="logo.svg" align="right" width="200" alt="Wouter Logo by Katya Vakulenko">
