@@ -34,13 +34,11 @@ const App = () => (
 );
 ```
 
-### ⚠️ This library comes untranspiled, please read this!
+### This library comes untranspiled, please read this!
 
 **TL;DR** Want to support IE11 → make sure you transpile `node_modules`.
 
-The library is written in pure ES6 and it doesn't come with transpiled sources, while only stable features like arrow functions and destructuring assignment are used. There is a [huge debate going on](https://gist.github.com/Rich-Harris/51e1bf24e7c093469ef7a0983bad94cb) it the community on whether or not library authors should ship untranspiled code.
-
-Wouter was designed to be as small as possible and the decision to ship untranspiled code was made intentionally. We don't use unstable things like generators or async functions, that said it should work fine on the [majority of the browser](https://caniuse.com/#feat=es6). If you'd like to aim platforms like IE11, please make sure you run Babel over your `node_modules`.
+The library is written in pure ES6 and doesn't come with transpiled sources. There is a [big debate going on](https://gist.github.com/Rich-Harris/51e1bf24e7c093469ef7a0983bad94cb) it the community on whether or not libraries should ship untranspiled code. Wouter was designed to be as small as possible and the decision to ship raw ES6 was made intentionally. We only use basic things like arrow functions and destructive assignment, so it should work fine in the [majority of the browsers](https://caniuse.com/#feat=es6). If you'd like to aim platforms like IE11, please make sure you run Babel over your `node_modules`.
 
 ## Wouter API
 
