@@ -11,7 +11,7 @@ A tiny routing solution for modern React apps that relies on Hooks. A router you
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices, however the library isn't a drop-in replacement.
-- Out of the box only supports History API, customization is possible via a `<Router />` component.
+- Only History API is supported out of the box, while customization is available via the `<Router />` component.
 
 ## How to get started?
 
@@ -45,7 +45,7 @@ The library is written in pure ES6 and doesn't come with transpiled sources. The
 
 ### The power of HOOKS!
 
-**wouter** relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus it makes creating custom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
+**wouter** relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus, it makes creating custom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
 
 ```js
 import { useRoute } from "wouter";
@@ -61,7 +61,7 @@ const AnimatedRoute = () => {
 
 ### Matching Dynamic Segments
 
-Just like in React Router you can make dynamic matches either with `Route` component or `useRoute` hook.
+Just like in React Router, you can make dynamic matches either with `Route` component or `useRoute` hook.
 `useRoute` returns a second parameter which is a hash of all dynamic segments matched. Similarily, the
 `Route` component passes these parameters down to its children via a function prop.
 
@@ -86,9 +86,9 @@ used by React Router or Express, and it supports the following patterns:
 - Named dynamic segments: `/users/:foo`.
 - Dynamic segments with modifiers: `/foo/:bar*`, `/foo/baz?` or `/foo/bar+`.
 
-The library was designed to be as small as possible, so most of the additional matching feature were left out
+The library was designed to be as small as possible, so most of the additional matching features were left out
 (see [this issue](https://github.com/molefrog/wouter/issues/1) for more info).
-If you do need to have `path-to-regexp`-like functionality you can customize a matcher function:
+If you do need to have `path-to-regexp`-like functionality, you can customize a matcher function:
 
 ```js
 import { Router } from "wouter";
@@ -106,7 +106,7 @@ const App = () => (
 
 ### Working with History
 
-By default `wouter` creates an internal History object that observes the changes of the current location. If you need a custom history observer, for example for hash-based routing you can implement your [own history](https://github.com/molefrog/wouter/blob/master/history.js).
+By default, `wouter` creates an internal History object that observes the changes of the current location. If you need a custom history observer, for example, for hash-based routing, you can implement your [own history](https://github.com/molefrog/wouter/blob/master/history.js).
 
 ```js
 import { Router, Route, useRouter } from "wouter"
@@ -146,7 +146,7 @@ import { Switch, Route } from "wouter";
 
 ### How do I make a link active for the current route?
 
-There are cases when you need to highlight an active link, for example in the navigation bar. While this functionality isn't provided out-of-the-box, you can easily write your own `<Link />` wrapper and detect if the path is active by using `useRoute` hook. The `useRoute(pattern)` hook returns a pair of `[match, params]`, where `match` is a boolean value that tells if the pattern matches current location:
+There are cases when you need to highlight an active link, for example, in the navigation bar. While this functionality isn't provided out-of-the-box, you can easily write your own `<Link />` wrapper and detect if the path is active by using the `useRoute` hook. The `useRoute(pattern)` hook returns a pair of `[match, params]`, where `match` is a boolean value that tells if the pattern matches current location:
 
 ```js
 const [isActive] = useRoute(props.href);
@@ -162,7 +162,7 @@ return (
 
 ### Can I use _wouter_ in my TypeScript project?
 
-Yes! Although the project isn't written in TypeScript there is a [type definition package](https://www.npmjs.com/package/@types/wouter) available through [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). Simply add `npm install --save-dev @types/wouter` to your project and develop safely with types.
+Yes! Although the project isn't written in TypeScript, there is a [type definition package](https://www.npmjs.com/package/@types/wouter) available through [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). Simply add `npm install --save-dev @types/wouter` to your project and develop safely with types.
 
 ### Preact support?
 
@@ -175,9 +175,9 @@ The Preact exports are available within the `wouter/preact` namespace:
 
 You might need to ensure you have the latest version of [Preact X](https://github.com/preactjs/preact/releases/tag/10.0.0-alpha.0) with support for hooks.
 
-### Is there a support for server-side rendering (SSR)?
+### Is there any support for server-side rendering (SSR)?
 
-Yes! In order to render your app on a server you'll need to tell the router that the current location comes from the request rather than the browser history. In **wouter** you can achieve that by passing the static history to the top-level `<Router />` component:
+Yes! In order to render your app on a server, you'll need to tell the router that the current location comes from the request rather than the browser history. In **wouter**, you can achieve that by passing the static history to the top-level `<Router />` component:
 
 ```js
 import staticHistory from "wouter/extra/static-history";
