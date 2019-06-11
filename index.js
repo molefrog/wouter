@@ -4,6 +4,7 @@ import makeMatcher from "./matcher.js";
 import {
   useRef,
   useMemo,
+  useEffect,
   useContext,
   useCallback,
   createContext,
@@ -134,6 +135,13 @@ export const Switch = ({ children, location }) => {
     )
       return cloneElement(element, { match: true });
   }
+
+  return null;
+};
+
+export const Redirect = props => {
+  const [, push] = useLocation();
+  useEffect(() => push(props.href || props.to));
 
   return null;
 };
