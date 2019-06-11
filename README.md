@@ -59,6 +59,50 @@ const AnimatedRoute = () => {
 };
 ```
 
+### `useLocation` hook: working with the history
+
+The low-level navigation in wouter is powered by the `useLocation` hook, which is basically a wrapper around
+the native browser location object. The hook rerenders when the location changes and you can also perform
+a navigation with it, this is very similar to how you work with values returned from the `useState` hook:
+
+```js
+import { useLocation } from "wouter";
+
+const CurrentLocation = () => {
+  const [location, setLocation] = useLocation();
+
+  return (
+    <div>
+      {`The current page is: ${location}`}
+      <a onClick={() => setLocation("/somewhere")}>Click to update</a>
+    </div>
+  );
+};
+```
+
+All the components including the `useRoute` rely on `useLocation` hook, so normally you only need the hook to
+perform the navigation using a second value `setLocation`. You can check out the source code of the [`Redirect` component](https://github.com/molefrog/wouter/blob/master/index.js#L142) as a reference.
+
+By default, **wouter** uses `useLocation` hook that reacts to `pushState` and `replaceState` navigation and observes the current pathname including the leading slash e.g. **/users/12**. If you do need a custom history observer, for example, for hash-based routing, you can [implement your own hook](https://github.com/molefrog/wouter/blob/master/use-location.js) and customize it in a `<Router />` component:
+
+```js
+import { useState, useEffect } from "react";
+import { Router, Route } from "wouter";
+
+const useCustomLocation = () => {
+  const [location, update] = useState();
+
+  // custom location logic
+};
+
+const App = () => (
+  <Router hook={useCustomLocation}>
+    <Route path="/about" component={About} />
+    ...
+  </Router>
+);
+```
+
 ### Matching Dynamic Segments
 
 Just like in React Router, you can make dynamic matches either with `Route` component or `useRoute` hook.
@@ -102,29 +146,6 @@ const App = () => (
     <Route path="/users/:id(\d+)" />}
   </Router>
 );
-```
-
-### Working with History
-
-By default, `wouter` creates an internal History object that observes the changes of the current location. If you need a custom history observer, for example, for hash-based routing, you can implement your [own history](https://github.com/molefrog/wouter/blob/master/history.js).
-
-```js
-import { Router, Route, useRouter } from "wouter"
-
-const App => (
-  <Router history={myHashHistory}>
-    <Route path="/about" component={About} />
-    ...
-  </Router>
-)
-
-// you can later access the history object through the router object
-const Foo = () => {
-  const router = useRouter()
-
-  // manually changes the location
-  return <div onClick={() => router.history.push("/orders")}>My Orders</div>
-}
 ```
 
 ## FAQ and Code Recipes
