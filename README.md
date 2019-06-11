@@ -225,6 +225,26 @@ const handleRequest = (req, res) => {
 
 Make sure you replace the static hook with the real one when you hydrate your app on a client.
 
+### 1KB is too much, I can't afford it!
+
+We've got some great news for you! If you're a minimalist bundle-size nomad and you need a damn simple
+routing in your app, you can just use the [`useLocation` hook](#uselocation-hook-working-with-the-history)
+which is only **241 bytes gzipped** and manually match the current location with it:
+
+```js
+import useLocation from "wouter/use-location";
+
+const UsersRoute = () => {
+  const [location] = useLocation();
+
+  if (location !== "/users") return null;
+
+  // render the route
+};
+```
+
+Wouter's motto is **"Minimalist-friendly"**.
+
 ## Acknowledgements
 
 Special thanks to [Katya Vakulenko](https://katyavakulenko.com/) for creating a project logo.
