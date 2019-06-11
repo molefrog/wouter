@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-testing-library";
 
-import Redirect from "../redirect.js";
+import { Redirect } from "../index.js";
 
 it("renders nothing", () => {
   const { container, unmount } = render(<Redirect to="/users" />);
