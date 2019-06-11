@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "1.3.2",
+  "version": "2.0.0-alpha",
   "description": "A minimalistic routing for React. Nothing extra, just HOOKS.",
   "keywords": [
     "react",
