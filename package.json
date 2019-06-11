@@ -12,16 +12,16 @@
   ],
   "files": [
     "index.js",
-    "history.js",
     "matcher.js",
     "react-deps.js",
-    "extra/",
+    "use-location.js",
+    "static-location.js",
     "preact/"
   ],
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "prepublishOnly": "copyfiles index.js history.js matcher.js \"extra/**\" preact/"
+    "prepublishOnly": "copyfiles index.js matcher.js use-location.js static-location.js \"extra/**\" preact/"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
