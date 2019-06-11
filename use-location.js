@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "./react-deps.js";
 
 export default () => {
   const [path, update] = useState(location.pathname);
