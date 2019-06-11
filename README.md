@@ -7,7 +7,7 @@
 
 A tiny routing solution for modern React apps that relies on Hooks. A router you wanted so bad in your project!
 
-- Zero dependency, only **1.16KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
+- Zero dependency, only **1.11KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices, however the library isn't a drop-in replacement.
@@ -177,17 +177,23 @@ You might need to ensure you have the latest version of [Preact X](https://githu
 
 ### Is there any support for server-side rendering (SSR)?
 
-Yes! In order to render your app on a server, you'll need to tell the router that the current location comes from the request rather than the browser history. In **wouter**, you can achieve that by passing the static history to the top-level `<Router />` component:
+Yes! In order to render your app on a server, you'll need to tell the router that the current location comes from the request rather than the browser history. In **wouter**, you can achieve that by replacing the default `useLocation` hook with a static one:
 
 ```js
-import staticHistory from "wouter/extra/static-history";
 import { renderToString } from "react-dom/server";
+import { Router, Route } from "wouter";
+
+// note: static location has a different import path,
+// this helps to keep the wouter source as small as possible
+import staticLocationHook from "wouter/static-location";
 
 import App from "./app";
 
 const handleRequest = (req, res) => {
+  // The staticLocationHook function creates a hook that always
+  // responds with a path provided
   const prerendered = renderToString(
-    <Router history={staticHistory(req.path)}>
+    <Router hook={staticLocationHook(req.path)}>
       <App />
     </Router>
   );
@@ -196,7 +202,7 @@ const handleRequest = (req, res) => {
 };
 ```
 
-Make sure you replace the static history with the real one when you hydrate your app on a client.
+Make sure you replace the static hook with the real one when you hydrate your app on a client.
 
 ## Acknowledgements
 
