@@ -33,6 +33,10 @@
     {
       "path": "index.js",
       "limit": "1.2 KB"
+    },
+    {
+      "path": "use-location.js",
+      "limit": "241 B"
     }
   ],
   "babel": {
