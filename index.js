@@ -59,16 +59,10 @@ export const Router = props => {
   // this little trick allows to avoid having unnecessary
   // calls to potentially expensive `buildRouter` method.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  function getRouter() {
-    if (ref.current !== null) {
-      return ref.current;
-    } else {
-      return (ref.current = buildRouter(props));
-    }
-  }
+  const router = ref.current || (ref.current = buildRouter(props));
 
   return h(RouterCtx.Provider, {
-    value: getRouter(),
+    value: router,
     children: props.children
   });
 };
