@@ -11,7 +11,7 @@ export default () => {
 
     events.map(e => addEventListener(e, handler));
     return () => events.map(e => removeEventListener(e, handler));
-  });
+  }, []);
 
   return [path, to => history.pushState(0, 0, to)];
 };
