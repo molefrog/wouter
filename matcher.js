@@ -3,14 +3,11 @@ export default function makeMatcher(makeRegexpFn = pathToRegexp) {
   let cache = {};
 
   // obtains a cached regexp version of the pattern
-  const getRegexp = pattern => {
-    if (cache[pattern]) return cache[pattern];
-    let keys = [];
-    return (cache[pattern] = [makeRegexpFn(pattern, keys), keys]);
-  };
+  const getRegexp = pattern =>
+    (cache[pattern]) || (cache[pattern] = makeRegexpFn(pattern));
 
   return (pattern, path) => {
-    const [regexp, keys] = getRegexp(pattern || "");
+    const { regexp, keys } = getRegexp(pattern || "");
     const out = regexp.exec(path);
 
     if (!out) return [false, null];
@@ -37,11 +34,12 @@ const rxForSegment = (repeat, optional, prefix) => {
   return capture + (optional ? "?" : "");
 };
 
-const pathToRegexp = (pattern, keys) => {
+const pathToRegexp = pattern => {
   const groupRx = /:([A-Za-z0-9_]+)([?+*]?)/g;
 
   let match = null,
     lastIndex = 0,
+    keys = [],
     result = "";
 
   while ((match = groupRx.exec(pattern)) !== null) {
@@ -57,12 +55,12 @@ const pathToRegexp = (pattern, keys) => {
 
     const prev = pattern.substring(lastIndex, match.index - prefix);
 
-    if (keys) keys.push({ name: segment });
+    keys.push({ name: segment });
     lastIndex = groupRx.lastIndex;
 
     result += escapeRx(prev) + rxForSegment(repeat, optional, prefix);
   }
 
   result += escapeRx(pattern.substring(lastIndex));
-  return new RegExp("^" + result + "(?:\\/)?$", "i");
+  return { keys, regexp: new RegExp("^" + result + "(?:\\/)?$", "i") };
 };
