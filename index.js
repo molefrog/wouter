@@ -37,7 +37,10 @@ export const useRouter = () => {
   return globalRef.v || (globalRef.v = buildRouter());
 };
 
-export const useLocation = () => useRouter().hook();
+export const useLocation = () => {
+  const router = useRouter();
+  return router.hook(router);
+};
 
 export const useRoute = pattern => {
   const router = useRouter();
