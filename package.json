@@ -32,11 +32,11 @@
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1.2 KB"
+      "limit": "1.11 KB"
     },
     {
       "path": "use-location.js",
-      "limit": "241 B"
+      "limit": "245 B"
     }
   ],
   "babel": {
