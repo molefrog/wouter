@@ -3,7 +3,6 @@ import makeMatcher from "./matcher.js";
 
 import {
   useRef,
-  useMemo,
   useEffect,
   useContext,
   useCallback,
@@ -17,9 +16,13 @@ import {
  * Part 1, Hooks API: useRouter, useRoute and useLocation
  */
 
-const RouterCtx = createContext();
+// one of the coolest features of `createContext`:
+// when no value is provided — default object is used.
+// allows us to use the router context as a global ref to store
+// the implicitly created router (see `useRouter` below)
+const RouterCtx = createContext({});
 
-export const buildRouter = (options = {}) => {
+const buildRouter = (options = {}) => {
   return {
     hook: options.hook || locationHook,
     matcher: options.matcher || makeMatcher()
@@ -27,17 +30,11 @@ export const buildRouter = (options = {}) => {
 };
 
 export const useRouter = () => {
-  const providedRouter = useContext(RouterCtx);
+  const globalRef = useContext(RouterCtx);
 
-  // either obtain the router from the outer context
-  // (provided by the `<Router /> component) or create
-  // a default one on demand.
-  const router = useMemo(
-    () => (providedRouter ? providedRouter : buildRouter()),
-    [providedRouter]
-  );
-
-  return router;
+  // either obtain the router from the outer context (provided by the
+  // `<Router /> component) or create an implicit one on demand.
+  return globalRef.v || (globalRef.v = buildRouter());
 };
 
 export const useLocation = () => useRouter().hook();
@@ -59,10 +56,10 @@ export const Router = props => {
   // this little trick allows to avoid having unnecessary
   // calls to potentially expensive `buildRouter` method.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const router = ref.current || (ref.current = buildRouter(props));
+  const value = ref.current || (ref.current = { v: buildRouter(props) });
 
   return h(RouterCtx.Provider, {
-    value: router,
+    value: value,
     children: props.children
   });
 };
