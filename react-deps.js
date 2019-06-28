@@ -1,6 +1,5 @@
 export {
   useRef,
-  useMemo,
   useEffect,
   useState,
   useContext,
