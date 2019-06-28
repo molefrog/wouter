@@ -1,5 +1,6 @@
-import React from "react";
+import React, { cloneElement } from "react";
 import { renderHook, act } from "react-hooks-testing-library";
+import TestRenderer from "react-test-renderer";
 
 import { Router, useRouter } from "../index.js";
 
@@ -36,4 +37,25 @@ it("returns customized router provided by the <Router />", () => {
 
   expect(router).toBeInstanceOf(Object);
   expect(router.matcher).toBe(newMatcher);
+});
+
+it("shares one router instance between components", () => {
+  const RouterGetter = ({ el }) => {
+    const router = useRouter();
+    return cloneElement(el, { router: router });
+  };
+
+  const { root, rerender } = TestRenderer.create(
+    <>
+      <RouterGetter el={<div />} />
+      <RouterGetter el={<div />} />
+      <RouterGetter el={<div />} />
+      <RouterGetter el={<div />} />
+    </>
+  );
+
+  const uniqRouters = [
+    ...new Set(root.findAllByType("div").map(x => x.props.router))
+  ];
+  expect(uniqRouters.length).toBe(1);
 });
