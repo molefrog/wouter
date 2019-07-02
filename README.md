@@ -10,8 +10,9 @@ A tiny routing solution for modern React apps that relies on Hooks. A router you
 - Zero dependency, only **1.11KB** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
-- Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices, however the library isn't a drop-in replacement.
-- Only History API is supported out of the box, while customization is available via the `<Router />` component.
+- Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
+  `Route`, `Link`, `Switch` and `Redirect` components.
+- Has hook-based API for more granular control over routing (like animations): **[`useLocation`](#uselocation-hook-working-with-the-history)**, **[`useRoute`](#useroute-the-power-of-hooks)** and **[`useRouter`](#userouter-accessing-the-router-object)**.
 
 ## How to get started?
 
@@ -43,9 +44,36 @@ The library is written in pure ES6 and doesn't come with transpiled sources. The
 
 ## Wouter API
 
-### The power of HOOKS!
+Wouter comes with two kinds of APIs: low-level [React Hooks](https://reactjs.org/docs/hooks-intro.html) API and more traditional component-based API similar to React Router's one.
 
-**wouter** relies heavily on [React Hooks](https://reactjs.org/docs/hooks-intro.html). Thus, it makes creating custom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
+You are free to choose whatever works for you: use hooks when you want to keep your app as
+small as possible or you want to build custom routing components; if you're building a
+traditional app with pages and navigation — components might come in handy.
+
+Check out also [FAQ and Code Recipes](#faq-and-code-recipes) for more advanced things like
+active links, default routes etc.
+
+### The list of methods available
+
+**Hooks API:**
+
+- **[`useRoute`](#useroute-the-power-of-hooks)** — shows whether or not current page matches the pattern provided.
+- **[`useLocation`](#uselocation-hook-working-with-the-history)** — allows to manipulate current browser location, a tiny wrapper around the History API.
+- **[`useRouter`](#userouter-accessing-the-router-object)** — returns a global router object that holds the configuration. Only use it if
+  you want to customize the routing.
+
+**Component API:**
+
+- **`<Route />`** — conditionally renders a component based on a pattern.
+- **`<Link />`** — wraps `<a>`, allows to perfom a navigation.
+- **`<Switch />`** — exclusive routing, only renders the first matched route.
+- **`<Redirect />`** — when rendered, performs an immediate navigation.
+
+## Hooks API
+
+### `useRoute`: the power of HOOKS!
+
+Hooks make creating custom interactions such as route transitions or accessing router directly easier. You can check if a particular route matches the current location by using a `useRoute` hook:
 
 ```js
 import { useRoute } from "wouter";
@@ -55,7 +83,7 @@ const AnimatedRoute = () => {
   // `match` is boolean
   const [match, params] = useRoute("/users/:id");
 
-  return <Transition in={match}>This is user ID: {params.id}</Transition>;
+  return <Transition in={match}>Hi, this is: {params.id}</Transition>;
 };
 ```
 
@@ -83,24 +111,62 @@ const CurrentLocation = () => {
 All the components including the `useRoute` rely on `useLocation` hook, so normally you only need the hook to
 perform the navigation using a second value `setLocation`. You can check out the source code of the [`Redirect` component](https://github.com/molefrog/wouter/blob/master/index.js#L142) as a reference.
 
-By default, **wouter** uses `useLocation` hook that reacts to `pushState` and `replaceState` navigation and observes the current pathname including the leading slash e.g. **/users/12**. If you do need a custom history observer, for example, for hash-based routing, you can [implement your own hook](https://github.com/molefrog/wouter/blob/master/use-location.js) and customize it in a `<Router />` component:
+#### Customizing the location hook
+
+By default, **wouter** uses `useLocation` hook that reacts to `pushState` and `replaceState` navigation and observes the current pathname including the leading slash e.g. **`/users/12`**. If you do need a custom history observer, for example, for hash-based routing, you can [implement your own hook](https://github.com/molefrog/wouter/blob/master/use-location.js) and customize it in a `<Router />` component.
+
+Here is how you can implement a router with a fixed basepath:
 
 ```js
 import { useState, useEffect } from "react";
 import { Router, Route } from "wouter";
 
-const useCustomLocation = () => {
-  const [location, update] = useState();
+// a default useLocation hook which wouter uses
+import useLocation from "wouter/use-location";
 
-  // custom location logic
+const makeUseBasepathLocation = basepath => () => {
+  const [location, setLocation] = useLocation();
+
+  // could be done with regexp, but requires proper escaping
+  const normalized = location.startsWith(basepath)
+    ? location.slice(basepath.length)
+    : location;
+
+  return [normalized, to => setLocation(basepath + to)];
 };
 
+const useBasepathLocation = makeUseBasepathLocation("/app");
+
 const App = () => (
-  <Router hook={useCustomLocation}>
+  <Router hook={useBasepathLocation}>
     <Route path="/about" component={About} />
     ...
   </Router>
 );
+```
+
+### `useRouter`: accessing the router object
+
+If you're building an advanced integration, for example custom location hook, you might
+want to get access to the global router object. The router is a simple object that holds
+current matcher function and a custom location hook function.
+
+Normally, router is constructed internally on demand, but it can also be customized via a top-level `Router` component (see [the section above](#uselocation-hook-working-with-the-history)). The `useRouter` hook simply returns a
+current router object:
+
+```js
+import { useRouter } from "wouter";
+import useLocation from "wouter/use-location";
+
+const Custom = () => {
+  const router = useRouter();
+
+  // router.hook is useLocation by default
+
+  // you can also use router as a mediator object
+  // and store arbitrary data on it:
+  router.lastTransition = { path: "..." };
+};
 ```
 
 ### Matching Dynamic Segments
