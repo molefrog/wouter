@@ -11,7 +11,7 @@ A tiny routing solution for modern React apps that relies on Hooks. A router you
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
-  `Route`, `Link`, `Switch` and **[`Redirect`](#redirect-topath-)** components.
+  `Route`, **[`Link`](#link-hrefpath-childrenchildren--)**, `Switch` and **[`Redirect`](#redirect-topath-)** components.
 - Has hook-based API for more granular control over routing (like animations): **[`useLocation`](#uselocation-hook-working-with-the-history)**, **[`useRoute`](#useroute-the-power-of-hooks)** and **[`useRouter`](#userouter-accessing-the-router-object)**.
 
 ## How to get started?
@@ -65,9 +65,9 @@ active links, default routes etc.
 **Component API:**
 
 - **`<Route />`** — conditionally renders a component based on a pattern.
-- **`<Link />`** — wraps `<a>`, allows to perfom a navigation.
+- **[`<Link />`](#link-hrefpath-childrenchildren--)** — wraps `<a>`, allows to perfom a navigation.
 - **`<Switch />`** — exclusive routing, only renders the first matched route.
-- **`<Redirect />`** — when rendered, performs an immediate navigation.
+- **[`<Redirect />`](#redirect-topath-)** — when rendered, performs an immediate navigation.
 
 ## Hooks API
 
@@ -170,6 +170,24 @@ const Custom = () => {
 ```
 
 ## Component API
+
+### `<Link href={path} children={children} ... />`
+
+Link component renders an `<a />` element that, when clicked, performs a navigation. You can customize the link appearance
+by providing your own component or link element as `children`:
+
+```js
+// All of these will produce the same html:
+// <a href="/foo" class="active">Hello!</a>
+
+// lazy form: `a` element is constructed around children
+<Link href="/foo" className="active">Hello!</Link>
+
+// when using your own component or jsx the `href` prop
+// will be passed down to an element
+<Link href="/foo"><a className="active">Hello!</a></Link>
+<Link href="/foo"><A>Hello!</A></Link>
+```
 
 ### `<Redirect to={path} />`
 
