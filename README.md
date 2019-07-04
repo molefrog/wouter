@@ -11,7 +11,7 @@ A tiny routing solution for modern React apps that relies on Hooks. A router you
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
-  `Route`, `Link`, `Switch` and `Redirect` components.
+  `Route`, `Link`, `Switch` and **[`Redirect`](#redirect-topath-)** components.
 - Has hook-based API for more granular control over routing (like animations): **[`useLocation`](#uselocation-hook-working-with-the-history)**, **[`useRoute`](#useroute-the-power-of-hooks)** and **[`useRouter`](#userouter-accessing-the-router-object)**.
 
 ## How to get started?
@@ -47,7 +47,7 @@ The library is written in pure ES6 and doesn't come with transpiled sources. The
 Wouter comes with two kinds of APIs: low-level [React Hooks](https://reactjs.org/docs/hooks-intro.html) API and more traditional component-based API similar to React Router's one.
 
 You are free to choose whatever works for you: use hooks when you want to keep your app as
-small as possible or you want to build custom routing components; if you're building a
+small as possible or you want to build custom routing components; or if you're building a
 traditional app with pages and navigation — components might come in handy.
 
 Check out also [FAQ and Code Recipes](#faq-and-code-recipes) for more advanced things like
@@ -167,6 +167,26 @@ const Custom = () => {
   // and store arbitrary data on it:
   router.lastTransition = { path: "..." };
 };
+```
+
+## Component API
+
+### `<Redirect to={path} />`
+
+When mounted performs a redirect to a `path` provided. Uses `useLocation` hook internally to trigger the navigation inside of a `useEffect` block.
+
+If you need more advanced logic for navigation, for example, to trigger
+the redirect inside of an event handler, consider using [`useLocation` hook instead](#uselocation-hook-working-with-the-history):
+
+```js
+import { useLocation } from "wouter";
+
+const [location, setLocation] = useLocation();
+
+fetchOrders().then(orders => {
+  setOrders(orders);
+  setLocation("/app/orders");
+});
 ```
 
 ### Matching Dynamic Segments
