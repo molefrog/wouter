@@ -11,7 +11,7 @@ A tiny routing solution for modern React apps that relies on Hooks. A router you
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
-  `Route`, **[`Link`](#link-hrefpath-childrenchildren--)**, `Switch` and **[`Redirect`](#redirect-topath-)** components.
+  **[`Route`](#route-pathpattern-)**, **[`Link`](#link-hrefpath-)**, **[`Switch`](#switch-)** and **[`Redirect`](#redirect-topath-)** components.
 - Has hook-based API for more granular control over routing (like animations): **[`useLocation`](#uselocation-hook-working-with-the-history)**, **[`useRoute`](#useroute-the-power-of-hooks)** and **[`useRouter`](#userouter-accessing-the-router-object)**.
 
 ## How to get started?
@@ -64,9 +64,9 @@ active links, default routes etc.
 
 **Component API:**
 
-- **`<Route />`** — conditionally renders a component based on a pattern.
-- **[`<Link />`](#link-hrefpath-childrenchildren--)** — wraps `<a>`, allows to perfom a navigation.
-- **`<Switch />`** — exclusive routing, only renders the first matched route.
+- **[`<Route />`](#route-pathpattern-)** — conditionally renders a component based on a pattern.
+- **[`<Link />`](#link-hrefpath-)** — wraps `<a>`, allows to perfom a navigation.
+- **[`<Switch />`](#switch-)** — exclusive routing, only renders the first matched route.
 - **[`<Redirect />`](#redirect-topath-)** — when rendered, performs an immediate navigation.
 
 ## Hooks API
@@ -171,12 +171,37 @@ const Custom = () => {
 
 ## Component API
 
-### `<Link href={path} children={children} ... />`
+### `<Route path={pattern} />`
+
+`Route` represents a piece of the app that is rendered conditionally based on a pattern. Pattern is a string, which may
+contain special characters to describe dynamic segments, see [**Matching Dynamic Segments** section](#matching-dynamic-segments)
+below for details.
+
+The library provides multiple ways to declare a route's body:
+
+```js
+import { Route } from "wouter";
+
+// simple form
+<Route path="/home"><Home /></Route>
+
+// render-prop style
+<Route path="/users/:id">
+  {params => <UserPage id={params.id} />}
+</Route>
+
+// the `params` prop will be passed down to <Orders />
+<Route path="/orders/:status" component={Orders} />
+```
+
+### `<Link href={path} />`
 
 Link component renders an `<a />` element that, when clicked, performs a navigation. You can customize the link appearance
 by providing your own component or link element as `children`:
 
 ```js
+import { Link } from "wouter";
+
 // All of these will produce the same html:
 // <a href="/foo" class="active">Hello!</a>
 
@@ -188,6 +213,22 @@ by providing your own component or link element as `children`:
 <Link href="/foo"><a className="active">Hello!</a></Link>
 <Link href="/foo"><A>Hello!</A></Link>
 ```
+
+### `<Switch />`
+
+There are cases when you want to have an exclusive routing: to make sure that only one route is rendered at the time, even
+if the routes have patterns that overlap. That's what `Switch` does: it only renders **the first matching route**.
+
+```js
+import { Route, Switch } from "wouter";
+
+<Switch>
+  <Route path="/orders/all" component={AllOrders} />
+  <Route path="/orders/:status" component={Orders} />
+</Switch>;
+```
+
+Check out [**FAQ and Code Recipes** section](#faq-and-code-recipes) for more advanced use of `Switch`.
 
 ### `<Redirect to={path} />`
 
