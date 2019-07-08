@@ -88,7 +88,7 @@ it("allows to specify which routes to render via `location` prop", () => {
   expect(rendered[0].type).toBe(Route);
 });
 
-xit("always ensures the consistency of inner routes rendering", done => {
+it("always ensures the consistency of inner routes rendering", done => {
   history.replaceState(0, 0, "/foo/bar");
 
   const { unmount } = render(
