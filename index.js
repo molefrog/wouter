@@ -67,22 +67,19 @@ export const Router = props => {
   });
 };
 
-export const Route = props => {
-  const [matches, params] = useRoute(props.path);
+export const Route = ({ path, match, component, children }) => {
+  const useRouteMatch = useRoute(path);
 
-  if (!matches && !props.match) {
-    return null;
-  }
+  // `props.match` is present - Route is controlled by the Switch
+  const [matches, params] = match || useRouteMatch;
+
+  if (!matches) return null;
 
   // React-Router style `component` prop
-  if (props.component) {
-    return h(props.component, { params: params });
-  }
+  if (component) return h(component, { params: params });
 
   // support render prop or plain children
-  return typeof props.children === "function"
-    ? props.children(params)
-    : props.children;
+  return typeof children === "function" ? children(params) : children;
 };
 
 export const Link = props => {
@@ -118,6 +115,8 @@ export const Switch = ({ children, location }) => {
   children = children && children.length ? children : [children];
 
   for (const element of children) {
+    let match = 0;
+
     if (
       isValidElement(element) &&
       // we don't require an element to be of type Route,
@@ -125,9 +124,9 @@ export const Switch = ({ children, location }) => {
       // this allows to use different components that wrap Route
       // inside of a switch, for example <AnimatedRoute />.
       element.props.path &&
-      matcher(element.props.path, location || originalLocation)[0]
+      (match = matcher(element.props.path, location || originalLocation))[0]
     )
-      return cloneElement(element, { match: true });
+      return cloneElement(element, { match });
   }
 
   return null;
