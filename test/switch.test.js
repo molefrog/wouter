@@ -4,6 +4,8 @@ import TestRenderer from "react-test-renderer";
 import { Router, Route, Switch } from "../index.js";
 import { memoryLocation } from "./test-utils.js";
 
+import { render } from "react-testing-library";
+
 const testRouteRender = (initialPath, jsx) => {
   const instance = TestRenderer.create(
     <Router hook={memoryLocation(initialPath)}>{jsx}</Router>
@@ -84,4 +86,37 @@ it("allows to specify which routes to render via `location` prop", () => {
 
   expect(rendered.length).toBe(1);
   expect(rendered[0].type).toBe(Route);
+});
+
+xit("always ensures the consistency of inner routes rendering", done => {
+  history.replaceState(0, 0, "/foo/bar");
+
+  const { unmount } = render(
+    <Switch>
+      <Route path="/foo/:id">
+        {params => {
+          if (!params)
+            throw new Error("Render prop is called with falsy params!");
+          return null;
+        }}
+      </Route>
+    </Switch>
+  );
+
+  requestAnimationFrame(() => {
+    // suppress "An update was not wrapped in act(...)" warning.
+    // if we wrap `pushState` call in act() React will buffer events
+    // and renrender the `Switch` first. What we need is the exact opposite —
+    // to ensure that `Route` is rerendered before Switch does.
+    //
+    // This could be potentially solved with async act() calls in React v16.9.0:
+    // https://github.com/facebook/react/issues/15379
+    const spy = jest.spyOn(console, "error").mockImplementation();
+
+    history.pushState(0, 0, "/");
+    spy.mockRestore();
+
+    unmount();
+    done();
+  });
 });
