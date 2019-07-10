@@ -251,7 +251,7 @@ fetchOrders().then(orders => {
 ### Matching Dynamic Segments
 
 Just like in React Router, you can make dynamic matches either with `Route` component or `useRoute` hook.
-`useRoute` returns a second parameter which is a hash of all dynamic segments matched. Similarily, the
+`useRoute` returns a second parameter which is a hash of all dynamic segments matched. Similarly, the
 `Route` component passes these parameters down to its children via a function prop.
 
 ```js
