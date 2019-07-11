@@ -7,7 +7,7 @@ import {
 
 export type Params = { [paramName: string]: string } | null;
 export type Path = string;
-export type PushCallback = (to: string) => void;
+export type PushCallback = (to: string, replace?: boolean) => void;
 export type LocationTuple = [Path, PushCallback];
 export type Match = [boolean, Params];
 export type MatcherFn = (pattern: string, path: Path) => Match;
