@@ -22,3 +22,4 @@ coverage/
 # preact
 preact/*
 !preact/react-deps.js
+!preact/index.d.ts
