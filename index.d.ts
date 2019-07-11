@@ -16,6 +16,7 @@ export type PushCallback = (to: string) => void;
 export type LocationTuple = [Path, PushCallback];
 export type Match = [boolean, Params];
 export type MatcherFn = (pattern: string, path: Path) => Match;
+export type LocationHook = () => LocationTuple;
 
 export interface RouteProps {
   children?: ((params: Params) => ReactNode) | ReactNode;
@@ -46,7 +47,7 @@ export interface SwitchProps {
 export const Switch: FunctionComponent<SwitchProps>;
 
 export interface RouterProps {
-  hook: () => LocationTuple;
+  hook: LocationHook;
   matcher: MatcherFn;
 }
 export const Router: FunctionComponent<
