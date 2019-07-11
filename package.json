@@ -21,7 +21,7 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "prepublishOnly": "copyfiles index.js matcher.js use-location.js static-location.js \"extra/**\" preact/"
+    "prepublishOnly": "copyfiles index.js matcher.{js,d.ts} use-location.{js,d.ts} static-location.{js,d.ts} \"extra/**\" preact/"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
