@@ -12,10 +12,14 @@
   ],
   "files": [
     "index.js",
+    "index.d.ts",
     "matcher.js",
+    "matcher.d.ts",
     "react-deps.js",
     "use-location.js",
+    "use-location.d.ts",
     "static-location.js",
+    "static-location.d.ts",
     "preact/"
   ],
   "scripts": {
