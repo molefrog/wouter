@@ -7,7 +7,7 @@
 
 A tiny routing solution for modern React apps that relies on Hooks. A router you wanted so bad in your project!
 
-- Zero dependency, only **1143 B** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
+- Zero dependency, only **1151 B** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
