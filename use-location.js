@@ -13,7 +13,7 @@ export default () => {
     return () => events.map(e => removeEventListener(e, handler));
   }, []);
 
-  return [path, to => history.pushState(0, 0, to)];
+  return [path, (to, replace) => history[replace && "replaceState" || "pushState"](0, 0, to)];
 };
 
 // While History API does have `popstate` event, the only
