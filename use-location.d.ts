@@ -1,3 +1,5 @@
-import { LocationTuple } from "./index";
+import { LocationHook } from "./index";
 
-export default function useLocation(): LocationTuple;
+declare const useLocation: LocationHook;
+
+export default useLocation;
