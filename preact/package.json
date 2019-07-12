@@ -1,0 +1,13 @@
+{
+  "name": "wouter-preact",
+  "version": "2.1.1",
+  "private": true,
+  "description": "A minimalistic routing for Preact. Nothing extra, just HOOKS.",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "license": "ISC",
+  "peerDependencies": {
+    "wouter": "^2.1.1",
+    "preact": "^10.0.0-alpha.0"
+  }
+}
