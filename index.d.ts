@@ -29,7 +29,7 @@ export const Route: FunctionComponent<RouteProps>;
 export interface LinkProps {
   to?: string;
   href?: string;
-  children: ReactElement;
+  children: ReactNode;
   onClick?: () => void;
 }
 export const Link: FunctionComponent<LinkProps>;
