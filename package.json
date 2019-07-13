@@ -38,14 +38,6 @@
       "limit": "247 B"
     }
   ],
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ],
-    "plugins": [
-      "@babel/plugin-transform-react-jsx"
-    ]
-  },
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
