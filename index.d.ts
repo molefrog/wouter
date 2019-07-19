@@ -29,6 +29,7 @@ export const Route: FunctionComponent<RouteProps>;
 export interface LinkProps {
   to?: string;
   href?: string;
+  className?: string;
   children: ReactNode;
   onClick?: () => void;
 }
