@@ -5,6 +5,7 @@
 //                 Vladislav Polyakov <https://github.com/polRk>
 
 import {
+  AnchorHTMLAttributes,
   FunctionComponent,
   ComponentType,
   ReactElement,
@@ -27,12 +28,8 @@ export interface RouteProps {
 }
 export const Route: FunctionComponent<RouteProps>;
 
-export interface LinkProps {
-  to?: string;
-  href?: string;
-  className?: string;
-  children: ReactNode;
-  onClick?: () => void;
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  to: string;
 }
 export const Link: FunctionComponent<LinkProps>;
 
