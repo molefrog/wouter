@@ -62,7 +62,7 @@ export interface RouterProps {
 }
 export const Router: FunctionComponent<
   Partial<RouterProps> & {
-    children: ReactNode | ReactNode[];
+    children: ReactNode;
   }
 >;
 
