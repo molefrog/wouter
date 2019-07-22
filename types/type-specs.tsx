@@ -43,7 +43,7 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 </Route>;
 
 <Route path="/users/:id">
-  {(params: Params): React.ReactNode => `User id: ${params!.id}`}
+  {(params: Params): React.ReactNode => `User id: ${params.id}`}
 </Route>;
 
 <Route path="/app" match={true} />; // $ExpectError

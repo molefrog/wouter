@@ -9,13 +9,21 @@ import {
   ReactNode
 } from "react";
 
-export type Params = { [paramName: string]: string } | null;
 export type Path = string;
 export type PushCallback = (to: string, replace?: boolean) => void;
+
 export type LocationTuple = [Path, PushCallback];
-export type Match = [boolean, Params];
-export type MatcherFn = (pattern: string, path: Path) => Match;
 export type LocationHook = () => LocationTuple;
+
+export interface Params {
+  [paramName: string]: string;
+}
+
+export type MatchWithParams = [true, Params];
+export type NoMatch = [false, null];
+export type Match = MatchWithParams | NoMatch;
+
+export type MatcherFn = (pattern: string, path: Path) => Match;
 
 export interface RouteProps {
   children?: ((params: Params) => ReactNode) | ReactNode;
