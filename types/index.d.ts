@@ -1,7 +1,6 @@
-// Type definitions for wouter 2.0
-// Project: https://github.com/molefrog/wouter#readme
-// Definitions by: Tolkunov Alexander <https://github.com/StrayFromThePath>
-//                 Maksim Karelov <https://github.com/Ty3uK>
+// Type defitions for wouter are generously provided by:
+// * Alexander Tolkunov <https://github.com/StrayFromThePath>
+// * Maksim Karelov <https://github.com/Ty3uK>
 
 import {
   FunctionComponent,
