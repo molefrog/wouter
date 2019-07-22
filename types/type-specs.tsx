@@ -46,8 +46,7 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
   {(params: Params): React.ReactNode => `User id: ${params!.id}`}
 </Route>;
 
-// FIXME: `match` prop should not be exposed
-// <Route path="/app" match={true} />; // $ExpectError
+<Route path="/app" match={true} />; // $ExpectError
 
 /*
  * Link and Redirect component type specs

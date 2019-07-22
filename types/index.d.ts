@@ -21,7 +21,6 @@ export interface RouteProps {
   children?: ((params: Params) => ReactNode) | ReactNode;
   path: Path;
   component?: ComponentType<any>;
-  match?: boolean;
 }
 export const Route: FunctionComponent<RouteProps>;
 
