@@ -1,5 +1,15 @@
 import * as React from "react";
-import { Route, Params, Link, Redirect, Switch, Router } from "wouter";
+import {
+  Route,
+  Params,
+  Link,
+  Redirect,
+  Switch,
+  Router,
+  useLocation,
+  useRoute,
+  PushCallback
+} from "wouter";
 
 const Header: React.FunctionComponent = () => <div />;
 
@@ -89,3 +99,26 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 // <Router>
 //   Hello, we have <Header /> and some {1337} numbers here.
 // </Router>;
+
+/*
+ * Hooks API
+ */
+const [location, setLocation] = useLocation();
+location; // $ExpectType string
+
+setLocation(); // $ExpectError
+setLocation("/app");
+setLocation("/app", true);
+
+useRoute(Symbol()); // $ExpectError
+useRoute(); // $ExpectError
+useRoute("/");
+
+const [match, params] = useRoute("/app/users/:id");
+match; // $ExpectType boolean
+
+if (params) {
+  params.id; // $ExpectType string
+} else {
+  params; // $ExpectType null
+}
