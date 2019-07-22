@@ -37,7 +37,11 @@ export interface RedirectProps {
   to?: string;
   href?: string;
 }
-export const Redirect: React.FunctionComponent<RedirectProps>;
+export const Redirect: FunctionComponent<
+  RedirectProps & {
+    children?: null;
+  }
+>;
 
 export interface SwitchProps {
   location?: string;
@@ -51,7 +55,7 @@ export interface RouterProps {
 }
 export const Router: FunctionComponent<
   Partial<RouterProps> & {
-    children: ReactElement | ReactElement[];
+    children: ReactNode | ReactNode[];
   }
 >;
 

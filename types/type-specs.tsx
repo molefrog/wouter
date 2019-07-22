@@ -42,12 +42,9 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
   This is a <b>mixed</b> content
 </Route>;
 
-// FIXME: the code below throws "Object is possibly 'null'", because
-// Params type contains null type.
-
-// <Route path="/users/:id">
-//   {(params: Params): React.ReactNode => `User id: ${params.id}`}
-// </Route>;
+<Route path="/users/:id">
+  {(params: Params): React.ReactNode => `User id: ${params!.id}`}
+</Route>;
 
 // FIXME: `match` prop should not be exposed
 // <Route path="/app" match={true} />; // $ExpectError
@@ -72,8 +69,7 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 <Redirect to="/" />;
 <Redirect href="/" />;
 
-// FIXME: should not have children!
-// <Redirect>something</Redirect>; // $ExpectError
+<Redirect>something</Redirect>; // $ExpectError
 
 /*
  * Switch specs
@@ -95,10 +91,9 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
   <b>Hello!</b>
 </Router>;
 
-// FIXME: add support for mixed content in Router
-// <Router>
-//   Hello, we have <Header /> and some {1337} numbers here.
-// </Router>;
+<Router>
+  Hello, we have <Header /> and some {1337} numbers here.
+</Router>;
 
 /*
  * Hooks API
