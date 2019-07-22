@@ -4,5 +4,10 @@ node_js:
   - node
 git:
   depth: 5
+jobs:
+  include:
+    - script: npm test
+    - state: lint types
+      script: npm run lint-types
 after_success:
   - npx codecov
