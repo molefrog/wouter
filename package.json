@@ -20,6 +20,7 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
+    "lint-types": "dtslint types --onlyTestTsNext",
     "pack-types": "copyfiles -f types/*.d.ts .",
     "pack-preact": "copyfiles index.js matcher.{js,d.ts} use-location.{js,d.ts} static-location.{js,d.ts} preact/",
     "prepublishOnly": "npm run pack-types && npm run pack-preact"
