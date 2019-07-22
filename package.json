@@ -20,7 +20,9 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "prepublishOnly": "copyfiles index.js matcher.{js,d.ts} use-location.{js,d.ts} static-location.{js,d.ts} preact/"
+    "pack-types": "copyfiles -f types/*.d.ts .",
+    "pack-preact": "copyfiles index.js matcher.{js,d.ts} use-location.{js,d.ts} static-location.{js,d.ts} preact/",
+    "prepublishOnly": "npm run pack-types && npm run pack-preact"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
