@@ -19,8 +19,13 @@ dist/
 # test coverage
 coverage/
 
-# preact
+# preact dist: all files are ignored by default
+# expect sources that are Preact-specific
 preact/*
 !preact/react-deps.js
 !preact/index.d.ts
 !preact/package.json
+
+# type definitions in the project root are copied from types/ folder
+# before publishing, so they should be ignored
+/*.d.ts
