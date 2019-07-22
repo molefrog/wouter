@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route, Params } from "wouter";
+import { Route, Params, Link, Redirect, Switch, Router } from "wouter";
 
 const Header: React.FunctionComponent = () => <div />;
 
@@ -41,3 +41,51 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 
 // FIXME: `match` prop should not be exposed
 // <Route path="/app" match={true} />; // $ExpectError
+
+/*
+ * Link and Redirect component type specs
+ */
+<Link to="/users">Users</Link>;
+<Link href="/about">About</Link>;
+<Link href="/about">
+  This is <i>awesome!</i>
+</Link>;
+
+<Link href="/">
+  <a className="active">Active Link</a>
+</Link>;
+
+<Link href="/foo">
+  <Header />
+</Link>;
+
+<Redirect to="/" />;
+<Redirect href="/" />;
+
+// FIXME: should not have children!
+// <Redirect>something</Redirect>; // $ExpectError
+
+/*
+ * Switch specs
+ */
+
+<Switch>
+  <Route path="/app/users" />
+  <Route path="/app/:id" />
+</Switch>;
+
+/*
+ * Router specs
+ */
+
+<Router hook="wat?" />; // $ExpectError
+
+<Router>
+  <Route path="/" />
+  <b>Hello!</b>
+</Router>;
+
+// FIXME: add support for mixed content in Router
+// <Router>
+//   Hello, we have <Header /> and some {1337} numbers here.
+// </Router>;
