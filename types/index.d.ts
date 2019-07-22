@@ -10,7 +10,7 @@ import {
 } from "react";
 
 export type Path = string;
-export type PushCallback = (to: string, replace?: boolean) => void;
+export type PushCallback = (to: Path, replace?: boolean) => void;
 
 export type LocationTuple = [Path, PushCallback];
 export type LocationHook = () => LocationTuple;
@@ -23,7 +23,7 @@ export type MatchWithParams = [true, Params];
 export type NoMatch = [false, null];
 export type Match = MatchWithParams | NoMatch;
 
-export type MatcherFn = (pattern: string, path: Path) => Match;
+export type MatcherFn = (pattern: Path, path: Path) => Match;
 
 export interface RouteProps {
   children?: ((params: Params) => ReactNode) | ReactNode;
@@ -33,16 +33,16 @@ export interface RouteProps {
 export const Route: FunctionComponent<RouteProps>;
 
 export interface LinkProps {
-  to?: string;
-  href?: string;
+  to?: Path;
+  href?: Path;
   children: ReactNode;
   onClick?: () => void;
 }
 export const Link: FunctionComponent<LinkProps>;
 
 export interface RedirectProps {
-  to?: string;
-  href?: string;
+  to?: Path;
+  href?: Path;
 }
 export const Redirect: FunctionComponent<
   RedirectProps & {
@@ -68,6 +68,6 @@ export const Router: FunctionComponent<
 
 export function useRouter(): RouterProps;
 
-export function useRoute(pattern: string): Match;
+export function useRoute(pattern: Path): Match;
 
 export function useLocation(): LocationTuple;
