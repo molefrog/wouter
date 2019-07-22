@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "lib": ["es6"],
+    "jsx": "react",
+    "noEmit": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": { "wouter": ["."] }
+  },
+  "files": ["./type-specs.tsx"]
+}
