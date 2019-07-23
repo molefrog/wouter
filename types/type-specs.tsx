@@ -65,6 +65,10 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
   <Header />
 </Link>;
 
+// supports standard link attributes
+<Link onClick={() => 0} children={null} />;
+<Link download target="_blank" rel="noreferrer" children={null} />;
+
 <Redirect to="/" />;
 <Redirect href="/" />;
 
