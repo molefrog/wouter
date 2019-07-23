@@ -69,6 +69,17 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 <Link onClick={() => 0} children={null} />;
 <Link download target="_blank" rel="noreferrer" children={null} />;
 
+<Link
+  children={null}
+  onDrag={event => {
+    event; // $ExpectType DragEvent<HTMLAnchorElement>
+  }}
+/>;
+
+/*
+ * Redirect specs
+ */
+
 <Redirect to="/" />;
 <Redirect href="/" />;
 
