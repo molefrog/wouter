@@ -3,6 +3,7 @@
 // * Maksim Karelov <https://github.com/Ty3uK>
 
 import {
+  AnchorHTMLAttributes,
   FunctionComponent,
   ComponentType,
   ReactElement,
@@ -32,11 +33,11 @@ export interface RouteProps {
 }
 export const Route: FunctionComponent<RouteProps>;
 
-export interface LinkProps {
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   to?: Path;
   href?: Path;
-  children: ReactNode;
   onClick?: () => void;
+  children: ReactNode;
 }
 export const Link: FunctionComponent<LinkProps>;
 
