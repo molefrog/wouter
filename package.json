@@ -38,7 +38,7 @@
     },
     {
       "path": "use-location.js",
-      "limit": "247 B"
+      "limit": "251 B"
     }
   ],
   "eslintConfig": {
