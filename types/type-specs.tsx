@@ -66,7 +66,10 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 </Link>;
 
 // supports standard link attributes
-<Link onClick={() => 0} children={null} />;
+<Link
+  onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {}}
+  children={null}
+/>;
 <Link download target="_blank" rel="noreferrer" children={null} />;
 
 <Link

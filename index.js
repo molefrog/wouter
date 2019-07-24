@@ -92,7 +92,7 @@ export const Link = props => {
     event => {
       event.preventDefault();
       navigate(href);
-      onClick && onClick();
+      onClick && onClick(event);
     },
     [href, onClick, navigate]
   );
