@@ -36,8 +36,6 @@ export const Route: FunctionComponent<RouteProps>;
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   to?: Path;
   href?: Path;
-  onClick?: () => void;
-  children: ReactNode;
 }
 export const Link: FunctionComponent<LinkProps>;
 
