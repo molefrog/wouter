@@ -8,7 +8,8 @@ import {
   Router,
   useLocation,
   useRoute,
-  PushCallback
+  PushCallback,
+  LinkProps
 } from "wouter";
 
 const Header: React.FunctionComponent = () => <div />;
@@ -51,8 +52,14 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 /*
  * Link and Redirect component type specs
  */
+
+// `to` and `href` are aliases, but they are mutually exclusive and
+// can't be used at the same time:
 <Link to="/users">Users</Link>;
 <Link href="/about">About</Link>;
+<Link href="/about" to="/app" children="" />; // $ExpectError
+<Link children="" />; // $ExpectError
+
 <Link href="/about">
   This is <i>awesome!</i>
 </Link>;
@@ -67,12 +74,14 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 
 // supports standard link attributes
 <Link
+  href="/somewhere"
   onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {}}
   children={null}
 />;
-<Link download target="_blank" rel="noreferrer" children={null} />;
+<Link download href="/" target="_blank" rel="noreferrer" children={null} />;
 
 <Link
+  href="/somewhere"
   children={null}
   onDrag={event => {
     event; // $ExpectType DragEvent<HTMLAnchorElement>

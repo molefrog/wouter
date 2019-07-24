@@ -33,16 +33,17 @@ export interface RouteProps {
 }
 export const Route: FunctionComponent<RouteProps>;
 
-export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-  to?: Path;
-  href?: Path;
-}
+export type NavigationalProps =
+  | { to: Path; href?: never }
+  | { href: Path; to?: never };
+
+export type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> &
+  NavigationalProps;
+
 export const Link: FunctionComponent<LinkProps>;
 
-export interface RedirectProps {
-  to?: Path;
-  href?: Path;
-}
+export type RedirectProps = NavigationalProps;
+
 export const Redirect: FunctionComponent<
   RedirectProps & {
     children?: null;
