@@ -46,7 +46,7 @@ export type RedirectProps = NavigationalProps;
 
 export const Redirect: FunctionComponent<
   RedirectProps & {
-    children?: null;
+    children?: never;
   }
 >;
 

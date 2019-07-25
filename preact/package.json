@@ -7,7 +7,7 @@
   "types": "index.d.ts",
   "license": "ISC",
   "peerDependencies": {
-    "wouter": "^2.1.1",
-    "preact": "^10.0.0-rc.0"
+    "preact": "^10.0.0-rc.0",
+    "wouter": "^2.1.1"
   }
 }
