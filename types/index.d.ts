@@ -47,7 +47,7 @@ export interface RedirectProps {
 }
 export const Redirect: FunctionComponent<
   RedirectProps & {
-    children?: null;
+    children?: never;
   }
 >;
 

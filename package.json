@@ -13,15 +13,22 @@
   "files": [
     "*.js",
     "*.d.ts",
-    "preact/"
+    "preact",
+    "!babel.config.js",
+    "!preact/types"
   ],
   "module": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "lint-types": "dtslint types --onlyTestTsNext",
-    "pack-types": "copyfiles -f types/*.d.ts .",
+    "lint-types:react": "dtslint types --onlyTestTsNext",
+    "lint-types:preact": "npm run lint-types:preact:prepare && dtslint preact/types --onlyTestTsNext",
+    "lint-types:preact:prepare": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types",
+    "lint-types": "npm run lint-types:react && npm run lint-types:preact",
+    "pack-types:react": "copyfiles -f types/*.d.ts .",
+    "pack-types:preact": "copyfiles -f preact/types/*.d.ts preact/",
+    "pack-types": "npm run pack-types:react && npm run pack-types:preact",
     "pack-preact": "copyfiles index.js matcher.{js,d.ts} use-location.{js,d.ts} static-location.{js,d.ts} preact/",
     "prepublishOnly": "npm run pack-types && npm run pack-preact"
   },
