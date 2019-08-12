@@ -33,23 +33,16 @@ export interface RouteProps {
 }
 export const Route: FunctionComponent<RouteProps>;
 
-export interface LinkProps extends JSX.HTMLAttributes {
-  to?: Path;
-  href?: Path;
-  onClick?: () => void;
-  children: ComponentChildren;
-}
+export type NavigationalProps =
+  | { to: Path; href?: never }
+  | { href: Path; to?: never };
+
+export type LinkProps = Omit<JSX.HTMLAttributes, "href"> & NavigationalProps;
+
 export const Link: FunctionComponent<LinkProps>;
 
-export interface RedirectProps {
-  to?: Path;
-  href?: Path;
-}
-export const Redirect: FunctionComponent<
-  RedirectProps & {
-    children?: never;
-  }
->;
+export type RedirectProps = NavigationalProps & { children?: never };
+export const Redirect: FunctionComponent<RedirectProps>;
 
 export interface SwitchProps {
   location?: string;

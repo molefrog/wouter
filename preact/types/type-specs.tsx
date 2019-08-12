@@ -57,6 +57,9 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
   This is <i>awesome!</i>
 </Link>;
 
+<Link href="/about" to="/app" children="" />; // $ExpectError
+<Link children="" />; // $ExpectError
+
 <Link href="/">
   <a className="active">Active Link</a>
 </Link>;
@@ -66,15 +69,8 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 </Link>;
 
 // supports standard link attributes
-<Link onClick={() => 0} children={null} />;
-<Link download target="_blank" rel="noreferrer" children={null} />;
-
-<Link
-  children={null}
-  onDrag={event => {
-    event; // $ExpectType DragEvent
-  }}
-/>;
+<Link href="/somewhere" children={null} />;
+<Link download href="/" target="_blank" rel="noreferrer" children={null} />;
 
 /*
  * Redirect specs
