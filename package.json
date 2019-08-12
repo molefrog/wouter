@@ -22,15 +22,10 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "lint-types:react": "dtslint types --onlyTestTsNext",
-    "lint-types:preact": "npm run lint-types:preact:prepare && dtslint preact/types --onlyTestTsNext",
-    "lint-types:preact:prepare": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types",
-    "lint-types": "npm run lint-types:react && npm run lint-types:preact",
-    "pack-types:react": "copyfiles -f types/*.d.ts .",
-    "pack-types:preact": "copyfiles -f preact/types/*.d.ts preact/",
-    "pack-types": "npm run pack-types:react && npm run pack-types:preact",
-    "pack-preact": "copyfiles index.js matcher.{js,d.ts} use-location.{js,d.ts} static-location.{js,d.ts} preact/",
-    "prepublishOnly": "npm run pack-types && npm run pack-preact"
+    "lint-types": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types && dtslint types --onlyTestTsNext && dtslint preact/types --onlyTestTsNext",
+    "pack-react": "copyfiles -f types/*.d.ts .",
+    "pack-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts preact/types/index.d.ts preact/",
+    "prepublishOnly": "npm run pack-react && npm run pack-preact"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
