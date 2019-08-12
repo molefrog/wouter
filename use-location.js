@@ -1,4 +1,4 @@
-import { useEffect, useState } from "./react-deps.js";
+import { useEffect, useState, useCallback } from "./react-deps.js";
 
 export default () => {
   const [path, update] = useState(location.pathname);
@@ -13,7 +13,17 @@ export default () => {
     return () => events.map(e => removeEventListener(e, handler));
   }, []);
 
-  return [path, (to, replace) => history[replace ? "replaceState" : "pushState"](0, 0, to)];
+  // the 2nd argument of the `useLocation` return value is a function
+  // that allows to perform a navigation.
+  //
+  // the function reference should stay the same between re-renders, so that
+  // it can be passed down as an element prop without any performance concerns.
+  const navigate = useCallback(
+    (to, replace) => history[replace ? "replaceState" : "pushState"](0, 0, to),
+    []
+  );
+
+  return [path, navigate];
 };
 
 // While History API does have `popstate` event, the only
