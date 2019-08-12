@@ -67,6 +67,24 @@ it("performs a navigation when the link is clicked", () => {
   expect(location.pathname).toBe("/goo-baz");
 });
 
+it("ignores the navigation when clicked with modifiers", () => {
+  const { container, getByTestId } = render(
+    <Link href="/users" data-testid="link">
+      click
+    </Link>
+  );
+  fireEvent(
+    getByTestId("link"),
+    new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      button: 0,
+      ctrlKey: true
+    })
+  );
+  expect(location.pathname).not.toBe("/users");
+});
+
 it("accepts an `onClick` prop, fired after the navigation", () => {
   const clickHandler = jest.fn();
 
