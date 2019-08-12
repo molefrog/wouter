@@ -36,7 +36,7 @@
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1159 B"
+      "limit": "1191 B"
     },
     {
       "path": "use-location.js",
