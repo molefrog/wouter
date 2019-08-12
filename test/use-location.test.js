@@ -88,4 +88,15 @@ describe("`update` second parameter", () => {
     expect(location.pathname).toBe("/foo");
     unmount();
   });
+
+  it("stays the same reference between re-renders (function ref)", () => {
+    const { result, rerender, unmount } = renderHook(() => useLocation());
+
+    const updateWas = result.current[1];
+    rerender();
+    const updateNow = result.current[1];
+
+    expect(updateWas).toBe(updateNow);
+    unmount();
+  });
 });
