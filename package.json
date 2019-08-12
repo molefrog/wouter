@@ -22,9 +22,9 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "lint-types": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types && dtslint types --onlyTestTsNext && dtslint preact/types --onlyTestTsNext",
+    "lint-types": "dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
     "pack-react": "copyfiles -f types/*.d.ts .",
-    "pack-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts preact/types/index.d.ts preact/",
+    "pack-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts types/preact/index.d.ts preact/",
     "prepublishOnly": "npm run pack-react && npm run pack-preact"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",

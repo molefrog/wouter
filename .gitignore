@@ -22,9 +22,6 @@ coverage/
 # preact dist: all files are ignored by default
 # expect sources that are Preact-specific
 preact/*
-!preact/types/index.d.ts
-!preact/types/tsconfig.json
-!preact/types/type-specs.tsx
 !preact/react-deps.js
 !preact/package.json
 
