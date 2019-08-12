@@ -1,14 +1,15 @@
 {
   "name": "wouter",
   "version": "2.1.1",
-  "description": "A minimalistic routing for React. Nothing extra, just HOOKS.",
+  "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
   "keywords": [
     "react",
     "preact",
     "router",
     "tiny",
     "routing",
-    "hooks"
+    "hooks",
+    "useLocation"
   ],
   "files": [
     "*.js",

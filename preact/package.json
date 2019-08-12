@@ -1,13 +1,13 @@
 {
   "name": "wouter-preact",
   "version": "2.1.1",
-  "private": true,
-  "description": "A minimalistic routing for Preact. Nothing extra, just HOOKS.",
+  "description": "A minimalistic routing for React and Preact (Preact-only version).",
   "module": "index.js",
   "types": "index.d.ts",
+  "author": "Alexey Taktarov <molefrog@gmail.com>",
+  "repository": "molefrog/wouter",
   "license": "ISC",
   "peerDependencies": {
-    "preact": "^10.0.0-rc.0",
-    "wouter": "^2.1.1"
+    "preact": "^10.0.0-rc.0"
   }
 }
