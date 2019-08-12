@@ -14,8 +14,7 @@
     "*.js",
     "*.d.ts",
     "preact",
-    "!babel.config.js",
-    "!preact/types"
+    "!babel.config.js"
   ],
   "module": "index.js",
   "types": "index.d.ts",
