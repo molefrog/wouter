@@ -42,13 +42,11 @@ export type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> &
 
 export const Link: FunctionComponent<LinkProps>;
 
-export type RedirectProps = NavigationalProps;
+export type RedirectProps = NavigationalProps & {
+  children?: never;
+};
 
-export const Redirect: FunctionComponent<
-  RedirectProps & {
-    children?: never;
-  }
->;
+export const Redirect: FunctionComponent<RedirectProps>;
 
 export interface SwitchProps {
   location?: string;
