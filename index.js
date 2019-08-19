@@ -146,8 +146,8 @@ export const Switch = ({ children, location }) => {
 export const Redirect = props => {
   const [, push] = useLocation();
   useEffect(() => {
-    push(props.href || props.to)
-  });
+    push(props.href || props.to);
+  }, []);
 
   return null;
 };
