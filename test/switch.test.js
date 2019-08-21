@@ -4,7 +4,7 @@ import TestRenderer from "react-test-renderer";
 import { Router, Route, Switch } from "../index.js";
 import { memoryLocation } from "./test-utils.js";
 
-import { render } from "react-testing-library";
+import { render } from "@testing-library/react";
 
 const testRouteRender = (initialPath, jsx) => {
   const instance = TestRenderer.create(
