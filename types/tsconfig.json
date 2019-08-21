@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["es6"],
+    "lib": ["es6", "dom"],
     "jsx": "react",
     "noEmit": true,
     "strict": true,
