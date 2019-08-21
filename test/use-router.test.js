@@ -1,5 +1,5 @@
 import React, { cloneElement } from "react";
-import { renderHook, act } from "react-hooks-testing-library";
+import { renderHook, act } from "@testing-library/react-hooks";
 import TestRenderer from "react-test-renderer";
 
 import { Router, useRouter } from "../index.js";
