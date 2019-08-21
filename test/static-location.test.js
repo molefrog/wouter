@@ -1,4 +1,4 @@
-import { renderHook, act } from "react-hooks-testing-library";
+import { renderHook, act } from "@testing-library/react-hooks";
 import staticLocation from "../static-location.js";
 
 it("is a static hook factory", () => {
