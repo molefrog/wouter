@@ -4,9 +4,9 @@ import TestRenderer from "react-test-renderer";
 import { Router, Route } from "../index.js";
 import { memoryLocation } from "./test-utils.js";
 
-const testRouteRender = (initialPath, jsx) => {
+const testRouteRender = (initialPath, jsx, basepath = '') => {
   const instance = TestRenderer.create(
-    <Router hook={memoryLocation(initialPath)}>{jsx}</Router>
+    <Router hook={memoryLocation(initialPath)} basepath={basepath}>{jsx}</Router>
   ).root;
 
   return instance;
@@ -58,6 +58,18 @@ it("supports `component` prop similar to React-Router", () => {
   const result = testRouteRender(
     "/foo",
     <Route path="/foo" component={Users} />
+  );
+
+  expect(result.findByType("h2").props.children).toBe("All users");
+});
+
+it("renders via a basepath", () => {
+  const Users = () => <h2>All users</h2>;
+
+  const result = testRouteRender(
+    "/app/foo",
+    <Route path="/foo" component={Users} />,
+    '/app'
   );
 
   expect(result.findByType("h2").props.children).toBe("All users");

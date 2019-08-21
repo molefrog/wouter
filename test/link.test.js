@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
-import { Link } from "../index.js";
+import { Link, Router } from "../index.js";
 
 afterEach(cleanup);
 
@@ -96,4 +96,28 @@ it("accepts an `onClick` prop, fired after the navigation", () => {
 
   fireEvent.click(getByTestId("link"));
   expect(clickHandler).toHaveBeenCalledTimes(1);
+});
+
+it("performs a navigation with basepath when the link is clicked", () => {
+  const { getByTestId } = render(
+    <Router basepath="/app">
+      <Link href="/about" data-testid="link"/>
+    </Router>
+  );
+
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).toBe("/app/about");
+});
+
+it("performs a custom navigation component with basepath when the link is clicked", () => {
+  const { getByTestId } = render(
+    <Router basepath="/app">
+      <Link href="/about" data-testid="link">
+        { props => <a data-testid="link" href={props.href}/>}
+      </Link>
+    </Router>
+  );
+
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).toBe("/app/about");
 });
