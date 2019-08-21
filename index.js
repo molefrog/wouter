@@ -147,7 +147,10 @@ export const Redirect = props => {
   const [, push] = useLocation();
   useEffect(() => {
     push(props.href || props.to);
-  }, []);
+
+    // we pass an empty array of dependecies to ensure that
+    // we only run the effect once after initial render
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };
