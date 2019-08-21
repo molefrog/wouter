@@ -14,7 +14,8 @@
   "files": [
     "*.js",
     "*.d.ts",
-    "preact"
+    "preact",
+    "cjs"
   ],
   "module": "index.js",
   "types": "index.d.ts",
@@ -24,7 +25,8 @@
     "lint-types": "dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
     "pack-react": "copyfiles -f types/*.d.ts .",
     "pack-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts types/preact/index.d.ts preact/",
-    "prepublishOnly": "npm run pack-react && npm run pack-preact"
+    "bundle-cjs": "rollup -e react,preact,preact/hooks,preact/compat -f cjs --exports named --preserveModules -d cjs *.js preact/*.js",
+    "prepublishOnly": "npm run pack-react && npm run pack-preact && npm run bundle-cjs"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
@@ -86,11 +88,12 @@
     "eslint": "^6.2.1",
     "eslint-plugin-react-hooks": "^1.7.0",
     "jest": "^24.9.0",
+    "jest-esm-jsx-transform": "^1.0.0",
     "preact": "^10.0.0-rc.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.9.0",
-    "size-limit": "^2.1.1",
-    "jest-esm-jsx-transform": "^1.0.0"
+    "rollup": "^1.19.4",
+    "size-limit": "^2.1.1"
   }
 }
