@@ -1,79 +1,78 @@
 /** @jsx h */
-import { h, Fragment, options } from "preact";
-import { act, teardown } from "preact/test-utils";
-import { render, cleanup, fireEvent } from "preact-testing-library";
-
-import { Router, Route, Link, Switch } from "../index.js";
+import { h, Fragment, render, createContext } from "preact";
+import { act, setupRerender, teardown } from "preact/test-utils";
 
 // make the library use Preact exports
 jest.mock("../react-deps.js", () => require("../preact/react-deps.js"));
+const { Router, Route, Link, Switch } = require("../index.js");
 
 describe("Preact support", () => {
-  beforeEach(() => history.replaceState(0, 0, "/"));
+  beforeEach(() => {
+    history.replaceState(0, 0, "/");
+    setupRerender();
+  });
 
-  afterEach(cleanup);
-  afterEach(teardown);
+  afterEach(() => {
+    teardown();
+  });
 
   it("renders properly and reacts on navigation", () => {
+    const container = document.body.appendChild(document.createElement("div"));
     const fn = jest.fn();
-    let renderResult = null;
 
-    act(() => {
-      renderResult = render(
-        <Fragment>
-          <nav>
-            <Link href="/albums/all" onClick={fn} data-testid="index-link">
-              The Best Albums Ever
-            </Link>
-            <Link to="/albums/london-calling">
-              <a data-testid="featured-link">
-                Featured Now: London Calling, Clash
-              </a>
-            </Link>
-          </nav>
+    const App = () => (
+      <Fragment>
+        <nav>
+          <Link href="/albums/all" onClick={fn} data-testid="index-link">
+            The Best Albums Ever
+          </Link>
+          <Link to="/albums/london-calling">
+            <a data-testid="featured-link">
+              Featured Now: London Calling, Clash
+            </a>
+          </Link>
+        </nav>
 
-          <main data-testid="routes">
-            <Switch>
-              Welcome to the list of {100} greatest albums of all time!
-              <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
-              <Route path="/albums/:name">
-                {params => `Album ${params.name}`}
-              </Route>
-              <Route path="/:anything*">Nothing was found!</Route>
-            </Switch>
-          </main>
-        </Fragment>
-      );
-    });
+        <main data-testid="routes">
+          <Switch>
+            Welcome to the list of {100} greatest albums of all time!
+            <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
+            <Route path="/albums/:name">
+              {params => `Album ${params.name}`}
+            </Route>
+            <Route path="/:anything*">Nothing was found!</Route>
+          </Switch>
+        </main>
+      </Fragment>
+    );
 
-    const { container, getByTestId } = renderResult;
+    let node = render(<App />, container);
 
-    const routesEl = getByTestId("routes");
+    const routesEl = container.querySelector('[data-testid="routes"]');
+    const indexLinkEl = container.querySelector('[data-testid="index-link"]');
+    const featLinkEl = container.querySelector('[data-testid="featured-link"]');
 
     // default route should be rendered
     expect(routesEl.textContent).toBe("Nothing was found!");
+    expect(featLinkEl.getAttribute("href")).toBe("/albums/london-calling");
 
     // link renders as A element
-    const indexLink = getByTestId("index-link");
-    expect(indexLink.tagName).toBe("A");
+    expect(indexLinkEl.tagName).toBe("A");
 
-    act(() => fireEvent.click(indexLink));
+    act(() => {
+      const evt = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        button: 0
+      });
+
+      indexLinkEl.dispatchEvent(evt);
+    });
 
     // performs a navigation when the link is clicked
     expect(location.pathname).toBe("/albums/all");
 
     // Link accepts an `onClick` prop, fired after the navigation
     expect(fn).toHaveBeenCalledTimes(1);
-
-    // always renders no more than 1 matched children in Switch
-    expect(routesEl.textContent).toBe("Rolling Stones Best 100 Albums");
-
-    const featuredLink = getByTestId("featured-link");
-    expect(featuredLink.getAttribute("href")).toBe("/albums/london-calling");
-
-    act(() => fireEvent.click(featuredLink));
-
-    expect(location.pathname).toBe("/albums/london-calling");
-    expect(routesEl.textContent).toBe("Album london-calling");
   });
 });
