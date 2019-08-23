@@ -36,11 +36,9 @@ const App = () => (
 );
 ```
 
-### This library comes untranspiled, please read this!
+### Supporting IE11 and obsolete platforms
 
-**TL;DR** Want to support IE11 → make sure you transpile `node_modules`.
-
-The library is written in pure ES6 and doesn't come with transpiled sources. There is a [big debate going on](https://gist.github.com/Rich-Harris/51e1bf24e7c093469ef7a0983bad94cb) it the community on whether or not libraries should ship untranspiled code. Wouter was designed to be as small as possible and the decision to ship raw ES6 was made intentionally. We only use basic things like arrow functions and destructive assignment, so it should work fine in the [majority of the browsers](https://caniuse.com/#feat=es6). If you'd like to aim platforms like IE11, please make sure you run Babel over your `node_modules`.
+This library uses features like [destructuring assignment](https://kangax.github.io/compat-table/es6/#test-destructuring,_assignment) and [`const/let` declarations](https://kangax.github.io/compat-table/es6/#test-const) and doesn't ship with ES5 transpiled sources. If you aim to support browsers like IE11 and below → make sure you run Babel over your `node_modules`
 
 ## Wouter API
 
