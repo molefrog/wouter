@@ -5,7 +5,7 @@
 
 <img src="logo.svg" align="right" width="200" alt="Wouter Logo by Katya Vakulenko">
 
-A tiny routing solution for modern React apps that relies on Hooks. A router you wanted so bad in your project!
+A tiny routing solution for modern React and Preact apps that relies on Hooks. A router you wanted so bad in your project!
 
 - Zero dependency, only **1151 B** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
@@ -66,6 +66,7 @@ active links, default routes etc.
 - **[`<Link />`](#link-hrefpath-)** — wraps `<a>`, allows to perfom a navigation.
 - **[`<Switch />`](#switch-)** — exclusive routing, only renders the first matched route.
 - **[`<Redirect />`](#redirect-topath-)** — when rendered, performs an immediate navigation.
+- **[`<Router />`](#router-hookhook-matchermatchfn-)** — an optional top-level component for advanced routing configuration.
 
 ## Hooks API
 
@@ -245,6 +246,24 @@ fetchOrders().then(orders => {
   setLocation("/app/orders");
 });
 ```
+
+### `<Router hook={hook} matcher={matchFn} />`
+
+Unlike _React Router_, routes in wouter **don't have to be wrapped in a top-level component**. An internal router object will
+be constructed on demand, so you can start writing your app without polluting it with a cascade of top-level providers.
+There are cases however, when the routing behaviour needs to be customized.
+
+These cases include hash-based routing, basepath support, custom matcher function etc.
+
+A router is a simple object that holds the routing configuration options. You can always obtain this object using a [`useRouter` hook](#userouter-accessing-the-router-object). The list of currently available options:
+
+- **`hook: () => [location: string, setLocation: fn]`** — is a React Hook function that subscribes to location changes. It returns a pair of current `location` string e.g. `/app/users` and a `setLocation` function for navigation. You can use this hook from any component of your app by calling [`useLocation()` hook](#uselocation-hook-working-with-the-history).
+
+Read more → [Customizing the location hook](#customizing-the-location-hook).
+
+- **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters.
+
+Read more → [Matching Dynamic Segments](#matching-dynamic-segments).
 
 ### Matching Dynamic Segments
 
