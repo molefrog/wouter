@@ -345,7 +345,7 @@ return (
 
 ### Can I use _wouter_ in my TypeScript project?
 
-Yes! Although the project isn't written in TypeScript, there is a [type definition package](https://www.npmjs.com/package/@types/wouter) available through [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). Simply add `npm install --save-dev @types/wouter` to your project and develop safely with types.
+Yes! Although the project isn't written in TypeScript, the type definition files are bundled with the package.
 
 ### Preact support?
 
