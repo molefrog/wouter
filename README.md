@@ -349,11 +349,11 @@ Yes! Although the project isn't written in TypeScript, there is a [type definiti
 
 ### Preact support?
 
-The Preact exports are available within the `wouter/preact` namespace:
+Preact exports are available through a separate package named `wouter-preact` (or within the `wouter/preact` namespace, however this method isn't recommended as it requires React as a peer dependency):
 
 ```diff
 - import { useRoute, Route, Switch } from "wouter";
-+ import { useRoute, Route, Switch } from "wouter/preact";
++ import { useRoute, Route, Switch } from "wouter-preact";
 ```
 
 You might need to ensure you have the latest version of [Preact X](https://github.com/preactjs/preact/releases/tag/10.0.0-alpha.0) with support for hooks.
