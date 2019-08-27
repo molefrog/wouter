@@ -161,7 +161,7 @@ export const Switch = ({ children, location }) => {
 export const Redirect = props => {
   const [, push] = useLocation();
   useEffect(() => {
-    push(props.href || props.to, false, props.state);
+    push(props.href || props.to, props.replace, props.state);
 
     // we pass an empty array of dependecies to ensure that
     // we only run the effect once after initial render
