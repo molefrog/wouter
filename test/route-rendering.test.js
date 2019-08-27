@@ -67,8 +67,8 @@ it("renders via a basepath", () => {
   const Users = () => <h2>All users</h2>;
 
   const result = testRouteRender(
-    "/app/foo",
-    <Route path="/foo" component={Users} />,
+    "/app/users",
+    <Route path="/users" component={Users} />,
     '/app'
   );
 

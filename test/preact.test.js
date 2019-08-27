@@ -33,16 +33,18 @@ describe("Preact support", () => {
           </Link>
         </nav>
 
-        <main data-testid="routes">
-          <Switch>
-            Welcome to the list of {100} greatest albums of all time!
-            <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
-            <Route path="/albums/:name">
-              {params => `Album ${params.name}`}
-            </Route>
-            <Route path="/:anything*">Nothing was found!</Route>
-          </Switch>
-        </main>
+        <Router basepath="/app">
+          <main data-testid="routes">
+            <Switch>
+              Welcome to the list of {100} greatest albums of all time!
+              <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
+              <Route path="/albums/:name">
+                {params => `Album ${params.name}`}
+              </Route>
+              <Route default>Nothing was found!</Route>
+            </Switch>
+          </main>
+        </Router>
       </Fragment>
     );
 

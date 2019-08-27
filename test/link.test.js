@@ -112,8 +112,21 @@ it("performs a navigation with basepath when the link is clicked", () => {
 it("performs a custom navigation component with basepath when the link is clicked", () => {
   const { getByTestId } = render(
     <Router basepath="/app">
-      <Link href="/about" data-testid="link">
-        { props => <a data-testid="link" href={props.href}/>}
+      <Link href="/about" data-testid="link"/>
+    </Router>
+  );
+
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).toBe("/app/about");
+});
+
+it("link can support render props", () => {
+  const { getByTestId } = render(
+    <Router basepath="/app">
+      <Link>
+        {
+          ({navigate}) => <a data-testid="link" onClick={() => navigate('/about')}>click to navigate</a>
+        }
       </Link>
     </Router>
   );

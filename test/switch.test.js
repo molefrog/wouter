@@ -9,9 +9,9 @@ import { render, act } from "@testing-library/react";
 const raf = () =>
   new Promise((resolve, reject) => requestAnimationFrame(resolve));
 
-const testRouteRender = (initialPath, jsx) => {
+const testRouteRender = (initialPath, jsx, basepath = '') => {
   const instance = TestRenderer.create(
-    <Router hook={memoryLocation(initialPath)}>{jsx}</Router>
+    <Router hook={memoryLocation(initialPath)} basepath={basepath}>{jsx}</Router>
   ).root;
 
   return instance;
@@ -112,4 +112,53 @@ it("always ensures the consistency of inner routes rendering", async () => {
   });
 
   unmount();
+});
+
+it("renders one match child route via basepath and without location props", () => {
+  const result = testRouteRender(
+    "/app/users",
+    <Switch>
+      <Route path="/users"><h1 /></Route>
+      <Route path="/others"><h2 /></Route>
+    </Switch>,
+    '/app'
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(result.findByType("h1")).toBeTruthy();
+});
+
+it("render one match child route where both basepath and location exist", () => {
+  const result = testRouteRender(
+    "/app/users",
+    <Switch location="/others">
+      <Route path="/users"><h1 /></Route>
+      <Route path="/others"><h2 /></Route>
+    </Switch>,
+    '/app'
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(result.findByType("h2")).toBeTruthy();
+});
+
+it("render default route when no route's path be matched", () => {
+  const result = testRouteRender(
+    "/app/users",
+    <Switch>
+      <Route path="/anything-one"><h1 /></Route>
+      <Route default><h2 /></Route>
+      <Route path="/anything-two"><h3 /></Route>
+    </Switch>,
+    '/app'
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(result.findByType("h2")).toBeTruthy();
 });

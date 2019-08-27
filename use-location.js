@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "./react-deps.js";
 
-export default () => {
+export default ({ basepath = '', ...others } = {}) => {
   const [path, update] = useState(location.pathname);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default () => {
   // the function reference should stay the same between re-renders, so that
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
-    (to, replace) => history[replace ? "replaceState" : "pushState"](0, 0, to),
+    (to, replace, state) => history[replace ? "replaceState" : "pushState"](state, 0, basepath + to),
     []
   );
 

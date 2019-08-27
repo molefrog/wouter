@@ -77,17 +77,16 @@ export const Route = ({ path, match, component, children }) => {
   if (!matches) return null;
 
   // React-Router style `component` prop
-  if (component) return h(component, { params: params });
+  if (component) return h(component, { params });
 
   // support render prop or plain children
   return typeof children === "function" ? children(params) : children;
 };
 
 export const Link = props => {
-  const { basepath } = useRouter();
   const [, navigate] = useLocation();
 
-  const href = basepath + (props.href || props.to);
+  const href = props.href || props.to;
   const { children, onClick } = props;
 
   const handleClick = useCallback(
@@ -104,7 +103,7 @@ export const Link = props => {
         return;
 
       event.preventDefault();
-      navigate(href);
+      navigate(href, false, props.state);
       onClick && onClick(event);
     },
     [href, onClick, navigate]
@@ -114,14 +113,14 @@ export const Link = props => {
   const extraProps = { href, onClick: handleClick, to: null };
 
   // render props
-  if (typeof children === 'function') return children(props);
+  if (typeof children === 'function') return children({...props, navigate});
   const jsx = isValidElement(children) ? children : h("a", props);
 
   return cloneElement(jsx, extraProps);
 };
 
 export const Switch = ({ children, location }) => {
-  const { matcher } = useRouter();
+  const { matcher, basepath } = useRouter();
   const [originalLocation] = useLocation();
 
   // make sure the `children` prop is always an array
@@ -130,8 +129,19 @@ export const Switch = ({ children, location }) => {
   // properly handled below in the loop.
   children = children && children.length ? children : [children];
 
+  if (location) location = basepath + location;
+
+  let defaultEl;
+
   for (const element of children) {
+
     let match = 0;
+
+    // we always use the last `default` element
+    if (isValidElement(element) && element.props.default) {
+      defaultEl = element;
+      continue;
+    }
 
     if (
       isValidElement(element) &&
@@ -140,18 +150,18 @@ export const Switch = ({ children, location }) => {
       // this allows to use different components that wrap Route
       // inside of a switch, for example <AnimatedRoute />.
       element.props.path &&
-      (match = matcher(element.props.path, location || originalLocation))[0]
+      (match = matcher(basepath + element.props.path, location || originalLocation))[0]
     )
       return cloneElement(element, { match });
   }
 
-  return null;
+  return defaultEl ? cloneElement(defaultEl, { match: [1] }) : null;
 };
 
 export const Redirect = props => {
   const [, push] = useLocation();
   useEffect(() => {
-    push(props.href || props.to);
+    push(props.href || props.to, false, props.state);
 
     // we pass an empty array of dependecies to ensure that
     // we only run the effect once after initial render
