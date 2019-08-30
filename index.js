@@ -119,11 +119,7 @@ export const Switch = ({ children, location }) => {
   const { matcher } = useRouter();
   const [originalLocation] = useLocation();
 
-  // make sure the `children` prop is always an array
-  // this is a bit hacky, because it returns [[]], in
-  // case of an empty array, but this case should be
-  // properly handled below in the loop.
-  children = children && children.length ? children : [children];
+  children = Array.isArray(children) ? children : [children];
 
   for (const element of children) {
     let match = 0;
