@@ -3,6 +3,7 @@ import makeMatcher from "./matcher.js";
 
 import {
   useRef,
+  useState,
   useEffect,
   useContext,
   useCallback,
@@ -140,13 +141,18 @@ export const Switch = ({ children, location }) => {
 };
 
 export const Redirect = props => {
+  const [delayed, update] = useState(false);
   const [, push] = useLocation();
   useEffect(() => {
-    push(props.href || props.to);
+    if (delayed) {
+      push(props.href || props.to);
+    } else {
+      update(true);
+    }
 
-    // we pass an empty array of dependecies to ensure that
+    // we pass only `delayed` as dependecies to ensure that
     // we only run the effect once after initial render
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [delayed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };
