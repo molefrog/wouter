@@ -1,18 +1,20 @@
 import * as React from "react";
 import {
-  Route,
-  Params,
   Link,
+  Params,
   Redirect,
-  Switch,
+  Route,
+  RouteComponentProps,
   Router,
+  Switch,
   useLocation,
   useRoute,
-  PushCallback,
-  LinkProps
 } from "wouter";
 
 const Header: React.FunctionComponent = () => <div />;
+const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (
+  <div>User id: {params.id}</div>
+);
 
 /*
  * Params type specs
@@ -39,6 +41,9 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 // Supports various ways to declare children
 <Route path="/header" component={Header} />;
+<Route path="/profile/:id" component={Profile} />;
+<Route<{ id: string }> path="/profile/:id" component={Profile} />;
+<Route<{ name: string }> path="/profile/:name" component={Profile} />; // $ExpectError
 
 <Route path="/app">
   <div />
