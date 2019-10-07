@@ -2,6 +2,7 @@
 npm-debug.log*
 node_modules/
 .npm
+yarn.lock
 
 # ignore package-lock.json since it's a package
 # see https://github.com/sindresorhus/ama/issues/479#issuecomment-310661514

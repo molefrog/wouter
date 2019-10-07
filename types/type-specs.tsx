@@ -18,9 +18,14 @@ const Header: React.FunctionComponent = () => <div />;
  * Params type specs
  */
 const someParams: Params = { foo: "bar" };
+const someParamsWithGeneric: Params<{ foo: string }> = { foo: "bar" };
+
+// error: params should follow generic type
+const paramsDontMatchGeneric: Params<{ foo: string }> = { baz: "bar" };  // $ExpectError
 
 // error: values are strings!
 const invalidParams: Params = { id: 13 }; // $ExpectError
+const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectError
 
 /*
  * <Route /> component type specs
@@ -45,6 +50,14 @@ const invalidParams: Params = { id: 13 }; // $ExpectError
 
 <Route path="/users/:id">
   {(params: Params): React.ReactNode => `User id: ${params.id}`}
+</Route>;
+
+<Route<{ id: string }> path="/users/:id">
+  {({ id }) => `User id: ${id}`}
+</Route>;
+
+<Route<{ id: string }> path="/users/:id">
+  {({ age }) => `User age: ${age}`} // $ExpectError
 </Route>;
 
 <Route path="/app" match={true} />; // $ExpectError
@@ -135,11 +148,12 @@ useRoute(Symbol()); // $ExpectError
 useRoute(); // $ExpectError
 useRoute("/");
 
-const [match, params] = useRoute("/app/users/:id");
+const [match, params] = useRoute<{ id: string }>("/app/users/:id");
 match; // $ExpectType boolean
 
 if (params) {
   params.id; // $ExpectType string
+  params.age; // $ExpectError
 } else {
   params; // $ExpectType null
 }
