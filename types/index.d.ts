@@ -21,6 +21,10 @@ export interface DefaultParams {
 }
 export type Params<T extends DefaultParams = DefaultParams> = T;
 
+export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
+  params: T;
+}
+
 export type MatchWithParams<T extends DefaultParams = DefaultParams> = [true, Params<T>];
 export type NoMatch = [false, null];
 export type Match<T extends DefaultParams = DefaultParams> = MatchWithParams<T> | NoMatch;
@@ -30,7 +34,7 @@ export type MatcherFn = (pattern: Path, path: Path) => Match;
 export interface RouteProps<T extends DefaultParams = DefaultParams> {
   children?: ((params: Params<T>) => ReactNode) | ReactNode;
   path: Path;
-  component?: ComponentType<any>;
+  component?: ComponentType<RouteComponentProps<T>>;
 }
 
 export function Route<T extends DefaultParams = DefaultParams>(props: RouteProps<T>): ReactElement | null;  // tslint:disable-line:no-unnecessary-generics
