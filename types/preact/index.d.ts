@@ -16,22 +16,27 @@ export type PushCallback = (to: Path, replace?: boolean) => void;
 export type LocationTuple = [Path, PushCallback];
 export type LocationHook = () => LocationTuple;
 
-export interface Params {
+export interface DefaultParams {
   [paramName: string]: string;
 }
+export type Params<T extends DefaultParams = DefaultParams> = T;
 
-export type MatchWithParams = [true, Params];
+export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
+  params: T;
+}
+
+export type MatchWithParams<T extends DefaultParams = DefaultParams> = [true, Params<T>];
 export type NoMatch = [false, null];
-export type Match = MatchWithParams | NoMatch;
+export type Match<T extends DefaultParams = DefaultParams> = MatchWithParams<T> | NoMatch;
 
 export type MatcherFn = (pattern: Path, path: Path) => Match;
 
-export interface RouteProps {
-  children?: ((params: Params) => ComponentChildren) | ComponentChildren;
+export interface RouteProps<T extends DefaultParams = DefaultParams> {
+  children?: ((params: Params<T>) => ComponentChildren) | ComponentChildren;
   path: Path;
-  component?: ComponentType<any>;
+  component?: ComponentType<RouteComponentProps<T>>;
 }
-export const Route: FunctionComponent<RouteProps>;
+export function Route<T extends DefaultParams = DefaultParams>(props: RouteProps<T>): VNode<any> | null; // tslint:disable-line:no-unnecessary-generics
 
 export type NavigationalProps =
   | { to: Path; href?: never }
@@ -62,6 +67,6 @@ export const Router: FunctionComponent<
 
 export function useRouter(): RouterProps;
 
-export function useRoute(pattern: Path): Match;
+export function useRoute<T extends DefaultParams = DefaultParams>(pattern: Path): Match<T>; // tslint:disable-line:no-unnecessary-generics
 
 export function useLocation(): LocationTuple;
