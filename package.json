@@ -90,7 +90,7 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "jest": "^24.9.0",
     "jest-esm-jsx-transform": "^1.0.0",
-    "preact": "^10.0.0-rc.1",
+    "preact": "^10.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.9.0",
