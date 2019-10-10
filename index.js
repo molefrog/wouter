@@ -3,7 +3,7 @@ import makeMatcher from "./matcher.js";
 
 import {
   useRef,
-  useEffect,
+  useLayoutEffect,
   useContext,
   useCallback,
   createContext,
@@ -141,7 +141,7 @@ export const Switch = ({ children, location }) => {
 
 export const Redirect = props => {
   const [, push] = useLocation();
-  useEffect(() => {
+  useLayoutEffect(() => {
     push(props.href || props.to);
 
     // we pass an empty array of dependecies to ensure that

@@ -2,6 +2,7 @@ export { isValidElement, createContext, cloneElement, createElement } from "prea
 export {
   useRef,
   useEffect,
+  useLayoutEffect,
   useState,
   useContext,
   useCallback

@@ -1,6 +1,7 @@
 export {
   useRef,
   useEffect,
+  useLayoutEffect,
   useState,
   useContext,
   useCallback,
