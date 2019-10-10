@@ -1,16 +1,29 @@
-import { useEffect, useState, useCallback } from "./react-deps.js";
+import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
 export default () => {
   const [path, update] = useState(location.pathname);
+  const prevPath = useRef(path);
 
   useEffect(() => {
     patchHistoryEvents();
 
-    const events = ["popstate", "pushState", "replaceState"];
-    const handler = () => update(location.pathname);
+    // this function checks if the location has been changed since the
+    // last render and updates the state only when needed.
+    // unfortunately, we can't rely on `path` value here, since it can be stale,
+    // that's why we store the last pathname in a ref.
+    const checkForUpdates = () =>
+      prevPath.current !== location.pathname &&
+      update((prevPath.current = location.pathname));
 
-    events.map(e => addEventListener(e, handler));
-    return () => events.map(e => removeEventListener(e, handler));
+    const events = ["popstate", "pushState", "replaceState"];
+    events.map(e => addEventListener(e, checkForUpdates));
+
+    // it's possible that an update has occurred between render and the effect handler,
+    // so we run additional check on mount to catch these updates. Based on:
+    // https://gist.github.com/bvaughn/e25397f70e8c65b0ae0d7c90b731b189
+    checkForUpdates();
+
+    return () => events.map(e => removeEventListener(e, checkForUpdates));
   }, []);
 
   // the 2nd argument of the `useLocation` return value is a function
