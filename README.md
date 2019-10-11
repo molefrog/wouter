@@ -358,6 +358,8 @@ Preact exports are available through a separate package named `wouter-preact` (o
 
 You might need to ensure you have the latest version of [Preact X](https://github.com/preactjs/preact/releases/tag/10.0.0-alpha.0) with support for hooks.
 
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-preact-0lr3n)**
+
 ### Is there any support for server-side rendering (SSR)?
 
 Yes! In order to render your app on a server, you'll need to tell the router that the current location comes from the request rather than the browser history. In **wouter**, you can achieve that by replacing the default `useLocation` hook with a static one:
