@@ -26,8 +26,9 @@
     "lint-types": "dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
     "pack-react": "copyfiles -f types/*.d.ts .",
     "pack-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts types/preact/index.d.ts preact/",
-    "bundle-cjs": "rollup -e react,preact,preact/hooks,preact/compat -f cjs --exports named --preserveModules -d cjs *.js preact/*.js",
-    "prepublishOnly": "npm run pack-react && npm run pack-preact && npm run bundle-cjs"
+    "bundle-cjs": "rollup -e react,preact,preact/hooks -f cjs --exports named --preserveModules -d cjs *.js preact/*.js",
+    "bundle-cjs-preact": "rollup -e preact,preact/hooks -f cjs --exports named --preserveModules -d preact/cjs preact/*.js",
+    "prepublishOnly": "npm run pack-react && npm run pack-preact && npm run bundle-cjs && npm run bundle-cjs-preact"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
