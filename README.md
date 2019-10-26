@@ -96,12 +96,15 @@ a navigation with it, this is very similar to how you work with values returned 
 import { useLocation } from "wouter";
 
 const CurrentLocation = () => {
-  const [location, setLocation] = useLocation();
+  const [location, setLocation, state] = useLocation();
 
   return (
     <div>
       {`The current page is: ${location}`}
+      {`The current page location state is: ${state}`}
       <a onClick={() => setLocation("/somewhere")}>Click to update</a>
+      <a onClick={() => setLocation("/somewhere", true)}>Click to update replacing the last entry in the browsing history</a>
+      <a onClick={() => setLocation("/somewhere", false, { from: '/here' })}>Click to update with an additional location state object</a>
     </div>
   );
 };
@@ -193,7 +196,7 @@ import { Route } from "wouter";
 <Route path="/orders/:status" component={Orders} />
 ```
 
-### `<Link href={path} />`
+### `<Link href={path} replace state={stateObj} />`
 
 Link component renders an `<a />` element that, when clicked, performs a navigation. You can customize the link appearance
 by providing your own component or link element as `children`:
@@ -211,7 +214,16 @@ import { Link } from "wouter";
 // will be passed down to an element
 <Link href="/foo"><a className="active">Hello!</a></Link>
 <Link href="/foo"><A>Hello!</A></Link>
+
+// when using `replace` the last entry in the browsing history will be replaced
+// by `/foo` location
+<Link href="/foo" replace className="active">Hello!</Link>
+// when using `state` a location state object will be set and made accesible
+// using the third argument of the `useLocation` return value
+<Link href="/foo" state={{ exampleState: true }} className="active">Hello!</Link>
 ```
+
+`replace` and `state` props are optional.
 
 ### `<Switch />`
 
@@ -229,9 +241,10 @@ import { Route, Switch } from "wouter";
 
 Check out [**FAQ and Code Recipes** section](#faq-and-code-recipes) for more advanced use of `Switch`.
 
-### `<Redirect to={path} />`
+### `<Redirect to={path} replace state={stateObj} />`
 
 When mounted performs a redirect to a `path` provided. Uses `useLocation` hook internally to trigger the navigation inside of a `useEffect` block.
+`replace` and `state` props are optional.
 
 If you need more advanced logic for navigation, for example, to trigger
 the redirect inside of an event handler, consider using [`useLocation` hook instead](#uselocation-hook-working-with-the-history):

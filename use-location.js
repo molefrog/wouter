@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
 export default () => {
   const [path, update] = useState(location.pathname);
+  const [currentState, updateCurrentState] = useState(history.state);
   const prevPath = useRef(path);
 
   useEffect(() => {
@@ -11,9 +12,15 @@ export default () => {
     // last render and updates the state only when needed.
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
-    const checkForUpdates = () =>
-      prevPath.current !== location.pathname &&
-      update((prevPath.current = location.pathname));
+    const checkForUpdates = () => {
+      if (prevPath.current !== location.pathname) {
+        update((prevPath.current = location.pathname));
+      }
+
+      if (currentState !== history.state) {
+        updateCurrentState(history.state);
+      }
+    };
 
     const events = ["popstate", "pushState", "replaceState"];
     events.map(e => addEventListener(e, checkForUpdates));
@@ -24,7 +31,7 @@ export default () => {
     checkForUpdates();
 
     return () => events.map(e => removeEventListener(e, checkForUpdates));
-  }, []);
+  }, [currentState]);
 
   // the 2nd argument of the `useLocation` return value is a function
   // that allows to perform a navigation.
@@ -32,11 +39,12 @@ export default () => {
   // the function reference should stay the same between re-renders, so that
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
-    (to, replace) => history[replace ? "replaceState" : "pushState"](0, 0, to),
+    (to, replace, state) =>
+      history[replace ? "replaceState" : "pushState"](state || 0, 0, to),
     []
   );
 
-  return [path, navigate];
+  return [path, navigate, currentState];
 };
 
 // While History API does have `popstate` event, the only

@@ -58,7 +58,7 @@ it("supports `to` prop as an alias to `href`", () => {
 });
 
 it("performs a navigation when the link is clicked", () => {
-  const { container, getByTestId } = render(
+  const { getByTestId } = render(
     <Link href="/goo-baz">
       <a data-testid="link" />
     </Link>
@@ -68,7 +68,7 @@ it("performs a navigation when the link is clicked", () => {
 });
 
 it("ignores the navigation when clicked with modifiers", () => {
-  const { container, getByTestId } = render(
+  const { getByTestId } = render(
     <Link href="/users" data-testid="link">
       click
     </Link>
@@ -88,7 +88,7 @@ it("ignores the navigation when clicked with modifiers", () => {
 it("accepts an `onClick` prop, fired after the navigation", () => {
   const clickHandler = jest.fn();
 
-  const { container, getByTestId } = render(
+  const { getByTestId } = render(
     <Link href="/" onClick={clickHandler}>
       <a data-testid="link" />
     </Link>
@@ -96,4 +96,30 @@ it("accepts an `onClick` prop, fired after the navigation", () => {
 
   fireEvent.click(getByTestId("link"));
   expect(clickHandler).toHaveBeenCalledTimes(1);
+});
+
+it("accepts a `replace` prop to replace last history entry instead of add a new one after navigation", () => {
+  const { getByTestId } = render(
+    <Link href="/replacing" replace>
+      <a data-testid="link" />
+    </Link>
+  );
+
+  const prevHistoryLength = history.length;
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).toBe("/replacing");
+  expect(history.length).toEqual(prevHistoryLength);
+});
+
+it("accepts a `state` prop to pass some state along with navigation", () => {
+  const state = { from: "/" };
+  const { getByTestId } = render(
+    <Link href="/with-state" state={state}>
+      <a data-testid="link" />
+    </Link>
+  );
+
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).toBe("/with-state");
+  expect(history.state).toMatchObject(state);
 });

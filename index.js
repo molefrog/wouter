@@ -82,11 +82,11 @@ export const Route = ({ path, match, component, children }) => {
   return typeof children === "function" ? children(params) : children;
 };
 
-export const Link = props => {
+export const Link = ({ replace, ...props }) => {
   const [, navigate] = useLocation();
 
   const href = props.href || props.to;
-  const { children, onClick } = props;
+  const { children, onClick, state } = props;
 
   const handleClick = useCallback(
     event => {
@@ -102,10 +102,10 @@ export const Link = props => {
         return;
 
       event.preventDefault();
-      navigate(href);
+      navigate(href, replace, state);
       onClick && onClick(event);
     },
-    [href, onClick, navigate]
+    [href, replace, state, onClick, navigate]
   );
 
   // wraps children in `a` if needed
@@ -119,7 +119,9 @@ export const Switch = ({ children, location }) => {
   const { matcher } = useRouter();
   const [originalLocation] = useLocation();
 
-  children = Array.isArray(children) ? children : [children];
+  if (!Array.isArray(children)) {
+    children = [children];
+  }
 
   for (const element of children) {
     let match = 0;
@@ -142,9 +144,9 @@ export const Switch = ({ children, location }) => {
 export const Redirect = props => {
   const [, push] = useLocation();
   useLayoutEffect(() => {
-    push(props.href || props.to);
+    push(props.href || props.to, props.replace, props.state);
 
-    // we pass an empty array of dependecies to ensure that
+    // we pass an empty array of dependencies to ensure that
     // we only run the effect once after initial render
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

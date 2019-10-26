@@ -1,12 +1,13 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 import useLocation from "../use-location.js";
 
-it("returns a pair [value, update]", () => {
+it("returns a trio [value, update, state]", () => {
   const { result, unmount } = renderHook(() => useLocation());
-  const [value, update] = result.current;
+  const [value, update, state] = result.current;
 
   expect(typeof value).toBe("string");
   expect(typeof update).toBe("function");
+  expect(typeof state).toBe("object");
   unmount();
 });
 
@@ -97,6 +98,44 @@ describe("`update` second parameter", () => {
     const updateNow = result.current[1];
 
     expect(updateWas).toBe(updateNow);
+    unmount();
+  });
+});
+
+describe("`state` third parameter", () => {
+  it("reflects the current history state", () => {
+    const { result, unmount } = renderHook(() => useLocation());
+    expect(result.current[2]).toBe(0);
+    unmount();
+  });
+
+  it("reacts to `pushState` / `replaceState`", () => {
+    const { result, unmount } = renderHook(() => useLocation());
+
+    act(() => history.pushState({ foo: true }, 0, "/foo"));
+    expect(result.current[2]).toMatchObject({ foo: true });
+
+    act(() => history.replaceState({ bar: true }, 0, "/bar"));
+    expect(result.current[2]).toMatchObject({ bar: true });
+    unmount();
+  });
+
+  it("supports history.back() navigation", () => {
+    jest.useFakeTimers();
+    const { result, unmount } = renderHook(() => useLocation());
+
+    act(() => history.pushState({ foo: true }, 0, "/foo"));
+    expect(result.current[2]).toMatchObject({ foo: true });
+
+    act(() => history.pushState({ bar: true }, 0, "/bar"));
+    expect(result.current[2]).toMatchObject({ bar: true });
+
+    act(() => {
+      history.back();
+      jest.runAllTimers();
+    });
+
+    expect(result.current[2]).toMatchObject({ foo: true });
     unmount();
   });
 });
