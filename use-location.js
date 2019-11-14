@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
-export default () => {
-  const [path, update] = useState(location.pathname);
+export default ({ basepath }) => {
+  const [path, update] = useState(location.pathname.slice(basepath.length));
   const prevPath = useRef(path);
 
   useEffect(() => {
@@ -11,9 +11,12 @@ export default () => {
     // last render and updates the state only when needed.
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
-    const checkForUpdates = () =>
-      prevPath.current !== location.pathname &&
-      update((prevPath.current = location.pathname));
+    const checkForUpdates = () => {
+      const pathname = location.pathname.slice(basepath.length);
+      return (
+        prevPath.current !== pathname && update((prevPath.current = pathname))
+      );
+    };
 
     const events = ["popstate", "pushState", "replaceState"];
     events.map(e => addEventListener(e, checkForUpdates));
@@ -31,10 +34,9 @@ export default () => {
   //
   // the function reference should stay the same between re-renders, so that
   // it can be passed down as an element prop without any performance concerns.
-  const navigate = useCallback(
-    (to, replace) => history[replace ? "replaceState" : "pushState"](0, 0, to),
-    []
-  );
+  const navigate = useCallback((to, replace) => {
+    return history[replace ? "replaceState" : "pushState"](0, 0, basepath + to);
+  }, []);
 
   return [path, navigate];
 };
