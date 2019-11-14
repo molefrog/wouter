@@ -25,6 +25,7 @@ const RouterCtx = createContext({});
 const buildRouter = (options = {}) => {
   return {
     hook: options.hook || locationHook,
+    basepath: options.basepath || "",
     matcher: options.matcher || makeMatcher()
   };
 };
@@ -84,6 +85,7 @@ export const Route = ({ path, match, component, children }) => {
 
 export const Link = props => {
   const [, navigate] = useLocation();
+  const { basepath } = useRouter();
 
   const href = props.href || props.to;
   const { children, onClick } = props;
@@ -109,7 +111,7 @@ export const Link = props => {
   );
 
   // wraps children in `a` if needed
-  const extraProps = { href, onClick: handleClick, to: null };
+  const extraProps = { href: basepath + href, onClick: handleClick, to: null };
   const jsx = isValidElement(children) ? children : h("a", props);
 
   return cloneElement(jsx, extraProps);
