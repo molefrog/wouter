@@ -55,6 +55,16 @@ describe("`value` first argument", () => {
     expect(result.current[0]).toBe("/dashboard");
     unmount();
   });
+
+  it("returns `/` when URL contains only a basepath", () => {
+    const { result, unmount } = renderHook(() =>
+      useLocation({ basepath: "/app" })
+    );
+
+    act(() => history.pushState(0, 0, "/app"));
+    expect(result.current[0]).toBe("/");
+    unmount();
+  });
 });
 
 describe("`update` second parameter", () => {
