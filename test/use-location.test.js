@@ -45,6 +45,16 @@ describe("`value` first argument", () => {
     expect(result.current[0]).toBe("/");
     unmount();
   });
+
+  it("returns a pathname without a basepath", () => {
+    const { result, unmount } = renderHook(() =>
+      useLocation({ basepath: "/app" })
+    );
+
+    act(() => history.pushState(0, 0, "/app/dashboard"));
+    expect(result.current[0]).toBe("/dashboard");
+    unmount();
+  });
 });
 
 describe("`update` second parameter", () => {
@@ -97,6 +107,17 @@ describe("`update` second parameter", () => {
     const updateNow = result.current[1];
 
     expect(updateWas).toBe(updateNow);
+    unmount();
+  });
+
+  it("supports a basepath", () => {
+    const { result, unmount } = renderHook(() =>
+      useLocation({ basepath: "/app" })
+    );
+    const update = result.current[1];
+
+    act(() => update("/dashboard"));
+    expect(location.pathname).toBe("/app/dashboard");
     unmount();
   });
 });
