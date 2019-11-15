@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
-export default ({ basepath }) => {
+export default (router = {}) => {
+  const { basepath = "" } = router;
   const [path, update] = useState(location.pathname.slice(basepath.length));
   const prevPath = useRef(path);
 
