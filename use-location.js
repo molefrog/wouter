@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
-export default (router = {}) => {
-  const { basepath = "" } = router;
-  const [path, update] = useState(location.pathname.slice(basepath.length));
+export default (options = {}) => {
+  const { basepath = "" } = options;
+  const [path, update] = useState(currentPathname(basepath));
   const prevPath = useRef(path);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export default (router = {}) => {
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
-      const pathname = location.pathname.slice(basepath.length);
+      const pathname = currentPathname(basepath);
       return (
         prevPath.current !== pathname && update((prevPath.current = pathname))
       );
@@ -68,3 +68,6 @@ const patchHistoryEvents = () => {
 
   return (patched = 1);
 };
+
+const currentPathname = (base, path = location.pathname) =>
+  !path.indexOf(base) ? path.slice(base.length) || "/" : path;
