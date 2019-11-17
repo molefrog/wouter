@@ -22,13 +22,11 @@ import {
 // the implicitly created router (see `useRouter` below)
 const RouterCtx = createContext({});
 
-const buildRouter = (options = {}) => {
-  return {
-    hook: options.hook || locationHook,
-    basepath: options.basepath || "",
-    matcher: options.matcher || makeMatcher()
-  };
-};
+const buildRouter = ({
+  hook = locationHook,
+  basepath = "",
+  matcher = makeMatcher()
+} = {}) => ({ hook, basepath, matcher });
 
 export const useRouter = () => {
   const globalRef = useContext(RouterCtx);
