@@ -14,7 +14,7 @@ export type Path = string;
 export type PushCallback = (to: Path, replace?: boolean) => void;
 
 export type LocationTuple = [Path, PushCallback];
-export type LocationHook = () => LocationTuple;
+export type LocationHook = (props?: Pick<RouterProps, 'basepath'>) => LocationTuple;
 
 export interface DefaultParams {
   [paramName: string]: string;
@@ -57,6 +57,7 @@ export const Switch: FunctionComponent<SwitchProps>;
 
 export interface RouterProps {
   hook: LocationHook;
+  basepath: string;
   matcher: MatcherFn;
 }
 export const Router: FunctionComponent<
@@ -69,4 +70,4 @@ export function useRouter(): RouterProps;
 
 export function useRoute<T extends DefaultParams = DefaultParams>(pattern: Path): Match<T>; // tslint:disable-line:no-unnecessary-generics
 
-export function useLocation(): LocationTuple;
+export function useLocation(props?: Pick<RouterProps, 'basepath'>): LocationTuple;
