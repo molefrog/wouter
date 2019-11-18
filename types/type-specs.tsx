@@ -139,10 +139,15 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   Hello, we have <Header /> and some {1337} numbers here.
 </Router>;
 
+<Router basepath="/app">
+  Hello World!
+</Router>;
+
 /*
  * Hooks API
  */
 const [location, setLocation] = useLocation();
+
 location; // $ExpectType string
 
 setLocation(); // $ExpectError
@@ -161,4 +166,18 @@ if (params) {
   params.age; // $ExpectError
 } else {
   params; // $ExpectType null
+}
+
+const [] = useLocation({base: '/app'}); // $ExpectError
+const [, setLoc] = useLocation({basepath: '/base'});
+
+setLoc('/app');
+
+const [, parameters] = useRoute<{ id: string}>('/app/users/:id');
+
+if (parameters) {
+  parameters.id; // $ExpectType string
+  parameters.age; // $ExpectError
+} else {
+  parameters; // $ExpectType null
 }
