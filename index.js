@@ -67,10 +67,8 @@ export const Router = props => {
 };
 
 export const Route = ({ path, match, component, children }) => {
-  const useRouteMatch = useRoute(path);
-
   // `props.match` is present - Route is controlled by the Switch
-  const [matches, params] = match || useRouteMatch;
+  const [matches, params] = match || useRoute(path);
 
   if (!matches) return null;
 
