@@ -75,7 +75,7 @@ export const Route = ({ path, match, component, children }) => {
   if (!matches) return null;
 
   // React-Router style `component` prop
-  if (component) return h(component, { params: params });
+  if (component) return h(component, { params });
 
   // support render prop or plain children
   return typeof children === "function" ? children(params) : children;
