@@ -7,7 +7,7 @@
 
 A tiny routing solution for modern React and Preact apps that relies on Hooks. A router you wanted so bad in your project!
 
-- Zero dependency, only **1225 B** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
+- Zero dependency, only **1278 B** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
@@ -393,7 +393,7 @@ Make sure you replace the static hook with the real one when you hydrate your ap
 
 We've got some great news for you! If you're a minimalist bundle-size nomad and you need a damn simple
 routing in your app, you can just use the [`useLocation` hook](#uselocation-hook-working-with-the-history)
-which is only **288 bytes gzipped** and manually match the current location with it:
+which is only **338 bytes gzipped** and manually match the current location with it:
 
 ```js
 import useLocation from "wouter/use-location";
