@@ -38,11 +38,11 @@
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1225 B"
+      "limit": "1278 B"
     },
     {
       "path": "use-location.js",
-      "limit": "288 B"
+      "limit": "338 B"
     }
   ],
   "eslintConfig": {
