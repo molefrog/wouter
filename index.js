@@ -42,10 +42,8 @@ export const useLocation = () => {
 };
 
 export const useRoute = pattern => {
-  const router = useRouter();
   const [path] = useLocation();
-
-  return router.matcher(pattern, path);
+  return useRouter().matcher(pattern, path);
 };
 
 /*
