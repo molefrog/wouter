@@ -328,6 +328,12 @@ const App = () => (
 
 ## FAQ and Code Recipes
 
+### I deploy my app to the subfolder. Can I specify a base path?
+
+You can! Wrap your app with `<Router base="/app" />` component and that should do the trick.
+
+**Note:** _the base path feature is only supported by the default `pushState` hook. If you're implementing your own location hook, you'll need to implement base path support yoursel, e.g. `myLocationHook({ base })`._
+
 ### How do I make a default/fallback route?
 
 One of the common patterns in application routing is having a default route that will be shown as a fallback, in case no other route matches (for example, if you need to render 404 message). In **wouter** this can easily be done as a combination of `<Switch />` component and catch-all route:
