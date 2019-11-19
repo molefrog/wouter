@@ -112,37 +112,50 @@ perform the navigation using a second value `setLocation`. You can check out the
 
 #### Customizing the location hook
 
-By default, **wouter** uses `useLocation` hook that reacts to `pushState` and `replaceState` navigation and observes the current pathname including the leading slash e.g. **`/users/12`**. If you do need a custom history observer, for example, for hash-based routing, you can [implement your own hook](https://github.com/molefrog/wouter/blob/master/use-location.js) and customize it in a `<Router />` component.
+By default, **wouter** uses `useLocation` hook that reacts to `pushState` and `replaceState` navigation and observes the current pathname including the leading slash e.g. **`/app/users`**.
 
-Here is how you can implement a router with a fixed basepath:
+If you do need a custom history observer, for example, for hash-based routing, you can [implement your own hook](https://github.com/molefrog/wouter/blob/master/use-location.js) and customize it in a `<Router />` component.
+
+As an exercise, let's implement a simple location hook that listens to hash changes:
 
 ```js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Router, Route } from "wouter";
 
-// a default useLocation hook which wouter uses
-import useLocation from "wouter/use-location";
-
-const makeUseBasepathLocation = basepath => () => {
-  const [location, setLocation] = useLocation();
-
-  // could be done with regexp, but requires proper escaping
-  const normalized = location.startsWith(basepath)
-    ? location.slice(basepath.length)
-    : location;
-
-  return [normalized, to => setLocation(basepath + to)];
+// returns the current hash location in a normalized form
+// (excluding the leading '#' symbol)
+const currentLocation = () => {
+  return window.location.hash.replace(/^#/, "") || "/";
 };
 
-const useBasepathLocation = makeUseBasepathLocation("/app");
+const useHashLocation = () => {
+  const [loc, setLoc] = useState(currentLocation());
+
+  useEffect(() => {
+    // this function is called whenever the hash changes
+    const handler = () => setLoc(currentLocation());
+
+    // subscribe to hash changes
+    window.addEventListener("hashchange", handler);
+    return () => window.removeEventListener("hashchange", handler);
+  }, []);
+
+  // remember to wrap your function with `useCallback` hook
+  // a tiny but important optimization
+  const navigate = useCallback(to => (window.location.hash = to), []);
+
+  return [loc, navigate];
+};
 
 const App = () => (
-  <Router hook={useBasepathLocation}>
+  <Router hook={useHashLocation}>
     <Route path="/about" component={About} />
     ...
   </Router>
 );
 ```
+
+**[▶ Demo Sandbox: hash-based routing](https://codesandbox.io/s/wouter-hash-based-hook-5fp9g)**
 
 ### `useRouter`: accessing the router object
 
@@ -264,7 +277,7 @@ Read more → [Customizing the location hook](#customizing-the-location-hook).
 - **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters.
 
 - **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All application routes
-will be relative to that path.
+  will be relative to that path.
 
 Read more → [Matching Dynamic Segments](#matching-dynamic-segments).
 
