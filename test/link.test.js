@@ -100,7 +100,7 @@ it("accepts an `onClick` prop, fired after the navigation", () => {
 
 it("renders `href` with basepath", () => {
   const { getByTestId } = render(
-    <Router basepath="/app">
+    <Router base="/app">
       <Link href="/dashboard" data-testid="link" />
     </Router>
   );

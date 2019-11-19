@@ -47,9 +47,7 @@ describe("`value` first argument", () => {
   });
 
   it("returns a pathname without a basepath", () => {
-    const { result, unmount } = renderHook(() =>
-      useLocation({ basepath: "/app" })
-    );
+    const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
 
     act(() => history.pushState(0, 0, "/app/dashboard"));
     expect(result.current[0]).toBe("/dashboard");
@@ -57,9 +55,7 @@ describe("`value` first argument", () => {
   });
 
   it("returns `/` when URL contains only a basepath", () => {
-    const { result, unmount } = renderHook(() =>
-      useLocation({ basepath: "/app" })
-    );
+    const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
 
     act(() => history.pushState(0, 0, "/app"));
     expect(result.current[0]).toBe("/");
@@ -121,9 +117,7 @@ describe("`update` second parameter", () => {
   });
 
   it("supports a basepath", () => {
-    const { result, unmount } = renderHook(() =>
-      useLocation({ basepath: "/app" })
-    );
+    const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
     const update = result.current[1];
 
     act(() => update("/dashboard"));
