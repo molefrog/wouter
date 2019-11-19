@@ -247,7 +247,7 @@ fetchOrders().then(orders => {
 });
 ```
 
-### `<Router hook={hook} matcher={matchFn} />`
+### `<Router hook={hook} matcher={matchFn} base={basepath} />`
 
 Unlike _React Router_, routes in wouter **don't have to be wrapped in a top-level component**. An internal router object will
 be constructed on demand, so you can start writing your app without polluting it with a cascade of top-level providers.
@@ -262,6 +262,9 @@ A router is a simple object that holds the routing configuration options. You ca
 Read more → [Customizing the location hook](#customizing-the-location-hook).
 
 - **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters.
+
+- **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All application routes
+will be relative to that path.
 
 Read more → [Matching Dynamic Segments](#matching-dynamic-segments).
 
