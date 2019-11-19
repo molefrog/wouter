@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
-export default ({ basepath = "" } = {}) => {
-  const [path, update] = useState(currentPathname(basepath));
+export default ({ base = "" } = {}) => {
+  const [path, update] = useState(currentPathname(base));
   const prevPath = useRef(path);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ export default ({ basepath = "" } = {}) => {
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
-      const pathname = currentPathname(basepath);
+      const pathname = currentPathname(base);
       prevPath.current !== pathname && update((prevPath.current = pathname));
     };
 
@@ -34,7 +34,7 @@ export default ({ basepath = "" } = {}) => {
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
     (to, replace) =>
-      history[replace ? "replaceState" : "pushState"](0, 0, basepath + to),
+      history[replace ? "replaceState" : "pushState"](0, 0, base + to),
     []
   );
 

@@ -124,7 +124,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   Hello, we have <Header /> and some {1337} numbers here.
 </Router>;
 
-<Router basepath="/app">
+<Router base="/app">
   Hello World!
 </Router>;
 
@@ -152,8 +152,8 @@ if (params) {
   params; // $ExpectType null
 }
 
-const [] = useLocation({base: '/app'}); // $ExpectError
-const [, setLoc] = useLocation({basepath: '/base'});
+const [] = useLocation({basename: '/app'}); // $ExpectError
+const [, setLoc] = useLocation({base: '/base'});
 
 setLoc('/app');
 
