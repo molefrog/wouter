@@ -57,7 +57,7 @@ export const Switch: FunctionComponent<SwitchProps>;
 
 export interface RouterProps {
   hook: LocationHook;
-  basepath: string;
+  basepath: Path;
   matcher: MatcherFn;
 }
 export const Router: FunctionComponent<
