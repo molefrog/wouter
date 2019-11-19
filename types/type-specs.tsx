@@ -147,7 +147,6 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
  * Hooks API
  */
 const [location, setLocation] = useLocation();
-
 location; // $ExpectType string
 
 setLocation(); // $ExpectError
