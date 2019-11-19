@@ -167,7 +167,7 @@ if (params) {
   params; // $ExpectType null
 }
 
-const [] = useLocation({base: '/app'}); // $ExpectError
+const [] = useLocation({basename: '/app'}); // $ExpectError
 const [, setLoc] = useLocation({base: '/base'});
 
 setLoc('/app');
