@@ -5,7 +5,7 @@
     "noEmit": true,
     "strict": true,
     "baseUrl": ".",
-    "paths": { "wouter": ["."] }
+    "paths": { "wouter": ["."], "wouter/use-location": ["./use-location"] }
   },
   "files": ["./type-specs.tsx"]
 }

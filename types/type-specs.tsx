@@ -8,8 +8,10 @@ import {
   Router,
   Switch,
   useLocation,
-  useRoute,
+  useRoute
 } from "wouter";
+
+import useBrowserLocation from "wouter/use-location";
 
 const Header: React.FunctionComponent = () => <div />;
 const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (
@@ -23,7 +25,7 @@ const someParams: Params = { foo: "bar" };
 const someParamsWithGeneric: Params<{ foo: string }> = { foo: "bar" };
 
 // error: params should follow generic type
-const paramsDontMatchGeneric: Params<{ foo: string }> = { baz: "bar" };  // $ExpectError
+const paramsDontMatchGeneric: Params<{ foo: string }> = { baz: "bar" }; // $ExpectError
 
 // error: values are strings!
 const invalidParams: Params = { id: 13 }; // $ExpectError
@@ -57,9 +59,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   {(params: Params): React.ReactNode => `User id: ${params.id}`}
 </Route>;
 
-<Route<{ id: string }> path="/users/:id">
-  {({ id }) => `User id: ${id}`}
-</Route>;
+<Route<{ id: string }> path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
 <Route<{ id: string }> path="/users/:id">
   {({ age }) => `User age: ${age}`} // $ExpectError
@@ -139,15 +139,16 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   Hello, we have <Header /> and some {1337} numbers here.
 </Router>;
 
-<Router base="/app">
-  Hello World!
-</Router>;
+<Router base="/app">Hello World!</Router>;
 
 /*
  * Hooks API
  */
 const [location, setLocation] = useLocation();
 location; // $ExpectType string
+
+// embedded useLocation hook doesn't accept any arguments
+const [] = useLocation({}); // $ExpectError
 
 setLocation(); // $ExpectError
 setLocation("/app");
@@ -167,12 +168,7 @@ if (params) {
   params; // $ExpectType null
 }
 
-const [] = useLocation({basename: '/app'}); // $ExpectError
-const [, setLoc] = useLocation({base: '/base'});
-
-setLoc('/app');
-
-const [, parameters] = useRoute<{ id: string}>('/app/users/:id');
+const [, parameters] = useRoute<{ id: string }>("/app/users/:id");
 
 if (parameters) {
   parameters.id; // $ExpectType string
@@ -180,3 +176,13 @@ if (parameters) {
 } else {
   parameters; // $ExpectType null
 }
+
+/*
+ * Standalone useLocation hook
+ */
+
+const [loc, navigate] = useBrowserLocation();
+loc; // $ExpectType string
+
+useBrowserLocation({ base: "/something" });
+useBrowserLocation({ foo: "bar" }); // $ExpectError
