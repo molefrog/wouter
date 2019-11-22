@@ -74,7 +74,7 @@ it("ignores other elements", () => {
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
-  expect(rendered[0].type).toBe(Route);
+  expect(rendered[0].type).toBe('b');
 });
 
 it("allows to specify which routes to render via `location` prop", () => {
@@ -112,4 +112,42 @@ it("always ensures the consistency of inner routes rendering", async () => {
   });
 
   unmount();
+});
+
+it("default route via position-dependent with wildcard expression", async () => {
+  const result = testRouteRender(
+    "/something-different",
+    <Switch>
+      <Route path="/users">
+        <h1/>
+      </Route>
+      <Route path="/:anything*">
+        <h2/>
+      </Route>
+    </Switch>
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(result.findByType("h2")).toBeTruthy();
+});
+
+it("default route via position-dependent and without a path prop", async () => {
+  const result = testRouteRender(
+    "/something-different",
+    <Switch>
+      <Route path="/users">
+        <h1/>
+      </Route>
+      <Route>
+        <h2/>
+      </Route>
+    </Switch>
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(result.findByType("h2")).toBeTruthy();
 });
