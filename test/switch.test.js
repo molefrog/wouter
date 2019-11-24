@@ -59,22 +59,21 @@ it("ignores mixed children", () => {
   expect(rendered[0].type).toBe(Route);
 });
 
-it("ignores other elements", () => {
+it("matches regular components as well", () => {
   const Dummy = props => props.children;
 
   const result = testRouteRender(
     "/",
     <Switch>
+      <Dummy path="/">Component</Dummy>
       <b>Bold</b>
-      <Dummy>Component</Dummy>
-      <Route path="/">route</Route>
     </Switch>
   );
 
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
-  expect(rendered[0].type).toBe('b');
+  expect(rendered[0].type).toBe(Dummy);
 });
 
 it("allows to specify which routes to render via `location` prop", () => {
@@ -114,7 +113,7 @@ it("always ensures the consistency of inner routes rendering", async () => {
   unmount();
 });
 
-it("default route via position-dependent with wildcard expression", async () => {
+it("supports catch-all routes with wildcard segments", async () => {
   const result = testRouteRender(
     "/something-different",
     <Switch>
@@ -133,7 +132,7 @@ it("default route via position-dependent with wildcard expression", async () => 
   expect(result.findByType("h2")).toBeTruthy();
 });
 
-it("default route via position-dependent and without a path prop", async () => {
+it("uses a route without a path prop as a fallback", async () => {
   const result = testRouteRender(
     "/something-different",
     <Switch>
