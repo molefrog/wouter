@@ -42,7 +42,7 @@ export type MatcherFn = (pattern: Path, path: Path) => Match;
 
 export interface RouteProps<T extends DefaultParams = DefaultParams> {
   children?: ((params: Params<T>) => ReactNode) | ReactNode;
-  path: Path;
+  path?: Path;
   component?: ComponentType<RouteComponentProps<T>>;
 }
 

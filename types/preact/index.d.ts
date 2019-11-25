@@ -41,7 +41,7 @@ export type MatcherFn = (pattern: Path, path: Path) => Match;
 
 export interface RouteProps<T extends DefaultParams = DefaultParams> {
   children?: ((params: Params<T>) => ComponentChildren) | ComponentChildren;
-  path: Path;
+  path?: Path;
   component?: ComponentType<RouteComponentProps<T>>;
 }
 export function Route<T extends DefaultParams = DefaultParams>(
