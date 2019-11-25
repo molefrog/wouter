@@ -39,7 +39,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 <Route path="/app/users" />;
 <Route path={Symbol()} />; // $ExpectError
 <Route path={1337} />; // $ExpectError
-<Route />; // $ExpectError
+<Route />;
 
 // Supports various ways to declare children
 <Route path="/header" component={Header} />;
@@ -122,6 +122,11 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 <Switch>
   <Route path="/app/users" />
   <Route path="/app/:id" />
+</Switch>;
+
+<Switch>
+  <Route path="/app/users" />
+  <Route />
 </Switch>;
 
 /*
