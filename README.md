@@ -401,7 +401,7 @@ Yes! In order to render your app on a server, you'll need to tell the router tha
 
 ```js
 import { renderToString } from "react-dom/server";
-import { Router, Route } from "wouter";
+import { Router } from "wouter";
 
 // note: static location has a different import path,
 // this helps to keep the wouter source as small as possible
