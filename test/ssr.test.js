@@ -5,7 +5,7 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Route, Router, useRoute, Link } from "../index";
+import { Route, Router, useRoute, Link, Switch } from "../index";
 import staticLocationHook from "../static-location.js";
 
 describe("server-side rendering", () => {
@@ -50,5 +50,53 @@ describe("server-side rendering", () => {
 
     const rendered = renderToStaticMarkup(<App />);
     expect(rendered).toBe(`<a href="/users/1" title="Profile">Mark</a>`);
+  });
+
+  it("handles strict routes with useRoute", () => {
+    const HookRouteNoSlash = () => {
+      const [match] = useRoute("/pages/:name", {strict: true});
+      return match ? "NoSlash!" : null;
+    };
+
+    const HookRouteSlash = () => {
+      const [match] = useRoute("/pages/:name/", {strict: true});
+      return match ? "Slash!" : null;
+    };
+
+    const App = () => (
+      <Router hook={staticLocationHook("/pages/intro/")}>
+        <HookRouteNoSlash />
+        <HookRouteSlash />
+      </Router>
+    );
+
+    const rendered = renderToStaticMarkup(<App />);
+    expect(rendered).toBe("Slash!");
+  });
+
+  it("handles strict routes without Switch", () => {
+    const App = () => (
+      <Router hook={staticLocationHook("/foo/")}>
+        <Route strict path="/foo">NoSlash!</Route>
+        <Route strict path="/foo/">Slash!</Route>
+      </Router>
+    );
+
+    const rendered = renderToStaticMarkup(<App />);
+    expect(rendered).toBe("Slash!");
+  });
+
+  it("handles strict routes with Switch", () => {
+    const App = () => (
+      <Router hook={staticLocationHook("/foo/")}>
+        <Switch>
+          <Route strict path="/foo">NoSlash!</Route>
+          <Route strict path="/foo/">Slash!</Route>
+        </Switch>
+      </Router>
+    );
+
+    const rendered = renderToStaticMarkup(<App />);
+    expect(rendered).toBe("Slash!");
   });
 });

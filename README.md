@@ -86,6 +86,10 @@ const AnimatedRoute = () => {
 };
 ```
 
+`useRoute` accepts a `options` object as a second argument which has these options:
+
+ - `strict` When enabled, a trailing slash in the pattern will only match when the path also has a trailing slash.
+
 ### `useLocation` hook: working with the history
 
 The low-level navigation in wouter is powered by the `useLocation` hook, which is basically a wrapper around
@@ -183,11 +187,11 @@ const Custom = () => {
 
 ## Component API
 
-### `<Route path={pattern} />`
+### `<Route path={pattern} strict={false}/>`
 
 `Route` represents a piece of the app that is rendered conditionally based on a pattern. Pattern is a string, which may
 contain special characters to describe dynamic segments, see [**Matching Dynamic Segments** section](#matching-dynamic-segments)
-below for details.
+below for details. When `strict` is enabled, a trailing slash in the pattern will only match when the path also has a trailing slash.
 
 The library provides multiple ways to declare a route's body:
 
@@ -274,7 +278,7 @@ A router is a simple object that holds the routing configuration options. You ca
 
 Read more → [Customizing the location hook](#customizing-the-location-hook).
 
-- **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters.
+- **`matcher: (pattern: string, path: string, options: Object) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters.
 
 - **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All application routes
   will be relative to that path.
@@ -364,7 +368,7 @@ import { Switch, Route } from "wouter";
 
 ### How do I make a link active for the current route?
 
-There are cases when you need to highlight an active link, for example, in the navigation bar. While this functionality isn't provided out-of-the-box, you can easily write your own `<Link />` wrapper and detect if the path is active by using the `useRoute` hook. The `useRoute(pattern)` hook returns a pair of `[match, params]`, where `match` is a boolean value that tells if the pattern matches current location:
+There are cases when you need to highlight an active link, for example, in the navigation bar. While this functionality isn't provided out-of-the-box, you can easily write your own `<Link />` wrapper and detect if the path is active by using the `useRoute` hook. The `useRoute(pattern, options)` hook returns a pair of `[match, params]`, where `match` is a boolean value that tells if the pattern matches current location:
 
 ```js
 const [isActive] = useRoute(props.href);

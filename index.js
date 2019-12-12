@@ -41,9 +41,9 @@ export const useLocation = () => {
   return router.hook(router);
 };
 
-export const useRoute = pattern => {
+export const useRoute = (pattern, {strict = false} = {}) => {
   const [path] = useLocation();
-  return useRouter().matcher(pattern, path);
+  return useRouter().matcher(pattern, path, {strict});
 };
 
 /*
@@ -64,8 +64,8 @@ export const Router = props => {
   });
 };
 
-export const Route = ({ path, match, component, children }) => {
-  const useRouteMatch = useRoute(path);
+export const Route = ({ path, match, strict, component, children }) => {
+  const useRouteMatch = useRoute(path, {strict});
 
   // `props.match` is present - Route is controlled by the Switch
   const [matches, params] = match || useRouteMatch;
@@ -129,7 +129,7 @@ export const Switch = ({ children, location }) => {
       // this allows to use different components that wrap Route
       // inside of a switch, for example <AnimatedRoute />.
       (match = element.props.path
-        ? matcher(element.props.path, location || originalLocation)
+        ? matcher(element.props.path, location || originalLocation, {strict: element.props.strict})
         : [true, {}]
       )[0]
     )

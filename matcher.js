@@ -3,11 +3,13 @@ export default function makeMatcher(makeRegexpFn = pathToRegexp) {
   let cache = {};
 
   // obtains a cached regexp version of the pattern
-  const getRegexp = pattern =>
-    (cache[pattern]) || (cache[pattern] = makeRegexpFn(pattern));
+  const getRegexp = (pattern, {strict = false} = {}) => {
+    const key = `${pattern}\0${strict}`;
+    return (cache[key]) || (cache[key] = makeRegexpFn(pattern, {strict}));
+  }
 
-  return (pattern, path) => {
-    const { regexp, keys } = getRegexp(pattern || "");
+  return (pattern, path, {strict = false} = {}) => {
+    const { regexp, keys } = getRegexp(pattern || "", {strict});
     const out = regexp.exec(path);
 
     if (!out) return [false, null];
@@ -34,7 +36,7 @@ const rxForSegment = (repeat, optional, prefix) => {
   return capture + (optional ? "?" : "");
 };
 
-const pathToRegexp = pattern => {
+const pathToRegexp = (pattern, {strict} = {}) => {
   const groupRx = /:([A-Za-z0-9_]+)([?+*]?)/g;
 
   let match = null,
@@ -62,5 +64,6 @@ const pathToRegexp = pattern => {
   }
 
   result += escapeRx(pattern.substring(lastIndex));
-  return { keys, regexp: new RegExp("^" + result + "(?:\\/)?$", "i") };
+  const slash = !strict ? "(?:\\/)?" : "";
+  return { keys, regexp: new RegExp("^" + result + slash + "$", "i") };
 };

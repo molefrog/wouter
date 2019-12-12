@@ -57,6 +57,15 @@ it("ignores a slash at the end", () => {
   expect(match("/orders/new/", "/orders/new")[0]).toBe(false);
 });
 
+it("respects a slash at the end when strict", () => {
+  const match = createMatcher();
+
+  expect(match("/orders/new", "/orders/new", {strict: true})[0]).toBe(true);
+  expect(match("/orders/new", "/orders/new/", {strict: true})[0]).toBe(false);
+  expect(match("/orders/new/", "/orders/new/", {strict: true})[0]).toBe(true);
+  expect(match("/orders/new/", "/orders/new", {strict: true})[0]).toBe(false);
+});
+
 describe("additional segment modifiers", () => {
   it("an asterisk matches 0 or more groups", () => {
     const match = createMatcher();
