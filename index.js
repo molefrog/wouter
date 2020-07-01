@@ -142,7 +142,7 @@ export const Switch = ({ children, location }) => {
 export const Redirect = props => {
   const [, push] = useLocation();
   useLayoutEffect(() => {
-    push(props.href || props.to);
+    push(props.href || props.to, props.replace);
 
     // we pass an empty array of dependecies to ensure that
     // we only run the effect once after initial render
