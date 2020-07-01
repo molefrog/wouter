@@ -66,7 +66,7 @@ active links, default routes etc.
 - **[`<Link />`](#link-hrefpath-)** — wraps `<a>`, allows to perfom a navigation.
 - **[`<Switch />`](#switch-)** — exclusive routing, only renders the first matched route.
 - **[`<Redirect />`](#redirect-topath-)** — when rendered, performs an immediate navigation.
-- **[`<Router />`](#router-hookhook-matchermatchfn-)** — an optional top-level component for advanced routing configuration.
+- **[`<Router />`](#router-hookhook-matchermatchfn-basebasepath-)** — an optional top-level component for advanced routing configuration.
 
 ## Hooks API
 
