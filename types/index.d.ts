@@ -63,6 +63,7 @@ export const Link: FunctionComponent<LinkProps>;
 
 export type RedirectProps = NavigationalProps & {
   children?: never;
+  replace?: boolean;
 };
 
 export const Redirect: FunctionComponent<RedirectProps>;
