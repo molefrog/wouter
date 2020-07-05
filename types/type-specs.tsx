@@ -8,7 +8,7 @@ import {
   Router,
   Switch,
   useLocation,
-  useRoute
+  useRoute,
 } from "wouter";
 
 import useBrowserLocation from "wouter/use-location";
@@ -78,6 +78,10 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 <Link href="/about" to="/app" children="" />; // $ExpectError
 <Link children="" />; // $ExpectError
 
+<Link href="/about" replace>
+  About
+</Link>;
+
 <Link href="/about">
   This is <i>awesome!</i>
 </Link>;
@@ -101,7 +105,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 <Link
   href="/somewhere"
   children={null}
-  onDrag={event => {
+  onDrag={(event) => {
     event; // $ExpectType DragEvent<HTMLAnchorElement>
   }}
 />;
@@ -112,6 +116,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 <Redirect to="/" />;
 <Redirect href="/" />;
+<Redirect href="/" replace />;
 
 <Redirect>something</Redirect>; // $ExpectError
 
@@ -157,7 +162,8 @@ const [] = useLocation({}); // $ExpectError
 
 setLocation(); // $ExpectError
 setLocation("/app");
-setLocation("/app", true);
+setLocation("/app", { replace: true });
+setLocation("/app", { unknownOption: true }); // $ExpectError
 
 useRoute(Symbol()); // $ExpectError
 useRoute(); // $ExpectError

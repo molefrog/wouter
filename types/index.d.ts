@@ -7,18 +7,33 @@ import {
   FunctionComponent,
   ComponentType,
   ReactElement,
-  ReactNode
+  ReactNode,
 } from "react";
 
 export type Path = string;
-export type PushCallback = (to: Path, replace?: boolean) => void;
-
-export type LocationTuple = [Path, PushCallback];
 
 export interface LocationHookOptions {
   base?: Path;
 }
-export type LocationHook = (options?: LocationHookOptions) => LocationTuple;
+
+export interface LocationHookNavigationOptions {
+  replace?: boolean;
+}
+
+export type PushCallback<N = LocationHookNavigationOptions> = (
+  to: Path,
+  options?: N
+) => void;
+
+export type LocationTuple<N = LocationHookNavigationOptions> = [
+  Path,
+  PushCallback<N>
+];
+
+export type LocationHook<
+  O = LocationHookOptions,
+  N = LocationHookNavigationOptions
+> = (options?: O) => LocationTuple<N>;
 
 export interface DefaultParams {
   [paramName: string]: string;
@@ -52,9 +67,10 @@ export function Route<T extends DefaultParams = DefaultParams>(
 ): ReactElement | null;
 // tslint:enable:no-unnecessary-generics
 
-export type NavigationalProps =
+export type NavigationalProps = (
   | { to: Path; href?: never }
-  | { href: Path; to?: never };
+  | { href: Path; to?: never }) &
+  LocationHookNavigationOptions;
 
 export type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> &
   NavigationalProps;
@@ -79,9 +95,11 @@ export interface RouterProps {
   base: Path;
   matcher: MatcherFn;
 }
-export const Router: FunctionComponent<Partial<RouterProps> & {
-  children: ReactNode;
-}>;
+export const Router: FunctionComponent<
+  Partial<RouterProps> & {
+    children: ReactNode;
+  }
+>;
 
 export function useRouter(): RouterProps;
 
