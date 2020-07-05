@@ -46,6 +46,15 @@ export const useRoute = (pattern) => {
   return useRouter().matcher(pattern, path);
 };
 
+// internal hook used by Link and Redirect in order to perform navigation
+const useNavigate = (options) => {
+  const navRef = useRef();
+  const [, navigate] = useLocation();
+
+  navRef.current = () => navigate(options.to || options.href, options);
+  return navRef;
+};
+
 /*
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
@@ -80,10 +89,10 @@ export const Route = ({ path, match, component, children }) => {
 };
 
 export const Link = (props) => {
-  let { to, href = to, children, onClick } = props;
-
-  const [, navigate] = useLocation();
+  const navRef = useNavigate(props);
   const { base } = useRouter();
+
+  let { to, href = to, children, onClick } = props;
 
   const handleClick = useCallback(
     (event) => {
@@ -99,10 +108,12 @@ export const Link = (props) => {
         return;
 
       event.preventDefault();
-      navigate(href, props);
+      navRef.current();
       onClick && onClick(event);
     },
-    [href, onClick, navigate]
+    // navRef is a ref so it never changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [onClick]
   );
 
   // wraps children in `a` if needed
@@ -138,13 +149,11 @@ export const Switch = ({ children, location }) => {
 };
 
 export const Redirect = (props) => {
-  const [, push] = useLocation();
-  useLayoutEffect(() => {
-    push(props.href || props.to, props);
+  const navRef = useNavigate(props);
 
-    // we pass an empty array of dependecies to ensure that
-    // we only run the effect once after initial render
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // empty array means running the effect once, navRef is a ref so it never changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => navRef.current(), []);
 
   return null;
 };
