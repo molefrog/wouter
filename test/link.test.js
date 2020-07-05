@@ -58,7 +58,7 @@ it("supports `to` prop as an alias to `href`", () => {
 });
 
 it("performs a navigation when the link is clicked", () => {
-  const { container, getByTestId } = render(
+  const { getByTestId } = render(
     <Link href="/goo-baz">
       <a data-testid="link" />
     </Link>
@@ -67,8 +67,22 @@ it("performs a navigation when the link is clicked", () => {
   expect(location.pathname).toBe("/goo-baz");
 });
 
+it("supports replace navigation", () => {
+  const { getByTestId } = render(
+    <Link href="/goo-baz" replace>
+      <a data-testid="link" />
+    </Link>
+  );
+
+  const histBefore = history.length;
+
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).toBe("/goo-baz");
+  expect(history.length).toBe(histBefore);
+});
+
 it("ignores the navigation when clicked with modifiers", () => {
-  const { container, getByTestId } = render(
+  const { getByTestId } = render(
     <Link href="/users" data-testid="link">
       click
     </Link>
@@ -79,7 +93,7 @@ it("ignores the navigation when clicked with modifiers", () => {
       bubbles: true,
       cancelable: true,
       button: 0,
-      ctrlKey: true
+      ctrlKey: true,
     })
   );
   expect(location.pathname).not.toBe("/users");
@@ -88,7 +102,7 @@ it("ignores the navigation when clicked with modifiers", () => {
 it("accepts an `onClick` prop, fired after the navigation", () => {
   const clickHandler = jest.fn();
 
-  const { container, getByTestId } = render(
+  const { getByTestId } = render(
     <Link href="/" onClick={clickHandler}>
       <a data-testid="link" />
     </Link>

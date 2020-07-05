@@ -9,7 +9,7 @@ import {
   createContext,
   isValidElement,
   cloneElement,
-  createElement as h
+  createElement as h,
 } from "./react-deps.js";
 
 /*
@@ -25,7 +25,7 @@ const RouterCtx = createContext({});
 const buildRouter = ({
   hook = locationHook,
   base = "",
-  matcher = makeMatcher()
+  matcher = makeMatcher(),
 } = {}) => ({ hook, base, matcher });
 
 export const useRouter = () => {
@@ -41,7 +41,7 @@ export const useLocation = () => {
   return router.hook(router);
 };
 
-export const useRoute = pattern => {
+export const useRoute = (pattern) => {
   const [path] = useLocation();
   return useRouter().matcher(pattern, path);
 };
@@ -50,7 +50,7 @@ export const useRoute = pattern => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = props => {
+export const Router = (props) => {
   const ref = useRef(null);
 
   // this little trick allows to avoid having unnecessary
@@ -60,7 +60,7 @@ export const Router = props => {
 
   return h(RouterCtx.Provider, {
     value: value,
-    children: props.children
+    children: props.children,
   });
 };
 
@@ -79,15 +79,14 @@ export const Route = ({ path, match, component, children }) => {
   return typeof children === "function" ? children(params) : children;
 };
 
-export const Link = props => {
+export const Link = (props) => {
+  let { to, href = to, children, onClick } = props;
+
   const [, navigate] = useLocation();
   const { base } = useRouter();
 
-  const href = props.href || props.to;
-  const { children, onClick } = props;
-
   const handleClick = useCallback(
-    event => {
+    (event) => {
       // ignores the navigation when clicked using right mouse button or
       // by holding a special modifier key: ctrl, command, win, alt, shift
       if (
@@ -100,7 +99,7 @@ export const Link = props => {
         return;
 
       event.preventDefault();
-      navigate(href);
+      navigate(href, props);
       onClick && onClick(event);
     },
     [href, onClick, navigate]
@@ -130,8 +129,7 @@ export const Switch = ({ children, location }) => {
       // inside of a switch, for example <AnimatedRoute />.
       (match = element.props.path
         ? matcher(element.props.path, location || originalLocation)
-        : [true, {}]
-      )[0]
+        : [true, {}])[0]
     )
       return cloneElement(element, { match });
   }
@@ -139,10 +137,10 @@ export const Switch = ({ children, location }) => {
   return null;
 };
 
-export const Redirect = props => {
+export const Redirect = (props) => {
   const [, push] = useLocation();
   useLayoutEffect(() => {
-    push(props.href || props.to, props.replace);
+    push(props.href || props.to, props);
 
     // we pass an empty array of dependecies to ensure that
     // we only run the effect once after initial render

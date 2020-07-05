@@ -15,3 +15,13 @@ it("results in change of current location", () => {
   expect(location.pathname).toBe("/users");
   unmount();
 });
+
+it("supports replace navigation", () => {
+  const histBefore = history.length;
+
+  const { unmount } = render(<Redirect to="/users" replace />);
+
+  expect(location.pathname).toBe("/users");
+  expect(history.length).toBe(histBefore);
+  unmount();
+});
