@@ -98,7 +98,7 @@ describe("`update` second parameter", () => {
     const update = result.current[1];
 
     const histBefore = history.length;
-    act(() => update("/foo", true));
+    act(() => update("/foo", { replace: true }));
 
     expect(history.length).toBe(histBefore);
     expect(location.pathname).toBe("/foo");
