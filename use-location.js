@@ -17,15 +17,15 @@ export default ({ base = "" } = {}) => {
     };
 
     const events = ["popstate", "pushState", "replaceState"];
-    events.map(e => addEventListener(e, checkForUpdates));
+    events.map((e) => addEventListener(e, checkForUpdates));
 
     // it's possible that an update has occurred between render and the effect handler,
     // so we run additional check on mount to catch these updates. Based on:
     // https://gist.github.com/bvaughn/e25397f70e8c65b0ae0d7c90b731b189
     checkForUpdates();
 
-    return () => events.map(e => removeEventListener(e, checkForUpdates));
-  }, []);
+    return () => events.map((e) => removeEventListener(e, checkForUpdates));
+  }, [base]);
 
   // the 2nd argument of the `useLocation` return value is a function
   // that allows to perform a navigation.
@@ -33,9 +33,9 @@ export default ({ base = "" } = {}) => {
   // the function reference should stay the same between re-renders, so that
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
-    (to, replace) =>
+    (to, { replace = false } = {}) =>
       history[replace ? "replaceState" : "pushState"](0, 0, base + to),
-    []
+    [base]
   );
 
   return [path, navigate];
@@ -52,7 +52,7 @@ let patched = 0;
 const patchHistoryEvents = () => {
   if (patched) return;
 
-  ["pushState", "replaceState"].map(type => {
+  ["pushState", "replaceState"].map((type) => {
     const original = history[type];
 
     history[type] = function() {
