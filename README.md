@@ -424,6 +424,33 @@ const handleRequest = (req, res) => {
 
 Make sure you replace the static hook with the real one when you hydrate your app on a client.
 
+If you want to be able to detect redirects you can provide the `record` option:
+
+```js
+import { renderToString } from "react-dom/server";
+import { Router } from "wouter";
+import staticLocationHook from "wouter/static-location";
+
+import App from "./app";
+
+const handleRequest = (req, res) => {
+  const location = staticLocationHook(req.path, { record: true });
+  const prerendered = renderToString(
+    <Router hook={location}>
+      <App />
+    </Router>
+  );
+
+  // location.history is an array matching the history a
+  // user's browser would capture after loading the page
+
+  const finalPage = locationHook.history.slice(-1)[0];
+  if (finalPage !== req.path) {
+    // perform redirect
+  }
+};
+```
+
 ### 1KB is too much, I can't afford it!
 
 We've got some great news for you! If you're a minimalist bundle-size nomad and you need a damn simple
