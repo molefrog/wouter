@@ -12,6 +12,7 @@ import {
 } from "wouter";
 
 import useBrowserLocation from "wouter/use-location";
+import staticLocationHook from "wouter/static-location";
 
 const Header: React.FunctionComponent = () => <div />;
 const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (
@@ -197,3 +198,19 @@ loc; // $ExpectType string
 
 useBrowserLocation({ base: "/something" });
 useBrowserLocation({ foo: "bar" }); // $ExpectError
+
+/*
+ * staticLocationHook
+ */
+
+const myStaticHook = staticLocationHook();
+const [staticLoc, staticNavigate] = myStaticHook();
+staticLoc; // $ExpectType string
+staticNavigate("/something");
+staticNavigate("/something", { replace: true });
+staticNavigate("/something", { foo: "bar" }); // $ExpectError
+myStaticHook.history; // $ExpectType readonly string[]
+
+staticLocationHook('/');
+staticLocationHook('/', { record: true });
+staticLocationHook('/', { foo: "bar" }); // $ExpectError

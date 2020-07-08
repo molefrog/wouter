@@ -1,5 +1,16 @@
 import { Path, LocationHook } from "./index";
 
-declare function staticLocationHook(path?: Path): LocationHook;
+interface StaticLocationHookOptions {
+  record?: boolean;
+}
 
-export = staticLocationHook;
+interface StaticLocationHook extends LocationHook {
+  history: Readonly<Path[]>;
+}
+
+declare function staticLocationHook(
+  path?: Path,
+  options?: StaticLocationHookOptions,
+): StaticLocationHook;
+
+export default staticLocationHook;
