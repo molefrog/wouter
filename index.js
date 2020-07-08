@@ -60,7 +60,7 @@ const useNavigate = (options) => {
  */
 
 export const Router = (props) => {
-  const ref = useRef(null);
+  const ref = useRef();
 
   // this little trick allows to avoid having unnecessary
   // calls to potentially expensive `buildRouter` method.
