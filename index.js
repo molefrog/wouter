@@ -68,7 +68,7 @@ export const Router = (props) => {
   const value = ref.current || (ref.current = { v: buildRouter(props) });
 
   return h(RouterCtx.Provider, {
-    value: value,
+    value,
     children: props.children,
   });
 };
