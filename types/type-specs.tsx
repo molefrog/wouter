@@ -142,7 +142,8 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 <Router hook="wat?" />; // $ExpectError
 
 type UseNetworkLocation = (options?: {
-  path: string;
+  protocol: string;
+  address: string;
 }) => [string, (to: string, delay: number) => void];
 
 const useNetwork: UseNetworkLocation = (() => {}) as UseNetworkLocation;
@@ -173,6 +174,10 @@ setLocation(); // $ExpectError
 setLocation("/app");
 setLocation("/app", { replace: true });
 setLocation("/app", { unknownOption: true }); // $ExpectError
+
+// custom hook
+const [networkLoc, setNetworkLoc] = useLocation<UseNetworkLocation>();
+setNetworkLoc("/home", 2000);
 
 useRoute(Symbol()); // $ExpectError
 useRoute(); // $ExpectError
