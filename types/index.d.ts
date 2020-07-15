@@ -10,30 +10,48 @@ import {
   ReactNode,
 } from "react";
 
+/*
+ * Foundation: useLocation and paths
+ */
+
 export type Path = string;
 
-export interface LocationHookOptions {
+// the base useLocation hook type. Any custom hook (including the
+// default one) should inherit from it.
+export type BaseLocationHook = (
+  ...args: any[]
+) => [Path, (path: Path, ...args: any[]) => any];
+
+/*
+ * Utility types that operate on hook
+ */
+
+// Returns the type of the location tuple of the given hook.
+export type HookReturnValue<H extends BaseLocationHook> = ReturnType<H>;
+
+// Returns the type of the navigation options that hook's push function accepts.
+export type HookNavigationOptions<H extends BaseLocationHook> = HookReturnValue<
+  H
+>[1] extends (path: Path, options: infer R, ...rest: any[]) => any
+  ? R
+  : {};
+
+/*
+ * Default `useLocation`
+ */
+
+// The type of the default `useLocation` hook that wouter uses.
+// It operates on current URL using History API, supports base path and can
+// navigate with `pushState` or `replaceState`.
+export type LocationHook = (options?: {
   base?: Path;
-}
+}) => [Path, (to: Path, options?: { replace?: boolean }) => void];
 
-export interface LocationHookNavigationOptions {
-  replace?: boolean;
-}
+export type LocationTuple = HookReturnValue<LocationHook>;
 
-export type PushCallback<N = LocationHookNavigationOptions> = (
-  to: Path,
-  options?: N
-) => void;
-
-export type LocationTuple<N = LocationHookNavigationOptions> = [
-  Path,
-  PushCallback<N>
-];
-
-export type LocationHook<
-  O = LocationHookOptions,
-  N = LocationHookNavigationOptions
-> = (options?: O) => LocationTuple<N>;
+/*
+ * Match and params
+ */
 
 export interface DefaultParams {
   [paramName: string]: string;
@@ -55,6 +73,10 @@ export type Match<T extends DefaultParams = DefaultParams> =
 
 export type MatcherFn = (pattern: Path, path: Path) => Match;
 
+/*
+ * Components: <Route />
+ */
+
 export interface RouteProps<T extends DefaultParams = DefaultParams> {
   children?: ((params: Params<T>) => ReactNode) | ReactNode;
   path?: Path;
@@ -67,22 +89,35 @@ export function Route<T extends DefaultParams = DefaultParams>(
 ): ReactElement | null;
 // tslint:enable:no-unnecessary-generics
 
-export type NavigationalProps = (
+/*
+ * Components: <Link /> & <Redirect />
+ */
+
+export type NavigationalProps<H extends BaseLocationHook = LocationHook> = (
   | { to: Path; href?: never }
-  | { href: Path; to?: never }) &
-  LocationHookNavigationOptions;
+  | { href: Path; to?: never }
+) &
+  HookNavigationOptions<H>;
 
-export type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> &
-  NavigationalProps;
+export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  "href"
+> &
+  NavigationalProps<H>;
 
-export const Link: FunctionComponent<LinkProps>;
-
-export type RedirectProps = NavigationalProps & {
+export type RedirectProps<
+  H extends BaseLocationHook = LocationHook
+> = NavigationalProps<H> & {
   children?: never;
-  replace?: boolean;
 };
 
 export const Redirect: FunctionComponent<RedirectProps>;
+
+export const Link: FunctionComponent<LinkProps>;
+
+/*
+ * Components: <Switch />
+ */
 
 export interface SwitchProps {
   location?: string;
@@ -90,8 +125,12 @@ export interface SwitchProps {
 }
 export const Switch: FunctionComponent<SwitchProps>;
 
+/*
+ * Components: <Router />
+ */
+
 export interface RouterProps {
-  hook: LocationHook;
+  hook: BaseLocationHook;
   base: Path;
   matcher: MatcherFn;
 }
@@ -101,10 +140,16 @@ export const Router: FunctionComponent<
   }
 >;
 
+/*
+ * Hooks
+ */
+
 export function useRouter(): RouterProps;
 
 export function useRoute<T extends DefaultParams = DefaultParams>(
   pattern: Path
 ): Match<T>; // tslint:disable-line:no-unnecessary-generics
 
-export function useLocation(): LocationTuple;
+export function useLocation<
+  H extends BaseLocationHook = LocationHook
+>(): HookReturnValue<H>; // tslint:disable-line:no-unnecessary-generics
