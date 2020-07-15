@@ -141,6 +141,14 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 <Router hook="wat?" />; // $ExpectError
 
+type UseNetworkLocation = (options?: {
+  path: string;
+}) => [string, (to: string, delay: number) => void];
+
+const useNetwork: UseNetworkLocation = (() => {}) as UseNetworkLocation;
+
+<Router hook={useNetwork}>this is a valid router</Router>;
+
 <Router>
   <Route path="/" />
   <b>Hello!</b>
@@ -211,6 +219,6 @@ staticNavigate("/something", { replace: true });
 staticNavigate("/something", { foo: "bar" }); // $ExpectError
 myStaticHook.history; // $ExpectType readonly string[]
 
-staticLocationHook('/');
-staticLocationHook('/', { record: true });
-staticLocationHook('/', { foo: "bar" }); // $ExpectError
+staticLocationHook("/");
+staticLocationHook("/", { record: true });
+staticLocationHook("/", { foo: "bar" }); // $ExpectError
