@@ -5,6 +5,7 @@
 import {
   AnchorHTMLAttributes,
   FunctionComponent,
+  PropsWithChildren,
   ComponentType,
   ReactElement,
   ReactNode,
@@ -33,7 +34,9 @@ export type HookReturnValue<H extends BaseLocationHook> = ReturnType<H>;
 export type HookNavigationOptions<H extends BaseLocationHook> = HookReturnValue<
   H
 >[1] extends (path: Path, options: infer R, ...rest: any[]) => any
-  ? R
+  ? R extends { [k: string]: any }
+    ? R
+    : {}
   : {};
 
 /*
@@ -111,9 +114,15 @@ export type RedirectProps<
   children?: never;
 };
 
-export const Redirect: FunctionComponent<RedirectProps>;
+export function Redirect<H extends BaseLocationHook = LocationHook>(
+  props: PropsWithChildren<RedirectProps<H>>, // tslint:disable-line:no-unnecessary-generics
+  context?: any
+): ReactElement<any, any> | null;
 
-export const Link: FunctionComponent<LinkProps>;
+export function Link<H extends BaseLocationHook = LocationHook>(
+  props: PropsWithChildren<LinkProps<H>>, // tslint:disable-line:no-unnecessary-generics
+  context?: any
+): ReactElement<any, any> | null;
 
 /*
  * Components: <Switch />

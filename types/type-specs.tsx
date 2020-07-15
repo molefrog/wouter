@@ -19,6 +19,12 @@ const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (
   <div>User id: {params.id}</div>
 );
 
+// example custom hook
+type UseNetworkLocation = (options?: {
+  protocol: string;
+  address: string;
+}) => [string, (to: string, options?: { delay: number }) => void];
+
 /*
  * Params type specs
  */
@@ -118,6 +124,15 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 <Redirect to="/" />;
 <Redirect href="/" />;
 <Redirect href="/" replace />;
+<Redirect href="/" unknownProp={1000} />; // $ExpectError
+
+Redirect<UseNetworkLocation>({ href: "/home", delay: 1000 });
+// example custom hook
+type UseLocWithNoOptions = () => [
+  string,
+  (to: string, foo: number, bar: string) => void
+];
+Redirect<UseLocWithNoOptions>({ href: "/app" });
 
 <Redirect>something</Redirect>; // $ExpectError
 
@@ -140,11 +155,6 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
  */
 
 <Router hook="wat?" />; // $ExpectError
-
-type UseNetworkLocation = (options?: {
-  protocol: string;
-  address: string;
-}) => [string, (to: string, delay: number) => void];
 
 const useNetwork: UseNetworkLocation = (() => {}) as UseNetworkLocation;
 
@@ -177,7 +187,7 @@ setLocation("/app", { unknownOption: true }); // $ExpectError
 
 // custom hook
 const [networkLoc, setNetworkLoc] = useLocation<UseNetworkLocation>();
-setNetworkLoc("/home", 2000);
+setNetworkLoc("/home", { delay: 2000 });
 
 useRoute(Symbol()); // $ExpectError
 useRoute(); // $ExpectError
