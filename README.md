@@ -16,14 +16,35 @@ A tiny routing solution for modern React and Preact apps that relies on Hooks. A
 
 ## developers :sparkling_heart: wouter
 
->... I love Wouter. It’s tiny, fully embraces hooks, and has an intuitive and barebones API. I can accomplish everything I could with react-router 
-> with Wouter, and it just feels __more minimalist while not being inconvenient.__
+> ... I love Wouter. It’s tiny, fully embraces hooks, and has an intuitive and barebones API. I can accomplish everything I could with react-router
+> with Wouter, and it just feels **more minimalist while not being inconvenient.**
 >
 > [**Matt Miller**, _An exhaustive React ecosystem for 2020_](https://medium.com/@mmiller42/an-exhaustive-react-guide-for-2020-7859f0bddc56)
 
 Wouter provides a simple API that many developers and library authors appreciate. Some notable projects that use wouter: **[Arcade (React UI kit)](https://github.com/blvdmitry/arcade),** **[fre](https://github.com/yisar/fre)**, **[react-three-fiber](https://github.com/react-spring/react-three-fiber)**, **[ssgl-doom-launcher](https://github.com/FreaKzero/ssgl-doom-launcher)**, **[Ziro App](https://ziro.com.br/)** and many more.
 
+## Table of Contents
 
+- **[Getting Started](#getting-started)**
+- **[API](#wouter-api)**
+  - **[Hooks](#hooks-api)**
+    - **[`useRoute`](#useroute-the-power-of-hooks)**
+    - **[`useLocation`](#uselocation-hook-working-with-the-history)**
+    - **[`useRouter`](#userouter-accessing-the-router-object)**
+  - **[Components](#component-api)**
+    - **[`<Route />`](#route-pathpattern-)**
+    - **[`<Link />`](#link-hrefpath-)**
+    - **[`<Switch />`](#switch-)**
+    - **[`<Redirect />`](#redirect-topath-)**
+    - **[`<Router />`](#router-hookhook-matchermatchfn-basebasepath-)**
+- **[FAQ and How-to's](#faq-and-code-recipes)**
+  - **[Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)**
+  - **[Default route](#how-do-i-make-a-defaultfallback-route)**
+  - **[Active links](#how-do-i-make-a-link-active-for-the-current-route)**
+  - **[TypeScript support](#can-i-use-wouter-in-my-typescript-project)**
+  - **[Using with Preact](#preact-support)**
+  - **[Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)**
+  - **[Routing in less than 350B](#1kb-is-too-much-i-cant-afford-it)**
 
 ## Getting Started
 
@@ -40,7 +61,7 @@ const App = () => (
 
     <Route path="/about">About Us</Route>
     <Route path="/users/:name">
-      {params => <div>Hello, {params.name}!</div>}
+      {(params) => <div>Hello, {params.name}!</div>}
     </Route>
     <Route path="/inbox" component={InboxPage} />
   </div>
@@ -153,7 +174,7 @@ const useHashLocation = () => {
 
   // remember to wrap your function with `useCallback` hook
   // a tiny but important optimization
-  const navigate = useCallback(to => (window.location.hash = to), []);
+  const navigate = useCallback((to) => (window.location.hash = to), []);
 
   return [loc, navigate];
 };
@@ -265,7 +286,7 @@ import { useLocation } from "wouter";
 
 const [location, setLocation] = useLocation();
 
-fetchOrders().then(orders => {
+fetchOrders().then((orders) => {
   setOrders(orders);
   setLocation("/app/orders");
 });
@@ -307,7 +328,7 @@ const [match, params] = useRoute("/users/:name");
 
 // or with Route component
 <Route path="/users/:name">
-  {params => {
+  {(params) => {
     /* { name: "alex" } */
   }}
 </Route>;
