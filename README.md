@@ -39,7 +39,7 @@ Wouter provides a simple API that many developers and library authors appreciate
     - **[`<Router />`](#router-hookhook-matchermatchfn-basebasepath-)**
 - [FAQ and How-to's](#faq-and-code-recipes)
   - [Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
-  - [Default route](#how-do-i-make-a-defaultfallback-route)
+  - [Default route](#how-do-i-make-a-default-route)
   - [Active links](#how-do-i-make-a-link-active-for-the-current-route)
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
@@ -379,16 +379,35 @@ const App = () => (
 
 **Note:** _the base path feature is only supported by the default `pushState` hook. If you're implementing your own location hook, you'll need to add base path support yourself._
 
-### How do I make a default/fallback route?
+### How do I make a default route?
 
-One of the common patterns in application routing is having a default route that will be shown as a fallback, in case no other route matches (for example, if you need to render 404 message). In **wouter** this can easily be done as a combination of `<Switch />` component and catch-all route:
+One of the common patterns in application routing is having a default route that will be shown as a fallback, in case no other route matches (for example, if you need to render 404 message). In **wouter** this can easily be done as a combination of `<Switch />` component and a default route:
 
 ```js
 import { Switch, Route } from "wouter";
 
 <Switch>
   <Route path="/about">...</Route>
-  <Route path="/:rest*">404, not found!</Route>
+  <Route>
+    404, Not Found!
+  </Route>
+</Switch>;
+```
+
+_Note:_ the order of switch children matters, default route should always come last. If you want to have access to the matched segment of the 
+path you can use `:param*`:
+
+```js
+<Switch>
+  <Route path="/users">...</Route>
+  
+  {/* will match anything that starts with /users/, e.g. /users/foo, /users/1/edit etc. */}
+  <Route path="/users/:rest*">...</Route>
+  
+  {/* will match everything else */}
+  <Route path="/:rest*">
+    {(params) => `404, Sorry the page ${params.rest} does not exist!`}
+  </Route>
 </Switch>;
 ```
 
