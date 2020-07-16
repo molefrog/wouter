@@ -14,7 +14,18 @@ A tiny routing solution for modern React and Preact apps that relies on Hooks. A
   **[`Route`](#route-pathpattern-)**, **[`Link`](#link-hrefpath-)**, **[`Switch`](#switch-)** and **[`Redirect`](#redirect-topath-)** components.
 - Has hook-based API for more granular control over routing (like animations): **[`useLocation`](#uselocation-hook-working-with-the-history)**, **[`useRoute`](#useroute-the-power-of-hooks)** and **[`useRouter`](#userouter-accessing-the-router-object)**.
 
-## How to get started?
+## developers :sparkling_heart: wouter
+
+>... I love Wouter. It’s tiny, fully embraces hooks, and has an intuitive and barebones API. I can accomplish everything I could with react-router 
+> with Wouter, and it just feels __more minimalist while not being inconvenient.__
+>
+> [**Matt Miller**, _An exhaustive React ecosystem for 2020_](https://medium.com/@mmiller42/an-exhaustive-react-guide-for-2020-7859f0bddc56)
+
+Wouter provides a simple API that many developers and library authors appreciate. Some notable projects that use wouter: **[Arcade (React UI kit)](https://github.com/blvdmitry/arcade),** **[fre](https://github.com/yisar/fre)**, **[react-three-fiber](https://github.com/react-spring/react-three-fiber)**, **[ssgl-doom-launcher](https://github.com/FreaKzero/ssgl-doom-launcher)**, **[Ziro App](https://ziro.com.br/)** and many more.
+
+
+
+## Getting Started
 
 Check out this demo app below in order to get started:
 
