@@ -39,11 +39,11 @@
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1273 B"
+      "limit": "1308 B"
     },
     {
       "path": "use-location.js",
-      "limit": "336 B"
+      "limit": "341 B"
     }
   ],
   "eslintConfig": {
@@ -81,7 +81,7 @@
     }
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^2.1.1",
+    "@size-limit/preset-small-lib": "^2.2.4",
     "@testing-library/react": "^9.1.3",
     "@testing-library/react-hooks": "^2.0.1",
     "@types/react": "^16.8.23",
@@ -95,7 +95,6 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.9.0",
-    "rollup": "^1.19.4",
-    "size-limit": "^2.1.1"
+    "rollup": "^1.19.4"
   }
 }
