@@ -25,8 +25,8 @@ Wouter provides a simple API that many developers and library authors appreciate
 
 ## Table of Contents
 
-- **[Getting Started](#getting-started)**
-- **[API](#wouter-api)**
+- [Getting Started](#getting-started)
+- [API](#wouter-api)
   - **[Hooks](#hooks-api)**
     - **[`useRoute`](#useroute-the-power-of-hooks)**
     - **[`useLocation`](#uselocation-hook-working-with-the-history)**
@@ -37,14 +37,14 @@ Wouter provides a simple API that many developers and library authors appreciate
     - **[`<Switch />`](#switch-)**
     - **[`<Redirect />`](#redirect-topath-)**
     - **[`<Router />`](#router-hookhook-matchermatchfn-basebasepath-)**
-- **[FAQ and How-to's](#faq-and-code-recipes)**
-  - **[Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)**
-  - **[Default route](#how-do-i-make-a-defaultfallback-route)**
-  - **[Active links](#how-do-i-make-a-link-active-for-the-current-route)**
-  - **[TypeScript support](#can-i-use-wouter-in-my-typescript-project)**
-  - **[Using with Preact](#preact-support)**
-  - **[Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)**
-  - **[Routing in less than 350B](#1kb-is-too-much-i-cant-afford-it)**
+- [FAQ and How-to's](#faq-and-code-recipes)
+  - [Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
+  - [Default route](#how-do-i-make-a-defaultfallback-route)
+  - [Active links](#how-do-i-make-a-link-active-for-the-current-route)
+  - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
+  - [Using with Preact](#preact-support)
+  - [Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)
+  - [Routing in less than 350B](#1kb-is-too-much-i-cant-afford-it)
 
 ## Getting Started
 
