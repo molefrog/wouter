@@ -11,74 +11,27 @@ import {
   ReactNode,
 } from "react";
 
-/*
- * Foundation: useLocation and paths
- */
+import {
+  Path,
+  BaseLocationHook,
+  HookReturnValue,
+  HookNavigationOptions,
+  LocationHook,
+} from "./use-location";
 
-export type Path = string;
+import { DefaultParams, Params, Match, MatcherFn } from "./matcher";
 
-// the base useLocation hook type. Any custom hook (including the
-// default one) should inherit from it.
-export type BaseLocationHook = (
-  ...args: any[]
-) => [Path, (path: Path, ...args: any[]) => any];
-
-/*
- * Utility types that operate on hook
- */
-
-// Returns the type of the location tuple of the given hook.
-export type HookReturnValue<H extends BaseLocationHook> = ReturnType<H>;
-
-// Returns the type of the navigation options that hook's push function accepts.
-export type HookNavigationOptions<H extends BaseLocationHook> = HookReturnValue<
-  H
->[1] extends (path: Path, options: infer R, ...rest: any[]) => any
-  ? R extends { [k: string]: any }
-    ? R
-    : {}
-  : {};
-
-/*
- * Default `useLocation`
- */
-
-// The type of the default `useLocation` hook that wouter uses.
-// It operates on current URL using History API, supports base path and can
-// navigate with `pushState` or `replaceState`.
-export type LocationHook = (options?: {
-  base?: Path;
-}) => [Path, (to: Path, options?: { replace?: boolean }) => void];
-
-export type LocationTuple = HookReturnValue<LocationHook>;
-
-/*
- * Match and params
- */
-
-export interface DefaultParams {
-  [paramName: string]: string;
-}
-export type Params<T extends DefaultParams = DefaultParams> = T;
-
-export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
-  params: T;
-}
-
-export type MatchWithParams<T extends DefaultParams = DefaultParams> = [
-  true,
-  Params<T>
-];
-export type NoMatch = [false, null];
-export type Match<T extends DefaultParams = DefaultParams> =
-  | MatchWithParams<T>
-  | NoMatch;
-
-export type MatcherFn = (pattern: Path, path: Path) => Match;
+// re-export types from these modules
+export * from "./matcher";
+export * from "./use-location";
 
 /*
  * Components: <Route />
  */
+
+export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
+  params: T;
+}
 
 export interface RouteProps<T extends DefaultParams = DefaultParams> {
   children?: ((params: Params<T>) => ReactNode) | ReactNode;
