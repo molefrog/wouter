@@ -41,6 +41,7 @@ Wouter provides a simple API that many developers and library authors appreciate
   - [Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
   - [Default route](#how-do-i-make-a-default-route)
   - [Active links](#how-do-i-make-a-link-active-for-the-current-route)
+  - [Nested routes](#are-relative-routes-and-links-supported)
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
   - [Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)
@@ -388,27 +389,25 @@ import { Switch, Route } from "wouter";
 
 <Switch>
   <Route path="/about">...</Route>
-  <Route>
-    404, Not Found!
-  </Route>
+  <Route>404, Not Found!</Route>
 </Switch>;
 ```
 
-_Note:_ the order of switch children matters, default route should always come last. If you want to have access to the matched segment of the 
+_Note:_ the order of switch children matters, default route should always come last. If you want to have access to the matched segment of the
 path you can use `:param*`:
 
 ```js
 <Switch>
   <Route path="/users">...</Route>
-  
+
   {/* will match anything that starts with /users/, e.g. /users/foo, /users/1/edit etc. */}
   <Route path="/users/:rest*">...</Route>
-  
+
   {/* will match everything else */}
   <Route path="/:rest*">
     {(params) => `404, Sorry the page ${params.rest} does not exist!`}
   </Route>
-</Switch>;
+</Switch>
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/oqk302k2y)**
@@ -428,6 +427,42 @@ return (
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/5zjpj19yz4)**
+
+### Are relative routes and links supported?
+
+Unlike [React Router](https://reach.tech/router/nesting), there is no first-class support for route
+nesting. However, thanks to the [base path support](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path), you can easily implement a nesting router yourself!
+
+```js
+const NestedRoutes = (props) => {
+  const router = useRouter();
+  const [parentLocation] = useLocation();
+
+  const nestedBase = `${router.base}${props.base}`;
+
+  // don't render anything outside of the scope
+  if (!parentLocation.startsWith(nestedBase)) return null;
+
+  // we need key to make sure the router will remount when base changed
+  return (
+    <Router base={nestedBase} key={nestedBase}>
+      {props.children}
+    </Router>
+  );
+};
+
+const App = () => (
+  <Router base="/app">
+    <NestedRoutes base="/dashboard">
+      {/* the real url is /app/dashboard/users */}
+      <Link to="/users" />
+      <Route path="/users" />
+    </NestedRoutes>
+  </Router>
+);
+```
+
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-nested-routes-ffd5h)**
 
 ### Can I use _wouter_ in my TypeScript project?
 
