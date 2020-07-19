@@ -5,8 +5,10 @@
     "jsxFactory": "h",
     "noEmit": true,
     "strict": true,
-    "baseUrl": ".",
-    "paths": { "wouter/preact": ["."] }
+    "baseUrl": "../../preact",
+    "paths": {
+      "wouter/preact": ["."]
+    }
   },
   "files": ["./type-specs.tsx"]
 }
