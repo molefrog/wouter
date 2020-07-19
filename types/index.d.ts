@@ -1,6 +1,4 @@
-// Type defitions for wouter are generously provided by:
-// * Alexander Tolkunov <https://github.com/StrayFromThePath>
-// * Maksim Karelov <https://github.com/Ty3uK>
+// tslint:disable:no-unnecessary-generics
 
 import {
   AnchorHTMLAttributes,
@@ -39,11 +37,9 @@ export interface RouteProps<T extends DefaultParams = DefaultParams> {
   component?: ComponentType<RouteComponentProps<T>>;
 }
 
-// tslint:disable:no-unnecessary-generics
 export function Route<T extends DefaultParams = DefaultParams>(
   props: RouteProps<T>
 ): ReactElement | null;
-// tslint:enable:no-unnecessary-generics
 
 /*
  * Components: <Link /> & <Redirect />
@@ -68,12 +64,12 @@ export type RedirectProps<
 };
 
 export function Redirect<H extends BaseLocationHook = LocationHook>(
-  props: PropsWithChildren<RedirectProps<H>>, // tslint:disable-line:no-unnecessary-generics
+  props: PropsWithChildren<RedirectProps<H>>,
   context?: any
 ): ReactElement<any, any> | null;
 
 export function Link<H extends BaseLocationHook = LocationHook>(
-  props: PropsWithChildren<LinkProps<H>>, // tslint:disable-line:no-unnecessary-generics
+  props: PropsWithChildren<LinkProps<H>>,
   context?: any
 ): ReactElement<any, any> | null;
 
@@ -110,8 +106,10 @@ export function useRouter(): RouterProps;
 
 export function useRoute<T extends DefaultParams = DefaultParams>(
   pattern: Path
-): Match<T>; // tslint:disable-line:no-unnecessary-generics
+): Match<T>;
 
 export function useLocation<
   H extends BaseLocationHook = LocationHook
->(): HookReturnValue<H>; // tslint:disable-line:no-unnecessary-generics
+>(): HookReturnValue<H>;
+
+// tslint:enable:no-unnecessary-generics
