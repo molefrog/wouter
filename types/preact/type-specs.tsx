@@ -8,7 +8,7 @@ import {
   Router,
   Switch,
   useLocation,
-  useRoute
+  useRoute,
 } from "wouter/preact";
 
 const Header: FunctionComponent = () => <div />;
@@ -87,6 +87,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 // supports standard link attributes
 <Link href="/somewhere" children={null} />;
+<Link href="/somewhere" children={null} replace />;
 <Link download href="/" target="_blank" rel="noreferrer" children={null} />;
 
 /*
@@ -95,6 +96,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 <Redirect to="/" />;
 <Redirect href="/" />;
+<Redirect href="/" replace />;
 
 <Redirect>something</Redirect>; // $ExpectError
 
@@ -137,7 +139,8 @@ location; // $ExpectType string
 
 setLocation(); // $ExpectError
 setLocation("/app");
-setLocation("/app", true);
+setLocation("/app", { replace: true });
+setLocation("/app", { unknown: true }); // $ExpectError
 
 useLocation({ base: "/app" }); // $ExpectError
 
