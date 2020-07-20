@@ -42,6 +42,7 @@ Wouter provides a simple API that many developers and library authors appreciate
   - [Default route](#how-do-i-make-a-default-route)
   - [Active links](#how-do-i-make-a-link-active-for-the-current-route)
   - [Nested routes](#are-relative-routes-and-links-supported)
+  - [Multipath routes](#is-it-possible-to-match-an array-of-paths)
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
   - [Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)
@@ -307,7 +308,7 @@ A router is a simple object that holds the routing configuration options. You ca
 
 Read more → [Customizing the location hook](#customizing-the-location-hook).
 
-- **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters.
+- **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters. It should return `[false, null]` when there is no match.
 
 - **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All application routes
   will be relative to that path.
@@ -463,6 +464,37 @@ const App = () => (
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-nested-routes-ffd5h)**
+
+### Is it possible to match an array of paths?
+
+While wouter doesn't currently support multipath routes, you can achieve that in your app by
+specifying a custom [`matcher` function](#router-hookhook-matchermatchfn-basebasepath-):
+
+```js
+import makeMatcher from "wouter/matcher";
+
+const defaultMatcher = makeMatcher();
+
+/*
+ * A custom routing matcher function that supports multipath routes
+ */
+const multipathMatcher = (patterns, path) => {
+  for (let pattern of [patterns].flat()) {
+    const [match, params] = defaultMatcher(pattern, path);
+    if (match) return [match, params];
+  }
+
+  return [false, null];
+};
+
+const App = () => (
+  <Router matcher={multipathMatcher}>
+    <Route path={["/app", "/home"]}>...</Route>
+  </Router>
+);
+```
+
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-multipath-routes-42bi3)**
 
 ### Can I use _wouter_ in my TypeScript project?
 
