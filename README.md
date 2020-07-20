@@ -42,7 +42,7 @@ Wouter provides a simple API that many developers and library authors appreciate
   - [Default route](#how-do-i-make-a-default-route)
   - [Active links](#how-do-i-make-a-link-active-for-the-current-route)
   - [Nested routes](#are-relative-routes-and-links-supported)
-  - [Multipath routes](#is-it-possible-to-match-an array-of-paths)
+  - [Multipath routes](#is-it-possible-to-match-an-array-of-paths)
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
   - [Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)
