@@ -17,8 +17,27 @@
     "preact",
     "cjs"
   ],
-  "module": "index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./cjs/index.js",
+      "default": "./index.js"
+    },
+    "./use-location": {
+      "require": "./cjs/use-location.js",
+      "default": "./use-location.js"
+    },
+    "./matcher": {
+      "require": "./cjs/matcher.js",
+      "default": "./matcher.js"
+    },
+    "./static-location": {
+      "require": "./cjs/static-location.js",
+      "default": "./static-location.js"
+    }
+  },
   "main": "cjs/index.js",
+  "module": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "test": "jest --verbose --coverage",
@@ -26,7 +45,7 @@
     "lint-types": "npm run types-preact && dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
     "types-react": "copyfiles -f types/*.d.ts .",
     "types-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts types/preact/*.d.ts preact/",
-    "bundle": "rollup -e react,preact,preact/hooks -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs -d ${DIR}cjs ${DIR}static-location.js",
+    "bundle": "rollup -e react,preact,preact/hooks -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
     "prepublishOnly": "npm run types-react && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
