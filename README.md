@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/wouter.svg?color=%2356C838)](https://www.npmjs.com/package/wouter)
 [![Build Status](https://travis-ci.org/molefrog/wouter.svg?branch=master)](https://travis-ci.org/molefrog/wouter) [![codecov](https://codecov.io/gh/molefrog/wouter/branch/master/graph/badge.svg)](https://codecov.io/gh/molefrog/wouter)
 
-<img src="assets/wouter.svg" align="right" width="275" alt="by Katya Simacheva" />
+<img src="assets/wouter.svg" align="right" width="265" alt="by Katya Simacheva" />
 
 A tiny routing solution for modern React and Preact apps that relies on Hooks. A router you wanted so bad in your project!
 
