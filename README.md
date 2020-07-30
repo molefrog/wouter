@@ -1,15 +1,29 @@
-<p align="center">
-  <img src="assets/logo.svg" width="64" alt="Wouter logo by Katya Simacheva" />
-  <h1 align="center">wouter</h1>
-  
-  <a align="center" href="https://www.npmjs.com/package/wouter">
+<div align="center">
+  <img src="assets/logo.svg" width="80" alt="Wouter — a super-tiny React router (logo by Katya Simacheva)" />
+</div>
+
+<br />
+
+<div align="center">
+  <a href="https://npmjs.org/package/wouter">
     <img alt="npm" src="https://img.shields.io/npm/v/wouter.svg?color=black&labelColor=888" />
   </a>
-</p>
+  <a href="https://travis-ci.org/molefrog/wouter">
+    <img alt="CI" src="https://img.shields.io/travis/molefrog/wouter.svg?color=black&labelColor=888" />
+  </a>
+  <a href="https://packagephobia.now.sh/result?p=uvu">
+    <img alt="Coverage" src="https://img.shields.io/codecov/c/github/molefrog/wouter.svg?color=black&labelColor=888" />
+  </a>
+</div>
+
+<div align="center">
+  <b>wouter</b> is a tiny router for modern React and Preact apps that relies on Hooks. <br />
+  A router you wanted so bad in your project!<br>
+</div>
+
+## Features
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
-
-A tiny routing solution for modern React and Preact apps that relies on Hooks. A router you wanted so bad in your project!
 
 - Zero dependency, only **1308 bytes** gzipped vs 17KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
