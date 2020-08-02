@@ -3,10 +3,10 @@ import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
  */
-const eventPopstate = "popstate"
-const eventPushState = "pushState"
-const eventReplaceState = "replaceState"
-export const eventsHistory = [eventPopstate, eventPushState, eventReplaceState]
+const eventPopstate = "popstate";
+const eventPushState = "pushState";
+const eventReplaceState = "replaceState";
+export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
   const [path, update] = useState(currentPathname(base));
@@ -24,7 +24,7 @@ export default ({ base = "" } = {}) => {
       prevPath.current !== pathname && update((prevPath.current = pathname));
     };
 
-    eventsHistory.map((e) => addEventListener(e, checkForUpdates));
+    events.map((e) => addEventListener(e, checkForUpdates));
 
     // it's possible that an update has occurred between render and the effect handler,
     // so we run additional check on mount to catch these updates. Based on:
