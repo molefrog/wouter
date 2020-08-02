@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
+const eventPopState = "popstate"
+const eventPushState = "pushstate"
+const eventReplaceState = "replaceState"
+export const eventsHistory = [eventPopState, eventPushState, eventReplaceState]
+
 export default ({ base = "" } = {}) => {
   const [path, update] = useState(currentPathname(base));
   const prevPath = useRef(path);
@@ -16,8 +21,7 @@ export default ({ base = "" } = {}) => {
       prevPath.current !== pathname && update((prevPath.current = pathname));
     };
 
-    const events = ["popstate", "pushState", "replaceState"];
-    events.map((e) => addEventListener(e, checkForUpdates));
+    eventsHistory.map((e) => addEventListener(e, checkForUpdates));
 
     // it's possible that an update has occurred between render and the effect handler,
     // so we run additional check on mount to catch these updates. Based on:
@@ -34,7 +38,7 @@ export default ({ base = "" } = {}) => {
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
     (to, { replace = false } = {}) =>
-      history[replace ? "replaceState" : "pushState"](0, 0, base + to),
+      history[replace ? eventReplaceState : eventPushState](0, 0, base + to),
     [base]
   );
 
@@ -52,7 +56,7 @@ let patched = 0;
 const patchHistoryEvents = () => {
   if (patched) return;
 
-  ["pushState", "replaceState"].map((type) => {
+  [eventPushState, eventReplaceState].map((type) => {
     const original = history[type];
 
     history[type] = function() {
