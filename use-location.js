@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
 
-const eventPopState = "popstate"
-const eventPushState = "pushstate"
+/**
+ * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
+ */
+const eventPopstate = "popstate"
+const eventPushState = "pushState"
 const eventReplaceState = "replaceState"
-export const eventsHistory = [eventPopState, eventPushState, eventReplaceState]
+export const eventsHistory = [eventPopstate, eventPushState, eventReplaceState]
 
 export default ({ base = "" } = {}) => {
   const [path, update] = useState(currentPathname(base));
