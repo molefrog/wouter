@@ -12,10 +12,6 @@ import {
   createElement as h,
 } from "./react-deps.js";
 
-/**
- * consts
- */
-export { eventsHistory } from "./use-location";
 /*
  * Part 1, Hooks API: useRouter, useRoute and useLocation
  */
