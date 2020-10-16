@@ -450,6 +450,30 @@ return (
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/5zjpj19yz4)**
 
+### Are strict routes supported?
+
+If a trailing slash is important for your app's routing, you could specify a custom matcher that implements the `strict` option support.
+
+```js
+import makeMatcher from "wouter/matcher";
+import { pathToRegexp } from "path-to-regexp";
+
+const customMatcher = makeMatcher((path) => {
+  let keys = [];
+  const regexp = pathToRegexp(path, keys, { strict: true });
+  return { keys, regexp };
+});
+
+const App = () => (
+  <Router matcher={customMatcher}>
+    <Route path="/foo">...</Route>
+    <Route path="/foo/">...</Route>
+  </Router>
+)
+```
+
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-path-to-regexp-strict-rq72c)**
+
 ### Are relative routes and links supported?
 
 Unlike [React Router](https://reach.tech/router/nesting), there is no first-class support for route
