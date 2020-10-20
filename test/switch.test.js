@@ -7,7 +7,7 @@ import { memoryLocation } from "./test-utils.js";
 import { render, act } from "@testing-library/react";
 
 const raf = () =>
-  new Promise((resolve, reject) => requestAnimationFrame(resolve));
+  new Promise(resolve => requestAnimationFrame(resolve));
 
 const testRouteRender = (initialPath, jsx) => {
   const instance = TestRenderer.create(
