@@ -61,6 +61,14 @@ describe("`value` first argument", () => {
     expect(result.current[0]).toBe("/");
     unmount();
   });
+
+  it("bathpath should be case-insensitive", () => {
+    const { result, unmount } = renderHook(() => useLocation({ base: "/App" }));
+
+    act(() => history.pushState(0, 0, "/app/dashboard"));
+    expect(result.current[0]).toBe("/dashboard");
+    unmount();
+  });
 });
 
 describe("`update` second parameter", () => {
