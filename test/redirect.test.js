@@ -1,7 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
 
-import { Redirect } from "../index.js";
+import { Redirect, Router } from "../index.js";
+import { customHook } from './test-utils.js';
 
 it("renders nothing", () => {
   const { container, unmount } = render(<Redirect to="/users" />);
@@ -23,5 +24,12 @@ it("supports replace navigation", () => {
 
   expect(location.pathname).toBe("/users");
   expect(history.length).toBe(histBefore);
+  unmount();
+});
+
+it("useLayoutEffect should return nothing", () => {
+  const { unmount } = render(<Router hook={customHook()}><Redirect to="/users" replace /></Router>);
+
+  expect(location.pathname).toBe("/users");
   unmount();
 });
