@@ -1,10 +1,10 @@
 /** @jsx h */
-import { h, Fragment, render, createContext } from "preact";
+import { h, Fragment, render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
 
 // make the library use Preact exports
 jest.mock("../react-deps.js", () => require("../preact/react-deps.js"));
-const { Router, Route, Link, Switch } = require("../index.js");
+const { Route, Link, Switch } = require("../index.js");
 
 describe("Preact support", () => {
   beforeEach(() => {

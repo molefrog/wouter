@@ -1,5 +1,5 @@
 import React, { cloneElement } from "react";
-import { renderHook, act } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react-hooks";
 import TestRenderer from "react-test-renderer";
 
 import { Router, useRouter } from "../index.js";
@@ -45,7 +45,7 @@ it("shares one router instance between components", () => {
     return cloneElement(el, { router: router });
   };
 
-  const { root, rerender } = TestRenderer.create(
+  const { root } = TestRenderer.create(
     <>
       <RouterGetter el={<div />} />
       <RouterGetter el={<div />} />
