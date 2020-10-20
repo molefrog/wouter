@@ -153,7 +153,7 @@ export const Redirect = (props) => {
 
   // empty array means running the effect once, navRef is a ref so it never changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useLayoutEffect(() => navRef.current(), []);
+  useLayoutEffect(() => { navRef.current() }, []);
 
   return null;
 };
