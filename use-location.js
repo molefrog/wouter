@@ -51,7 +51,9 @@ export default ({ base = "" } = {}) => {
 // is to monkey-patch these methods.
 //
 // See https://stackoverflow.com/a/4585031
+if (typeof history !== "undefined") {
 const eventsToPatch = [eventPushState, eventReplaceState];
+
 for (const type of eventsToPatch) {
     const original = history[type];
 
@@ -63,6 +65,7 @@ for (const type of eventsToPatch) {
       dispatchEvent(event);
       return result;
     };
+}
 }
 
 const currentPathname = (base, path = location.pathname.toLowerCase()) =>
