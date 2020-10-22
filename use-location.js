@@ -9,7 +9,7 @@ const eventReplaceState = "replaceState";
 export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
-  const [path, update] = useState(currentPathname(base));
+  const [path, update] = useState(() => currentPathname(base)); // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
   const prevPath = useRef(path);
 
   useEffect(() => {
