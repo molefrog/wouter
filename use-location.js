@@ -75,5 +75,5 @@ const patchHistoryEvents = () => {
   return (patched = 1);
 };
 
-const currentPathname = (base, path = location.pathname) =>
+const currentPathname = (base, path = location.pathname.toLowerCase()) =>
   !path.indexOf(base.toLowerCase()) ? path.slice(base.length) || "/" : path;
