@@ -28,7 +28,7 @@
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
 
-- Zero dependency, only **1308 bytes** gzipped vs 11KB [React Router](https://github.com/ReactTraining/react-router).
+- Zero dependency, only **1322 bytes** gzipped vs 11KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
@@ -469,7 +469,7 @@ const App = () => (
     <Route path="/foo">...</Route>
     <Route path="/foo/">...</Route>
   </Router>
-)
+);
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-path-to-regexp-strict-rq72c)**
@@ -618,7 +618,7 @@ const handleRequest = (req, res) => {
 
 We've got some great news for you! If you're a minimalist bundle-size nomad and you need a damn simple
 routing in your app, you can just use the [`useLocation` hook](#uselocation-hook-working-with-the-history)
-which is only **341 bytes gzipped** and manually match the current location with it:
+which is only **370 bytes gzipped** and manually match the current location with it:
 
 ```js
 import useLocation from "wouter/use-location";
