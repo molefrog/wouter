@@ -9,7 +9,7 @@ const eventReplaceState = "replaceState";
 export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
-  const [path, update] = useState(currPathname(base));
+  const [path, update] = useState(currentPathname(base));
   const prevPath = useRef(path);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default ({ base = "" } = {}) => {
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
-      const pathname = currPathname(base);
+      const pathname = currentPathname(base);
       prevPath.current !== pathname && update((prevPath.current = pathname));
     };
 
@@ -75,5 +75,5 @@ const patchHistoryEvents = () => {
   return (patched = 1);
 };
 
-const currPathname = (base, path = location.pathname.toLowerCase()) =>
+const currentPathname = (base, path = location.pathname) =>
   !path.indexOf(base.toLowerCase()) ? path.slice(base.length) || "/" : path;
