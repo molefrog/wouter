@@ -13,8 +13,6 @@ export default ({ base = "" } = {}) => {
   const prevPath = useRef(path);
 
   useEffect(() => {
-    patchHistoryEvents();
-
     // this function checks if the location has been changed since the
     // last render and updates the state only when needed.
     // unfortunately, we can't rely on `path` value here, since it can be stale,
@@ -53,13 +51,8 @@ export default ({ base = "" } = {}) => {
 // is to monkey-patch these methods.
 //
 // See https://stackoverflow.com/a/4585031
-
-let patched = 0;
-
-const patchHistoryEvents = () => {
-  if (patched) return;
-
-  [eventPushState, eventReplaceState].map((type) => {
+const eventsToPatch = [eventPushState, eventReplaceState];
+for (const type of eventsToPatch) {
     const original = history[type];
 
     history[type] = function() {
@@ -70,10 +63,7 @@ const patchHistoryEvents = () => {
       dispatchEvent(event);
       return result;
     };
-  });
-
-  return (patched = 1);
-};
+}
 
 const currentPathname = (base, path = location.pathname.toLowerCase()) =>
   !path.indexOf(base.toLowerCase()) ? path.slice(base.length) || "/" : path;
