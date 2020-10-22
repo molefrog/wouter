@@ -11,4 +11,4 @@ jobs:
     - stage: lint types
       script: npm run lint-types
 after_success:
-  - npx codecov
+  - bash <(curl -s https://codecov.io/bash)
