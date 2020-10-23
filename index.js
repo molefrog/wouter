@@ -1,4 +1,4 @@
-import locationHook from "./use-location.js";
+import locationHook, { eventPushState, eventReplaceState } from "./use-location.js";
 import makeMatcher from "./matcher.js";
 
 import {
@@ -36,20 +36,26 @@ export const useRouter = () => {
   return globalRef.v || (globalRef.v = buildRouter());
 };
 
+export const useNavigate = () => {
+  const { base } = useRouter();
+  return useCallback((to, { replace } = {}) =>
+    history[replace ? eventReplaceState : eventPushState](null, "", base + to), [base]);
+};
+
 export const useLocation = () => {
   const router = useRouter();
   return router.hook(router);
 };
 
 export const useRoute = (pattern) => {
-  const [path] = useLocation();
+  const path = useLocation();
   return useRouter().matcher(pattern, path);
 };
 
 // internal hook used by Link and Redirect in order to perform navigation
-const useNavigate = (options) => {
+const useNavigateInternal = (options) => {
   const navRef = useRef();
-  const [, navigate] = useLocation();
+  const navigate = useNavigate();
 
   navRef.current = () => navigate(options.to || options.href, options);
   return navRef;
@@ -89,7 +95,8 @@ export const Route = ({ path, match, component, children }) => {
 };
 
 export const Link = (props) => {
-  const navRef = useNavigate(props);
+  useLocation(); // subscribe to history's state
+  const navRef = useNavigateInternal(props);
   const { base } = useRouter();
 
   let { to, href = to, children, onClick } = props;
@@ -125,7 +132,7 @@ export const Link = (props) => {
 
 export const Switch = ({ children, location }) => {
   const { matcher } = useRouter();
-  const [originalLocation] = useLocation();
+  const originalLocation = useLocation();
 
   children = Array.isArray(children) ? children : [children];
 
@@ -149,7 +156,7 @@ export const Switch = ({ children, location }) => {
 };
 
 export const Redirect = (props) => {
-  const navRef = useNavigate(props);
+  const navRef = useNavigateInternal(props);
 
   // empty array means running the effect once, navRef is a ref so it never changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
