@@ -71,7 +71,9 @@ describe("`value` first argument", () => {
   });
 
   it("does not modify original location in case of base path", () => {
-    const { result, unmount } = renderHook(() => useLocation({ base: "/MyApp" }));
+    const { result, unmount } = renderHook(() =>
+      useLocation({ base: "/MyApp" })
+    );
 
     act(() => history.pushState(null, "", "/myAPP/users/JohnDoe"));
     expect(result.current[0]).toBe("/users/JohnDoe");
