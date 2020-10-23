@@ -5,11 +5,7 @@ import { Router, Route } from "../index.js";
 import { memoryLocation } from "./test-utils.js";
 
 const customMatcher = (pattern, path) => {
-  const reversed = path
-    .replace(/^\//, "")
-    .split("")
-    .reverse()
-    .join("");
+  const reversed = path.replace(/^\//, "").split("").reverse().join("");
 
   return [pattern.replace(/^\//, "") === reversed, {}];
 };

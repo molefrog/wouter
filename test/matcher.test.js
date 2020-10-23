@@ -66,7 +66,7 @@ describe("additional segment modifiers", () => {
     expect(match(ptr, "/u/rest")).toMatchObject([true, { any: undefined }]);
     expect(match(ptr, "/u/foo/bar/baz/rest")).toMatchObject([
       true,
-      { any: "foo/bar/baz" }
+      { any: "foo/bar/baz" },
     ]);
   });
 
@@ -78,7 +78,7 @@ describe("additional segment modifiers", () => {
     expect(match(ptr, "/u/rest")).toMatchObject([false, null]);
     expect(match(ptr, "/u/foo/bar/baz/rest")).toMatchObject([
       true,
-      { any: "foo/bar/baz" }
+      { any: "foo/bar/baz" },
     ]);
   });
 

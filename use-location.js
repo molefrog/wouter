@@ -39,7 +39,11 @@ export default ({ base = "" } = {}) => {
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
     (to, { replace = false } = {}) =>
-      history[replace ? eventReplaceState : eventPushState](null, "", base + to),
+      history[replace ? eventReplaceState : eventPushState](
+        null,
+        "",
+        base + to
+      ),
     [base]
   );
 
@@ -55,7 +59,7 @@ if (typeof history !== "undefined") {
   for (const type of [eventPushState, eventReplaceState]) {
     const original = history[type];
 
-    history[type] = function() {
+    history[type] = function () {
       const result = original.apply(this, arguments);
       const event = new Event(type);
       event.arguments = arguments;

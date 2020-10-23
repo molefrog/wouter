@@ -6,8 +6,7 @@ import { memoryLocation } from "./test-utils.js";
 
 import { render, act } from "@testing-library/react";
 
-const raf = () =>
-  new Promise(resolve => requestAnimationFrame(resolve));
+const raf = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
 const testRouteRender = (initialPath, jsx) => {
   const instance = TestRenderer.create(
@@ -60,7 +59,7 @@ it("ignores mixed children", () => {
 });
 
 it("matches regular components as well", () => {
-  const Dummy = props => props.children;
+  const Dummy = (props) => props.children;
 
   const result = testRouteRender(
     "/",
@@ -96,7 +95,7 @@ it("always ensures the consistency of inner routes rendering", async () => {
   const { unmount } = render(
     <Switch>
       <Route path="/foo/:id">
-        {params => {
+        {(params) => {
           if (!params)
             throw new Error("Render prop is called with falsy params!");
           return null;
@@ -118,10 +117,10 @@ it("supports catch-all routes with wildcard segments", async () => {
     "/something-different",
     <Switch>
       <Route path="/users">
-        <h1/>
+        <h1 />
       </Route>
       <Route path="/:anything*">
-        <h2/>
+        <h2 />
       </Route>
     </Switch>
   );
@@ -137,10 +136,10 @@ it("uses a route without a path prop as a fallback", async () => {
     "/something-different",
     <Switch>
       <Route path="/users">
-        <h1/>
+        <h1 />
       </Route>
       <Route>
-        <h2/>
+        <h2 />
       </Route>
     </Switch>
   );

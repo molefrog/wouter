@@ -19,7 +19,7 @@ it("creates a router object only once", () => {
 
 it("caches the router object if Router rerenders", () => {
   const { result, rerender } = renderHook(() => useRouter(), {
-    wrapper: props => <Router>{props.children}</Router>
+    wrapper: (props) => <Router>{props.children}</Router>,
   });
   const router = result.current;
 
@@ -31,7 +31,7 @@ it("returns customized router provided by the <Router />", () => {
   const newMatcher = () => "n00p";
 
   const { result } = renderHook(() => useRouter(), {
-    wrapper: props => <Router matcher={newMatcher}>{props.children}</Router>
+    wrapper: (props) => <Router matcher={newMatcher}>{props.children}</Router>,
   });
   const router = result.current;
 
@@ -55,7 +55,7 @@ it("shares one router instance between components", () => {
   );
 
   const uniqRouters = [
-    ...new Set(root.findAllByType("div").map(x => x.props.router))
+    ...new Set(root.findAllByType("div").map((x) => x.props.router)),
   ];
   expect(uniqRouters.length).toBe(1);
 });
