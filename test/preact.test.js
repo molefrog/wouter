@@ -38,7 +38,7 @@ describe("Preact support", () => {
             Welcome to the list of {100} greatest albums of all time!
             <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
             <Route path="/albums/:name">
-              {params => `Album ${params.name}`}
+              {(params) => `Album ${params.name}`}
             </Route>
             <Route path="/:anything*">Nothing was found!</Route>
           </Switch>
@@ -63,7 +63,7 @@ describe("Preact support", () => {
       const evt = new MouseEvent("click", {
         bubbles: true,
         cancelable: true,
-        button: 0
+        button: 0,
       });
 
       indexLinkEl.dispatchEvent(evt);

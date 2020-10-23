@@ -14,7 +14,7 @@ describe("server-side rendering", () => {
       <Router hook={staticLocationHook("/users/baz")}>
         <Route path="/users/baz">foo</Route>
         <Route path="/users/:any*">bar</Route>
-        <Route path="/users/:id">{params => params.id}</Route>
+        <Route path="/users/:id">{(params) => params.id}</Route>
         <Route path="/about">should not be rendered</Route>
       </Router>
     );
