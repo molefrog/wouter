@@ -40,6 +40,7 @@
   "module": "index.js",
   "types": "index.d.ts",
   "scripts": {
+    "fix:p": "prettier --write './**/*.js{x,}'",
     "test": "jest --verbose --coverage",
     "size": "size-limit",
     "lint-types": "npm run types-preact && dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
@@ -64,6 +65,11 @@
       "limit": "377 B"
     }
   ],
+  "husky": {
+    "hooks": {
+      "commit-msg": "yarn fix:p"
+    }
+  },
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -107,9 +113,11 @@
     "dtslint": "^0.9.0",
     "eslint": "^6.2.1",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "husky": "^4.3.0",
     "jest": "^24.9.0",
     "jest-esm-jsx-transform": "^1.0.0",
     "preact": "^10.0.0",
+    "prettier": "^2.1.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.9.0",
