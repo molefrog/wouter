@@ -1,6 +1,6 @@
 {
   "name": "wouter-preact",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "description": "A minimalistic routing for React and Preact (Preact-only version).",
   "type": "module",
   "exports": {
