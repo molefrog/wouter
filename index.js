@@ -26,7 +26,8 @@ const buildRouter = ({
   hook = locationHook,
   base = "",
   matcher = makeMatcher(),
-} = {}) => ({ hook, base, matcher });
+  useNavigate
+} = {}) => ({ hook, base, matcher, useNavigate });
 
 export const useRouter = () => {
   const globalRef = useContext(RouterCtx);
@@ -36,6 +37,9 @@ export const useRouter = () => {
   return globalRef.v || (globalRef.v = buildRouter());
 };
 
+// if you would like to customize, for example:
+//   - to manage state or document.title
+// override useNavigate through "Router" & don't use this default "useNavigate" Hook
 export const useNavigate = () => {
   const { base } = useRouter();
   return useCallback((to, { replace } = {}) =>
@@ -54,8 +58,9 @@ export const useRoute = (pattern) => {
 
 // internal hook used by Link and Redirect in order to perform navigation
 const useNavigateInternal = (options) => {
+  const { useNavigate: useOverride } = useRouter();
   const navRef = useRef();
-  const navigate = useNavigate();
+  const navigate = (useOverride || useNavigate)(); // it shouldn't break the rules of Hooks: "Don't call conditionally" because when override is applied, the condition is always true or false
 
   navRef.current = () => navigate(options.to || options.href, options);
   return navRef;
