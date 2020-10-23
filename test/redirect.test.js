@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 
 import { Redirect, Router } from "../index.js";
-import { customHookWithReturn } from './test-utils.js';
+import { memoryLocation } from "./test-utils.js";
 
 it("renders nothing", () => {
   const { container, unmount } = render(<Redirect to="/users" />);
@@ -28,7 +28,11 @@ it("supports replace navigation", () => {
 });
 
 it("useLayoutEffect should return nothing", () => {
-  const { unmount } = render(<Router hook={customHookWithReturn()}><Redirect to="/users" replace /></Router>);
+  const { unmount } = render(
+    <Router hook={memoryLocation()}>
+      <Redirect to="/users" replace />
+    </Router>
+  );
 
   expect(location.pathname).toBe("/users");
   unmount();
