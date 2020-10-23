@@ -11,7 +11,7 @@ it("returns a pair [value, update]", () => {
 });
 
 describe("`value` first argument", () => {
-  beforeEach(() => history.replaceState(0, 0, "/"));
+  beforeEach(() => history.replaceState(null, "", "/"));
 
   it("reflects the current pathname", () => {
     const { result, unmount } = renderHook(() => useLocation());
@@ -22,10 +22,10 @@ describe("`value` first argument", () => {
   it("reacts to `pushState` / `replaceState`", () => {
     const { result, unmount } = renderHook(() => useLocation());
 
-    act(() => history.pushState(0, 0, "/foo"));
+    act(() => history.pushState(null, "", "/foo"));
     expect(result.current[0]).toBe("/foo");
 
-    act(() => history.replaceState(0, 0, "/bar"));
+    act(() => history.replaceState(null, "", "/bar"));
     expect(result.current[0]).toBe("/bar");
     unmount();
   });
@@ -34,7 +34,7 @@ describe("`value` first argument", () => {
     jest.useFakeTimers();
     const { result, unmount } = renderHook(() => useLocation());
 
-    act(() => history.pushState(0, 0, "/foo"));
+    act(() => history.pushState(null, "", "/foo"));
     expect(result.current[0]).toBe("/foo");
 
     act(() => {
@@ -49,7 +49,7 @@ describe("`value` first argument", () => {
   it("returns a pathname without a basepath", () => {
     const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
 
-    act(() => history.pushState(0, 0, "/app/dashboard"));
+    act(() => history.pushState(null, "", "/app/dashboard"));
     expect(result.current[0]).toBe("/dashboard");
     unmount();
   });
@@ -57,7 +57,7 @@ describe("`value` first argument", () => {
   it("returns `/` when URL contains only a basepath", () => {
     const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
 
-    act(() => history.pushState(0, 0, "/app"));
+    act(() => history.pushState(null, "", "/app"));
     expect(result.current[0]).toBe("/");
     unmount();
   });
@@ -65,7 +65,7 @@ describe("`value` first argument", () => {
   it("bathpath should be case-insensitive", () => {
     const { result, unmount } = renderHook(() => useLocation({ base: "/App" }));
 
-    act(() => history.pushState(0, 0, "/app/dashboard"));
+    act(() => history.pushState(null, "", "/app/dashboard"));
     expect(result.current[0]).toBe("/dashboard");
     unmount();
   });

@@ -8,7 +8,7 @@ const { Route, Link, Switch } = require("../index.js");
 
 describe("Preact support", () => {
   beforeEach(() => {
-    history.replaceState(0, 0, "/");
+    history.replaceState(null, "", "/");
     setupRerender();
   });
 
