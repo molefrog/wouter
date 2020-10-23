@@ -62,11 +62,19 @@ describe("`value` first argument", () => {
     unmount();
   });
 
-  it("bathpath should be case-insensitive", () => {
+  it("basepath should be case-insensitive", () => {
     const { result, unmount } = renderHook(() => useLocation({ base: "/App" }));
 
     act(() => history.pushState(null, "", "/app/dashboard"));
     expect(result.current[0]).toBe("/dashboard");
+    unmount();
+  });
+
+  it("does not modify original location in case of base path", () => {
+    const { result, unmount } = renderHook(() => useLocation({ base: "/MyApp" }));
+
+    act(() => history.pushState(null, "", "/myAPP/users/JohnDoe"));
+    expect(result.current[0]).toBe("/users/JohnDoe");
     unmount();
   });
 });

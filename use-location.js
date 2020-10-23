@@ -70,5 +70,5 @@ if (typeof history !== "undefined") {
   }
 }
 
-const currentPathname = (base, path = location.pathname.toLowerCase()) =>
-  !path.indexOf(base.toLowerCase()) ? path.slice(base.length) || "/" : path;
+const currentPathname = (base, path = location.pathname) =>
+  !path.toLowerCase().indexOf(base.toLowerCase()) ? path.slice(base.length) || "/" : path;
