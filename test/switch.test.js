@@ -91,7 +91,7 @@ it("allows to specify which routes to render via `location` prop", () => {
 });
 
 it("always ensures the consistency of inner routes rendering", async () => {
-  history.replaceState(0, 0, "/foo/bar");
+  history.replaceState(null, "", "/foo/bar");
 
   const { unmount } = render(
     <Switch>
@@ -107,7 +107,7 @@ it("always ensures the consistency of inner routes rendering", async () => {
 
   await act(async () => {
     await raf();
-    history.pushState(0, 0, "/");
+    history.pushState(null, "", "/");
   });
 
   unmount();
