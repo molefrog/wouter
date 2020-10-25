@@ -52,7 +52,7 @@
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
   "peerDependencies": {
-    "react": "^16.8.0"
+    "react": ">=16.8.0"
   },
   "repository": "molefrog/wouter",
   "size-limit": [
@@ -106,9 +106,9 @@
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^2.2.4",
-    "@testing-library/react": "^9.1.3",
-    "@testing-library/react-hooks": "^2.0.1",
-    "@types/react": "^16.8.23",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/react-hooks": "^3.4.2",
+    "@types/react": "^16.9.53",
     "copyfiles": "^2.1.0",
     "dtslint": "^0.9.0",
     "eslint": "^6.2.1",
@@ -118,9 +118,9 @@
     "jest-esm-jsx-transform": "^1.0.0",
     "preact": "^10.0.0",
     "prettier": "^2.1.2",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-test-renderer": "^16.9.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-test-renderer": "^17.0.1",
     "rollup": "^1.19.4"
   }
 }
