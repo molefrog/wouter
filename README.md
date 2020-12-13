@@ -67,7 +67,7 @@ Wouter provides a simple API that many developers and library authors appreciate
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
   - [Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)
-  - [Routing in less than 350B](#1kb-is-too-much-i-cant-afford-it)
+  - [Routing in less than 400B](#1kb-is-too-much-i-cant-afford-it)
 
 ## Getting Started
 
@@ -332,7 +332,7 @@ Read more → [Customizing the location hook](#customizing-the-location-hook).
 - **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom function used for matching the current location against the user-defined patterns like `/app/users/:id`. Should return a match result and an hash of extracted parameters. It should return `[false, null]` when there is no match.
 
 - **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All application routes
-  will be relative to that path.
+  will be relative to that path. Prefixing a route with `~` will make it absolute, bypassing the base path.
 
 Read more → [Matching Dynamic Segments](#matching-dynamic-segments).
 
@@ -618,7 +618,7 @@ const handleRequest = (req, res) => {
 
 We've got some great news for you! If you're a minimalist bundle-size nomad and you need a damn simple
 routing in your app, you can just use the [`useLocation` hook](#uselocation-hook-working-with-the-history)
-which is only **362 bytes gzipped** and manually match the current location with it:
+which is only **380 bytes gzipped** and manually match the current location with it:
 
 ```js
 import useLocation from "wouter/use-location";

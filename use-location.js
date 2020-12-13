@@ -42,7 +42,8 @@ export default ({ base = "" } = {}) => {
       history[replace ? eventReplaceState : eventPushState](
         null,
         "",
-        base + to
+        // handle nested routers and absolute paths
+        to[0] === "~" ? to.slice(1) : base + to
       ),
     [base]
   );
@@ -73,4 +74,4 @@ if (typeof history !== "undefined") {
 const currentPathname = (base, path = location.pathname) =>
   !path.toLowerCase().indexOf(base.toLowerCase())
     ? path.slice(base.length) || "/"
-    : path;
+    : "~" + path;
