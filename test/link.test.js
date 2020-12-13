@@ -122,3 +122,14 @@ it("renders `href` with basepath", () => {
   const link = getByTestId("link");
   expect(link.getAttribute("href")).toBe("/app/dashboard");
 });
+
+it("renders `href` with absolute links", () => {
+  const { getByTestId } = render(
+    <Router base="/app">
+      <Link href="~/home" data-testid="link" />
+    </Router>
+  );
+
+  const link = getByTestId("link");
+  expect(link.getAttribute("href")).toBe("/home");
+});

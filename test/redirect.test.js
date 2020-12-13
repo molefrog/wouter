@@ -17,6 +17,28 @@ it("results in change of current location", () => {
   unmount();
 });
 
+it("supports `base` routers with relative path", () => {
+  const { unmount } = render(
+    <Router base="/app">
+      <Redirect to="/nested" />
+    </Router>
+  );
+
+  expect(location.pathname).toBe("/app/nested");
+  unmount();
+});
+
+it("supports `base` routers with absolute path", () => {
+  const { unmount } = render(
+    <Router base="/app">
+      <Redirect to="~/absolute" />
+    </Router>
+  );
+
+  expect(location.pathname).toBe("/absolute");
+  unmount();
+});
+
 it("supports replace navigation", () => {
   const histBefore = history.length;
 

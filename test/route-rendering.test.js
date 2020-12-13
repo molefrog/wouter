@@ -1,4 +1,5 @@
 import React from "react";
+import { render, act } from "@testing-library/react";
 import TestRenderer from "react-test-renderer";
 
 import { Router, Route } from "../index.js";
@@ -61,4 +62,44 @@ it("supports `component` prop similar to React-Router", () => {
   );
 
   expect(result.findByType("h2").props.children).toBe("All users");
+});
+
+it("supports `base` routers with relative path", () => {
+  const { container, unmount } = render(
+    <Router base="/app">
+      <Route path="/nested">
+        <h1>Nested</h1>
+      </Route>
+      <Route path="~/absolute">
+        <h2>Absolute</h2>
+      </Route>
+    </Router>
+  );
+
+  act(() => history.replaceState(null, "", "/app/nested"));
+
+  expect(container.childNodes.length).toBe(1);
+  expect(container.firstChild.tagName).toBe("H1");
+
+  unmount();
+});
+
+it("supports `base` routers with absolute path", () => {
+  const { container, unmount } = render(
+    <Router base="/app">
+      <Route path="/nested">
+        <h1>Nested</h1>
+      </Route>
+      <Route path="~/absolute">
+        <h2>Absolute</h2>
+      </Route>
+    </Router>
+  );
+
+  act(() => history.replaceState(null, "", "/absolute"));
+
+  expect(container.childNodes.length).toBe(1);
+  expect(container.firstChild.tagName).toBe("H2");
+
+  unmount();
 });

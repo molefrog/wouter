@@ -63,20 +63,22 @@ describe("`value` first argument", () => {
   });
 
   it("basepath should be case-insensitive", () => {
-    const { result, unmount } = renderHook(() => useLocation({ base: "/App" }));
-
-    act(() => history.pushState(null, "", "/app/dashboard"));
-    expect(result.current[0]).toBe("/dashboard");
-    unmount();
-  });
-
-  it("does not modify original location in case of base path", () => {
     const { result, unmount } = renderHook(() =>
       useLocation({ base: "/MyApp" })
     );
 
     act(() => history.pushState(null, "", "/myAPP/users/JohnDoe"));
     expect(result.current[0]).toBe("/users/JohnDoe");
+    unmount();
+  });
+
+  it("returns an absolute path in case of unmatched base path", () => {
+    const { result, unmount } = renderHook(() =>
+      useLocation({ base: "/MyApp" })
+    );
+
+    act(() => history.pushState(null, "", "/MyOtherApp/users/JohnDoe"));
+    expect(result.current[0]).toBe("~/MyOtherApp/users/JohnDoe");
     unmount();
   });
 });

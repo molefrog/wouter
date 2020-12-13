@@ -117,7 +117,12 @@ export const Link = (props) => {
   );
 
   // wraps children in `a` if needed
-  const extraProps = { href: base + href, onClick: handleClick, to: null };
+  const extraProps = {
+    // handle nested routers and absolute paths
+    href: href[0] === "~" ? href.slice(1) : base + href,
+    onClick: handleClick,
+    to: null,
+  };
   const jsx = isValidElement(children) ? children : h("a", props);
 
   return cloneElement(jsx, extraProps);
