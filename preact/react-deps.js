@@ -3,6 +3,7 @@ export {
   createContext,
   cloneElement,
   createElement,
+  Fragment,
 } from "preact";
 export {
   useRef,

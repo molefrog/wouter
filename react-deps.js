@@ -9,4 +9,5 @@ export {
   isValidElement,
   cloneElement,
   createElement,
+  Fragment,
 } from "react";

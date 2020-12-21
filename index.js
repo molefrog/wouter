@@ -10,6 +10,7 @@ import {
   isValidElement,
   cloneElement,
   createElement as h,
+  Fragment,
 } from "./react-deps.js";
 
 /*
@@ -128,11 +129,21 @@ export const Link = (props) => {
   return cloneElement(jsx, extraProps);
 };
 
+const flattenChildren = (children) => {
+  return Array.isArray(children)
+    ? children.flatMap((c) =>
+        c.type === Fragment
+          ? flattenChildren(c.props.children)
+          : flattenChildren(c)
+      )
+    : [children];
+};
+
 export const Switch = ({ children, location }) => {
   const { matcher } = useRouter();
   const [originalLocation] = useLocation();
 
-  children = Array.isArray(children) ? children : [children];
+  children = flattenChildren(children);
 
   for (const element of children) {
     let match = 0;
