@@ -143,9 +143,7 @@ export const Switch = ({ children, location }) => {
   const { matcher } = useRouter();
   const [originalLocation] = useLocation();
 
-  children = flattenChildren(children);
-
-  for (const element of children) {
+  for (const element of flattenChildren(children)) {
     let match = 0;
 
     if (
