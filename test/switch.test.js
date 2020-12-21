@@ -149,3 +149,53 @@ it("uses a route without a path prop as a fallback", async () => {
   expect(rendered.length).toBe(1);
   expect(result.findByType("h2")).toBeTruthy();
 });
+
+it("correctly handles arrays as children", async () => {
+  const result = testRouteRender(
+    "/in-array-3",
+    <Switch>
+      {[1, 2, 3].map((i) => {
+        const H = "h" + i;
+        return (
+          <Route path={"/in-array-" + i}>
+            <H />
+          </Route>
+        );
+      })}
+      <Route>
+        <h4 />
+      </Route>
+    </Switch>
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(result.findByType("h3")).toBeTruthy();
+});
+
+it("correctly handles fragments as children", async () => {
+  const result = testRouteRender(
+    "/in-fragment-2",
+    <Switch>
+      <>
+        {[1, 2, 3].map((i) => {
+          const H = "h" + i;
+          return (
+            <Route path={"/in-fragment-" + i}>
+              <H />
+            </Route>
+          );
+        })}
+      </>
+      <Route>
+        <h4 />
+      </Route>
+    </Switch>
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(result.findByType("h2")).toBeTruthy();
+});
