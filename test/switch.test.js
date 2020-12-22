@@ -157,7 +157,7 @@ it("correctly handles arrays as children", async () => {
       {[1, 2, 3].map((i) => {
         const H = "h" + i;
         return (
-          <Route path={"/in-array-" + i}>
+          <Route key={i} path={"/in-array-" + i}>
             <H />
           </Route>
         );
@@ -182,7 +182,7 @@ it("correctly handles fragments as children", async () => {
         {[1, 2, 3].map((i) => {
           const H = "h" + i;
           return (
-            <Route path={"/in-fragment-" + i}>
+            <Route key={i} path={"/in-fragment-" + i}>
               <H />
             </Route>
           );

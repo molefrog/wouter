@@ -131,10 +131,12 @@ export const Link = (props) => {
 
 const flattenChildren = (children) => {
   return Array.isArray(children)
-    ? children.flatMap((c) =>
-        c.type === Fragment
-          ? flattenChildren(c.props.children)
-          : flattenChildren(c)
+    ? [].concat(
+        ...children.map((c) =>
+          c.type === Fragment
+            ? flattenChildren(c.props.children)
+            : flattenChildren(c)
+        )
       )
     : [children];
 };
