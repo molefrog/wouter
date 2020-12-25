@@ -371,7 +371,7 @@ If you do need to have `path-to-regexp`-like functionality, you can customize a 
 import { Router } from "wouter";
 import createMatcher from "wouter/matcher";
 
-import pathToRegexp from "path-to-regexp";
+import { pathToRegexp } from "path-to-regexp";
 
 const App = () => (
   <Router matcher={createMatcher(pathToRegexp)}>
