@@ -107,6 +107,13 @@ export const Link = (props) => {
         event.button !== 0
       )
         return;
+      
+      // ignores the navigation when routing is outside
+      // of application
+      const target = new Url(event.target.href, window.location.origin);
+      if (target.host !== window.location.host) {
+        return;
+      }
 
       event.preventDefault();
       navRef.current();
