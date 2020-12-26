@@ -112,7 +112,7 @@ export const Link = (props) => {
       // of application
       const target = new Url(event.target.href, window.location.origin);
       if (target.host !== window.location.host) {
-        return;
+        return onClick && onClick(event);
       }
 
       event.preventDefault();
