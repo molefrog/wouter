@@ -4,9 +4,9 @@ import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
  */
 const eventPopstate = "popstate";
-const eventPushState = "pushState";
-const eventReplaceState = "replaceState";
-export const events = [eventPopstate, eventPushState, eventReplaceState];
+const eventPushstate = "pushstate";
+const eventReplacestate = "replacestate";
+export const events = [eventPopstate, eventPushstate, eventReplacestate];
 
 export default ({ base = "" } = {}) => {
   const [path, update] = useState(() => currentPathname(base)); // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
@@ -39,7 +39,7 @@ export default ({ base = "" } = {}) => {
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
     (to, { replace = false } = {}) =>
-      history[replace ? eventReplaceState : eventPushState](
+      history[replace ? eventReplacestate : eventPushstate](
         null,
         "",
         // handle nested routers and absolute paths
@@ -57,7 +57,7 @@ export default ({ base = "" } = {}) => {
 //
 // See https://stackoverflow.com/a/4585031
 if (typeof history !== "undefined") {
-  for (const type of [eventPushState, eventReplaceState]) {
+  for (const type of [eventPushstate, eventReplacestate]) {
     const original = history[type];
 
     history[type] = function () {
