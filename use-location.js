@@ -4,9 +4,9 @@ import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
  */
 const eventPopstate = "popstate";
-const eventPushstate = "pushstate";
-const eventReplacestate = "replacestate";
-export const events = [eventPopstate, eventPushstate, eventReplacestate];
+const eventPushState = "pushState";
+const eventReplaceState = "replaceState";
+const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
   const [path, update] = useState(() => currentPathname(base)); // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
@@ -22,14 +22,14 @@ export default ({ base = "" } = {}) => {
       prevPath.current !== pathname && update((prevPath.current = pathname));
     };
 
-    events.map((e) => addEventListener(e, checkForUpdates));
+    events.map((e) => addEventListener(e.toLowerCase(), checkForUpdates));
 
     // it's possible that an update has occurred between render and the effect handler,
     // so we run additional check on mount to catch these updates. Based on:
     // https://gist.github.com/bvaughn/e25397f70e8c65b0ae0d7c90b731b189
     checkForUpdates();
 
-    return () => events.map((e) => removeEventListener(e, checkForUpdates));
+    return () => events.map((e) => removeEventListener(e.toLowerCase(), checkForUpdates));
   }, [base]);
 
   // the 2nd argument of the `useLocation` return value is a function
@@ -39,7 +39,7 @@ export default ({ base = "" } = {}) => {
   // it can be passed down as an element prop without any performance concerns.
   const navigate = useCallback(
     (to, { replace = false } = {}) =>
-      history[replace ? eventReplacestate : eventPushstate](
+      history[replace ? eventReplaceState : eventPushState](
         null,
         "",
         // handle nested routers and absolute paths
@@ -57,12 +57,12 @@ export default ({ base = "" } = {}) => {
 //
 // See https://stackoverflow.com/a/4585031
 if (typeof history !== "undefined") {
-  for (const type of [eventPushstate, eventReplacestate]) {
+  for (const type of [eventPushState, eventReplaceState]) {
     const original = history[type];
 
     history[type] = function () {
       const result = original.apply(this, arguments);
-      const event = new Event(type);
+      const event = new Event(type.toLowerCase());
       event.arguments = arguments;
 
       dispatchEvent(event);
