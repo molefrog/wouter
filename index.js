@@ -110,8 +110,7 @@ export const Link = (props) => {
       
       // ignores the navigation when routing is outside
       // of application
-      const target = new Url(event.target.href, window.location.origin);
-      if (target.host !== window.location.host) {
+      if (event.target.href.includes("://") && !event.target.href.includes(`://${window.location.host}`)) {
         return onClick && onClick(event);
       }
 
