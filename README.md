@@ -262,10 +262,10 @@ import { Route } from "wouter";
 ### `<Link href={path} />`
 
 Link component renders an `<a />` element that, when clicked, performs a navigation. You can customize the link appearance
-by providing your own component or link element as `children`:
+by providing your own component or a link element as `children`:
 
 ```js
-import { Link } from "wouter";
+import { Link } from "wouter"
 
 // All of these will produce the same html:
 // <a href="/foo" class="active">Hello!</a>
@@ -277,6 +277,28 @@ import { Link } from "wouter";
 // will be passed down to an element
 <Link href="/foo"><a className="active">Hello!</a></Link>
 <Link href="/foo"><A>Hello!</A></Link>
+```
+
+If you wrap a custom component with `Link`, wouter won't install event listeners so make sure the component handles 
+`onClick` and `href` props properly:
+
+```jsx
+import { Link } from "wouter"
+
+const MyButton = (props) => {
+  // it is recommended to use <a>'s when possible (they play nicely with SSR and are SEO-friendly),
+  // but wouter's Links should work with almost anything, as long as the `onClick` is handled. 
+  return (
+    <div title={props.href}>
+      <button onClick={props.onClick}>Home</button>
+    </div>
+  )
+}
+
+// in your app
+<Link href="/home">
+  <MyButton />
+</Link>
 ```
 
 ### `<Switch />`
