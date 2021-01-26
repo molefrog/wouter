@@ -18,7 +18,7 @@ export default ({ base = "" } = {}) => {
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
-      const pathname = currentPathname(base);
+      const pathname = currentPathname(base) + location.search;
       prevPath.current !== pathname && update((prevPath.current = pathname));
     };
 
