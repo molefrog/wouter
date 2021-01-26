@@ -81,6 +81,14 @@ describe("`value` first argument", () => {
     expect(result.current[0]).toBe("~/MyOtherApp/users/JohnDoe");
     unmount();
   });
+
+  it("support search url", () => {
+    const { result, unmount } = renderHook(() => useLocation());
+    
+    act(() => history.pushState(null, "", "/foo?hello=world"));
+    expect(result.current[0]).toBe("/foo?hello=world");
+    unmount();
+  });
 });
 
 describe("`update` second parameter", () => {
