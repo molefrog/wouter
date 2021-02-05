@@ -25,8 +25,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm install
-    - name: Run Unit Tests
+      run: |
+        npm install -g typescript
+        npm install
+    - name: Run Jest
+      env: 
+        FORCE_COLOR: true
       run: npm test
     - name: Lint TypeScript Types
       run: npm run lint-types
