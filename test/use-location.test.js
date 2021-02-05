@@ -82,11 +82,18 @@ describe("`value` first argument", () => {
     unmount();
   });
 
-  it("support search url", () => {
+  it("supports search url", () => {
     const { result, unmount } = renderHook(() => useLocation());
-    
+
+    act(() => history.pushState(null, "", "/foo"));
+
+    const renderCount = result.all.length;
     act(() => history.pushState(null, "", "/foo?hello=world"));
-    expect(result.current[0]).toBe("/foo?hello=world");
+
+    expect(result.current[0]).toBe("/foo");
+
+    // assert the update
+    expect(result.all.length).toBeGreaterThan(renderCount);
     unmount();
   });
 });
