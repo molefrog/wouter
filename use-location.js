@@ -10,7 +10,7 @@ export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
   const [path, update] = useState(() => currentPathname(base)); // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
-  const prevPath = useRef(path);
+  const prevHash = useRef(path + location.search);
 
   useEffect(() => {
     // this function checks if the location has been changed since the
@@ -18,8 +18,13 @@ export default ({ base = "" } = {}) => {
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
-      const pathname = currentPathname(base) + location.search;
-      prevPath.current !== pathname && update((prevPath.current = pathname));
+      const pathname = currentPathname(base),
+        hash = pathname + location.search;
+
+      if (prevHash.current !== hash) {
+        prevHash.current = hash;
+        update(pathname);
+      }
     };
 
     events.map((e) => addEventListener(e, checkForUpdates));
