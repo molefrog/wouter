@@ -28,7 +28,7 @@
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
 
-- Zero dependency, only **1311 bytes** gzipped vs 11KB [React Router](https://github.com/ReactTraining/react-router).
+- Zero dependency, only **1.36 KB** gzipped vs 11KB [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
 - Mimics [React Router](https://github.com/ReactTraining/react-router)'s best practices by providing familiar
@@ -279,26 +279,26 @@ import { Link } from "wouter"
 <Link href="/foo"><A>Hello!</A></Link>
 ```
 
-If you wrap a custom component with `Link`, wouter won't install event listeners so make sure the component handles 
+If you wrap a custom component with `Link`, wouter won't install event listeners so make sure the component handles
 `onClick` and `href` props properly:
 
 ```jsx
-import { Link } from "wouter"
+import { Link } from "wouter";
 
 const MyButton = (props) => {
   // it is recommended to use <a>'s when possible (they play nicely with SSR and are SEO-friendly),
-  // but wouter's Links should work with almost anything, as long as the `onClick` is handled. 
+  // but wouter's Links should work with almost anything, as long as the `onClick` is handled.
   return (
     <div title={props.href}>
       <button onClick={props.onClick}>Home</button>
     </div>
-  )
-}
+  );
+};
 
 // in your app
 <Link href="/home">
   <MyButton />
-</Link>
+</Link>;
 ```
 
 ### `<Switch />`
@@ -638,7 +638,7 @@ const handleRequest = (req, res) => {
 
 We've got some great news for you! If you're a minimalist bundle-size nomad and you need a damn simple
 routing in your app, you can just use the [`useLocation` hook](#uselocation-hook-working-with-the-history)
-which is only **380 bytes gzipped** and manually match the current location with it:
+which is only **400 bytes gzipped** and manually match the current location with it:
 
 ```js
 import useLocation from "wouter/use-location";
