@@ -1,4 +1,4 @@
-name: Test & Lint
+name: Run Tests & Linters
 
 on:
   push:
