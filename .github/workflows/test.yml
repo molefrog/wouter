@@ -28,5 +28,7 @@ jobs:
           npm install
       - name: Run Jest
         run: npm test
+      - name: Lint TypeScript Type Definitions
+        run: npm run lint-types
       - name: Lint Sources with ESLint
         run: npm run lint
