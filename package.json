@@ -59,11 +59,11 @@
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1378 B"
+      "limit": "1400 B"
     },
     {
       "path": "use-location.js",
-      "limit": "380 B"
+      "limit": "400 B"
     }
   ],
   "husky": {
