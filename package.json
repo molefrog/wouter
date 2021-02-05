@@ -43,6 +43,7 @@
     "fix:p": "prettier --write './**/*.js{x,}'",
     "test": "jest --verbose --coverage",
     "size": "size-limit",
+    "build": "npm run bundle",
     "lint": "eslint *.js preact/",
     "lint-types": "npm run types-preact && dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
     "types-react": "copyfiles -f types/*.d.ts .",
