@@ -26,6 +26,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
+          rm package-lock.json
       - name: Run Jest
         run: npm test
       - name: Lint TypeScript Type Definitions
