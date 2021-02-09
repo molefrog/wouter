@@ -58,6 +58,8 @@ Wouter provides a simple API that many developers and library authors appreciate
     - **[`<Switch />`](#switch-)**
     - **[`<Redirect />`](#redirect-topath-)**
     - **[`<Router />`](#router-hookhook-matchermatchfn-basebasepath-)**
+      - [Matching Dynamic Segments](#matching-dynamic-segments)
+      - [Using a `path-to-regexp`-based matcher](#using-a-path-to-regexp-based-matcher)
 - [FAQ and How-to's](#faq-and-code-recipes)
   - [Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
   - [Default route](#how-do-i-make-a-default-route)
@@ -356,7 +358,7 @@ Read more → [Customizing the location hook](#customizing-the-location-hook).
 
 Read more → [Matching Dynamic Segments](#matching-dynamic-segments).
 
-### Matching Dynamic Segments
+#### Matching Dynamic Segments
 
 Just like in React Router, you can make dynamic matches either with `Route` component or `useRoute` hook.
 `useRoute` returns a second parameter which is a hash of all dynamic segments matched. Similarily, the
@@ -385,21 +387,65 @@ used by React Router or Express, and it supports the following patterns:
 
 The library was designed to be as small as possible, so most of the additional matching features were left out
 (see [this issue](https://github.com/molefrog/wouter/issues/1) for more info).
-If you do need to have `path-to-regexp`-like functionality, you can customize a matcher function:
+
+### Using `path-to-regexp`-based matcher
+The `<Router />` component accepts an optional prop called `matcher` which allows to customize how a path is 
+matched against the pattern. By default, a built-in matcher function is used, which implements basic functionality 
+such as wildcard parameters (see above). 
+
+However, if you do need to have `path-to-regexp`-like functionality, you can specify your own matcher function. 
+This matcher function should follow the convention below:
+
+```js
+/*
+ * accepts a pattern and a path as strings, should return a pair of values:
+ * [success, params]
+ */
+
+// returns [false, null] when there is no match
+matcher("/users", "/") 
+
+// [true, { id: "101" }]
+matcher("/users/:id", "/users/101") 
+```
+
+Most of the packages for parsing route patterns work with regular expressions, so to make it easier for you wouter 
+provides a factory function for transforming a regexp-based pattern builder into a matcher (it also makes sure that
+the expensive transform operation isn't called on each render by utilizing a simple cache). 
 
 ```js
 import { Router } from "wouter";
-import createMatcher from "wouter/matcher";
 
-import { pathToRegexp } from "path-to-regexp";
+import makeCachedMatcher from "wouter/matcher";
 
-const App = () => (
-  <Router matcher={createMatcher(pathToRegexp)}>
-    {/* segment constraints aren't supported by wouter */}
-    <Route path="/users/:id(\d+)" />}
+/*
+ * This function specifies how strings like /app/:users/:items* are
+ * transformed into regular expressions.
+ *
+ * Note: it is just a wrapper around `pathToRegexp`, which uses a
+ * slighly different convetion of returning the array of keys.
+ *
+ * @param {string} path — a path like "/:foo/:bar"
+ * @return {{ keys: [], regexp: RegExp }}
+ */
+const convertPathToRegexp = (path) => {
+  let keys = [];
+
+  // we use original pathToRegexp package here with keys
+  const regexp = pathToRegexp(path, keys, { strict: true });
+  return { keys, regexp };
+};
+
+const customMatcher = makeCachedMatcher(convertPathToRegexp);
+
+const App = () => ( 
+  <Router matcher={customMatcher}>
+    ...
   </Router>
-);
+)
 ```
+
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-path-to-regexp-matcher-fhg2h)**
 
 ## FAQ and Code Recipes
 
