@@ -356,8 +356,6 @@ Read more → [Customizing the location hook](#customizing-the-location-hook).
 - **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All application routes
   will be relative to that path. Prefixing a route with `~` will make it absolute, bypassing the base path.
 
-Read more → [Matching Dynamic Segments](#matching-dynamic-segments).
-
 #### Matching Dynamic Segments
 
 Just like in React Router, you can make dynamic matches either with `Route` component or `useRoute` hook.
@@ -388,7 +386,7 @@ used by React Router or Express, and it supports the following patterns:
 The library was designed to be as small as possible, so most of the additional matching features were left out
 (see [this issue](https://github.com/molefrog/wouter/issues/1) for more info).
 
-### Using `path-to-regexp`-based matcher
+#### Using a `path-to-regexp`-based matcher
 The `<Router />` component accepts an optional prop called `matcher` which allows to customize how a path is 
 matched against the pattern. By default, a built-in matcher function is used, which implements basic functionality 
 such as wildcard parameters (see above). 
@@ -410,8 +408,9 @@ matcher("/users/:id", "/users/101")
 ```
 
 Most of the packages for parsing route patterns work with regular expressions, so to make it easier for you wouter 
-provides a factory function for transforming a regexp-based pattern builder into a matcher (it also makes sure that
-the expensive transform operation isn't called on each render by utilizing a simple cache). 
+provides [a factory function](https://github.com/molefrog/wouter/blob/master/matcher.js#L2) for transforming a 
+regexp-based pattern builder into a matcher (it also makes sure that the expensive transform operation isn't called 
+on each render by utilizing a simple cache). 
 
 ```js
 import { Router } from "wouter";
@@ -438,11 +437,14 @@ const convertPathToRegexp = (path) => {
 
 const customMatcher = makeCachedMatcher(convertPathToRegexp);
 
-const App = () => ( 
-  <Router matcher={customMatcher}>
-    ...
-  </Router>
-)
+function App() {
+  return (
+    <Router matcher={customMatcher}>
+      {/* at the moment wouter doesn't support inline regexps, but path-to-regexp does! */}
+      <Route path="/(resumes|cover-letters)/:id" component={Dashboard} />
+    </Router>
+  )
+}
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-path-to-regexp-matcher-fhg2h)**
