@@ -391,8 +391,7 @@ The `<Router />` component accepts an optional prop called `matcher` which allow
 matched against the pattern. By default, a built-in matcher function is used, which implements basic functionality 
 such as wildcard parameters (see above). 
 
-However, if you do need to have `path-to-regexp`-like functionality, you can specify your own matcher function. 
-This matcher function should follow the convention below:
+However, if you do need to have more advanced functionality, you can specify your own matcher which should look like:
 
 ```js
 /*
@@ -407,10 +406,11 @@ matcher("/users", "/")
 matcher("/users/:id", "/users/101") 
 ```
 
-Most of the packages for parsing route patterns work with regular expressions, so to make it easier for you wouter 
+Most of the packages for parsing route patterns work with regular expressions (see [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) or 
+a super-tiny alternative [`regexparam`](https://github.com/lukeed/regexparam)), so to make it easier for you wouter 
 provides [a factory function](https://github.com/molefrog/wouter/blob/master/matcher.js#L2) for transforming a 
-regexp-based pattern builder into a matcher (it also makes sure that the expensive transform operation isn't called 
-on each render by utilizing a simple cache). 
+regexp-based pattern builder into a matcher. It also makes sure that the expensive transform operation isn't called 
+on each render by utilizing a simple cache. 
 
 ```js
 import { Router } from "wouter";
