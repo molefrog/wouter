@@ -9,8 +9,11 @@ const eventReplaceState = "replaceState";
 export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
-  const [path, update] = useState(() => currentPathname(base)); // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
-  const prevHash = useRef(path + location.search);
+  const [pathAndSearch, update] = useState(() => ({
+    path: currentPathname(base),
+    search: location.search,
+  })); // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
+  const prevHash = useRef(pathAndSearch.path + pathAndSearch.search);
 
   useEffect(() => {
     // this function checks if the location has been changed since the
@@ -18,12 +21,13 @@ export default ({ base = "" } = {}) => {
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
-      const pathname = currentPathname(base),
-        hash = pathname + location.search;
+      const pathname = currentPathname(base);
+      const search = location.search;
+      const hash = pathname + search;
 
       if (prevHash.current !== hash) {
         prevHash.current = hash;
-        update(pathname);
+        update({ path: pathname, search: search });
       }
     };
 
@@ -53,7 +57,7 @@ export default ({ base = "" } = {}) => {
     [base]
   );
 
-  return [path, navigate];
+  return [pathAndSearch.path, navigate];
 };
 
 // While History API does have `popstate` event, the only

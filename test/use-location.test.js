@@ -85,15 +85,29 @@ describe("`value` first argument", () => {
   it("supports search url", () => {
     const { result, unmount } = renderHook(() => useLocation());
 
+    expect(result.current[0]).toBe("/");
+    expect(result.all.length).toBe(1);
+
     act(() => history.pushState(null, "", "/foo"));
 
-    const renderCount = result.all.length;
+    expect(result.current[0]).toBe("/foo");
+    expect(result.all.length).toBe(2);
+
+    act(() => history.pushState(null, "", "/foo"));
+
+    expect(result.current[0]).toBe("/foo");
+    expect(result.all.length).toBe(2); // no re-render
+
     act(() => history.pushState(null, "", "/foo?hello=world"));
 
     expect(result.current[0]).toBe("/foo");
+    expect(result.all.length).toBe(3);
 
-    // assert the update
-    expect(result.all.length).toBeGreaterThan(renderCount);
+    act(() => history.pushState(null, "", "/foo?goodbye=world"));
+
+    expect(result.current[0]).toBe("/foo");
+    expect(result.all.length).toBe(4);
+
     unmount();
   });
 });
