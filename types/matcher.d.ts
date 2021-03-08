@@ -22,11 +22,9 @@ export type MatcherFn = (pattern: Path, path: Path) => Match;
 
 export type PatternToRegexpResult = {
   keys: Array<{ name: string | number }>;
+  regexp: RegExp;
 };
 
 export default function makeMatcher(
-  makeRegexpFn?: (
-    pattern: string,
-    keys?: Array<{ name: string | number }>
-  ) => PatternToRegexpResult
+  makeRegexpFn?: (pattern: string) => PatternToRegexpResult
 ): MatcherFn;
