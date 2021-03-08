@@ -20,9 +20,14 @@ export type Match<T extends DefaultParams = DefaultParams> =
 
 export type MatcherFn = (pattern: Path, path: Path) => Match;
 
+export type MakeRegexFn = {
+  keys: Array<{ name: string | number }>;
+  regexp: RegExp;
+};
+
 export default function makeMatcher(
   makeRegexpFn?: (
     pattern: string,
     keys?: Array<{ name: string | number }>
-  ) => RegExp
+  ) => MakeRegexFn
 ): MatcherFn;
