@@ -97,6 +97,8 @@ const App = () => (
 
 This library uses features like [destructuring assignment](https://kangax.github.io/compat-table/es6/#test-destructuring,_assignment) and [`const/let` declarations](https://kangax.github.io/compat-table/es6/#test-const) and doesn't ship with ES5 transpiled sources. If you aim to support browsers like IE11 and below → make sure you run Babel over your `node_modules`
 
+In addition, [Event](https://developer.mozilla.org/en-US/docs/Web/API/Event/Event) is also used. To be able to run successfully on IE browser, a polyfill is required.
+
 ## Wouter API
 
 Wouter comes with two kinds of APIs: low-level [React Hooks](https://reactjs.org/docs/hooks-intro.html) API and more traditional component-based API similar to React Router's one.
