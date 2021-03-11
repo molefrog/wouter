@@ -107,7 +107,7 @@
     }
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.9.2",
+    "@size-limit/preset-small-lib": "^4.10.1",
     "@testing-library/react": "^11.2.5",
     "@testing-library/react-hooks": "^5.0.3",
     "@types/react": "^17.0.1",
@@ -123,6 +123,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
-    "rollup": "^2.38.5"
+    "rollup": "^2.38.5",
+    "size-limit": "^4.10.1"
   }
 }
