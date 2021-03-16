@@ -27,7 +27,7 @@ export default ({ base = "" } = {}) => {
 
       if (prevHash.current !== hash) {
         prevHash.current = hash;
-        update({ path: pathname, search: search });
+        update({ path: pathname, search });
       }
     };
 
