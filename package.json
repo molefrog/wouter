@@ -44,11 +44,12 @@
     "test": "jest --verbose --coverage",
     "size": "size-limit",
     "build": "npm run bundle",
+    "clean": "rimraf cjs && rimraf preact/cjs",
     "lint": "eslint *.js preact/",
     "lint-types": "npm run types-preact && dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
     "types-react": "copyfiles -f types/*.d.ts .",
     "types-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts types/preact/*.d.ts preact/",
-    "bundle": "rollup -e react,preact,preact/hooks -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
+    "bundle": "npm run clean && rollup -e react,preact,preact/hooks -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
     "prepublishOnly": "npm run types-react && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
@@ -123,6 +124,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.38.5",
     "size-limit": "^4.10.1"
   }
