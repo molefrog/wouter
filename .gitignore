@@ -11,6 +11,7 @@ node_modules/
 # see https://github.com/sindresorhus/ama/issues/479#issuecomment-310661514
 /package-lock.json
 /yarn.lock
+/pnpm-lock.yaml
 
 # bundler
 dist/
