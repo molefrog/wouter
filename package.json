@@ -70,7 +70,7 @@
   ],
   "husky": {
     "hooks": {
-      "commit-msg": "yarn fix:p"
+      "commit-msg": "npm run fix:p"
     }
   },
   "eslintConfig": {
