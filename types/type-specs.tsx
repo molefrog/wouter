@@ -48,11 +48,8 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 <Route path={1337} />; // $ExpectError
 <Route />;
 
-// Supports various ways to declare children
 <Route path="/header" component={Header} />;
 <Route path="/profile/:id" component={Profile} />;
-<Route<{ id: string }> path="/profile/:id" component={Profile} />;
-<Route<{ name: string }> path="/profile/:name" component={Profile} />; // $ExpectError
 
 <Route path="/app">
   <div />
@@ -66,13 +63,28 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   {(params: Params): React.ReactNode => `User id: ${params.id}`}
 </Route>;
 
-<Route<{ id: string }> path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
+<Route path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
-<Route<{ id: string }> path="/users/:id">
+<Route path="/users/:id">
   {({ age }) => `User age: ${age}`} // $ExpectError
 </Route>;
 
 <Route path="/app" match={true} />; // $ExpectError
+
+// inferred rest params
+<Route path="/path/:rest*">
+  {params => `Rest: ${params.rest}`}
+</Route>;
+
+// infer multiple params
+<Route path="/path/:first/:second/another/:third">
+  {({ first, second, third }) => `${first}, ${second}, ${third}`}
+</Route>;
+
+// infer only named params
+<Route path="/:first/:second">
+  {({ first, second }) => `first: ${first}, second: ${second}`}
+</Route>;
 
 /*
  * Link and Redirect component type specs
