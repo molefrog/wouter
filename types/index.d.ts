@@ -23,6 +23,17 @@ import { DefaultParams, Params, Match, MatcherFn } from "./matcher";
 export * from "./matcher";
 export * from "./use-location";
 
+type StripAsterisk<Str extends string> =
+  Str extends `${infer Start}*` ? Start : Str;
+
+type ExtractRouteParams<T extends string> = string extends T
+  ? Record<string, string>
+  : T extends `${infer Start}:${infer Param}/${infer Rest}`
+  ? { [k in StripAsterisk<Param> | keyof ExtractRouteParams<Rest>]: string }
+  : T extends `${infer Start}:${infer Param}`
+  ? { [k in StripAsterisk<Param>]: string }
+  : {};
+
 /*
  * Components: <Route />
  */
@@ -31,14 +42,14 @@ export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
   params: T;
 }
 
-export interface RouteProps<T extends DefaultParams = DefaultParams> {
-  children?: ((params: Params<T>) => ReactNode) | ReactNode;
-  path?: Path;
-  component?: ComponentType<RouteComponentProps<T>>;
+export interface RouteProps<RoutePath extends Path = Path> {
+  children?: ((params: ExtractRouteParams<RoutePath>) => ReactNode) | ReactNode;
+  path?: RoutePath;
+  component?: ComponentType<RouteComponentProps<ExtractRouteParams<RoutePath>>>;
 }
 
-export function Route<T extends DefaultParams = DefaultParams>(
-  props: RouteProps<T>
+export function Route<RoutePath extends Path>(
+  props: RouteProps<RoutePath>,
 ): ReactElement | null;
 
 /*
