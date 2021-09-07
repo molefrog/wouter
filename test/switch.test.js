@@ -49,7 +49,24 @@ it("ignores mixed children", () => {
     <Switch>
       Here is a<Route path="/users">route</Route>
       route
+    </Switch>
+  );
+
+  const rendered = result.children[0].children;
+
+  expect(rendered.length).toBe(1);
+  expect(rendered[0].type).toBe(Route);
+});
+
+it("ignores falsy children", () => {
+  const result = testRouteRender(
+    "/users",
+    <Switch>
+      {""}
+      {false}
       {null}
+      {undefined}
+      <Route path="/users">route</Route>
     </Switch>
   );
 
