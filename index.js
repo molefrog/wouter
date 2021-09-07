@@ -133,7 +133,7 @@ const flattenChildren = (children) => {
   return Array.isArray(children)
     ? [].concat(
         ...children.map((c) =>
-          c.type === Fragment
+          c && c.type === Fragment
             ? flattenChildren(c.props.children)
             : flattenChildren(c)
         )
