@@ -49,6 +49,7 @@ it("ignores mixed children", () => {
     <Switch>
       Here is a<Route path="/users">route</Route>
       route
+      {null}
     </Switch>
   );
 
