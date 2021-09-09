@@ -23,15 +23,24 @@ import { DefaultParams, Params, Match, MatcherFn } from "./matcher";
 export * from "./matcher";
 export * from "./use-location";
 
-type StripAsterisk<Str extends string> =
-  Str extends `${infer Start}*` ? Start : Str;
+export type ExtractRouteOptionalParam<PathType extends Path> = PathType extends `${infer Param}?`
+  ? { [k in Param]: string }
+  : PathType extends `${infer Param}*`
+  ? { [k in Param]: string }
+  : PathType extends `${infer Param}+`
+  ? { [k in Param]: string }
+  : { [k in PathType]: string };
 
-type ExtractRouteParams<T extends string> = string extends T
-  ? Record<string, string>
-  : T extends `${infer Start}:${infer Param}/${infer Rest}`
-  ? { [k in StripAsterisk<Param> | keyof ExtractRouteParams<Rest>]: string }
-  : T extends `${infer Start}:${infer Param}`
-  ? { [k in StripAsterisk<Param>]: string }
+export type ExtractRouteParams<PathType extends string> = string extends PathType
+  ? { [k in string]: string }
+  : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
+  ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
+    ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
+    : ExtractRouteOptionalParam<ParamWithOptionalRegExp> & ExtractRouteParams<Rest>
+  : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}`
+  ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
+    ? ExtractRouteOptionalParam<Param>
+    : ExtractRouteOptionalParam<ParamWithOptionalRegExp>
   : {};
 
 /*
