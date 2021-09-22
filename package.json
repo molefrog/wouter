@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "2.7.4",
+  "version": "2.7.5",
   "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
   "keywords": [
     "react",
