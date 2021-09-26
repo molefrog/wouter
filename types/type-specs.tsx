@@ -69,12 +69,14 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   {({ age }) => `User age: ${age}`} // $ExpectError
 </Route>;
 
+<Route path="/users/:id">
+  {({ age }: { age: string }) => `User age: ${age}`}
+</Route>;
+
 <Route path="/app" match={true} />; // $ExpectError
 
 // inferred rest params
-<Route path="/path/:rest*">
-  {params => `Rest: ${params.rest}`}
-</Route>;
+<Route path="/path/:rest*">{(params) => `Rest: ${params.rest}`}</Route>;
 
 // infer multiple params
 <Route path="/path/:first/:second/another/:third">
@@ -227,6 +229,15 @@ if (parameters) {
   parameters.age; // $ExpectError
 } else {
   parameters; // $ExpectType null
+}
+
+const [, inferedParams] = useRoute("/app/users/:id/:age");
+
+if (inferedParams) {
+  inferedParams.id; // $ExpectType string
+  inferedParams.age; // $ExpectType string
+} else {
+  inferedParams; // $ExpectType null
 }
 
 /*
