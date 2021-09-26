@@ -93,7 +93,7 @@ export const Link = (props) => {
   const navRef = useNavigate(props);
   const { base } = useRouter();
 
-  let { to, href = to, children, onClick } = props;
+  let { to, href = to, children, onClick, ...rest } = props;
 
   const handleClick = useCallback(
     (event) => {
@@ -123,6 +123,7 @@ export const Link = (props) => {
     href: href[0] === "~" ? href.slice(1) : base + href,
     onClick: handleClick,
     to: null,
+    ...rest,
   };
   const jsx = isValidElement(children) ? children : h("a", props);
 
