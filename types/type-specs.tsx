@@ -90,7 +90,13 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 // for pathToRegexp matcher
 <Route path="/:user([a-z]i+)/profile/:tab/:first+/:second*">
-  {({ user, tab, first, second }) => `${user}, ${tab}, ${first}, ${second}`}
+  {({ user, tab, first, second }) => {
+    user; // $ExpectType string
+    tab; // $ExpectType string
+    first; // $ExpectType string
+    second; // $ExpectType string | undefined
+    return `${user}, ${tab}, ${first}, ${second}`;
+  }}
 </Route>;
 
 /*
