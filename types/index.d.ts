@@ -25,9 +25,9 @@ export * from "./use-location";
 
 export type ExtractRouteOptionalParam<PathType extends Path> =
   PathType extends `${infer Param}?`
-    ? { [k in Param]: string }
+    ? { [k in Param]: string | undefined }
     : PathType extends `${infer Param}*`
-    ? { [k in Param]: string }
+    ? { [k in Param]: string | undefined }
     : PathType extends `${infer Param}+`
     ? { [k in Param]: string }
     : { [k in PathType]: string };
