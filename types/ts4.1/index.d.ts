@@ -1,3 +1,4 @@
+// Minimum TypeScript Version: 4.1
 // tslint:disable:no-unnecessary-generics
 
 import {
@@ -15,13 +16,13 @@ import {
   HookReturnValue,
   HookNavigationOptions,
   LocationHook,
-} from "./use-location";
+} from "../use-location";
 
-import { DefaultParams, Params, Match, MatcherFn } from "./matcher";
+import { DefaultParams, Params, Match, MatcherFn } from "../matcher";
 
 // re-export types from these modules
-export * from "./matcher";
-export * from "./use-location";
+export * from "../matcher";
+export * from "../use-location";
 
 export type ExtractRouteOptionalParam<PathType extends Path> =
   PathType extends `${infer Param}?`

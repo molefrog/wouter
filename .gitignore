@@ -28,6 +28,7 @@ coverage/
 # preact dist: all files are ignored by default
 # expect sources that are Preact-specific
 preact/*
+!preact/types
 !preact/react-deps.js
 !preact/package.json
 

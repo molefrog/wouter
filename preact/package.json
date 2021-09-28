@@ -3,6 +3,13 @@
   "version": "2.7.5",
   "description": "A minimalistic routing for React and Preact (Preact-only version).",
   "type": "module",
+  "files": [
+    "*.js",
+    "types/**/*.d.ts",
+    "types/*.d.ts",
+    "preact",
+    "cjs"
+  ],
   "exports": {
     ".": {
       "require": "./cjs/index.js",
@@ -23,7 +30,14 @@
   },
   "main": "cjs/index.js",
   "module": "index.js",
-  "types": "index.d.ts",
+  "types": "types/ts3.9.4/index.d.ts",
+  "typesVersions": {
+    ">=4.1": {
+      "types/ts3.9.4/index.d.ts": [
+        "types/ts4.1/index.d.ts"
+      ]
+    }
+  },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": "molefrog/wouter",
   "license": "ISC",
