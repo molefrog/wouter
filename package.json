@@ -13,7 +13,8 @@
   ],
   "files": [
     "*.js",
-    "*.d.ts",
+    "types/**/*.d.ts",
+    "types/*.d.ts",
     "preact",
     "cjs"
   ],
@@ -38,7 +39,14 @@
   },
   "main": "cjs/index.js",
   "module": "index.js",
-  "types": "index.d.ts",
+  "types": "types/ts3.9.4/index.d.ts",
+  "typesVersions": {
+    ">=4.1": {
+      "types/ts3.9.4/index.d.ts": [
+        "types/ts4.1/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "fix:p": "prettier --write './**/*.js{x,}'",
     "test": "jest --verbose --coverage",
@@ -46,11 +54,13 @@
     "build": "npm run bundle",
     "clean": "rimraf cjs && rimraf preact/cjs",
     "lint": "eslint *.js preact/",
-    "lint-types": "npm run types-preact && dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
-    "types-react": "copyfiles -f types/*.d.ts .",
-    "types-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts types/preact/*.d.ts preact/",
-    "bundle": "rollup -e react,preact,preact/hooks -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
-    "prepublishOnly": "npm run clean && npm run types-react && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
+    "lint-types": "npm run lint-types-react && npm run lint-types-preact",
+    "lint-types-react": "dtslint types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
+    "lint-types-preact": "npm run preact && npm run types-preact && dtslint preact/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint preact/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
+    "preact": "copyfiles -f {index,matcher,use-location,static-location}.js preact/",
+    "types-preact": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types",
+    "bundle": "rollup -e react,preact -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
+    "prepublishOnly": "npm run clean && npm run preact && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "license": "ISC",
@@ -130,6 +140,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.38.5",
     "size-limit": "^4.10.1",
-    "typescript": "4.4.2"
+    "typescript": "4.4.2",
+    "typescript-3.9.4": "npm:typescript@3.9.4"
   }
 }

@@ -7,8 +7,8 @@
     "baseUrl": ".",
     "paths": {
       "wouter": ["."],
-      "wouter/use-location": ["./use-location"],
-      "wouter/static-location": ["./static-location"]
+      "wouter/use-location": ["../use-location"],
+      "wouter/static-location": ["../static-location"]
     }
   },
   "files": ["./type-specs.tsx"]

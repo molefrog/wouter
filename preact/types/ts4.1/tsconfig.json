@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom"],
+    "jsx": "react",
+    "jsxFactory": "h",
+    "noEmit": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "wouter/preact": ["."],
+      "wouter/use-location": ["../use-location"],
+      "wouter/static-location": ["../static-location"]
+    }
+  },
+  "files": ["./type-specs.tsx"]
+}

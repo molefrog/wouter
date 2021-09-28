@@ -1,12 +1,13 @@
 // tslint:disable:no-unnecessary-generics
 
 import {
-  JSX,
+  AnchorHTMLAttributes,
   FunctionComponent,
+  PropsWithChildren,
   ComponentType,
-  ComponentChildren,
-  VNode,
-} from "preact";
+  ReactElement,
+  ReactNode,
+} from "react";
 
 import {
   Path,
@@ -14,13 +15,13 @@ import {
   HookReturnValue,
   HookNavigationOptions,
   LocationHook,
-} from "./use-location";
+} from "../use-location";
 
-import { DefaultParams, Params, Match, MatcherFn } from "./matcher";
+import { DefaultParams, Params, Match, MatcherFn } from "../matcher";
 
 // re-export types from these modules
-export * from "./matcher";
-export * from "./use-location";
+export * from "../matcher";
+export * from "../use-location";
 
 /*
  * Components: <Route />
@@ -31,13 +32,14 @@ export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
 }
 
 export interface RouteProps<T extends DefaultParams = DefaultParams> {
-  children?: ((params: Params<T>) => ComponentChildren) | ComponentChildren;
+  children?: ((params: Params<T>) => ReactNode) | ReactNode;
   path?: Path;
   component?: ComponentType<RouteComponentProps<T>>;
 }
+
 export function Route<T extends DefaultParams = DefaultParams>(
   props: RouteProps<T>
-): VNode<any> | null;
+): ReactElement | null;
 
 /*
  * Components: <Link /> & <Redirect />
@@ -50,24 +52,25 @@ export type NavigationalProps<H extends BaseLocationHook = LocationHook> = (
   HookNavigationOptions<H>;
 
 export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
-  JSX.HTMLAttributes,
+  AnchorHTMLAttributes<HTMLAnchorElement>,
   "href"
 > &
   NavigationalProps<H>;
 
-export type RedirectProps<
-  H extends BaseLocationHook = LocationHook
-> = NavigationalProps<H> & {
-  children?: never;
-};
-
-export function Link<H extends BaseLocationHook = LocationHook>(
-  props: LinkProps<H>
-): VNode<any> | null;
+export type RedirectProps<H extends BaseLocationHook = LocationHook> =
+  NavigationalProps<H> & {
+    children?: never;
+  };
 
 export function Redirect<H extends BaseLocationHook = LocationHook>(
-  props: RedirectProps<H>
-): VNode<any> | null;
+  props: PropsWithChildren<RedirectProps<H>>,
+  context?: any
+): ReactElement<any, any> | null;
+
+export function Link<H extends BaseLocationHook = LocationHook>(
+  props: PropsWithChildren<LinkProps<H>>,
+  context?: any
+): ReactElement<any, any> | null;
 
 /*
  * Components: <Switch />
@@ -75,7 +78,7 @@ export function Redirect<H extends BaseLocationHook = LocationHook>(
 
 export interface SwitchProps {
   location?: string;
-  children: Array<VNode<RouteProps>>;
+  children: Array<ReactElement<RouteProps>>;
 }
 export const Switch: FunctionComponent<SwitchProps>;
 
@@ -90,13 +93,14 @@ export interface RouterProps {
 }
 export const Router: FunctionComponent<
   Partial<RouterProps> & {
-    children: ComponentChildren;
+    children: ReactNode;
   }
 >;
 
 /*
  * Hooks
  */
+
 export function useRouter(): RouterProps;
 
 export function useRoute<T extends DefaultParams = DefaultParams>(
