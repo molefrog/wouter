@@ -17,7 +17,7 @@ import {
   LocationHook,
 } from "./use-location";
 
-import { DefaultParams, Params, Match, MatcherFn } from "./matcher";
+import { DefaultParams, Match, MatcherFn } from "./matcher";
 
 // re-export types from these modules
 export * from "./matcher";

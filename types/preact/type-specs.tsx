@@ -63,7 +63,35 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   {({ age }) => `User age: ${age}`} // $ExpectError
 </Route>;
 
+<Route path="/users/:id">
+  {({ age }: { age: string }) => `User age: ${age}`}
+</Route>;
+
 <Route path="/app" match={true} />; // $ExpectError
+
+// inferred rest params
+<Route path="/path/:rest*">{(params) => `Rest: ${params.rest}`}</Route>;
+
+// infer multiple params
+<Route path="/path/:first/:second/another/:third">
+  {({ first, second, third }) => `${first}, ${second}, ${third}`}
+</Route>;
+
+// infer only named params
+<Route path="/:first/:second">
+  {({ first, second }) => `first: ${first}, second: ${second}`}
+</Route>;
+
+// for pathToRegexp matcher
+<Route path="/:user([a-z]i+)/profile/:tab/:first+/:second*">
+  {({ user, tab, first, second }) => {
+    user; // $ExpectType string
+    tab; // $ExpectType string
+    first; // $ExpectType string
+    second; // $ExpectType string | undefined
+    return `${user}, ${tab}, ${first}, ${second}`;
+  }}
+</Route>;
 
 /*
  * Link and Redirect component type specs
@@ -165,4 +193,13 @@ if (parameters) {
   parameters.age; // $ExpectError
 } else {
   parameters; // $ExpectType null
+}
+
+const [, inferedParams] = useRoute("/app/users/:id/:age");
+
+if (inferedParams) {
+  inferedParams.id; // $ExpectType string
+  inferedParams.age; // $ExpectType string
+} else {
+  inferedParams; // $ExpectType null
 }
