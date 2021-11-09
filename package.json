@@ -116,6 +116,7 @@
     ]
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "transform": {
       "\\.js$": "jest-esm-jsx-transform"
     }
@@ -130,7 +131,7 @@
     "eslint": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.0",
-    "jest": "^26.6.3",
+    "jest": "^27.3.1",
     "jest-esm-jsx-transform": "^1.0.0",
     "preact": "^10.0.0",
     "prettier": "^2.4.1",
