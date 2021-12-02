@@ -60,17 +60,26 @@ const useNavigate = (options) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = (props) => {
+export const Router = ({ hook, base, matcher, children }) => {
   const ref = useRef();
+  const { base: parentBase } = useRouter();
 
   // this little trick allows to avoid having unnecessary
   // calls to potentially expensive `buildRouter` method.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const value = ref.current || (ref.current = { v: buildRouter(props) });
+  const value =
+    ref.current ||
+    (ref.current = {
+      v: buildRouter({
+        hook,
+        base: parentBase ? parentBase + (base ?? "") : base,
+        matcher,
+      }),
+    });
 
   return h(RouterCtx.Provider, {
     value,
-    children: props.children,
+    children,
   });
 };
 

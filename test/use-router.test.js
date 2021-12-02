@@ -59,3 +59,36 @@ it("shares one router instance between components", () => {
   ];
   expect(uniqRouters.length).toBe(1);
 });
+
+it("nests non-empty base paths", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => (
+      <Router base="/base">
+        <Router base="/nested">{props.children}</Router>
+      </Router>
+    ),
+  });
+  expect(result.current.base).toBe("/base/nested");
+});
+
+it("handles empty parent base paths", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => (
+      <Router>
+        <Router base="/nested">{props.children}</Router>
+      </Router>
+    ),
+  });
+  expect(result.current.base).toBe("/nested");
+});
+
+it("propages the base path", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => (
+      <Router base="/base">
+        <Router>{props.children}</Router>
+      </Router>
+    ),
+  });
+  expect(result.current.base).toBe("/base");
+});
