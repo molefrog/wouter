@@ -26,8 +26,17 @@ const RouterCtx = createContext({});
 const buildRouter = ({
   hook = locationHook,
   base = "",
-  matcher = makeMatcher(),
-} = {}) => ({ hook, base, matcher });
+  matcher,
+  parent,
+} = {}) => ({
+  hook,
+  relbase: base,
+  parent,
+  matcher: matcher ?? parent?.matcher ?? makeMatcher(),
+  get base() {
+    return (this.parent?.base ?? "") + this.relbase;
+  },
+});
 
 export const useRouter = () => {
   const globalRef = useContext(RouterCtx);
@@ -67,6 +76,13 @@ export const Router = (props) => {
   // calls to potentially expensive `buildRouter` method.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
   const value = ref.current || (ref.current = { v: buildRouter(props) });
+
+  // Use the "latest ref" pattern.
+  // https://epicreact.dev/the-latest-ref-pattern-in-react/
+  useLayoutEffect(() => {
+    value.v.relbase = props.base || "";
+    value.v.parent = props.parent;
+  });
 
   return h(RouterCtx.Provider, {
     value,
