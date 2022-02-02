@@ -30,11 +30,11 @@ const buildRouter = ({
   parent,
 } = {}) => ({
   hook,
-  relbase: base,
+  ownBase: base,
   parent,
   matcher: matcher ?? parent?.matcher ?? makeMatcher(),
   get base() {
-    return (this.parent?.base ?? "") + this.relbase;
+    return (this.parent?.base ?? "") + this.ownBase;
   },
 });
 
@@ -80,7 +80,7 @@ export const Router = (props) => {
   // Use the "latest ref" pattern.
   // https://epicreact.dev/the-latest-ref-pattern-in-react/
   useLayoutEffect(() => {
-    value.v.relbase = props.base || "";
+    value.v.ownBase = props.base || "";
     value.v.parent = props.parent;
   });
 
