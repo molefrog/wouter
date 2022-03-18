@@ -99,7 +99,22 @@ it("ignores the navigation when clicked with modifiers", () => {
   expect(location.pathname).not.toBe("/users");
 });
 
-it("accepts an `onClick` prop, fired after the navigation", () => {
+it("ignores the navigation when event is cancelled", () => {
+  const clickHandler = (e) => {
+    e.preventDefault();
+  };
+
+  const { getByTestId } = render(
+    <Link href="/users" data-testid="link" onClick={clickHandler}>
+      click
+    </Link>
+  );
+
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).not.toBe("/users");
+});
+
+it("accepts an `onClick` prop, fired before the navigation", () => {
   const clickHandler = jest.fn();
 
   const { getByTestId } = render(

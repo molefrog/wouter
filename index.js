@@ -108,9 +108,11 @@ export const Link = (props) => {
       )
         return;
 
-      event.preventDefault();
-      navRef.current();
       onClick && onClick(event);
+      if (!event.defaultPrevented) {
+        event.preventDefault();
+        navRef.current();
+      }
     },
     // navRef is a ref so it never changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
