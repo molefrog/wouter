@@ -44,7 +44,10 @@
     ">=4.1": {
       "types/ts3.9.4/index.d.ts": [
         "types/ts4.1/index.d.ts"
-      ]
+      ],
+      "use-location": ["types/use-location.d.ts"],
+      "matcher": ["types/matcher.d.ts"],
+      "static-location": ["types/static-location.d.ts"]
     }
   },
   "scripts": {
