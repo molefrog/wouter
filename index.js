@@ -11,6 +11,7 @@ import {
   cloneElement,
   createElement as h,
   Fragment,
+  useState,
 } from "./react-deps.js";
 
 /*
@@ -61,12 +62,10 @@ const useNavigate = (options) => {
  */
 
 export const Router = (props) => {
-  const ref = useRef();
-
   // this little trick allows to avoid having unnecessary
   // calls to potentially expensive `buildRouter` method.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const value = ref.current || (ref.current = { v: buildRouter(props) });
+  const [value] = useState(() => ({ v: buildRouter(props) }));
 
   return h(RouterCtx.Provider, {
     value,
