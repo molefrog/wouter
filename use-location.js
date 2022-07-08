@@ -9,11 +9,9 @@ const eventReplaceState = "replaceState";
 export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
-  const [{ path, search }, update] = useState(() => ({
-    path: currentPathname(base),
-    search: location.search,
-  })); // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
-  const prevHash = useRef(path + search);
+  const [{ path }, update] = useState(() => ({ path: currentPathname(base) }));
+  // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
+  const prevHash = useRef(path + location.search);
 
   useEffect(() => {
     // this function checks if the location has been changed since the
@@ -22,12 +20,11 @@ export default ({ base = "" } = {}) => {
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
       const pathname = currentPathname(base);
-      const search = location.search;
-      const hash = pathname + search;
+      const hash = pathname + location.search;
 
       if (prevHash.current !== hash) {
         prevHash.current = hash;
-        update({ path: pathname, search });
+        update({ path: pathname });
       }
     };
 
