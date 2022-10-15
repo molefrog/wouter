@@ -12,6 +12,7 @@ import {
   createElement as h,
   Fragment,
   useState,
+  forwardRef,
 } from "./react-deps.js";
 
 /*
@@ -88,7 +89,7 @@ export const Route = ({ path, match, component, children }) => {
   return typeof children === "function" ? children(params) : children;
 };
 
-export const Link = (props) => {
+export const Link = forwardRef((props, ref) => {
   const navRef = useNavigate(props);
   const { base } = useRouter();
 
@@ -124,11 +125,12 @@ export const Link = (props) => {
     href: href[0] === "~" ? href.slice(1) : base + href,
     onClick: handleClick,
     to: null,
+    ref,
   };
   const jsx = isValidElement(children) ? children : h("a", props);
 
   return cloneElement(jsx, extraProps);
-};
+});
 
 const flattenChildren = (children) => {
   return Array.isArray(children)

@@ -3,6 +3,20 @@ import { render, cleanup, fireEvent } from "@testing-library/react";
 
 import { Router, Link } from "../index.js";
 
+const ParentComponent = (props) => {
+  const ref = React.createRef();
+
+  React.useEffect(() => {
+    ref.current.innerHTML = "Tested";
+  }, [ref])
+
+  return (
+    <Link href="/about" ref={ref}>
+      {props.children}
+    </Link>
+  );
+}
+
 afterEach(cleanup);
 
 it("renders a link with proper attributes", () => {
@@ -41,6 +55,31 @@ it("works for any other elements as well", () => {
   expect(link.className).toBe("link--wannabe");
   expect(link.textContent).toBe("Click Me");
 });
+
+it("passes ref to <a />", () => {
+  const { container } = render(
+    <ParentComponent>
+      Testing
+    </ParentComponent>
+  );
+  const link = container.firstChild;
+
+  expect(link.tagName).toBe("A");
+  expect(link.textContent).toBe("Tested");
+});
+
+it("passes ref to any other child element", () => {
+  const { container } = render(
+    <ParentComponent>
+      <div>Testing</div>
+    </ParentComponent>
+  );
+  const link = container.firstChild;
+
+  expect(link.tagName).toBe("DIV");
+  expect(link.textContent).toBe("Tested");
+});
+
 
 it("still creates a plain link when nothing is passed", () => {
   const { container } = render(<Link href="/about" />);
