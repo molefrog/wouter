@@ -13,3 +13,4 @@ export {
   useContext,
   useCallback,
 } from "preact/hooks";
+export { forwardRef } from "preact/compat";
