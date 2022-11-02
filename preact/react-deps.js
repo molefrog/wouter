@@ -13,4 +13,8 @@ export {
   useContext,
   useCallback,
 } from "preact/hooks";
-export { forwardRef } from "preact/compat";
+
+// provide forwardRef stub for preact
+export function forwardRef(component) {
+  return component;
+}
