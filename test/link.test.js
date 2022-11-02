@@ -8,14 +8,14 @@ const LinkWithForwardedRef = (props) => {
 
   React.useEffect(() => {
     ref.current.innerHTML = "Tested";
-  }, [ref])
+  }, [ref]);
 
   return (
     <Link href="/about" ref={ref}>
       {props.children}
     </Link>
   );
-}
+};
 
 afterEach(cleanup);
 
@@ -58,9 +58,7 @@ it("works for any other elements as well", () => {
 
 it("passes ref to <a />", () => {
   const { container } = render(
-    <LinkWithForwardedRef>
-      Testing
-    </LinkWithForwardedRef>
+    <LinkWithForwardedRef>Testing</LinkWithForwardedRef>
   );
   const link = container.firstChild;
 
@@ -79,7 +77,6 @@ it("passes ref to any other child element", () => {
   expect(link.tagName).toBe("DIV");
   expect(link.textContent).toBe("Tested");
 });
-
 
 it("still creates a plain link when nothing is passed", () => {
   const { container } = render(<Link href="/about" />);
