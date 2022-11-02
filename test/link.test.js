@@ -3,7 +3,7 @@ import { render, cleanup, fireEvent } from "@testing-library/react";
 
 import { Router, Link } from "../index.js";
 
-const ParentComponent = (props) => {
+const LinkWithForwardedRef = (props) => {
   const ref = React.createRef();
 
   React.useEffect(() => {
@@ -58,9 +58,9 @@ it("works for any other elements as well", () => {
 
 it("passes ref to <a />", () => {
   const { container } = render(
-    <ParentComponent>
+    <LinkWithForwardedRef>
       Testing
-    </ParentComponent>
+    </LinkWithForwardedRef>
   );
   const link = container.firstChild;
 
@@ -70,9 +70,9 @@ it("passes ref to <a />", () => {
 
 it("passes ref to any other child element", () => {
   const { container } = render(
-    <ParentComponent>
+    <LinkWithForwardedRef>
       <div>Testing</div>
-    </ParentComponent>
+    </LinkWithForwardedRef>
   );
   const link = container.firstChild;
 
