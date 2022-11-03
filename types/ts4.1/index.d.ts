@@ -19,7 +19,7 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { DefaultParams, Params, Match, MatcherFn } from "../matcher";
+import { DefaultParams, Match, MatcherFn } from "../matcher";
 import React = require("react");
 
 // re-export types from these modules
@@ -27,15 +27,15 @@ export * from "../matcher";
 export * from "../use-location";
 
 export type ExtractRouteOptionalParam<PathType extends Path> = PathType extends `${infer Param}?`
-  ? { [k in Param]: string | undefined }
+  ? { readonly [k in Param]: string | undefined }
   : PathType extends `${infer Param}*`
-  ? { [k in Param]: string | undefined }
+  ? { readonly [k in Param]: string | undefined }
   : PathType extends `${infer Param}+`
-  ? { [k in Param]: string }
-  : { [k in PathType]: string };
+  ? { readonly [k in Param]: string }
+  : { readonly [k in PathType]: string };
 
 export type ExtractRouteParams<PathType extends string> = string extends PathType
-  ? { [k in string]: string }
+  ? { readonly [k in string]: string | undefined }
   : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
   ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
     ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
