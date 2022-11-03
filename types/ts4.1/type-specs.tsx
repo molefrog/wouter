@@ -72,6 +72,14 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 // inferred rest params
 <Route path="/path/:rest*">{(params) => `Rest: ${params.rest}`}</Route>;
 
+// type must be string | undefined
+<Route path="/path/:rest*">
+  {({ rest }) => {
+    const fn = (a: string) => "noop";
+    fn(rest); // $ExpectError
+  }}
+</Route>;
+
 // infer multiple params
 <Route path="/path/:first/:second/another/:third">
   {({ first, second, third }) => `${first}, ${second}, ${third}`}
@@ -88,6 +96,12 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
     first; // $ExpectType string
     second; // $ExpectType string | undefined
     return `${user}, ${tab}, ${first}, ${second}`;
+  }}
+</Route>;
+
+<Route path={JSON.parse('"/home"')}>
+  {({ itemId }) => {
+    return <div className={itemId} />;
   }}
 </Route>;
 
