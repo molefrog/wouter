@@ -35,7 +35,7 @@ export type ExtractRouteOptionalParam<PathType extends Path> = PathType extends 
   : { readonly [k in PathType]: string };
 
 export type ExtractRouteParams<PathType extends string> = string extends PathType
-  ? { readonly [k in string]: string | undefined }
+  ? DefaultParams
   : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
   ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
     ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
