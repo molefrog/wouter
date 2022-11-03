@@ -101,6 +101,8 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 <Route path={JSON.parse('"/home"')}>
   {({ itemId }) => {
+    const fn = (a: string) => `noop ${a}`;
+    fn(itemId); // $ExpectError
     return <div className={itemId} />;
   }}
 </Route>;
