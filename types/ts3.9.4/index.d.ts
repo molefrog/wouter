@@ -57,10 +57,9 @@ export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
 > &
   NavigationalProps<H>;
 
-export type RedirectProps<H extends BaseLocationHook = LocationHook> =
-  NavigationalProps<H> & {
-    children?: never;
-  };
+export type RedirectProps<H extends BaseLocationHook = LocationHook> = NavigationalProps<H> & {
+  children?: never;
+};
 
 export function Redirect<H extends BaseLocationHook = LocationHook>(
   props: PropsWithChildren<RedirectProps<H>>,
@@ -78,7 +77,7 @@ export function Link<H extends BaseLocationHook = LocationHook>(
 
 export interface SwitchProps {
   location?: string;
-  children: Array<ReactElement<RouteProps>>;
+  children: ReactNode;
 }
 export const Switch: FunctionComponent<SwitchProps>;
 
@@ -103,12 +102,8 @@ export const Router: FunctionComponent<
 
 export function useRouter(): RouterProps;
 
-export function useRoute<T extends DefaultParams = DefaultParams>(
-  pattern: Path
-): Match<T>;
+export function useRoute<T extends DefaultParams = DefaultParams>(pattern: Path): Match<T>;
 
-export function useLocation<
-  H extends BaseLocationHook = LocationHook
->(): HookReturnValue<H>;
+export function useLocation<H extends BaseLocationHook = LocationHook>(): HookReturnValue<H>;
 
 // tslint:enable:no-unnecessary-generics

@@ -59,19 +59,13 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   This is a <b>mixed</b> content
 </Route>;
 
-<Route path="/users/:id">
-  {(params: Params): React.ReactNode => `User id: ${params.id}`}
-</Route>;
+<Route path="/users/:id">{(params: Params): React.ReactNode => `User id: ${params.id}`}</Route>;
 
 <Route path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
-<Route path="/users/:id">
-  {({ age }) => `User age: ${age}`} // $ExpectError
-</Route>;
+<Route path="/users/:id">{({ age }) => `User age: ${age}`}</Route>; // $ExpectError
 
-<Route path="/users/:id">
-  {({ age }: { age: string }) => `User age: ${age}`}
-</Route>;
+<Route path="/users/:id">{({ age }: { age: string }) => `User age: ${age}`}</Route>;
 
 <Route path="/app" match={true} />; // $ExpectError
 
@@ -84,9 +78,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 </Route>;
 
 // infer only named params
-<Route path="/:first/:second">
-  {({ first, second }) => `first: ${first}, second: ${second}`}
-</Route>;
+<Route path="/:first/:second">{({ first, second }) => `first: ${first}, second: ${second}`}</Route>;
 
 // for pathToRegexp matcher
 <Route path="/:user([a-z]i+)/profile/:tab/:first+/:second*">
@@ -153,10 +145,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 Redirect<UseNetworkLocation>({ href: "/home", delay: 1000 });
 // example custom hook
-type UseLocWithNoOptions = () => [
-  string,
-  (to: string, foo: number, bar: string) => void
-];
+type UseLocWithNoOptions = () => [string, (to: string, foo: number, bar: string) => void];
 Redirect<UseLocWithNoOptions>({ href: "/app" });
 
 <Redirect>something</Redirect>; // $ExpectError
@@ -174,6 +163,21 @@ Redirect<UseLocWithNoOptions>({ href: "/app" });
   <Route path="/app/users" />
   <Route />
 </Switch>;
+
+<Switch>
+  This won't be rendered, but it's allowed
+  <Route path="/app/users" />
+  <>
+    <div />
+    I'm a fragment
+  </>
+  {false && <a>Conditionals</a>}
+  {null}
+  {undefined}
+  <Route />
+</Switch>;
+
+<Switch />; // $ExpectError
 
 /*
  * Router specs

@@ -1,4 +1,5 @@
 // Minimum TypeScript Version: 4.1
+
 // tslint:disable:no-unnecessary-generics
 
 import {
@@ -19,33 +20,31 @@ import {
 } from "../use-location";
 
 import { DefaultParams, Params, Match, MatcherFn } from "../matcher";
+import React = require("react");
 
 // re-export types from these modules
 export * from "../matcher";
 export * from "../use-location";
 
-export type ExtractRouteOptionalParam<PathType extends Path> =
-  PathType extends `${infer Param}?`
-    ? { [k in Param]: string | undefined }
-    : PathType extends `${infer Param}*`
-    ? { [k in Param]: string | undefined }
-    : PathType extends `${infer Param}+`
-    ? { [k in Param]: string }
-    : { [k in PathType]: string };
+export type ExtractRouteOptionalParam<PathType extends Path> = PathType extends `${infer Param}?`
+  ? { [k in Param]: string | undefined }
+  : PathType extends `${infer Param}*`
+  ? { [k in Param]: string | undefined }
+  : PathType extends `${infer Param}+`
+  ? { [k in Param]: string }
+  : { [k in PathType]: string };
 
-export type ExtractRouteParams<PathType extends string> =
-  string extends PathType
-    ? { [k in string]: string }
-    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
-    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-      ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
-      : ExtractRouteOptionalParam<ParamWithOptionalRegExp> &
-          ExtractRouteParams<Rest>
-    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}`
-    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-      ? ExtractRouteOptionalParam<Param>
-      : ExtractRouteOptionalParam<ParamWithOptionalRegExp>
-    : {};
+export type ExtractRouteParams<PathType extends string> = string extends PathType
+  ? { [k in string]: string }
+  : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
+  ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
+    ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
+    : ExtractRouteOptionalParam<ParamWithOptionalRegExp> & ExtractRouteParams<Rest>
+  : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}`
+  ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
+    ? ExtractRouteOptionalParam<Param>
+    : ExtractRouteOptionalParam<ParamWithOptionalRegExp>
+  : {};
 
 /*
  * Components: <Route />
@@ -60,15 +59,11 @@ export interface RouteProps<
   RoutePath extends Path = Path
 > {
   children?:
-    | ((
-        params: T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
-      ) => ReactNode)
+    | ((params: T extends DefaultParams ? T : ExtractRouteParams<RoutePath>) => ReactNode)
     | ReactNode;
   path?: RoutePath;
   component?: ComponentType<
-    RouteComponentProps<
-      T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
-    >
+    RouteComponentProps<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>
   >;
 }
 
@@ -93,10 +88,9 @@ export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
 > &
   NavigationalProps<H>;
 
-export type RedirectProps<H extends BaseLocationHook = LocationHook> =
-  NavigationalProps<H> & {
-    children?: never;
-  };
+export type RedirectProps<H extends BaseLocationHook = LocationHook> = NavigationalProps<H> & {
+  children?: never;
+};
 
 export function Redirect<H extends BaseLocationHook = LocationHook>(
   props: PropsWithChildren<RedirectProps<H>>,
@@ -114,7 +108,7 @@ export function Link<H extends BaseLocationHook = LocationHook>(
 
 export interface SwitchProps {
   location?: string;
-  children: Array<ReactElement<RouteProps>>;
+  children: ReactNode;
 }
 export const Switch: FunctionComponent<SwitchProps>;
 
@@ -142,12 +136,8 @@ export function useRouter(): RouterProps;
 export function useRoute<
   T extends DefaultParams | undefined = undefined,
   RoutePath extends Path = Path
->(
-  pattern: RoutePath
-): Match<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>;
+>(pattern: RoutePath): Match<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>;
 
-export function useLocation<
-  H extends BaseLocationHook = LocationHook
->(): HookReturnValue<H>;
+export function useLocation<H extends BaseLocationHook = LocationHook>(): HookReturnValue<H>;
 
 // tslint:enable:no-unnecessary-generics

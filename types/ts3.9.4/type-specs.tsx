@@ -62,15 +62,11 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   This is a <b>mixed</b> content
 </Route>;
 
-<Route path="/users/:id">
-  {(params: Params): React.ReactNode => `User id: ${params.id}`}
-</Route>;
+<Route path="/users/:id">{(params: Params): React.ReactNode => `User id: ${params.id}`}</Route>;
 
 <Route<{ id: string }> path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
-<Route<{ id: string }> path="/users/:id">
-  {({ age }) => `User age: ${age}`} // $ExpectError
-</Route>;
+<Route<{ id: string }> path="/users/:id">{({ age }) => `User age: ${age}`}</Route>; // $ExpectError
 
 <Route path="/app" match={true} />; // $ExpectError
 
@@ -128,10 +124,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 Redirect<UseNetworkLocation>({ href: "/home", delay: 1000 });
 // example custom hook
-type UseLocWithNoOptions = () => [
-  string,
-  (to: string, foo: number, bar: string) => void
-];
+type UseLocWithNoOptions = () => [string, (to: string, foo: number, bar: string) => void];
 Redirect<UseLocWithNoOptions>({ href: "/app" });
 
 <Redirect>something</Redirect>; // $ExpectError
@@ -149,6 +142,21 @@ Redirect<UseLocWithNoOptions>({ href: "/app" });
   <Route path="/app/users" />
   <Route />
 </Switch>;
+
+<Switch>
+  This won't be rendered, but it's allowed
+  <Route path="/app/users" />
+  <>
+    <div />
+    I'm a fragment
+  </>
+  {false && <a>Conditionals</a>}
+  {null}
+  {undefined}
+  <Route />
+</Switch>;
+
+<Switch />; // $ExpectError
 
 /*
  * Router specs
