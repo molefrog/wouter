@@ -8,7 +8,8 @@ import {
   PropsWithChildren,
   ComponentType,
   ReactElement,
-  ReactNode,
+  ReactChild,
+  ReactPortal,
 } from "react";
 
 import {
@@ -25,6 +26,11 @@ import React = require("react");
 // re-export types from these modules
 export * from "../matcher";
 export * from "../use-location";
+
+// React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
+// This issue has been fixed in React 18 type declaration.
+// https://github.com/DefinitelyTyped/DefinitelyTyped/pull/56210
+type ReactNode = ReactChild | ReactNode[] | ReactPortal | boolean | null | undefined;
 
 export type ExtractRouteOptionalParam<PathType extends Path> = PathType extends `${infer Param}?`
   ? { readonly [k in Param]: string | undefined }
