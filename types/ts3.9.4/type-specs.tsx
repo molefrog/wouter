@@ -62,7 +62,7 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   This is a <b>mixed</b> content
 </Route>;
 
-<Route path="/users/:id">{(params: Params): React.ReactNode => `User id: ${params.id}`}</Route>;
+<Route path="/users/:id">{(params: Params) => `User id: ${params.id}`}</Route>;
 
 <Route<{ id: string }> path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
