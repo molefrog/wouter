@@ -8,7 +8,6 @@ export {
 export {
   useRef,
   useEffect,
-  useLayoutEffect,
   useLayoutEffect as useIsomorphicLayoutEffect,
   useState,
   useContext,

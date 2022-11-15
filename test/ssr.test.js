@@ -5,7 +5,7 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Route, Router, useRoute, Link } from "../index";
+import { Route, Router, useRoute, Link, Redirect } from "../index";
 import staticLocationHook from "../static-location.js";
 
 describe("server-side rendering", () => {
@@ -50,5 +50,20 @@ describe("server-side rendering", () => {
 
     const rendered = renderToStaticMarkup(<App />);
     expect(rendered).toBe(`<a href="/users/1" title="Profile">Mark</a>`);
+  });
+
+  it("renders redirects however they have effect only on a client-side", () => {
+    const App = () => (
+      <Router hook={staticLocationHook("/")}>
+        <Route path="/">
+          <Redirect to="/foo" />
+        </Route>
+
+        <Route path="/foo">You won't see that in SSR page</Route>
+      </Router>
+    );
+
+    const rendered = renderToStaticMarkup(<App />);
+    expect(rendered).toBe("");
   });
 });

@@ -3,7 +3,6 @@ import { useEffect, useLayoutEffect } from "react";
 export {
   useRef,
   useEffect,
-  useLayoutEffect,
   useState,
   useContext,
   useCallback,
