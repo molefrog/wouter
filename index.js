@@ -80,6 +80,9 @@ export const Router = ({
     router.matcher = matcher || proto.matcher;
     router.base = proto.base + base;
 
+    // parent router reference, `undefined` when router is top-level
+    router.parent = proto === defaultRouter ? proto : undefined;
+
     return router;
   };
 
