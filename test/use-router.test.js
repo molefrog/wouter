@@ -60,13 +60,18 @@ it("shares one router instance between components", () => {
   expect(uniqRouters.length).toBe(1);
 });
 
-it("inherits base path from the parent router when `nested` flag is provided", () => {
+it("inherits base path from the parent router when parent router is provided", () => {
+  const NestedRouter = (props) => {
+    const parent = useRouter();
+    return <Router {...props} parent={parent} />;
+  };
+
   const { result } = renderHook(() => useRouter(), {
     wrapper: (props) => (
       <Router base="/app">
-        <Router base="/users" nested>
+        <NestedRouter base="/users" nested>
           {props.children}
-        </Router>
+        </NestedRouter>
       </Router>
     ),
   });
