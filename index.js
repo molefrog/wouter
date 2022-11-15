@@ -61,29 +61,24 @@ const useNavigate = (options) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = ({
-  hook,
-  matcher,
-  base = "",
-  nested = false,
-  children,
-}) => {
+export const Router = ({ hook, matcher, base = "", nested = false, children }) => {
   const parent = useRouter();
 
   // nested `<Router />` has the scope of its closest parent router (base path is prepended)
   // Routers are not nested by default, but this might change in future versions
   const proto = nested ? parent : defaultRouter;
 
-  // this component doesn't handle prop updates, it is done intentionally to avoid unexpected
-  // side effects (e.g. you can't just hot swap the hook, it'll break the routing)
-  //
+  // updates the current router with the props passed down to the component
+  const updateRouter = (router) => {
+    router.hook = hook || proto.hook;
+    router.matcher = matcher || proto.matcher;
+    router.base = proto.base + base;
+  };
+
   // we use `useState` here, but it only catches the first render and never changes.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const [value] = useState(() => ({
-    hook: hook || proto.hook,
-    matcher: matcher || proto.matcher,
-    base: proto.base + base,
-  }));
+  const [value] = useState(() => ({})); // create the object once...
+  updateRouter(value); // then update it on each render
 
   return h(RouterCtx.Provider, {
     value,
@@ -116,13 +111,7 @@ export const Link = forwardRef((props, ref) => {
     (event) => {
       // ignores the navigation when clicked using right mouse button or
       // by holding a special modifier key: ctrl, command, win, alt, shift
-      if (
-        event.ctrlKey ||
-        event.metaKey ||
-        event.altKey ||
-        event.shiftKey ||
-        event.button !== 0
-      )
+      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.button !== 0)
         return;
 
       onClick && onClick(event);
@@ -153,9 +142,7 @@ const flattenChildren = (children) => {
   return Array.isArray(children)
     ? [].concat(
         ...children.map((c) =>
-          c && c.type === Fragment
-            ? flattenChildren(c.props.children)
-            : flattenChildren(c)
+          c && c.type === Fragment ? flattenChildren(c.props.children) : flattenChildren(c)
         )
       )
     : [children];
