@@ -221,30 +221,29 @@ customize it in a `<Router />` component.
 As an exercise, let's implement a simple location hook that listens to hash changes:
 
 ```js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { Router, Route } from "wouter";
 
 // returns the current hash location in a normalized form
 // (excluding the leading '#' symbol)
-const currentLocation = () => {
-  return window.location.hash.replace(/^#/, "") || "/";
-};
-
-const navigate = (to) => (window.location.hash = to);
+const currentLocation = () => window.location.hash.replace(/^#/, "") || "/";
 
 const useHashLocation = () => {
-  const [loc, setLoc] = useState(currentLocation());
+  // `useSyncExternalStore` is available in React 18, or you can use a shim for older versions
+  const location = useSyncExternalStore(
+    // first argument is a value subscriber: it gives us a callback that we should call 
+    // whenever the value is changed
+    (onChange) => {
+      window.addEventListener("hashchange", onChange);
+      return () => window.removeEventListener("hashchange", onChange);
+    },
+    
+    // the second argument is function to get the current value
+    () => currentLocation()
+  );
 
-  useEffect(() => {
-    // this function is called whenever the hash changes
-    const handler = () => setLoc(currentLocation());
-
-    // subscribe to hash changes
-    window.addEventListener("hashchange", handler);
-    return () => window.removeEventListener("hashchange", handler);
-  }, []);
-
-  return [loc, navigate];
+  const navigate = useCallback((to) => (window.location.hash = to), []);
+  return [location, navigate];
 };
 
 const App = () => (
