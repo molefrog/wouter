@@ -81,7 +81,7 @@ export const Router = ({
     router.base = proto.base + base;
 
     // parent router reference, `undefined` when router is top-level
-    router.parent = proto === defaultRouter ? proto : undefined;
+    router.parent = proto === defaultRouter ? undefined : proto;
 
     return router;
   };
