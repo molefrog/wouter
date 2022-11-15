@@ -61,27 +61,15 @@ const useNavigate = (options) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = ({
-  hook,
-  matcher,
-  base = "",
-  nested = false,
-  children,
-}) => {
-  const parent = useRouter();
-
-  // nested `<Router />` has the scope of its closest parent router (base path is prepended)
-  // Routers are not nested by default, but this might change in future versions
-  const proto = nested ? parent : defaultRouter;
-
+export const Router = ({ hook, matcher, base = "", parent, children }) => {
   // updates the current router with the props passed down to the component
-  const updateRouter = (router) => {
+  const updateRouter = (router, proto = parent || defaultRouter) => {
     router.hook = hook || proto.hook;
     router.matcher = matcher || proto.matcher;
     router.base = proto.base + base;
 
-    // parent router reference, `undefined` when router is top-level
-    router.parent = proto === defaultRouter ? undefined : proto;
+    // store reference to parent router
+    router.parent = parent;
 
     return router;
   };
