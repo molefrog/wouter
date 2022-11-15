@@ -54,8 +54,34 @@ it("shares one router instance between components", () => {
     </>
   );
 
-  const uniqRouters = [
-    ...new Set(root.findAllByType("div").map((x) => x.props.router)),
-  ];
+  const uniqRouters = [...new Set(root.findAllByType("div").map((x) => x.props.router))];
   expect(uniqRouters.length).toBe(1);
+});
+
+it("inherits base path from the parent router when `nested` flag is provided", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => (
+      <Router base="/app">
+        <Router base="/users" nested>
+          {props.children}
+        </Router>
+      </Router>
+    ),
+  });
+
+  const router = result.current;
+  expect(router.base).toBe("/app/users");
+});
+
+it("does not inherit base path by default", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => (
+      <Router base="/app">
+        <Router base="/users">{props.children}</Router>
+      </Router>
+    ),
+  });
+
+  const router = result.current;
+  expect(router.base).toBe("/users");
 });

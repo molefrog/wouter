@@ -61,7 +61,13 @@ const useNavigate = (options) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = ({ hook, matcher, base = "", nested = false, children }) => {
+export const Router = ({
+  hook,
+  matcher,
+  base = "",
+  nested = false,
+  children,
+}) => {
   const parent = useRouter();
 
   // nested `<Router />` has the scope of its closest parent router (base path is prepended)
@@ -110,7 +116,13 @@ export const Link = forwardRef((props, ref) => {
     (event) => {
       // ignores the navigation when clicked using right mouse button or
       // by holding a special modifier key: ctrl, command, win, alt, shift
-      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.button !== 0)
+      if (
+        event.ctrlKey ||
+        event.metaKey ||
+        event.altKey ||
+        event.shiftKey ||
+        event.button !== 0
+      )
         return;
 
       onClick && onClick(event);
@@ -141,7 +153,9 @@ const flattenChildren = (children) => {
   return Array.isArray(children)
     ? [].concat(
         ...children.map((c) =>
-          c && c.type === Fragment ? flattenChildren(c.props.children) : flattenChildren(c)
+          c && c.type === Fragment
+            ? flattenChildren(c.props.children)
+            : flattenChildren(c)
         )
       )
     : [children];
