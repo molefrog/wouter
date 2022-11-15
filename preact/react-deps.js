@@ -1,14 +1,9 @@
-export {
-  isValidElement,
-  createContext,
-  cloneElement,
-  createElement,
-  Fragment,
-} from "preact";
+export { isValidElement, createContext, cloneElement, createElement, Fragment } from "preact";
 export {
   useRef,
   useEffect,
   useLayoutEffect,
+  useLayoutEffect as useIsomorphicLayoutEffect,
   useState,
   useContext,
   useCallback,
