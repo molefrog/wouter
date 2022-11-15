@@ -1,5 +1,5 @@
 import locationHook from "./use-location.js";
-import makeMatcher from "./matcher.js";
+import matcherWithCache from "./matcher.js";
 
 import {
   useRef,
@@ -16,28 +16,27 @@ import {
 } from "./react-deps.js";
 
 /*
- * Part 1, Hooks API: useRouter, useRoute and useLocation
+ * Router and router context. Router is a lightweight object that represents the current
+ * routing options: how location is managed, base path etc.
+ *
+ * There is a default router present for most of the use cases, however it can be overriden
+ * via the <Router /> component.
  */
 
-// one of the coolest features of `createContext`:
-// when no value is provided — default object is used.
-// allows us to use the router context as a global ref to store
-// the implicitly created router (see `useRouter` below)
-const RouterCtx = createContext({});
-
-const buildRouter = ({
-  hook = locationHook,
-  base = "",
-  matcher = makeMatcher(),
-} = {}) => ({ hook, base, matcher });
-
-export const useRouter = () => {
-  const globalRef = useContext(RouterCtx);
-
-  // either obtain the router from the outer context (provided by the
-  // `<Router /> component) or create an implicit one on demand.
-  return globalRef.v || (globalRef.v = buildRouter());
+const defaultRouter = {
+  hook: locationHook,
+  matcher: matcherWithCache(),
+  base: "",
 };
+
+const RouterCtx = createContext(defaultRouter);
+
+// gets the closes parent router from the context
+export const useRouter = () => useContext(RouterCtx);
+
+/*
+ * Part 1, Hooks API: useRoute and useLocation
+ */
 
 export const useLocation = () => {
   const router = useRouter();
@@ -62,15 +61,27 @@ const useNavigate = (options) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = (props) => {
-  // this little trick allows to avoid having unnecessary
-  // calls to potentially expensive `buildRouter` method.
+export const Router = ({ hook, matcher, base = "", nested = false, children }) => {
+  const parent = useRouter();
+
+  // nested `<Router />` has the scope of its closest parent router (base path is prepended)
+  // Routers are not nested by default, but this might change in future versions
+  const proto = nested ? parent : defaultRouter;
+
+  // this component doesn't handle prop updates, it is done intentionally to avoid unexpected
+  // side effects (e.g. you can't just hot swap the hook, it'll break the routing)
+  //
+  // we use `useState` here, but it only catches the first render and never changes.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const [value] = useState(() => ({ v: buildRouter(props) }));
+  const [value] = useState(() => ({
+    hook: hook || proto.hook,
+    matcher: matcher || proto.matcher,
+    base: proto.base + base,
+  }));
 
   return h(RouterCtx.Provider, {
     value,
-    children: props.children,
+    children,
   });
 };
 
@@ -99,13 +110,7 @@ export const Link = forwardRef((props, ref) => {
     (event) => {
       // ignores the navigation when clicked using right mouse button or
       // by holding a special modifier key: ctrl, command, win, alt, shift
-      if (
-        event.ctrlKey ||
-        event.metaKey ||
-        event.altKey ||
-        event.shiftKey ||
-        event.button !== 0
-      )
+      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.button !== 0)
         return;
 
       onClick && onClick(event);
@@ -136,9 +141,7 @@ const flattenChildren = (children) => {
   return Array.isArray(children)
     ? [].concat(
         ...children.map((c) =>
-          c && c.type === Fragment
-            ? flattenChildren(c.props.children)
-            : flattenChildren(c)
+          c && c.type === Fragment ? flattenChildren(c.props.children) : flattenChildren(c)
         )
       )
     : [children];
