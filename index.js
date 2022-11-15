@@ -3,7 +3,6 @@ import matcherWithCache from "./matcher.js";
 
 import {
   useRef,
-  useLayoutEffect,
   useContext,
   useCallback,
   createContext,
@@ -13,6 +12,7 @@ import {
   Fragment,
   useState,
   forwardRef,
+  useIsomorphicLayoutEffect,
 } from "./react-deps.js";
 
 /*
@@ -73,12 +73,16 @@ export const Router = ({ hook, matcher, base = "", nested = false, children }) =
     router.hook = hook || proto.hook;
     router.matcher = matcher || proto.matcher;
     router.base = proto.base + base;
+
+    return router;
   };
 
   // we use `useState` here, but it only catches the first render and never changes.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const [value] = useState(() => ({})); // create the object once...
-  updateRouter(value); // then update it on each render
+  const [value] = useState(() => updateRouter({})); // create the object once...
+  useIsomorphicLayoutEffect(() => {
+    updateRouter(value);
+  }); // ...then update it on each render
 
   return h(RouterCtx.Provider, {
     value,
@@ -175,7 +179,7 @@ export const Redirect = (props) => {
   const navRef = useNavigate(props);
 
   // empty array means running the effect once, navRef is a ref so it never changes
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     navRef.current();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
