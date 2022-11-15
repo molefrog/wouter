@@ -72,6 +72,7 @@ it("inherits base path from the parent router when `nested` flag is provided", (
   });
 
   const router = result.current;
+  expect(router.parent.base).toBe("/app");
   expect(router.base).toBe("/app/users");
 });
 
@@ -86,4 +87,5 @@ it("does not inherit base path by default", () => {
 
   const router = result.current;
   expect(router.base).toBe("/users");
+  expect(router.parent).toBe(undefined);
 });
