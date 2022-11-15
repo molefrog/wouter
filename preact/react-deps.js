@@ -1,4 +1,10 @@
-export { isValidElement, createContext, cloneElement, createElement, Fragment } from "preact";
+export {
+  isValidElement,
+  createContext,
+  cloneElement,
+  createElement,
+  Fragment,
+} from "preact";
 export {
   useRef,
   useEffect,
