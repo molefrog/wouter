@@ -3,6 +3,7 @@ import {
   useIsomorphicLayoutEffect,
   useSyncExternalStore,
 } from "./react-deps.js";
+import { currentPathname } from "./utils.js";
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -71,8 +72,3 @@ if (typeof history !== "undefined") {
     };
   }
 }
-
-const currentPathname = (base, path = location.pathname) =>
-  !path.toLowerCase().indexOf(base.toLowerCase())
-    ? path.slice(base.length) || "/"
-    : "~" + path;
