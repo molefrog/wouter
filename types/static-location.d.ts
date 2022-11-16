@@ -1,4 +1,4 @@
-import { LocationHook, Path } from "./use-location";
+import { Path, LocationHook } from "./use-location";
 
 interface StaticLocationHookOptions {
   record?: boolean;
