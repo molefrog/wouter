@@ -52,7 +52,7 @@ export default ({ base = "" } = {}) => {
         // handle nested routers and absolute paths
         to[0] === "~" ? to.slice(1) : base + to,
       ),
-    [base],
+    [base]
   );
 
   return [path, navigate];
