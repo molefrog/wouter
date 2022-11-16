@@ -10,7 +10,6 @@ export default (path = "/", { record = false } = {}) => {
       if (replace) {
         hook.history.pop();
       }
-      // handle nested routers and absolute paths
       hook.history.push(to);
     }
   };
