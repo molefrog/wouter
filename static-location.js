@@ -4,7 +4,7 @@ import { currentPathname } from "./utils.js";
 // responds with initial path provided.
 // You can use this for server-side rendering.
 export default (path = "/", { record = false } = {}) => {
-  const hook = ({ base = "" }) => [
+  const hook = ({ base = "" } = {}) => [
     currentPathname(base, path),
     navigate,
     (to, { replace } = {}) => {
