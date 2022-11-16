@@ -1,4 +1,8 @@
-import {useState, useIsomorphicLayoutEffect, useSyncExternalStore} from "./react-deps.js";
+import {
+  useState,
+  useIsomorphicLayoutEffect,
+  useSyncExternalStore,
+} from "./react-deps.js";
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -17,15 +21,21 @@ export const subscribeToLocation = (callback) => {
       window.removeEventListener(event, callback);
     }
   };
-}
+};
 
 const currentSearch = () => location.search;
-export const useSearch = () => useSyncExternalStore(subscribeToLocation, currentSearch);
+export const useSearch = () =>
+  useSyncExternalStore(subscribeToLocation, currentSearch);
 
-export const usePathname = (base = "") => useSyncExternalStore(subscribeToLocation, () => currentPathname(base));
+export const usePathname = (base = "") =>
+  useSyncExternalStore(subscribeToLocation, () => currentPathname(base));
 
 export const navigate = (to, { replace = false } = {}, base = "") =>
-    history[replace ? eventReplaceState : eventPushState](null, "", to[0] === "~" ? to.slice(1) : base + to);
+  history[replace ? eventReplaceState : eventPushState](
+    null,
+    "",
+    to[0] === "~" ? to.slice(1) : base + to
+  );
 
 // the 2nd argument of the `useLocation` return value is a function
 // that allows to perform a navigation.
@@ -38,7 +48,7 @@ export const useNavigate = (base = "") => {
     nav[0] = base;
   });
   return nav[1];
-}
+};
 
 export default ({ base = "" } = {}) => [usePathname(base), useNavigate(base)];
 
