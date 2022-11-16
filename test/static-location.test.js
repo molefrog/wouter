@@ -62,3 +62,12 @@ it("respects the 'replace' option", () => {
   expect(hook.history).toEqual(["/page2"]);
   expect(result.current[0]).toBe("/page1");
 });
+
+it("supports a basepath", () => {
+  const hook = staticLocation("/app", { record: true });
+  const { result } = renderHook(() => hook({ base: "/app" }));
+  const [, update] = result.current;
+
+  act(() => update("/dashboard"));
+  expect(hook.history).toEqual(["/app", "/app/dashboard"]);
+});
