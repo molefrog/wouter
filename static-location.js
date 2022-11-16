@@ -1,16 +1,20 @@
+import { currentPathname } from "./utils.js";
+
 // Generates static `useLocation` hook. The hook always
 // responds with initial path provided.
 // You can use this for server-side rendering.
-export default (path = "/", { record = false } = {}) => {
+export default (path = "/", { base = "", record = false } = {}) => {
   let hook;
   const navigate = (to, { replace } = {}) => {
     if (record) {
       if (replace) {
         hook.history.pop();
       }
-      hook.history.push(to);
+      // handle nested routers and absolute paths
+      hook.history.push(to[0] === "~" ? to.slice(1) : base + to);
     }
   };
+  path = currentPathname(path);
   hook = () => [path, navigate];
   hook.history = [path];
   return hook;

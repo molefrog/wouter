@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
+import { currentPathname } from "./utils.js";
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -49,9 +50,9 @@ export default ({ base = "" } = {}) => {
         null,
         "",
         // handle nested routers and absolute paths
-        to[0] === "~" ? to.slice(1) : base + to
+        to[0] === "~" ? to.slice(1) : base + to,
       ),
-    [base]
+    [base],
   );
 
   return [path, navigate];
@@ -76,8 +77,3 @@ if (typeof history !== "undefined") {
     };
   }
 }
-
-const currentPathname = (base, path = location.pathname) =>
-  !path.toLowerCase().indexOf(base.toLowerCase())
-    ? path.slice(base.length) || "/"
-    : "~" + path;

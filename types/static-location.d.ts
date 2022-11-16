@@ -1,6 +1,7 @@
 import { Path, LocationHook } from "./use-location";
 
 interface StaticLocationHookOptions {
+  base?: string;
   record?: boolean;
 }
 
