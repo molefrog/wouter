@@ -6,7 +6,6 @@ import { currentPathname } from "./utils.js";
 export default (path = "/", { record = false } = {}) => {
   const hook = ({ base = "" } = {}) => [
     currentPathname(base, path),
-    navigate,
     (to, { replace } = {}) => {
       if (record) {
         if (replace) {
