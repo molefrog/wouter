@@ -531,7 +531,7 @@ const App = () => (
 );
 ```
 
-**Note:** _the base path feature is only supported by the default `pushState` hook. If you're
+**Note:** _the base path feature is only supported by the default `pushState` and `staticLocation` hooks. If you're
 implementing your own location hook, you'll need to add base path support yourself._
 
 ### How do I make a default route?
