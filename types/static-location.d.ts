@@ -1,7 +1,6 @@
-import { Path, LocationHook } from "./use-location";
+import { LocationHook, Path } from "./use-location";
 
 interface StaticLocationHookOptions {
-  base?: string;
   record?: boolean;
 }
 
@@ -11,7 +10,7 @@ interface StaticLocationHook extends LocationHook {
 
 declare function staticLocationHook(
   path?: Path,
-  options?: StaticLocationHookOptions
+  options?: StaticLocationHookOptions,
 ): StaticLocationHook;
 
 export default staticLocationHook;
