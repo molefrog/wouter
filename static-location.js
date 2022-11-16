@@ -13,7 +13,7 @@ export default (path = "/", { record = false } = {}) => {
       hook.history.push(to);
     }
   };
-  hook = (base) => [currentPathname(base, path), navigate];
+  hook = ({ base = "" }) => [currentPathname(base, path), navigate];
   hook.history = [path];
   return hook;
 };
