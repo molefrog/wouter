@@ -14,8 +14,7 @@ export default (path = "/", { base = "", record = false } = {}) => {
       hook.history.push(to[0] === "~" ? to.slice(1) : base + to);
     }
   };
-  path = currentPathname(path);
-  hook = () => [path, navigate];
+  hook = () => [currentPathname(path), navigate];
   hook.history = [path];
   return hook;
 };
