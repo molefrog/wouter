@@ -76,6 +76,9 @@
   "peerDependencies": {
     "react": ">=16.8.0"
   },
+  "dependencies": {
+    "use-sync-external-store": "^1.2.0"
+  },
   "repository": "molefrog/wouter",
   "size-limit": [
     {

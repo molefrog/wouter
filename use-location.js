@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
+import {useState, useIsomorphicLayoutEffect, useSyncExternalStore} from "./react-deps.js";
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -8,54 +8,39 @@ const eventPushState = "pushState";
 const eventReplaceState = "replaceState";
 export const events = [eventPopstate, eventPushState, eventReplaceState];
 
-export default ({ base = "" } = {}) => {
-  const [{ path }, update] = useState(() => ({ path: currentPathname(base) }));
-  // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
-  const prevHash = useRef(path + location.search);
+export const subscribeToLocation = (callback) => {
+  for (const event of events) {
+    window.addEventListener(event, callback);
+  }
+  return () => {
+    for (const event of events) {
+      window.removeEventListener(event, callback);
+    }
+  };
+}
 
-  useEffect(() => {
-    // this function checks if the location has been changed since the
-    // last render and updates the state only when needed.
-    // unfortunately, we can't rely on `path` value here, since it can be stale,
-    // that's why we store the last pathname in a ref.
-    const checkForUpdates = () => {
-      const pathname = currentPathname(base);
-      const hash = pathname + location.search;
+const currentSearch = () => location.search;
+export const useSearch = () => useSyncExternalStore(subscribeToLocation, currentSearch);
 
-      if (prevHash.current !== hash) {
-        prevHash.current = hash;
-        update({ path: pathname });
-      }
-    };
+export const usePathname = (base = "") => useSyncExternalStore(subscribeToLocation, () => currentPathname(base));
 
-    events.forEach((e) => addEventListener(e, checkForUpdates));
+export const navigate = (to, { replace = false } = {}, base = "") =>
+    history[replace ? eventReplaceState : eventPushState](null, "", to[0] === "~" ? to.slice(1) : base + to);
 
-    // it's possible that an update has occurred between render and the effect handler,
-    // so we run additional check on mount to catch these updates. Based on:
-    // https://gist.github.com/bvaughn/e25397f70e8c65b0ae0d7c90b731b189
-    checkForUpdates();
+// the 2nd argument of the `useLocation` return value is a function
+// that allows to perform a navigation.
+//
+// the function reference should stay the same between re-renders, so that
+// it can be passed down as an element prop without any performance concerns.
+export const useNavigate = (base = "") => {
+  const [nav] = useState([base, (to, opts) => navigate(to, opts, nav[0])]);
+  useIsomorphicLayoutEffect(() => {
+    nav[0] = base;
+  });
+  return nav[1];
+}
 
-    return () => events.forEach((e) => removeEventListener(e, checkForUpdates));
-  }, [base]);
-
-  // the 2nd argument of the `useLocation` return value is a function
-  // that allows to perform a navigation.
-  //
-  // the function reference should stay the same between re-renders, so that
-  // it can be passed down as an element prop without any performance concerns.
-  const navigate = useCallback(
-    (to, { replace = false } = {}) =>
-      history[replace ? eventReplaceState : eventPushState](
-        null,
-        "",
-        // handle nested routers and absolute paths
-        to[0] === "~" ? to.slice(1) : base + to
-      ),
-    [base]
-  );
-
-  return [path, navigate];
-};
+export default ({ base = "" } = {}) => [usePathname(base), useNavigate(base)];
 
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`

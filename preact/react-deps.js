@@ -14,6 +14,10 @@ export {
   useCallback,
 } from "preact/hooks";
 
+export {
+  useSyncExternalStore
+} from "preact/compat";
+
 // provide forwardRef stub for preact
 export function forwardRef(component) {
   return component;

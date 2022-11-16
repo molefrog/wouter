@@ -42,6 +42,6 @@
   "repository": "molefrog/wouter",
   "license": "ISC",
   "peerDependencies": {
-    "preact": "^10.0.0"
+    "preact": "^10.11.3"
   }
 }
