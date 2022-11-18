@@ -15,7 +15,7 @@ export {
   useCallback,
 } from "preact/hooks";
 
-// TODO: switch to "export { useSyncExternalStore } from "preact/compat" once we update Preact to >= 10.11.3
+// TODO: switch to `export { useSyncExternalStore } from "preact/compat"` once we update Preact to >= 10.11.3
 function is(x, y) {
   return (x === y && (x !== 0 || 1 / x === 1 / y)) || (x !== x && y !== y);
 }
@@ -23,7 +23,7 @@ export function useSyncExternalStore(subscribe, getSnapshot) {
   const value = getSnapshot();
 
   const [{ _instance }, forceUpdate] = useState({
-    _instance: { _value: value, _getSnapshot: getSnapshot }
+    _instance: { _value: value, _getSnapshot: getSnapshot },
   });
 
   useLayoutEffect(() => {
