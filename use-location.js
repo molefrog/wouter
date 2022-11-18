@@ -29,7 +29,9 @@ export const useSearch = () =>
   useSyncExternalStore(subscribeToLocationUpdates, currentSearch);
 
 export const usePathname = (opts = {}) =>
-  useSyncExternalStore(subscribeToLocationUpdates, () => currentPathname(opts.base || ""));
+  useSyncExternalStore(subscribeToLocationUpdates, () =>
+    currentPathname(opts.base || "")
+  );
 
 export const navigate = (to, { replace = false } = {}, base = "") =>
   history[replace ? eventReplaceState : eventPushState](
@@ -44,7 +46,10 @@ export const navigate = (to, { replace = false } = {}, base = "") =>
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
 export const useNavigate = (opts = {}) => {
-  const [nav] = useState([opts, (to, navOpts) => navigate(to, navOpts, nav[0].base || "")]);
+  const [nav] = useState([
+    opts,
+    (to, navOpts) => navigate(to, navOpts, nav[0].base || ""),
+  ]);
   useIsomorphicLayoutEffect(() => {
     nav[0] = opts;
   });
