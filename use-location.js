@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from "./react-deps.js";
-import { currentPathname } from "./utils.js";
+
+/*
+ * Transforms `path` into its relative `base` version
+ * If base isn't part of the path provided returns absolute path e.g. `~/app`
+ */
+export const relativePath = (base, path = location.pathname) =>
+  !path.toLowerCase().indexOf(base.toLowerCase())
+    ? path.slice(base.length) || "/"
+    : "~" + path;
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -10,7 +18,7 @@ const eventReplaceState = "replaceState";
 export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export default ({ base = "" } = {}) => {
-  const [{ path }, update] = useState(() => ({ path: currentPathname(base) }));
+  const [{ path }, update] = useState(() => ({ path: relativePath(base) }));
   // @see https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
   const prevHash = useRef(path + location.search);
 
@@ -20,7 +28,7 @@ export default ({ base = "" } = {}) => {
     // unfortunately, we can't rely on `path` value here, since it can be stale,
     // that's why we store the last pathname in a ref.
     const checkForUpdates = () => {
-      const pathname = currentPathname(base);
+      const pathname = relativePath(base);
       const hash = pathname + location.search;
 
       if (prevHash.current !== hash) {
