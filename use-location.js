@@ -13,7 +13,7 @@ const eventPushState = "pushState";
 const eventReplaceState = "replaceState";
 export const events = [eventPopstate, eventPushState, eventReplaceState];
 
-export const subscribeToLocation = (callback) => {
+export const subscribeToLocationUpdates = (callback) => {
   for (const event of events) {
     window.addEventListener(event, callback);
   }
@@ -26,10 +26,10 @@ export const subscribeToLocation = (callback) => {
 
 const currentSearch = () => location.search;
 export const useSearch = () =>
-  useSyncExternalStore(subscribeToLocation, currentSearch);
+  useSyncExternalStore(subscribeToLocationUpdates, currentSearch);
 
-export const usePathname = (base = "") =>
-  useSyncExternalStore(subscribeToLocation, () => currentPathname(base));
+export const usePathname = (opts = {}) =>
+  useSyncExternalStore(subscribeToLocationUpdates, () => currentPathname(opts.base || ""));
 
 export const navigate = (to, { replace = false } = {}, base = "") =>
   history[replace ? eventReplaceState : eventPushState](
@@ -43,15 +43,15 @@ export const navigate = (to, { replace = false } = {}, base = "") =>
 //
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
-export const useNavigate = (base = "") => {
-  const [nav] = useState([base, (to, opts) => navigate(to, opts, nav[0])]);
+export const useNavigate = (opts = {}) => {
+  const [nav] = useState([opts, (to, navOpts) => navigate(to, navOpts, nav[0].base || "")]);
   useIsomorphicLayoutEffect(() => {
-    nav[0] = base;
+    nav[0] = opts;
   });
   return nav[1];
 };
 
-export default ({ base = "" } = {}) => [usePathname(base), useNavigate(base)];
+export default (opts = {}) => [usePathname(opts), useNavigate(opts)];
 
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`

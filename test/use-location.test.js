@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks";
-import useLocation, {navigate, useSearch} from "../use-location.js";
+import useLocation, { navigate, useSearch } from "../use-location.js";
 
 it("returns a pair [value, update]", () => {
   const { result, unmount } = renderHook(() => useLocation());
@@ -84,7 +84,9 @@ describe("`value` first argument", () => {
 
   it("supports search url", () => {
     const { result, unmount } = renderHook(() => useLocation());
-    const { result: searchResult, unmount: searchUnmount } = renderHook(() => useSearch());
+    const { result: searchResult, unmount: searchUnmount } = renderHook(() =>
+      useSearch()
+    );
 
     expect(result.current[0]).toBe("/");
     expect(result.all.length).toBe(1);
