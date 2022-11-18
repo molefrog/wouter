@@ -3,7 +3,15 @@ import {
   useIsomorphicLayoutEffect,
   useSyncExternalStore,
 } from "./react-deps.js";
-import { currentPathname } from "./utils.js";
+
+/*
+ * Transforms `path` into its relative `base` version
+ * If base isn't part of the path provided returns absolute path e.g. `~/app`
+ */
+export const relativePath = (base, path = location.pathname) =>
+  !path.toLowerCase().indexOf(base.toLowerCase())
+    ? path.slice(base.length) || "/"
+    : "~" + path;
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -30,7 +38,7 @@ export const useSearch = () =>
 
 export const usePathname = (opts = {}) =>
   useSyncExternalStore(subscribeToLocationUpdates, () =>
-    currentPathname(opts.base || "")
+    relativePath(opts.base || "")
   );
 
 export const navigate = (to, { replace = false } = {}, base = "") =>

@@ -228,6 +228,10 @@ import { Router, Route } from "wouter";
 // (excluding the leading '#' symbol)
 const currentLocation = () => window.location.hash.replace(/^#/, "") || "/";
 
+const navigate = (to) => {
+  window.location.hash = to;
+};
+
 const useHashLocation = () => {
   // `useSyncExternalStore` is available in React 18, or you can use a shim for older versions
   const location = useSyncExternalStore(
@@ -241,8 +245,7 @@ const useHashLocation = () => {
     // the second argument is function to get the current value
     () => currentLocation()
   );
-
-  const navigate = useCallback((to) => (window.location.hash = to), []);
+  
   return [location, navigate];
 };
 
