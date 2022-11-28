@@ -41,10 +41,7 @@
   "module": "index.js",
   "types": "types/ts3.9.4/index.d.ts",
   "typesVersions": {
-    ">=4.1": {
-      "types/ts3.9.4/index.d.ts": [
-        "types/ts4.1/index.d.ts"
-      ],
+    "*": {
       "use-location": [
         "types/use-location.d.ts"
       ],
@@ -53,6 +50,11 @@
       ],
       "static-location": [
         "types/static-location.d.ts"
+      ]
+    },
+    ">=4.1": {
+      "types/ts3.9.4/index.d.ts": [
+        "types/ts4.1/index.d.ts"
       ]
     }
   },
