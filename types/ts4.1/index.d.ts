@@ -20,7 +20,9 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { DefaultParams, Match, MatcherFn } from "../matcher";
+import { RouterObject, RouterOptions } from "../router";
+
+import { DefaultParams, Match } from "../matcher";
 import React = require("react");
 
 // re-export types from these modules
@@ -122,22 +124,18 @@ export const Switch: FunctionComponent<SwitchProps>;
  * Components: <Router />
  */
 
-export interface RouterProps {
-  hook: BaseLocationHook;
-  base: Path;
-  matcher: MatcherFn;
-}
-export const Router: FunctionComponent<
-  Partial<RouterProps> & {
-    children: ReactNode;
-  }
->;
+export type RouterProps = Partial<RouterOptions> & {
+  parent?: RouterObject;
+  children: ReactNode;
+};
+
+export const Router: FunctionComponent<RouterProps>;
 
 /*
  * Hooks
  */
 
-export function useRouter(): RouterProps;
+export function useRouter(): RouterObject;
 
 export function useRoute<
   T extends DefaultParams | undefined = undefined,

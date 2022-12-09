@@ -8,7 +8,8 @@
     "paths": {
       "wouter": ["."],
       "wouter/use-location": ["../use-location"],
-      "wouter/static-location": ["../static-location"]
+      "wouter/static-location": ["../static-location"],
+      "wouter/matcher": ["../matcher"]
     }
   },
   "files": ["./type-specs.tsx"]
