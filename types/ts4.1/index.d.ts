@@ -28,6 +28,7 @@ import React = require("react");
 // re-export types from these modules
 export * from "../matcher";
 export * from "../use-location";
+export * from "../router";
 
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.
