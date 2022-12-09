@@ -13,6 +13,7 @@ import {
 
 import useBrowserLocation from "wouter/use-location";
 import staticLocationHook from "wouter/static-location";
+import { MatcherFn } from "wouter/matcher";
 
 const Header: React.FunctionComponent = () => <div />;
 const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (
@@ -217,6 +218,14 @@ const useNetwork: UseNetworkLocation = (() => {}) as UseNetworkLocation;
 </Router>;
 
 <Router base="/app">Hello World!</Router>;
+
+const parentRouter = {
+  base: "/app",
+  matcher: (() => null) as unknown as MatcherFn,
+  hook: useLocation,
+};
+
+<Router parent={parentRouter}>Parent router is inherited</Router>;
 
 /*
  * Hooks API
