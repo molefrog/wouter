@@ -18,11 +18,13 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { DefaultParams, Params, Match, MatcherFn } from "../matcher";
+import { DefaultParams, Params, Match } from "../matcher";
+import { RouterObject, RouterOptions } from "../router";
 
 // re-export types from these modules
 export * from "../matcher";
 export * from "../use-location";
+export * from "../router";
 
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.
@@ -91,22 +93,18 @@ export const Switch: FunctionComponent<SwitchProps>;
  * Components: <Router />
  */
 
-export interface RouterProps {
-  hook: BaseLocationHook;
-  base: Path;
-  matcher: MatcherFn;
-}
-export const Router: FunctionComponent<
-  Partial<RouterProps> & {
-    children: ReactNode;
-  }
->;
+export type RouterProps = Partial<RouterOptions> & {
+  parent?: RouterObject;
+  children: ReactNode;
+};
+
+export const Router: FunctionComponent<RouterProps>;
 
 /*
  * Hooks
  */
 
-export function useRouter(): RouterProps;
+export function useRouter(): RouterObject;
 
 export function useRoute<T extends DefaultParams = DefaultParams>(pattern: Path): Match<T>;
 
