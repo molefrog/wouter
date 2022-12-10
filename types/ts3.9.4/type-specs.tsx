@@ -9,6 +9,7 @@ import {
   Switch,
   useLocation,
   useRoute,
+  useRouter,
   RouterObject,
 } from "wouter";
 
@@ -229,6 +230,9 @@ if (parameters) {
 } else {
   parameters; // $ExpectType null
 }
+
+const router = useRouter(); // $ExpectType RouterObject
+router.parent; // $ExpectType RouterObject | undefined
 
 /*
  * Standalone useLocation hook

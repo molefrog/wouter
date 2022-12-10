@@ -9,6 +9,7 @@ import {
   Switch,
   useLocation,
   useRoute,
+  useRouter,
 } from "wouter";
 
 import useBrowserLocation from "wouter/use-location";
@@ -276,6 +277,9 @@ if (inferedParams) {
 } else {
   inferedParams; // $ExpectType null
 }
+
+const router = useRouter(); // $ExpectType RouterObject
+router.parent; // $ExpectType RouterObject | undefined
 
 /*
  * Standalone useLocation hook
