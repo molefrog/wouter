@@ -93,8 +93,7 @@ export const Switch: FunctionComponent<SwitchProps>;
  * Components: <Router />
  */
 
-export type RouterProps = Partial<RouterOptions> & {
-  parent?: RouterObject;
+export type RouterProps = RouterOptions & {
   children: ReactNode;
 };
 
