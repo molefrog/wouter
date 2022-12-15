@@ -63,7 +63,10 @@ export const useNavigate = (opts = {}) => {
   return optsAndNav[1];
 };
 
-export default (opts = {}) => [relativePath(opts.base, usePathname()), useNavigate(opts)];
+export default (opts = {}) => [
+  relativePath(opts.base, usePathname()),
+  useNavigate(opts),
+];
 
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`
