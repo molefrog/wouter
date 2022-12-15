@@ -18,16 +18,24 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { DefaultParams, Params, Match, MatcherFn } from "../matcher";
+import { DefaultParams, Params, Match } from "../matcher";
+import { RouterObject, RouterOptions } from "../router";
 
 // re-export types from these modules
 export * from "../matcher";
 export * from "../use-location";
+export * from "../router";
 
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.
 // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/56210
-type ReactNode = ReactChild | Iterable<ReactNode> | ReactPortal | boolean | null | undefined;
+type ReactNode =
+  | ReactChild
+  | Iterable<ReactNode>
+  | ReactPortal
+  | boolean
+  | null
+  | undefined;
 
 /*
  * Components: <Route />
@@ -63,9 +71,10 @@ export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
 > &
   NavigationalProps<H>;
 
-export type RedirectProps<H extends BaseLocationHook = LocationHook> = NavigationalProps<H> & {
-  children?: never;
-};
+export type RedirectProps<H extends BaseLocationHook = LocationHook> =
+  NavigationalProps<H> & {
+    children?: never;
+  };
 
 export function Redirect<H extends BaseLocationHook = LocationHook>(
   props: PropsWithChildren<RedirectProps<H>>,
@@ -91,25 +100,24 @@ export const Switch: FunctionComponent<SwitchProps>;
  * Components: <Router />
  */
 
-export interface RouterProps {
-  hook: BaseLocationHook;
-  base: Path;
-  matcher: MatcherFn;
-}
-export const Router: FunctionComponent<
-  Partial<RouterProps> & {
-    children: ReactNode;
-  }
->;
+export type RouterProps = RouterOptions & {
+  children: ReactNode;
+};
+
+export const Router: FunctionComponent<RouterProps>;
 
 /*
  * Hooks
  */
 
-export function useRouter(): RouterProps;
+export function useRouter(): RouterObject;
 
-export function useRoute<T extends DefaultParams = DefaultParams>(pattern: Path): Match<T>;
+export function useRoute<T extends DefaultParams = DefaultParams>(
+  pattern: Path
+): Match<T>;
 
-export function useLocation<H extends BaseLocationHook = LocationHook>(): HookReturnValue<H>;
+export function useLocation<
+  H extends BaseLocationHook = LocationHook
+>(): HookReturnValue<H>;
 
 // tslint:enable:no-unnecessary-generics

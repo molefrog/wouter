@@ -20,37 +20,47 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { DefaultParams, Match, MatcherFn } from "../matcher";
-import React = require("react");
+import { DefaultParams, Match } from "../matcher";
+import { RouterObject, RouterOptions } from "../router";
 
 // re-export types from these modules
 export * from "../matcher";
 export * from "../use-location";
+export * from "../router";
 
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.
 // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/56210
-type ReactNode = ReactChild | Iterable<ReactNode> | ReactPortal | boolean | null | undefined;
+type ReactNode =
+  | ReactChild
+  | Iterable<ReactNode>
+  | ReactPortal
+  | boolean
+  | null
+  | undefined;
 
-export type ExtractRouteOptionalParam<PathType extends Path> = PathType extends `${infer Param}?`
-  ? { readonly [k in Param]: string | undefined }
-  : PathType extends `${infer Param}*`
-  ? { readonly [k in Param]: string | undefined }
-  : PathType extends `${infer Param}+`
-  ? { readonly [k in Param]: string }
-  : { readonly [k in PathType]: string };
+export type ExtractRouteOptionalParam<PathType extends Path> =
+  PathType extends `${infer Param}?`
+    ? { readonly [k in Param]: string | undefined }
+    : PathType extends `${infer Param}*`
+    ? { readonly [k in Param]: string | undefined }
+    : PathType extends `${infer Param}+`
+    ? { readonly [k in Param]: string }
+    : { readonly [k in PathType]: string };
 
-export type ExtractRouteParams<PathType extends string> = string extends PathType
-  ? DefaultParams
-  : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
-  ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-    ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
-    : ExtractRouteOptionalParam<ParamWithOptionalRegExp> & ExtractRouteParams<Rest>
-  : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}`
-  ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-    ? ExtractRouteOptionalParam<Param>
-    : ExtractRouteOptionalParam<ParamWithOptionalRegExp>
-  : {};
+export type ExtractRouteParams<PathType extends string> =
+  string extends PathType
+    ? DefaultParams
+    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
+    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
+      ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
+      : ExtractRouteOptionalParam<ParamWithOptionalRegExp> &
+          ExtractRouteParams<Rest>
+    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}`
+    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
+      ? ExtractRouteOptionalParam<Param>
+      : ExtractRouteOptionalParam<ParamWithOptionalRegExp>
+    : {};
 
 /*
  * Components: <Route />
@@ -65,11 +75,15 @@ export interface RouteProps<
   RoutePath extends Path = Path
 > {
   children?:
-    | ((params: T extends DefaultParams ? T : ExtractRouteParams<RoutePath>) => ReactNode)
+    | ((
+        params: T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
+      ) => ReactNode)
     | ReactNode;
   path?: RoutePath;
   component?: ComponentType<
-    RouteComponentProps<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>
+    RouteComponentProps<
+      T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
+    >
   >;
 }
 
@@ -94,9 +108,10 @@ export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
 > &
   NavigationalProps<H>;
 
-export type RedirectProps<H extends BaseLocationHook = LocationHook> = NavigationalProps<H> & {
-  children?: never;
-};
+export type RedirectProps<H extends BaseLocationHook = LocationHook> =
+  NavigationalProps<H> & {
+    children?: never;
+  };
 
 export function Redirect<H extends BaseLocationHook = LocationHook>(
   props: PropsWithChildren<RedirectProps<H>>,
@@ -122,28 +137,27 @@ export const Switch: FunctionComponent<SwitchProps>;
  * Components: <Router />
  */
 
-export interface RouterProps {
-  hook: BaseLocationHook;
-  base: Path;
-  matcher: MatcherFn;
-}
-export const Router: FunctionComponent<
-  Partial<RouterProps> & {
-    children: ReactNode;
-  }
->;
+export type RouterProps = RouterOptions & {
+  children: ReactNode;
+};
+
+export const Router: FunctionComponent<RouterProps>;
 
 /*
  * Hooks
  */
 
-export function useRouter(): RouterProps;
+export function useRouter(): RouterObject;
 
 export function useRoute<
   T extends DefaultParams | undefined = undefined,
   RoutePath extends Path = Path
->(pattern: RoutePath): Match<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>;
+>(
+  pattern: RoutePath
+): Match<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>;
 
-export function useLocation<H extends BaseLocationHook = LocationHook>(): HookReturnValue<H>;
+export function useLocation<
+  H extends BaseLocationHook = LocationHook
+>(): HookReturnValue<H>;
 
 // tslint:enable:no-unnecessary-generics
