@@ -8,7 +8,7 @@ import {
  * Transforms `path` into its relative `base` version
  * If base isn't part of the path provided returns absolute path e.g. `~/app`
  */
-export const relativePath = (base, path = location.pathname) =>
+export const relativePath = (base = "", path = location.pathname) =>
   !path.toLowerCase().indexOf(base.toLowerCase())
     ? path.slice(base.length) || "/"
     : "~" + path;
@@ -36,10 +36,9 @@ const currentSearch = () => location.search;
 export const useSearch = () =>
   useSyncExternalStore(subscribeToLocationUpdates, currentSearch);
 
-export const usePathname = (opts = {}) =>
-  useSyncExternalStore(subscribeToLocationUpdates, () =>
-    relativePath(opts.base || "")
-  );
+const currentPathname = () => location.pathname;
+export const usePathname = () =>
+  useSyncExternalStore(subscribeToLocationUpdates, currentPathname);
 
 export const navigate = (to, { replace = false } = {}, base = "") =>
   history[replace ? eventReplaceState : eventPushState](
@@ -54,17 +53,17 @@ export const navigate = (to, { replace = false } = {}, base = "") =>
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
 export const useNavigate = (opts = {}) => {
-  const [nav] = useState([
+  const [optsAndNav] = useState([
     opts,
-    (to, navOpts) => navigate(to, navOpts, nav[0].base || ""),
+    (to, navOpts) => navigate(to, navOpts, optsAndNav[0].base),
   ]);
   useIsomorphicLayoutEffect(() => {
-    nav[0] = opts;
+    optsAndNav[0] = opts;
   });
-  return nav[1];
+  return optsAndNav[1];
 };
 
-export default (opts = {}) => [usePathname(opts), useNavigate(opts)];
+export default (opts = {}) => [relativePath(opts.base, usePathname()), useNavigate(opts)];
 
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`
