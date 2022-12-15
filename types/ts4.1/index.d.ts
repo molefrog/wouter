@@ -20,10 +20,8 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { RouterObject, RouterOptions } from "../router";
-
 import { DefaultParams, Match } from "../matcher";
-import React = require("react");
+import { RouterObject, RouterOptions } from "../router";
 
 // re-export types from these modules
 export * from "../matcher";

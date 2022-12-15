@@ -29,7 +29,13 @@ export * from "../router";
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.
 // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/56210
-type ReactNode = ReactChild | Iterable<ReactNode> | ReactPortal | boolean | null | undefined;
+type ReactNode =
+  | ReactChild
+  | Iterable<ReactNode>
+  | ReactPortal
+  | boolean
+  | null
+  | undefined;
 
 /*
  * Components: <Route />
@@ -65,9 +71,10 @@ export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
 > &
   NavigationalProps<H>;
 
-export type RedirectProps<H extends BaseLocationHook = LocationHook> = NavigationalProps<H> & {
-  children?: never;
-};
+export type RedirectProps<H extends BaseLocationHook = LocationHook> =
+  NavigationalProps<H> & {
+    children?: never;
+  };
 
 export function Redirect<H extends BaseLocationHook = LocationHook>(
   props: PropsWithChildren<RedirectProps<H>>,
@@ -105,8 +112,12 @@ export const Router: FunctionComponent<RouterProps>;
 
 export function useRouter(): RouterObject;
 
-export function useRoute<T extends DefaultParams = DefaultParams>(pattern: Path): Match<T>;
+export function useRoute<T extends DefaultParams = DefaultParams>(
+  pattern: Path
+): Match<T>;
 
-export function useLocation<H extends BaseLocationHook = LocationHook>(): HookReturnValue<H>;
+export function useLocation<
+  H extends BaseLocationHook = LocationHook
+>(): HookReturnValue<H>;
 
 // tslint:enable:no-unnecessary-generics
