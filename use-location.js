@@ -2,6 +2,7 @@ import {
   useState,
   useIsomorphicLayoutEffect,
   useSyncExternalStore,
+  useEvent
 } from "./react-deps.js";
 
 /*
@@ -52,16 +53,7 @@ export const navigate = (to, { replace = false } = {}, base = "") =>
 //
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
-export const useNavigate = (opts = {}) => {
-  const [optsAndNav] = useState([
-    opts,
-    (to, navOpts) => navigate(to, navOpts, optsAndNav[0].base),
-  ]);
-  useIsomorphicLayoutEffect(() => {
-    optsAndNav[0] = opts;
-  });
-  return optsAndNav[1];
-};
+export const useNavigate = (opts = {}) => useEvent((to, navOpts) => navigate(to, navOpts, opts.base));
 
 export default (opts = {}) => [
   relativePath(opts.base, usePathname()),

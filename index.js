@@ -13,6 +13,7 @@ import {
   useState,
   forwardRef,
   useIsomorphicLayoutEffect,
+  useEvent
 } from "./react-deps.js";
 
 /*
@@ -38,23 +39,15 @@ export const useRouter = () => useContext(RouterCtx);
  * Part 1, Hooks API: useRoute and useLocation
  */
 
-export const useLocation = () => {
-  const router = useRouter();
-  return router.hook(router);
-};
+const _useLocation = (router) => router.hook(router);
+
+export const useLocation = () => _useLocation(useRouter());
 
 export const useRoute = (pattern) => {
-  const [path] = useLocation();
-  return useRouter().matcher(pattern, path);
-};
-
-// internal hook used by Link and Redirect in order to perform navigation
-const useNavigate = (options) => {
-  const navRef = useRef();
-  const [, navigate] = useLocation();
-
-  navRef.current = () => navigate(options.to || options.href, options);
-  return navRef;
+  const router = useRouter();
+  // avoid inadvertently calling useRouter twice:
+  const [path] = _useLocation(router);
+  return router.matcher(pattern, path);
 };
 
 /*
@@ -103,12 +96,12 @@ export const Route = ({ path, match, component, children }) => {
 };
 
 export const Link = forwardRef((props, ref) => {
-  const navRef = useNavigate(props);
-  const { base } = useRouter();
+  const router = useRouter();
+  const [, navigate] = _useLocation(router);
 
-  let { to, href = to, children, onClick } = props;
+  const { to, href = to, children, onClick } = props;
 
-  const handleClick = useCallback(
+  const handleClick = useEvent(
     (event) => {
       // ignores the navigation when clicked using right mouse button or
       // by holding a special modifier key: ctrl, command, win, alt, shift
@@ -124,18 +117,14 @@ export const Link = forwardRef((props, ref) => {
       onClick && onClick(event);
       if (!event.defaultPrevented) {
         event.preventDefault();
-        navRef.current();
+        navigate(to || href, props);
       }
-    },
-    // navRef is a ref so it never changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onClick]
-  );
+    });
 
   // wraps children in `a` if needed
   const extraProps = {
     // handle nested routers and absolute paths
-    href: href[0] === "~" ? href.slice(1) : base + href,
+    href: href[0] === "~" ? href.slice(1) : router.base + href,
     onClick: handleClick,
     to: null,
     ref,
@@ -158,8 +147,8 @@ const flattenChildren = (children) => {
 };
 
 export const Switch = ({ children, location }) => {
-  const { matcher } = useRouter();
-  const [originalLocation] = useLocation();
+  const router = useRouter(), matcher = router.matcher;
+  const [originalLocation] = _useLocation(router);
 
   for (const element of flattenChildren(children)) {
     let match = 0;
@@ -181,11 +170,13 @@ export const Switch = ({ children, location }) => {
 };
 
 export const Redirect = (props) => {
-  const navRef = useNavigate(props);
+  const {to, href = to} = props;
+  const [, navigate] = useLocation();
+  const redirect = useEvent(() => navigate(to || href, props));
 
-  // empty array means running the effect once, navRef is a ref so it never changes
+  // redirect is guaranteed to be stable since it is returned from useEvent
   useIsomorphicLayoutEffect(() => {
-    navRef.current();
+    redirect();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
