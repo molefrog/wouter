@@ -2,9 +2,7 @@ import locationHook from "./use-location.js";
 import matcherWithCache from "./matcher.js";
 
 import {
-  useRef,
   useContext,
-  useCallback,
   createContext,
   isValidElement,
   cloneElement,
