@@ -17,7 +17,7 @@ export {
 // https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/forks/useSyncExternalStore.forward-to-shim.js
 // "Intentionally not using named imports because Rollup uses dynamic
 // dispatch for CommonJS interop named imports."
-import * as shim from "use-sync-external-store/shim";
+import * as shim from "use-sync-external-store/shim/index.js";
 
 export const useSyncExternalStore = shim.useSyncExternalStore;
 
