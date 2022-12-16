@@ -44,4 +44,4 @@ export const useEvent = (fn) => {
     ref[0] = fn;
   });
   return ref[1];
-}
+};

@@ -13,7 +13,7 @@ import {
   useState,
   forwardRef,
   useIsomorphicLayoutEffect,
-  useEvent
+  useEvent,
 } from "./react-deps.js";
 
 /*
@@ -101,25 +101,24 @@ export const Link = forwardRef((props, ref) => {
 
   const { to, href = to, children, onClick } = props;
 
-  const handleClick = useEvent(
-    (event) => {
-      // ignores the navigation when clicked using right mouse button or
-      // by holding a special modifier key: ctrl, command, win, alt, shift
-      if (
-        event.ctrlKey ||
-        event.metaKey ||
-        event.altKey ||
-        event.shiftKey ||
-        event.button !== 0
-      )
-        return;
+  const handleClick = useEvent((event) => {
+    // ignores the navigation when clicked using right mouse button or
+    // by holding a special modifier key: ctrl, command, win, alt, shift
+    if (
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey ||
+      event.shiftKey ||
+      event.button !== 0
+    )
+      return;
 
-      onClick && onClick(event);
-      if (!event.defaultPrevented) {
-        event.preventDefault();
-        navigate(to || href, props);
-      }
-    });
+    onClick && onClick(event);
+    if (!event.defaultPrevented) {
+      event.preventDefault();
+      navigate(to || href, props);
+    }
+  });
 
   // wraps children in `a` if needed
   const extraProps = {
@@ -147,7 +146,8 @@ const flattenChildren = (children) => {
 };
 
 export const Switch = ({ children, location }) => {
-  const router = useRouter(), matcher = router.matcher;
+  const router = useRouter(),
+    matcher = router.matcher;
   const [originalLocation] = _useLocation(router);
 
   for (const element of flattenChildren(children)) {
@@ -170,7 +170,7 @@ export const Switch = ({ children, location }) => {
 };
 
 export const Redirect = (props) => {
-  const {to, href = to} = props;
+  const { to, href = to } = props;
   const [, navigate] = useLocation();
   const redirect = useEvent(() => navigate(to || href, props));
 
