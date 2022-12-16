@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useEffect } from "preact/hooks";
+import { useState, useLayoutEffect, useEffect, useRef } from "preact/hooks";
 export {
   isValidElement,
   createContext,
