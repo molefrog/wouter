@@ -1,4 +1,4 @@
-import {useSyncExternalStore, useEvent} from "./react-deps.js";
+import { useSyncExternalStore, useEvent } from "./react-deps.js";
 
 /*
  * Transforms `path` into its relative `base` version
