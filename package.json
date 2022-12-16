@@ -85,11 +85,13 @@
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1500 B"
+      "limit": "1500 B",
+      "ignore": ["react-deps.js"]
     },
     {
       "path": "use-location.js",
-      "limit": "500 B"
+      "limit": "500 B",
+      "ignore": ["react-deps.js"]
     }
   ],
   "husky": {
