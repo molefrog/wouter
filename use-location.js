@@ -19,11 +19,11 @@ export const events = [eventPopstate, eventPushState, eventReplaceState];
 
 export const subscribeToLocationUpdates = (callback) => {
   for (const event of events) {
-    window.addEventListener(event, callback);
+    addEventListener(event, callback);
   }
   return () => {
     for (const event of events) {
-      window.removeEventListener(event, callback);
+      removeEventListener(event, callback);
     }
   };
 };
