@@ -31,7 +31,7 @@ const defaultRouter = {
 
 const RouterCtx = createContext(defaultRouter);
 
-// gets the closes parent router from the context
+// gets the closest parent router from the context
 export const useRouter = () => useContext(RouterCtx);
 
 /*
