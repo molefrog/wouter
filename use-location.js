@@ -64,7 +64,9 @@ export default (opts = {}) => [
 if (typeof history !== "undefined") {
   for (const type of [eventPushState, eventReplaceState]) {
     const original = history[type];
-
+    // TODO: we should be using unstable_batchedUpdates to avoid multiple re-renders,
+    // however that will require an additional peer dependency on react-dom.
+    // See: https://github.com/reactwg/react-18/discussions/86#discussioncomment-1567149
     history[type] = function () {
       const result = original.apply(this, arguments);
       const event = new Event(type);
