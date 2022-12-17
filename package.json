@@ -135,7 +135,10 @@
     "testEnvironment": "jsdom",
     "transform": {
       "\\.js$": "jest-esm-jsx-transform"
-    }
+    },
+    "collectCoverageFrom": [
+      "*.js"
+    ]
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.5",
