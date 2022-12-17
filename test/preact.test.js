@@ -76,13 +76,3 @@ describe("Preact support", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 });
-
-// preact/react-deps only reexports preact's api
-// however, it raises an issue w/ code coverage, so the hack below
-// is to fake coverage of the module that only reexports
-it("patches coverage of preact/react-deps", () => {
-  const modules = require("../preact/react-deps.js");
-  for (const modulePreact of Object.keys(modules)) {
-    expect(typeof modules[modulePreact] !== "undefined").toBe(true);
-  }
-});
