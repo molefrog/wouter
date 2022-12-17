@@ -37,14 +37,14 @@ export const useRouter = () => useContext(RouterCtx);
  * Part 1, Hooks API: useRoute and useLocation
  */
 
-const _useLocation = (router) => router.hook(router);
+// Internal version of useLocation to avoid redundant useRouter calls
+const useLocationFromRouter = (router) => router.hook(router);
 
-export const useLocation = () => _useLocation(useRouter());
+export const useLocation = () => useLocationFromRouter(useRouter());
 
 export const useRoute = (pattern) => {
   const router = useRouter();
-  // avoid inadvertently calling useRouter twice:
-  const [path] = _useLocation(router);
+  const [path] = useLocationFromRouter(router);
   return router.matcher(pattern, path);
 };
 
@@ -95,7 +95,7 @@ export const Route = ({ path, match, component, children }) => {
 
 export const Link = forwardRef((props, ref) => {
   const router = useRouter();
-  const [, navigate] = _useLocation(router);
+  const [, navigate] = useLocationFromRouter(router);
 
   const { to, href = to, children, onClick } = props;
 
@@ -144,9 +144,9 @@ const flattenChildren = (children) => {
 };
 
 export const Switch = ({ children, location }) => {
-  const router = useRouter(),
-    matcher = router.matcher;
-  const [originalLocation] = _useLocation(router);
+  const router = useRouter();
+  const matcher = router.matcher;
+  const [originalLocation] = useLocationFromRouter(router);
 
   for (const element of flattenChildren(children)) {
     let match = 0;
