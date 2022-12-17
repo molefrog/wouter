@@ -32,7 +32,7 @@ export const usePathname: () => Path;
 
 export type Navigate = (to: Path, options?: { replace?: boolean }) => void;
 
-export const useNavigate: (options?: { base?: Path }) => Navigate
+export const useNavigate: (options?: { base?: Path }) => Navigate;
 
 /*
  * Default `useLocation`
