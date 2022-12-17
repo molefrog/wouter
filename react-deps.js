@@ -48,8 +48,8 @@ export const useInsertionEffect =
 // So we will have to make do with this "close enough" approach for now.
 export const useEvent = (fn) => {
   const ref = useRef([fn, (...args) => ref[0](...args)]).current;
-  // Per Dan Abramov: useInsertionEffect is marginally closer to the
-  // "correct timing" for ref synchronization than useLayoutEffect on React 18.
+  // Per Dan Abramov: useInsertionEffect executes marginally closer to the
+  // correct timing for ref synchronization than useLayoutEffect on React 18.
   // See: https://github.com/facebook/react/pull/25881#issuecomment-1356244360
   useInsertionEffect(() => {
     ref[0] = fn;
