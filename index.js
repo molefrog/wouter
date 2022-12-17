@@ -12,6 +12,7 @@ import {
   forwardRef,
   useIsomorphicLayoutEffect,
   useEvent,
+  useInsertionEffect,
 } from "./react-deps.js";
 
 /*
@@ -68,7 +69,7 @@ export const Router = ({ hook, matcher, base = "", parent, children }) => {
   // we use `useState` here, but it only catches the first render and never changes.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
   const [value] = useState(() => updateRouter({})); // create the object once...
-  useIsomorphicLayoutEffect(() => {
+  useInsertionEffect(() => {
     updateRouter(value);
   }); // ...then update it on each render
 

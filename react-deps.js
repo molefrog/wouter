@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useInsertionEffect as useBuiltinInsertionEffect } from "react";
 
 export {
   useState,
@@ -30,6 +30,10 @@ export const useIsomorphicLayoutEffect = canUseDOM
   ? useLayoutEffect
   : useEffect;
 
+// useInsertionEffect is already a noop on the server.
+// See: https://github.com/facebook/react/blob/main/packages/react-server/src/ReactFizzHooks.js
+export const useInsertionEffect = useBuiltinInsertionEffect || useIsomorphicLayoutEffect;
+
 // Userland polyfill while we wait for the forthcoming
 // https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
 // Note: "A high-fidelty polyfill for useEvent is not possible because
@@ -38,7 +42,10 @@ export const useIsomorphicLayoutEffect = canUseDOM
 // So we will have to make do with this "close enough" approach for now.
 export const useEvent = (fn) => {
   const ref = useRef([fn, (...args) => ref[0](...args)]).current;
-  useIsomorphicLayoutEffect(() => {
+  // Per Dan Abramov: useInsertionEffect is marginally closer to the
+  // "correct timing" for ref synchronization than useLayoutEffect on React 18.
+  // See: https://github.com/facebook/react/pull/25881#issuecomment-1356244360
+  useInsertionEffect(() => {
     ref[0] = fn;
   });
   return ref[1];

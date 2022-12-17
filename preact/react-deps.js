@@ -8,6 +8,7 @@ export {
 } from "preact";
 export {
   useLayoutEffect as useIsomorphicLayoutEffect,
+  useLayoutEffect as useInsertionEffect,
   useState,
   useContext,
 } from "preact/hooks";
