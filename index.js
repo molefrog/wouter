@@ -68,16 +68,18 @@ export const Router = ({ hook, matcher, base = "", parent, children }) => {
 
   // we use `useState` here, but it only catches the first render and never changes.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const [value] = useState(() => updateRouter({
-    // We must store base as a property accessor because effects
-    // somewhat counter-intuitively run in child components *first*!
-    // This means that by the time a parent's base is updated in the
-    // parent effect, the child effect has already run, and saw
-    // the parent's *previous* base during its own execution.
-    get base() {
-      return (value.parent || defaultRouter).base + value.ownBase;
-    }
-  })); // create the object once...
+  const [value] = useState(() =>
+    updateRouter({
+      // We must store base as a property accessor because effects
+      // somewhat counter-intuitively run in child components *first*!
+      // This means that by the time a parent's base is updated in the
+      // parent effect, the child effect has already run, and saw
+      // the parent's *previous* base during its own execution.
+      get base() {
+        return (value.parent || defaultRouter).base + value.ownBase;
+      },
+    })
+  ); // create the object once...
   useInsertionEffect(() => {
     updateRouter(value);
   }); // ...then update it on each render
