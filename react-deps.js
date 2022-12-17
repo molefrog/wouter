@@ -14,12 +14,7 @@ export {
   forwardRef,
 } from "react";
 
-// https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/forks/useSyncExternalStore.forward-to-shim.js
-// "Intentionally not using named imports because Rollup uses dynamic
-// dispatch for CommonJS interop named imports."
-import * as shim from "use-sync-external-store/shim";
-
-export const useSyncExternalStore = shim.useSyncExternalStore;
+export { useSyncExternalStore } from "use-sync-external-store/shim";
 
 // https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.ts
 // "React currently throws a warning when using useLayoutEffect on the server.
