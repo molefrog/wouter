@@ -1,11 +1,8 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 
 export {
-  useRef,
-  useEffect,
   useState,
   useContext,
-  useCallback,
   createContext,
   isValidElement,
   cloneElement,
@@ -16,18 +13,19 @@ export {
 
 export { useSyncExternalStore } from "use-sync-external-store/shim";
 
-// https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.ts
-// "React currently throws a warning when using useLayoutEffect on the server.
-// To get around it, we can conditionally useEffect on the server (no-op) and
-// useLayoutEffect in the browser."
-// See React source code for reference:
+// Copied from:
 // https://github.com/facebook/react/blob/main/packages/shared/ExecutionEnvironment.js
-export const canUseDOM = !!(
+const canUseDOM = !!(
   typeof window !== "undefined" &&
   typeof window.document !== "undefined" &&
   typeof window.document.createElement !== "undefined"
 );
 
+// Copied from:
+// https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.ts
+// "React currently throws a warning when using useLayoutEffect on the server.
+// To get around it, we can conditionally useEffect on the server (no-op) and
+// useLayoutEffect in the browser."
 export const useIsomorphicLayoutEffect = canUseDOM
   ? useLayoutEffect
   : useEffect;

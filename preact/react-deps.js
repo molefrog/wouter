@@ -7,12 +7,9 @@ export {
   Fragment,
 } from "preact";
 export {
-  useRef,
-  useEffect,
   useLayoutEffect as useIsomorphicLayoutEffect,
   useState,
   useContext,
-  useCallback,
 } from "preact/hooks";
 
 // TODO: switch to `export { useSyncExternalStore } from "preact/compat"` once we update Preact to >= 10.11.3
