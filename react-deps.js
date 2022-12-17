@@ -1,4 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useInsertionEffect as useBuiltinInsertionEffect } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useInsertionEffect as useBuiltinInsertionEffect,
+} from "react";
 
 export {
   useState,
@@ -32,7 +37,8 @@ export const useIsomorphicLayoutEffect = canUseDOM
 
 // useInsertionEffect is already a noop on the server.
 // See: https://github.com/facebook/react/blob/main/packages/react-server/src/ReactFizzHooks.js
-export const useInsertionEffect = useBuiltinInsertionEffect || useIsomorphicLayoutEffect;
+export const useInsertionEffect =
+  useBuiltinInsertionEffect || useIsomorphicLayoutEffect;
 
 // Userland polyfill while we wait for the forthcoming
 // https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
