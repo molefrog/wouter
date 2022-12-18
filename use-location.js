@@ -16,7 +16,12 @@ const eventPopstate = "popstate";
 const eventPushState = "pushState";
 const eventReplaceState = "replaceState";
 const eventHashchange = "hashchange";
-export const events = [eventPopstate, eventPushState, eventReplaceState, eventHashchange];
+export const events = [
+  eventPopstate,
+  eventPushState,
+  eventReplaceState,
+  eventHashchange,
+];
 
 const subscribeToLocationUpdates = (callback) => {
   for (const event of events) {
@@ -29,7 +34,8 @@ const subscribeToLocationUpdates = (callback) => {
   };
 };
 
-export const useLocationProperty = (fn) => useSyncExternalStore(subscribeToLocationUpdates, fn);
+export const useLocationProperty = (fn) =>
+  useSyncExternalStore(subscribeToLocationUpdates, fn);
 
 const currentSearch = () => location.search;
 export const useSearch = () => useLocationProperty(currentSearch);
