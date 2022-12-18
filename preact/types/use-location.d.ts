@@ -26,6 +26,9 @@ export type HookNavigationOptions<H extends BaseLocationHook> = HookReturnValue<
     : {}
   : {};
 
+type Primitive = string | number | bigint | boolean | null | undefined | symbol;
+export const useLocationProperty: <S extends Primitive>(fn: () => S) => S;
+
 export const useSearch: () => string;
 
 export const usePathname: () => Path;

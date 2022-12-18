@@ -15,9 +15,10 @@ export const relativePath = (base = "", path = location.pathname) =>
 const eventPopstate = "popstate";
 const eventPushState = "pushState";
 const eventReplaceState = "replaceState";
-export const events = [eventPopstate, eventPushState, eventReplaceState];
+const eventHashchange = "hashchange";
+export const events = [eventPopstate, eventPushState, eventReplaceState, eventHashchange];
 
-export const subscribeToLocationUpdates = (callback) => {
+const subscribeToLocationUpdates = (callback) => {
   for (const event of events) {
     addEventListener(event, callback);
   }
@@ -28,13 +29,13 @@ export const subscribeToLocationUpdates = (callback) => {
   };
 };
 
+export const useLocationProperty = (fn) => useSyncExternalStore(subscribeToLocationUpdates, fn);
+
 const currentSearch = () => location.search;
-export const useSearch = () =>
-  useSyncExternalStore(subscribeToLocationUpdates, currentSearch);
+export const useSearch = () => useLocationProperty(currentSearch);
 
 const currentPathname = () => location.pathname;
-export const usePathname = () =>
-  useSyncExternalStore(subscribeToLocationUpdates, currentPathname);
+export const usePathname = () => useLocationProperty(currentPathname);
 
 export const navigate = (to, { replace = false } = {}, base = "") =>
   history[replace ? eventReplaceState : eventPushState](
