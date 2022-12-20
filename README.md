@@ -223,19 +223,17 @@ As an exercise, let's implement a simple location hook that listens to hash chan
 ```js
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { Router, Route } from "wouter";
-import { useLocationProperty } from "wouter/use-location";
+import { useLocationProperty, navigate } from "wouter/use-location";
 
 // returns the current hash location in a normalized form
 // (excluding the leading '#' symbol)
-const currentLocation = () => window.location.hash.replace(/^#/, "") || "/";
+const hashLocation = () => window.location.hash.replace(/^#/, "") || "/";
 
-const navigate = (to) => {
-  window.location.hash = to;
-};
+const hashNavigate = (to) => navigate('#' + to);
 
 const useHashLocation = () => {
-  const location = useLocationProperty(currentLocation);
-  return [location, navigate];
+  const location = useLocationProperty(hashLocation);
+  return [location, hashNavigate];
 };
 
 const App = () => (
