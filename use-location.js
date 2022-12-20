@@ -9,6 +9,8 @@ export const relativePath = (base = "", path = location.pathname) =>
     ? path.slice(base.length) || "/"
     : "~" + path;
 
+export const absolutePath = (to, base = "") => to[0] === "~" ? to.slice(1) : base + to
+
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
  */
@@ -43,24 +45,18 @@ export const useSearch = () => useLocationProperty(currentSearch);
 const currentPathname = () => location.pathname;
 export const usePathname = () => useLocationProperty(currentPathname);
 
-export const navigate = (to, { replace = false } = {}, base = "") =>
-  history[replace ? eventReplaceState : eventPushState](
-    null,
-    "",
-    to[0] === "~" ? to.slice(1) : base + to
-  );
+export const navigate = (to, { replace = false } = {}) =>
+  history[replace ? eventReplaceState : eventPushState](null, "", to);
 
 // the 2nd argument of the `useLocation` return value is a function
 // that allows to perform a navigation.
 //
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
-export const useNavigate = (opts = {}) =>
-  useEvent((to, navOpts) => navigate(to, navOpts, opts.base));
-
+// (This is achieved via `useEvent`.)
 export default (opts = {}) => [
   relativePath(opts.base, usePathname()),
-  useNavigate(opts),
+  useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
 ];
 
 // While History API does have `popstate` event, the only

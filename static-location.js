@@ -1,4 +1,4 @@
-import { relativePath } from "./use-location.js";
+import { relativePath, absolutePath } from "./use-location.js";
 
 // Generates static `useLocation` hook. The hook always
 // responds with initial path provided.
@@ -13,7 +13,7 @@ export default (path = "/", { record = false } = {}) => {
         }
         hook.history.push(
           // handle nested routers and absolute paths
-          to[0] === "~" ? to.slice(1) : base + to
+          absolutePath(to, base)
         );
       }
     },

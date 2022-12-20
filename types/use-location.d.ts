@@ -33,9 +33,7 @@ export const useSearch: () => string;
 
 export const usePathname: () => Path;
 
-export type Navigate = (to: Path, options?: { replace?: boolean }) => void;
-
-export const useNavigate: (options?: { base?: Path }) => Navigate;
+export const navigate: (to: string | URL, options?: { replace?: boolean }) => void
 
 /*
  * Default `useLocation`
@@ -44,7 +42,9 @@ export const useNavigate: (options?: { base?: Path }) => Navigate;
 // The type of the default `useLocation` hook that wouter uses.
 // It operates on current URL using History API, supports base path and can
 // navigate with `pushState` or `replaceState`.
-export type LocationHook = (options?: { base?: Path }) => [Path, Navigate];
+export type LocationHook = (options?: {
+  base?: Path;
+}) => [Path, (to: Path, options?: { replace?: boolean }) => void];
 
 declare const useLocation: LocationHook;
 export default useLocation;
