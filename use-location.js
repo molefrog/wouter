@@ -9,7 +9,8 @@ export const relativePath = (base = "", path = location.pathname) =>
     ? path.slice(base.length) || "/"
     : "~" + path;
 
-export const absolutePath = (to, base = "") => to[0] === "~" ? to.slice(1) : base + to
+export const absolutePath = (to, base = "") =>
+  to[0] === "~" ? to.slice(1) : base + to;
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
