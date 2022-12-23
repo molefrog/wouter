@@ -70,7 +70,7 @@
     "lint-types-preact": "npm run preact && npm run types-preact && dtslint preact/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint preact/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
     "preact": "copyfiles -f {index,matcher,use-location,static-location}.js preact/",
     "types-preact": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types",
-    "bundle": "rollup -e react,preact,use-sync-external-store/shim -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -e react,preact,use-sync-external-store/shim -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
+    "bundle": "rollup -e react,preact,use-sync-external-store/shim -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
     "prepublishOnly": "npm run clean && npm run preact && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",

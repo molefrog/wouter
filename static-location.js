@@ -1,4 +1,13 @@
-import { relativePath, absolutePath } from "./use-location.js";
+// Unfortunately we cannot import these from use-location, because
+// that will also pull in react, use-sync-external-store, and then
+// monkeypatch `history` *again* in the generated build files!
+const relativePath = (base = "", path = location.pathname) =>
+    !path.toLowerCase().indexOf(base.toLowerCase())
+        ? path.slice(base.length) || "/"
+        : "~" + path;
+
+const absolutePath = (to, base = "") =>
+    to[0] === "~" ? to.slice(1) : base + to;
 
 // Generates static `useLocation` hook. The hook always
 // responds with initial path provided.
