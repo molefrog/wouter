@@ -70,7 +70,7 @@
     "lint-types-preact": "npm run preact && npm run types-preact && dtslint preact/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint preact/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
     "preact": "copyfiles -f {index,matcher,use-location,static-location}.js preact/",
     "types-preact": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types",
-    "bundle": "rollup -e react,preact -p commonjs -p node-resolve -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -e react,preact -p commonjs -p node-resolve -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
+    "bundle": "rollup -e react,preact,use-sync-external-store/shim -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -e react,preact,use-sync-external-store/shim -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
     "prepublishOnly": "npm run clean && npm run preact && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
@@ -79,19 +79,19 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "use-sync-external-store": "^1.2.0"
+    "use-sync-external-store": "^1.0.0"
   },
   "repository": "molefrog/wouter",
   "size-limit": [
     {
       "path": "index.js",
       "limit": "1500 B",
-      "ignore": ["./react-deps.js", "use-sync-external-store"]
+      "ignore": ["./react-deps.js"]
     },
     {
       "path": "use-location.js",
       "limit": "500 B",
-      "ignore": ["./react-deps.js", "use-sync-external-store"]
+      "ignore": ["./react-deps.js"]
     }
   ],
   "husky": {
@@ -141,8 +141,6 @@
     ]
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^23.0.5",
-    "@rollup/plugin-node-resolve": "^15.0.1",
     "@size-limit/preset-small-lib": "^6.0.4",
     "@testing-library/react": "^11.2.5",
     "@testing-library/react-hooks": "^5.0.3",
