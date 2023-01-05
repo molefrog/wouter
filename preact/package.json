@@ -1,6 +1,6 @@
 {
   "name": "wouter-preact",
-  "version": "2.9.0",
+  "version": "2.10.0-alpha.1",
   "description": "A minimalistic routing for React and Preact (Preact-only version).",
   "type": "module",
   "files": [
@@ -46,7 +46,7 @@
     ">=4.1": {
       "types/ts3.9.4/index.d.ts": [
         "types/ts4.1/index.d.ts"
-      ]      
+      ]
     }
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",

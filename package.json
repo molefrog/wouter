@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "2.9.1",
+  "version": "2.10.0-alpha.1",
   "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
   "keywords": [
     "react",
@@ -86,12 +86,16 @@
     {
       "path": "index.js",
       "limit": "1500 B",
-      "ignore": ["./react-deps.js"]
+      "ignore": [
+        "./react-deps.js"
+      ]
     },
     {
       "path": "use-location.js",
       "limit": "500 B",
-      "ignore": ["./react-deps.js"]
+      "ignore": [
+        "./react-deps.js"
+      ]
     }
   ],
   "husky": {
