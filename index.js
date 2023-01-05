@@ -2,9 +2,7 @@ import locationHook from "./use-location.js";
 import matcherWithCache from "./matcher.js";
 
 import {
-  useRef,
   useContext,
-  useCallback,
   createContext,
   isValidElement,
   cloneElement,
@@ -13,6 +11,8 @@ import {
   useState,
   forwardRef,
   useIsomorphicLayoutEffect,
+  useEvent,
+  useInsertionEffect,
 } from "./react-deps.js";
 
 /*
@@ -31,30 +31,22 @@ const defaultRouter = {
 
 const RouterCtx = createContext(defaultRouter);
 
-// gets the closes parent router from the context
+// gets the closest parent router from the context
 export const useRouter = () => useContext(RouterCtx);
 
 /*
  * Part 1, Hooks API: useRoute and useLocation
  */
 
-export const useLocation = () => {
-  const router = useRouter();
-  return router.hook(router);
-};
+// Internal version of useLocation to avoid redundant useRouter calls
+const useLocationFromRouter = (router) => router.hook(router);
+
+export const useLocation = () => useLocationFromRouter(useRouter());
 
 export const useRoute = (pattern) => {
-  const [path] = useLocation();
-  return useRouter().matcher(pattern, path);
-};
-
-// internal hook used by Link and Redirect in order to perform navigation
-const useNavigate = (options) => {
-  const navRef = useRef();
-  const [, navigate] = useLocation();
-
-  navRef.current = () => navigate(options.to || options.href, options);
-  return navRef;
+  const router = useRouter();
+  const [path] = useLocationFromRouter(router);
+  return router.matcher(pattern, path);
 };
 
 /*
@@ -66,7 +58,7 @@ export const Router = ({ hook, matcher, base = "", parent, children }) => {
   const updateRouter = (router, proto = parent || defaultRouter) => {
     router.hook = hook || proto.hook;
     router.matcher = matcher || proto.matcher;
-    router.base = proto.base + base;
+    router.ownBase = base;
 
     // store reference to parent router
     router.parent = parent;
@@ -76,8 +68,19 @@ export const Router = ({ hook, matcher, base = "", parent, children }) => {
 
   // we use `useState` here, but it only catches the first render and never changes.
   // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const [value] = useState(() => updateRouter({})); // create the object once...
-  useIsomorphicLayoutEffect(() => {
+  const [value] = useState(() =>
+    updateRouter({
+      // We must store base as a property accessor because effects
+      // somewhat counter-intuitively run in child components *first*!
+      // This means that by the time a parent's base is updated in the
+      // parent effect, the child effect has already run, and saw
+      // the parent's *previous* base during its own execution.
+      get base() {
+        return (value.parent || defaultRouter).base + value.ownBase;
+      },
+    })
+  ); // create the object once...
+  useInsertionEffect(() => {
     updateRouter(value);
   }); // ...then update it on each render
 
@@ -103,39 +106,34 @@ export const Route = ({ path, match, component, children }) => {
 };
 
 export const Link = forwardRef((props, ref) => {
-  const navRef = useNavigate(props);
-  const { base } = useRouter();
+  const router = useRouter();
+  const [, navigate] = useLocationFromRouter(router);
 
-  let { to, href = to, children, onClick } = props;
+  const { to, href = to, children, onClick } = props;
 
-  const handleClick = useCallback(
-    (event) => {
-      // ignores the navigation when clicked using right mouse button or
-      // by holding a special modifier key: ctrl, command, win, alt, shift
-      if (
-        event.ctrlKey ||
-        event.metaKey ||
-        event.altKey ||
-        event.shiftKey ||
-        event.button !== 0
-      )
-        return;
+  const handleClick = useEvent((event) => {
+    // ignores the navigation when clicked using right mouse button or
+    // by holding a special modifier key: ctrl, command, win, alt, shift
+    if (
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey ||
+      event.shiftKey ||
+      event.button !== 0
+    )
+      return;
 
-      onClick && onClick(event);
-      if (!event.defaultPrevented) {
-        event.preventDefault();
-        navRef.current();
-      }
-    },
-    // navRef is a ref so it never changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onClick]
-  );
+    onClick && onClick(event);
+    if (!event.defaultPrevented) {
+      event.preventDefault();
+      navigate(to || href, props);
+    }
+  });
 
   // wraps children in `a` if needed
   const extraProps = {
     // handle nested routers and absolute paths
-    href: href[0] === "~" ? href.slice(1) : base + href,
+    href: href[0] === "~" ? href.slice(1) : router.base + href,
     onClick: handleClick,
     to: null,
     ref,
@@ -158,8 +156,9 @@ const flattenChildren = (children) => {
 };
 
 export const Switch = ({ children, location }) => {
-  const { matcher } = useRouter();
-  const [originalLocation] = useLocation();
+  const router = useRouter();
+  const matcher = router.matcher;
+  const [originalLocation] = useLocationFromRouter(router);
 
   for (const element of flattenChildren(children)) {
     let match = 0;
@@ -181,11 +180,13 @@ export const Switch = ({ children, location }) => {
 };
 
 export const Redirect = (props) => {
-  const navRef = useNavigate(props);
+  const { to, href = to } = props;
+  const [, navigate] = useLocation();
+  const redirect = useEvent(() => navigate(to || href, props));
 
-  // empty array means running the effect once, navRef is a ref so it never changes
+  // redirect is guaranteed to be stable since it is returned from useEvent
   useIsomorphicLayoutEffect(() => {
-    navRef.current();
+    redirect();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;

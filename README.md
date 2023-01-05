@@ -223,30 +223,17 @@ As an exercise, let's implement a simple location hook that listens to hash chan
 ```js
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { Router, Route } from "wouter";
+import { useLocationProperty, navigate } from "wouter/use-location";
 
 // returns the current hash location in a normalized form
 // (excluding the leading '#' symbol)
-const currentLocation = () => window.location.hash.replace(/^#/, "") || "/";
+const hashLocation = () => window.location.hash.replace(/^#/, "") || "/";
 
-const navigate = (to) => {
-  window.location.hash = to;
-};
+const hashNavigate = (to) => navigate('#' + to);
 
 const useHashLocation = () => {
-  // `useSyncExternalStore` is available in React 18, or you can use a shim for older versions
-  const location = useSyncExternalStore(
-    // first argument is a value subscriber: it gives us a callback that we should call 
-    // whenever the value is changed
-    (onChange) => {
-      window.addEventListener("hashchange", onChange);
-      return () => window.removeEventListener("hashchange", onChange);
-    },
-    
-    // the second argument is function to get the current value
-    () => currentLocation()
-  );
-  
-  return [location, navigate];
+  const location = useLocationProperty(hashLocation);
+  return [location, hashNavigate];
 };
 
 const App = () => (

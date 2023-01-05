@@ -70,7 +70,7 @@
     "lint-types-preact": "npm run preact && npm run types-preact && dtslint preact/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint preact/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
     "preact": "copyfiles -f {index,matcher,use-location,static-location}.js preact/",
     "types-preact": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types",
-    "bundle": "rollup -e react,preact -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
+    "bundle": "rollup -e react,preact,use-sync-external-store/shim -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
     "prepublishOnly": "npm run clean && npm run preact && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
@@ -78,15 +78,20 @@
   "peerDependencies": {
     "react": ">=16.8.0"
   },
+  "dependencies": {
+    "use-sync-external-store": "^1.0.0"
+  },
   "repository": "molefrog/wouter",
   "size-limit": [
     {
       "path": "index.js",
-      "limit": "1500 B"
+      "limit": "1500 B",
+      "ignore": ["./react-deps.js"]
     },
     {
       "path": "use-location.js",
-      "limit": "500 B"
+      "limit": "500 B",
+      "ignore": ["./react-deps.js"]
     }
   ],
   "husky": {
@@ -130,7 +135,10 @@
     "testEnvironment": "jsdom",
     "transform": {
       "\\.js$": "jest-esm-jsx-transform"
-    }
+    },
+    "collectCoverageFrom": [
+      "*.js"
+    ]
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^6.0.4",
@@ -150,7 +158,7 @@
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.59.0",
+    "rollup": "^2.79.1",
     "size-limit": "^6.0.4",
     "typescript": "4.4.2",
     "typescript-3.9.4": "npm:typescript@3.9.4"

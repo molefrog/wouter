@@ -1,11 +1,13 @@
-import { useEffect, useLayoutEffect } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useInsertionEffect as useBuiltinInsertionEffect,
+} from "react";
 
 export {
-  useRef,
-  useEffect,
   useState,
   useContext,
-  useCallback,
   createContext,
   isValidElement,
   cloneElement,
@@ -14,18 +16,43 @@ export {
   forwardRef,
 } from "react";
 
-// React currently throws a warning when using useLayoutEffect on the server.
-// To get around it, we can conditionally useEffect on the server (no-op) and
-// useLayoutEffect in the browser.
+export { useSyncExternalStore } from "use-sync-external-store/shim";
 
-// See Redux's source code for reference:
-// https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.ts
-export const canUseDOM = !!(
+// Copied from:
+// https://github.com/facebook/react/blob/main/packages/shared/ExecutionEnvironment.js
+const canUseDOM = !!(
   typeof window !== "undefined" &&
   typeof window.document !== "undefined" &&
   typeof window.document.createElement !== "undefined"
 );
 
+// Copied from:
+// https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.ts
+// "React currently throws a warning when using useLayoutEffect on the server.
+// To get around it, we can conditionally useEffect on the server (no-op) and
+// useLayoutEffect in the browser."
 export const useIsomorphicLayoutEffect = canUseDOM
   ? useLayoutEffect
   : useEffect;
+
+// useInsertionEffect is already a noop on the server.
+// See: https://github.com/facebook/react/blob/main/packages/react-server/src/ReactFizzHooks.js
+export const useInsertionEffect =
+  useBuiltinInsertionEffect || useIsomorphicLayoutEffect;
+
+// Userland polyfill while we wait for the forthcoming
+// https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
+// Note: "A high-fidelty polyfill for useEvent is not possible because
+// there is no lifecycle or Hook in React that we can use to switch
+// .current at the right timing."
+// So we will have to make do with this "close enough" approach for now.
+export const useEvent = (fn) => {
+  const ref = useRef([fn, (...args) => ref[0](...args)]).current;
+  // Per Dan Abramov: useInsertionEffect executes marginally closer to the
+  // correct timing for ref synchronization than useLayoutEffect on React 18.
+  // See: https://github.com/facebook/react/pull/25881#issuecomment-1356244360
+  useInsertionEffect(() => {
+    ref[0] = fn;
+  });
+  return ref[1];
+};
