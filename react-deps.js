@@ -16,7 +16,12 @@ export {
   forwardRef,
 } from "react";
 
-export { useSyncExternalStore } from "use-sync-external-store/shim";
+// To resolve webpack 5 errors, while not presenting problems for native,
+// we copy the approaches from https://github.com/TanStack/query/pull/3561
+// and https://github.com/TanStack/query/pull/3601
+// ~ Show this aging PR some love to remove the need for this hack:
+//   https://github.com/facebook/react/pull/25231 ~
+export { useSyncExternalStore } from "./use-sync-external-store";
 
 // Copied from:
 // https://github.com/facebook/react/blob/main/packages/shared/ExecutionEnvironment.js
