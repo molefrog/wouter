@@ -21,7 +21,7 @@ export {
 // and https://github.com/TanStack/query/pull/3601
 // ~ Show this aging PR some love to remove the need for this hack:
 //   https://github.com/facebook/react/pull/25231 ~
-export { useSyncExternalStore } from "./use-sync-external-store";
+export { useSyncExternalStore } from "./use-sync-external-store.js";
 
 // Copied from:
 // https://github.com/facebook/react/blob/main/packages/shared/ExecutionEnvironment.js
