@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "2.10.0-alpha.1",
+  "version": "2.10.0-alpha.4",
   "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
   "keywords": [
     "react",
@@ -68,9 +68,9 @@
     "lint-types": "npm run lint-types-react && npm run lint-types-preact",
     "lint-types-react": "dtslint types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
     "lint-types-preact": "npm run preact && npm run types-preact && dtslint preact/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint preact/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
-    "preact": "copyfiles -f {index,matcher,use-location,static-location}.js preact/",
+    "preact": "copyfiles -f {index,matcher,use-location,static-location,use-sync-external-store,use-sync-external-store.native}.js preact/",
     "types-preact": "copyfiles -f types/{matcher,use-location,static-location}.d.ts preact/types",
-    "bundle": "rollup -e react,preact,use-sync-external-store/shim/index.js,use-sync-external-store/shim/index.native.js -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
+    "bundle": "rollup -c && DIR=./preact rollup -c && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
     "prepublishOnly": "npm run clean && npm run preact && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
@@ -141,7 +141,8 @@
       "\\.js$": "jest-esm-jsx-transform"
     },
     "collectCoverageFrom": [
-      "*.js", "!use-sync-external-store*.js"
+      "*.js",
+      "!use-sync-external-store*.js"
     ]
   },
   "devDependencies": {
@@ -162,7 +163,7 @@
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.79.1",
+    "rollup": "^3.7.4",
     "size-limit": "^6.0.4",
     "typescript": "4.4.2",
     "typescript-3.9.4": "npm:typescript@3.9.4"
