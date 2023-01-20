@@ -1,5 +1,3 @@
-import glob from "glob";
-
 // support for preact builds
 if (process.env.DIR) process.chdir(process.env.DIR);
 
