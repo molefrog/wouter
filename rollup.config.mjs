@@ -43,5 +43,3 @@ export default [
     },
   },
 ];
-
-// && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json
