@@ -221,7 +221,7 @@ customize it in a `<Router />` component.
 As an exercise, let's implement a simple location hook that listens to hash changes:
 
 ```js
-import { useState, useEffect, useSyncExternalStore } from "react";
+import { useState, useEffect } from "react";
 import { Router, Route } from "wouter";
 import { useLocationProperty, navigate } from "wouter/use-location";
 
