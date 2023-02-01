@@ -1,14 +1,17 @@
 // support for preact builds
-if (process.env.DIR) process.chdir(process.env.DIR);
+const isPreact = String(process.env.DIR).indexOf("preact") !== -1;
+
+if (isPreact) process.chdir("./preact");
 
 const ESM_SOURCES = [
   "index.js",
   "matcher.js",
   "react-deps.js",
   "use-location.js",
-  "use-sync-external-store.js",
-  "use-sync-external-store.native.js",
-  "static-location.js",
+  ...(isPreact
+    ? []
+    : // only included in React build
+      ["use-sync-external-store.js", "use-sync-external-store.native.js"]),
 ];
 
 const OUTPUT_DIR = "cjs";
@@ -40,3 +43,5 @@ export default [
     },
   },
 ];
+
+// && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json
