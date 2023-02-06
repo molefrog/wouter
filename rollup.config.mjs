@@ -1,3 +1,5 @@
+import replace from "@rollup/plugin-replace";
+
 // support for preact builds
 const isPreact = String(process.env.DIR).indexOf("preact") !== -1;
 
@@ -25,6 +27,9 @@ export default [
       "preact/hooks",
       "use-sync-external-store/shim/index.js",
       "use-sync-external-store/shim/index.native.js",
+      // tell Rollup not to apply any optimizations to unqualified `use-sync-external-store`
+      // import (see comment below)
+      "./use-sync-external-store",
     ],
     output: {
       dir: OUTPUT_DIR,
@@ -32,6 +37,16 @@ export default [
       preserveModules: true,
       exports: "named",
     },
+    plugins: [
+      replace({
+        // replaces qualified import with an unqualified one
+        // so that React Native's bundler can pick up the right source file
+        // See https://github.com/molefrog/wouter/pull/277#issuecomment-1382930657
+        "./use-sync-external-store.js": "./use-sync-external-store",
+        preventAssignment: true,
+        delimiters: ["", ""],
+      }),
+    ],
   },
   {
     // TODO: migrate `static-location` to ESM object exports
