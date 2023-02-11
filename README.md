@@ -50,11 +50,9 @@
 > [**Matt Miller**, _An exhaustive React ecosystem for 2020_](https://medium.com/@mmiller42/an-exhaustive-react-guide-for-2020-7859f0bddc56)
 
 Wouter provides a simple API that many developers and library authors appreciate. Some notable
-projects that use wouter: **[arcade.design (React UI kit)](https://arcade.design/),**
-**[fre](https://github.com/yisar/fre)**,
-**[react-three-fiber](https://github.com/react-spring/react-three-fiber)**,
-**[ssgl-doom-launcher](https://github.com/FreaKzero/ssgl-doom-launcher)**,
-**[Ziro App](https://ziro.com.br/)** and many more.
+projects that use wouter: **[Ultra](https://ultrajs.dev/)**, **[react-three-fiber](https://github.com/react-spring/react-three-fiber)**, 
+**[Sunmao UI](https://sunmao-ui.com/)**,
+**[ssgl-doom-launcher](https://github.com/FreaKzero/ssgl-doom-launcher)** and many more.
 
 ## Table of Contents
 
