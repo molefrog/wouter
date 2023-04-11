@@ -19,7 +19,7 @@ import {
  * Router and router context. Router is a lightweight object that represents the current
  * routing options: how location is managed, base path etc.
  *
- * There is a default router present for most of the use cases, however it can be overriden
+ * There is a default router present for most of the use cases, however it can be overridden
  * via the <Router /> component.
  */
 

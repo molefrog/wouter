@@ -472,7 +472,7 @@ import makeCachedMatcher from "wouter/matcher";
  * transformed into regular expressions.
  *
  * Note: it is just a wrapper around `pathToRegexp`, which uses a
- * slighly different convetion of returning the array of keys.
+ * slightly different convention of returning the array of keys.
  *
  * @param {string} path — a path like "/:foo/:bar"
  * @return {{ keys: [], regexp: RegExp }}
