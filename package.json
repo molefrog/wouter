@@ -83,7 +83,6 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@rollup/plugin-replace": "^5.0.2",
     "use-sync-external-store": "^1.0.0"
   },
   "repository": "molefrog/wouter",
@@ -151,6 +150,7 @@
     ]
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.2",
     "@size-limit/preset-small-lib": "^6.0.4",
     "@testing-library/react": "^11.2.5",
     "@testing-library/react-hooks": "^5.0.3",
