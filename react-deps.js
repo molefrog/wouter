@@ -1,9 +1,12 @@
-import {
+import * as React from "react";
+
+// React.useInsertionEffect is not available in React <18
+const {
   useEffect,
   useLayoutEffect,
   useRef,
-  useInsertionEffect as useBuiltinInsertionEffect,
-} from "react";
+  useInsertionEffect: useBuiltinInsertionEffect,
+} = React;
 
 export {
   useState,
