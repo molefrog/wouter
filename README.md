@@ -339,10 +339,19 @@ import { Route, Switch } from "wouter";
 <Switch>
   <Route path="/orders/all" component={AllOrders} />
   <Route path="/orders/:status" component={Orders} />
+  
+  {/* 
+     in wouter, any Route with empty path is considered always active. 
+     This can be used to achieve "default" route behaviour within Switch. 
+     Note: the order matters! See examples below.
+  */}
+  <Route>
+    This is rendered when nothing above has matched
+  </Route>
 </Switch>;
 ```
 
-Check out [**FAQ and Code Recipes** section](#faq-and-code-recipes) for more advanced use of
+Check out [**FAQ and Code Recipes** section](#how-do-i-make-a-default-route) for more advanced use of
 `Switch`.
 
 ### `<Redirect to={path} />`
