@@ -1,5 +1,5 @@
 import React, { cloneElement } from "react";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import TestRenderer from "react-test-renderer";
 
 import { Router, useRouter } from "../index.js";
@@ -54,9 +54,7 @@ it("shares one router instance between components", () => {
     </>
   );
 
-  const uniqRouters = [
-    ...new Set(root.findAllByType("div").map((x) => x.props.router)),
-  ];
+  const uniqRouters = [...new Set(root.findAllByType("div").map((x) => x.props.router))];
   expect(uniqRouters.length).toBe(1);
 });
 

@@ -152,9 +152,8 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.2",
     "@size-limit/preset-small-lib": "^6.0.4",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/react-hooks": "^5.0.3",
-    "@types/react": "^17.0.1",
+    "@testing-library/react": "^14.0.0",
+    "@types/react": "^18.2.0",
     "copyfiles": "^2.4.1",
     "dtslint": "^3.4.2",
     "eslint": "^7.19.0",
