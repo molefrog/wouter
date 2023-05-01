@@ -5,9 +5,12 @@ import { useSyncExternalStore, useEvent } from "./react-deps.js";
  * If base isn't part of the path provided returns absolute path e.g. `~/app`
  */
 const relativePath = (base = "", path = location.pathname) =>
-  !path.toLowerCase().indexOf(base.toLowerCase()) ? path.slice(base.length) || "/" : "~" + path;
+  !path.toLowerCase().indexOf(base.toLowerCase())
+    ? path.slice(base.length) || "/"
+    : "~" + path;
 
-const absolutePath = (to, base = "") => (to[0] === "~" ? to.slice(1) : base + to);
+const absolutePath = (to, base = "") =>
+  to[0] === "~" ? to.slice(1) : base + to;
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -16,7 +19,12 @@ const eventPopstate = "popstate";
 const eventPushState = "pushState";
 const eventReplaceState = "replaceState";
 const eventHashchange = "hashchange";
-export const events = [eventPopstate, eventPushState, eventReplaceState, eventHashchange];
+export const events = [
+  eventPopstate,
+  eventPushState,
+  eventReplaceState,
+  eventHashchange,
+];
 
 const subscribeToLocationUpdates = (callback) => {
   for (const event of events) {
@@ -36,7 +44,8 @@ const currentSearch = () => location.search;
 export const useSearch = () => useLocationProperty(currentSearch);
 
 const currentPathname = () => location.pathname;
-export const usePathname = (ssrPath) => useLocationProperty(currentPathname, () => ssrPath);
+export const usePathname = (ssrPath) =>
+  useLocationProperty(currentPathname, () => ssrPath);
 
 export const navigate = (to, { replace = false } = {}) =>
   history[replace ? eventReplaceState : eventPushState](null, "", to);
