@@ -8,6 +8,7 @@ export interface RouterObject {
   readonly ownBase: Path;
   readonly matcher: MatcherFn;
   readonly parent?: RouterObject;
+  readonly ssrPath: Path;
 }
 
 // basic options to construct a router
@@ -16,4 +17,5 @@ export type RouterOptions = {
   base?: Path;
   matcher?: MatcherFn;
   parent?: RouterObject;
-}
+  ssrPath?: Path;
+};
