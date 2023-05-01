@@ -54,7 +54,9 @@ it("shares one router instance between components", () => {
     </>
   );
 
-  const uniqRouters = [...new Set(root.findAllByType("div").map((x) => x.props.router))];
+  const uniqRouters = [
+    ...new Set(root.findAllByType("div").map((x) => x.props.router)),
+  ];
   expect(uniqRouters.length).toBe(1);
 });
 
