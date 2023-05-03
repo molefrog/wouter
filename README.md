@@ -70,7 +70,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [Multipath routes](#is-it-possible-to-match-an-array-of-paths)
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
-  - [Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)
+  - [Server-side Rendering (SSR)](#server-side-rendering-support-ssr)
   - [Routing in less than 400B](#1kb-is-too-much-i-cant-afford-it)
 
 ## Getting Started
