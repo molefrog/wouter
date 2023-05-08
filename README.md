@@ -692,16 +692,14 @@ You might need to ensure you have the latest version of
 ### Server-side Rendering support (SSR)?
 
 In order to render your app on the server, you'll need to wrap your app with top-level Router and
-specify `ssrPath` prop (usually, derived from current request). Once hydrated, your app will start
-using browser location as usual.
+specify `ssrPath` prop (usually, derived from current request).
 
 ```js
 import { renderToString } from "react-dom/server";
 import { Router } from "wouter";
 
 const handleRequest = (req, res) => {
-  // If you omit `ssrPath` prop or remove the top-level Router, SSR will
-  // still work, but it will always render the app using root "/" location
+  // top-level Router is mandatory in SSR mode
   const prerendered = renderToString(
     <Router ssrPath={req.path}>
       <App />
@@ -710,6 +708,22 @@ const handleRequest = (req, res) => {
 
   // respond with prerendered html
 };
+```
+
+On the client, the static markup must be hydrated in order for your app to become interactive. Note
+that to avoid having hydration warnings, the JSX rendered on the client must match the one used by
+the server, so the `Router` component must be present.
+
+```js
+import { hydrateRoot } from "react-dom/server";
+
+const root = hydrateRoot(
+  domNode,
+  // during hydration `ssrPath` is set to `location.pathname`
+  <Router>
+    <App />
+  </Router>
+);
 ```
 
 ### 1KB is too much, I can't afford it!
