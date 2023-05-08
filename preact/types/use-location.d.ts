@@ -6,9 +6,7 @@ export type Path = string;
 
 // the base useLocation hook type. Any custom hook (including the
 // default one) should inherit from it.
-export type BaseLocationHook = (
-  ...args: any[]
-) => [Path, (path: Path, ...args: any[]) => any];
+export type BaseLocationHook = (...args: any[]) => [Path, (path: Path, ...args: any[]) => any];
 
 /*
  * Utility types that operate on hook
@@ -18,22 +16,24 @@ export type BaseLocationHook = (
 export type HookReturnValue<H extends BaseLocationHook> = ReturnType<H>;
 
 // Returns the type of the navigation options that hook's push function accepts.
-export type HookNavigationOptions<H extends BaseLocationHook> = HookReturnValue<
-  H
->[1] extends (path: Path, options: infer R, ...rest: any[]) => any
+export type HookNavigationOptions<H extends BaseLocationHook> = HookReturnValue<H>[1] extends (
+  path: Path,
+  options: infer R,
+  ...rest: any[]
+) => any
   ? R extends { [k: string]: any }
     ? R
     : {}
   : {};
 
 type Primitive = string | number | bigint | boolean | null | undefined | symbol;
-export const useLocationProperty: <S extends Primitive>(fn: () => S) => S;
+export const useLocationProperty: <S extends Primitive>(fn: () => S, ssrFn?: () => S) => S;
 
 export const useSearch: () => string;
 
-export const usePathname: () => Path;
+export const usePathname: (options?: { ssrPath?: string }) => Path;
 
-export const navigate: (to: string | URL, options?: { replace?: boolean }) => void
+export const navigate: (to: string | URL, options?: { replace?: boolean }) => void;
 
 /*
  * Default `useLocation`

@@ -55,7 +55,14 @@ export const useRoute = (pattern) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = ({ hook, matcher, ssrPath, base = "", parent, children }) => {
+export const Router = ({
+  hook,
+  matcher,
+  ssrPath,
+  base = "",
+  parent,
+  children,
+}) => {
   // updates the current router with the props passed down to the component
   const updateRouter = (router, proto = parent || defaultRouter) => {
     router.hook = hook || proto.hook;
@@ -117,7 +124,13 @@ export const Link = forwardRef((props, ref) => {
   const handleClick = useEvent((event) => {
     // ignores the navigation when clicked using right mouse button or
     // by holding a special modifier key: ctrl, command, win, alt, shift
-    if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.button !== 0)
+    if (
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey ||
+      event.shiftKey ||
+      event.button !== 0
+    )
       return;
 
     onClick && onClick(event);
@@ -144,7 +157,9 @@ const flattenChildren = (children) => {
   return Array.isArray(children)
     ? [].concat(
         ...children.map((c) =>
-          c && c.type === Fragment ? flattenChildren(c.props.children) : flattenChildren(c)
+          c && c.type === Fragment
+            ? flattenChildren(c.props.children)
+            : flattenChildren(c)
         )
       )
     : [children];
