@@ -31,7 +31,7 @@ export const useLocationProperty: <S extends Primitive>(fn: () => S, ssrFn?: () 
 
 export const useSearch: () => string;
 
-export const usePathname: (options?: { ssrPath?: string }) => Path;
+export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
 export const navigate: (to: string | URL, options?: { replace?: boolean }) => void;
 
