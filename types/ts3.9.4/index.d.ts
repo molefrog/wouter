@@ -21,9 +21,15 @@ import {
 import { DefaultParams, Params, Match } from "../matcher";
 import { RouterObject, RouterOptions } from "../router";
 
-// re-export types from these modules
-export * from "../matcher";
-export * from "../use-location";
+// re-export some types from these modules
+export {
+  DefaultParams,
+  Params,
+  MatchWithParams,
+  NoMatch,
+  Match,
+} from "../matcher";
+export { Path, BaseLocationHook, LocationHook } from "../use-location";
 export * from "../router";
 
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
