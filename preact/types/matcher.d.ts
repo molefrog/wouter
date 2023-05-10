@@ -10,9 +10,14 @@ export interface DefaultParams {
 
 export type Params<T extends DefaultParams = DefaultParams> = T;
 
-export type MatchWithParams<T extends DefaultParams = DefaultParams> = [true, Params<T>];
+export type MatchWithParams<T extends DefaultParams = DefaultParams> = [
+  true,
+  Params<T>
+];
 export type NoMatch = [false, null];
-export type Match<T extends DefaultParams = DefaultParams> = MatchWithParams<T> | NoMatch;
+export type Match<T extends DefaultParams = DefaultParams> =
+  | MatchWithParams<T>
+  | NoMatch;
 
 export type MatcherFn = (pattern: Path, path: Path) => Match;
 

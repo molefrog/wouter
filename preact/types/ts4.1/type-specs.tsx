@@ -60,13 +60,17 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
   This is a <b>mixed</b> content
 </Route>;
 
-<Route path="/users/:id">{(params: Params): React.ReactNode => `User id: ${params.id}`}</Route>;
+<Route path="/users/:id">
+  {(params: Params): React.ReactNode => `User id: ${params.id}`}
+</Route>;
 
 <Route path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
 <Route path="/users/:id">{({ age }) => `User age: ${age}`}</Route>; // $ExpectError
 
-<Route path="/users/:id">{({ age }: { age: string }) => `User age: ${age}`}</Route>;
+<Route path="/users/:id">
+  {({ age }: { age: string }) => `User age: ${age}`}
+</Route>;
 
 <Route path="/app" match={true} />; // $ExpectError
 
@@ -79,7 +83,9 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 </Route>;
 
 // infer only named params
-<Route path="/:first/:second">{({ first, second }) => `first: ${first}, second: ${second}`}</Route>;
+<Route path="/:first/:second">
+  {({ first, second }) => `first: ${first}, second: ${second}`}
+</Route>;
 
 // for pathToRegexp matcher
 <Route path="/:user([a-z]i+)/profile/:tab/:first+/:second*">
@@ -150,7 +156,10 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 Redirect<UseNetworkLocation>({ href: "/home", delay: 1000 });
 // example custom hook
-type UseLocWithNoOptions = () => [string, (to: string, foo: number, bar: string) => void];
+type UseLocWithNoOptions = () => [
+  string,
+  (to: string, foo: number, bar: string) => void
+];
 Redirect<UseLocWithNoOptions>({ href: "/app" });
 
 <Redirect>something</Redirect>; // $ExpectError

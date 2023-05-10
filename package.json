@@ -72,7 +72,7 @@
     }
   },
   "scripts": {
-    "fix:p": "prettier --write './**/*.js{x,}'",
+    "fix:p": "prettier --write './**/*.(js|ts){x,}'",
     "test": "jest --verbose --coverage",
     "size": "size-limit",
     "build": "npm run bundle",
@@ -95,6 +95,12 @@
     "use-sync-external-store": "^1.0.0"
   },
   "repository": "molefrog/wouter",
+  "prettier": {
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": false,
+    "printWidth": 80
+  },
   "size-limit": [
     {
       "path": "index.js",

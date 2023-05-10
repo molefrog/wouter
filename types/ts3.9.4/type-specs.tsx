@@ -69,7 +69,9 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 <Route<{ id: string }> path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
-<Route<{ id: string }> path="/users/:id">{({ age }) => `User age: ${age}`}</Route>; // $ExpectError
+<Route<{ id: string }> path="/users/:id">
+  {({ age }) => `User age: ${age}`}
+</Route>; // $ExpectError
 
 <Route path="/app" match={true} />; // $ExpectError
 
@@ -127,7 +129,10 @@ const invalidParamsWithGeneric: Params<{ id: number }> = { id: 13 }; // $ExpectE
 
 Redirect<UseNetworkLocation>({ href: "/home", delay: 1000 });
 // example custom hook
-type UseLocWithNoOptions = () => [string, (to: string, foo: number, bar: string) => void];
+type UseLocWithNoOptions = () => [
+  string,
+  (to: string, foo: number, bar: string) => void
+];
 Redirect<UseLocWithNoOptions>({ href: "/app" });
 
 <Redirect>something</Redirect>; // $ExpectError
