@@ -27,6 +27,8 @@ const defaultRouter = {
   hook: locationHook,
   matcher: matcherWithCache(),
   base: "",
+  // this option is used to override the current location during SSR
+  // ssrPath: undefined,
 };
 
 const RouterCtx = createContext(defaultRouter);
@@ -53,11 +55,19 @@ export const useRoute = (pattern) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = ({ hook, matcher, base = "", parent, children }) => {
+export const Router = ({
+  hook,
+  matcher,
+  ssrPath,
+  base = "",
+  parent,
+  children,
+}) => {
   // updates the current router with the props passed down to the component
   const updateRouter = (router, proto = parent || defaultRouter) => {
     router.hook = hook || proto.hook;
     router.matcher = matcher || proto.matcher;
+    router.ssrPath = ssrPath || proto.ssrPath;
     router.ownBase = base;
 
     // store reference to parent router

@@ -1,4 +1,5 @@
-import { renderHook, act } from "@testing-library/react-hooks";
+import React, { useEffect } from "react";
+import { renderHook, act } from "@testing-library/react";
 import useLocation, { navigate, useSearch } from "../use-location.js";
 
 it("returns a pair [value, update]", () => {
@@ -83,39 +84,53 @@ describe("`value` first argument", () => {
   });
 
   it("supports search url", () => {
-    const { result, unmount } = renderHook(() => useLocation());
-    const { result: searchResult, unmount: searchUnmount } = renderHook(() =>
-      useSearch()
-    );
+    // count how many times each hook is rendered
+    const locationRenders = { current: 0 };
+    const searchRenders = { current: 0 };
+
+    // count number of rerenders for each hook
+    const { result, unmount } = renderHook(() => {
+      useEffect(() => {
+        locationRenders.current += 1;
+      });
+      return useLocation();
+    });
+
+    const { result: searchResult, unmount: searchUnmount } = renderHook(() => {
+      useEffect(() => {
+        searchRenders.current += 1;
+      });
+      return useSearch();
+    });
 
     expect(result.current[0]).toBe("/");
-    expect(result.all.length).toBe(1);
+    expect(locationRenders.current).toBe(1);
     expect(searchResult.current).toBe("");
-    expect(searchResult.all.length).toBe(1);
+    expect(searchRenders.current).toBe(1);
 
     act(() => navigate("/foo"));
 
     expect(result.current[0]).toBe("/foo");
-    expect(result.all.length).toBe(2);
+    expect(locationRenders.current).toBe(2);
 
     act(() => navigate("/foo"));
 
     expect(result.current[0]).toBe("/foo");
-    expect(result.all.length).toBe(2); // no re-render
+    expect(locationRenders.current).toBe(2); // no re-render
 
     act(() => navigate("/foo?hello=world"));
 
     expect(result.current[0]).toBe("/foo");
-    expect(result.all.length).toBe(2);
+    expect(locationRenders.current).toBe(2);
     expect(searchResult.current).toBe("?hello=world");
-    expect(searchResult.all.length).toBe(2);
+    expect(searchRenders.current).toBe(2);
 
     act(() => navigate("/foo?goodbye=world"));
 
     expect(result.current[0]).toBe("/foo");
-    expect(result.all.length).toBe(2);
+    expect(locationRenders.current).toBe(2);
     expect(searchResult.current).toBe("?goodbye=world");
-    expect(searchResult.all.length).toBe(3);
+    expect(searchRenders.current).toBe(3);
 
     unmount();
     searchUnmount();

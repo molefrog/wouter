@@ -42,7 +42,8 @@
 > [**Matt Miller**, _An exhaustive React ecosystem for 2020_](https://medium.com/@mmiller42/an-exhaustive-react-guide-for-2020-7859f0bddc56)
 
 Wouter provides a simple API that many developers and library authors appreciate. Some notable
-projects that use wouter: **[Ultra](https://ultrajs.dev/)**, **[React-three-fiber](https://github.com/react-spring/react-three-fiber)**, 
+projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
+**[React-three-fiber](https://github.com/react-spring/react-three-fiber)**,
 **[Sunmao UI](https://sunmao-ui.com/)**, **[Million](https://millionjs.org/)** and many more.
 
 ## Table of Contents
@@ -69,7 +70,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**, **[React-three-fibe
   - [Multipath routes](#is-it-possible-to-match-an-array-of-paths)
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
-  - [Server-side Rendering (SSR)](#is-there-any-support-for-server-side-rendering-ssr)
+  - [Server-side Rendering (SSR)](#server-side-rendering-support-ssr)
   - [Routing in less than 400B](#1kb-is-too-much-i-cant-afford-it)
 
 ## Getting Started
@@ -218,7 +219,7 @@ import { useLocationProperty, navigate } from "wouter/use-location";
 // (excluding the leading '#' symbol)
 const hashLocation = () => window.location.hash.replace(/^#/, "") || "/";
 
-const hashNavigate = (to) => navigate('#' + to);
+const hashNavigate = (to) => navigate("#" + to);
 
 const useHashLocation = () => {
   const location = useLocationProperty(hashLocation);
@@ -339,20 +340,18 @@ import { Route, Switch } from "wouter";
 <Switch>
   <Route path="/orders/all" component={AllOrders} />
   <Route path="/orders/:status" component={Orders} />
-  
+
   {/* 
      in wouter, any Route with empty path is considered always active. 
      This can be used to achieve "default" route behaviour within Switch. 
      Note: the order matters! See examples below.
   */}
-  <Route>
-    This is rendered when nothing above has matched
-  </Route>
+  <Route>This is rendered when nothing above has matched</Route>
 </Switch>;
 ```
 
-Check out [**FAQ and Code Recipes** section](#how-do-i-make-a-default-route) for more advanced use of
-`Switch`.
+Check out [**FAQ and Code Recipes** section](#how-do-i-make-a-default-route) for more advanced use
+of `Switch`.
 
 ### `<Redirect to={path} />`
 
@@ -519,8 +518,9 @@ const App = () => (
 );
 ```
 
-**Note:** _the base path feature is only supported by the default `pushState` and `staticLocation` hooks. If you're
-implementing your own location hook, you'll need to add base path support yourself._
+**Note:** _the base path feature is only supported by the default browser History API location hook
+(the one exported from `"wouter/use-location"`). If you're implementing your own location hook,
+you'll need to add base path support yourself._
 
 ### How do I make a default route?
 
@@ -689,27 +689,19 @@ You might need to ensure you have the latest version of
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-preact-0lr3n)**
 
-### Is there any support for server-side rendering (SSR)?
+### Server-side Rendering support (SSR)?
 
-Yes! In order to render your app on a server, you'll need to tell the router that the current
-location comes from the request rather than the browser history. In **wouter**, you can achieve that
-by replacing the default `useLocation` hook with a static one:
+In order to render your app on the server, you'll need to wrap your app with top-level Router and
+specify `ssrPath` prop (usually, derived from current request).
 
 ```js
 import { renderToString } from "react-dom/server";
 import { Router } from "wouter";
 
-// note: static location has a different import path,
-// this helps to keep the wouter source as small as possible
-import staticLocationHook from "wouter/static-location";
-
-import App from "./app";
-
 const handleRequest = (req, res) => {
-  // The staticLocationHook function creates a hook that always
-  // responds with a path provided
+  // top-level Router is mandatory in SSR mode
   const prerendered = renderToString(
-    <Router hook={staticLocationHook(req.path)}>
+    <Router ssrPath={req.path}>
       <App />
     </Router>
   );
@@ -718,33 +710,20 @@ const handleRequest = (req, res) => {
 };
 ```
 
-Make sure you replace the static hook with the real one when you hydrate your app on a client.
-
-If you want to be able to detect redirects you can provide the `record` option:
+On the client, the static markup must be hydrated in order for your app to become interactive. Note
+that to avoid having hydration warnings, the JSX rendered on the client must match the one used by
+the server, so the `Router` component must be present.
 
 ```js
-import { renderToString } from "react-dom/server";
-import { Router } from "wouter";
-import staticLocationHook from "wouter/static-location";
+import { hydrateRoot } from "react-dom/server";
 
-import App from "./app";
-
-const handleRequest = (req, res) => {
-  const location = staticLocationHook(req.path, { record: true });
-  const prerendered = renderToString(
-    <Router hook={location}>
-      <App />
-    </Router>
-  );
-
-  // location.history is an array matching the history a
-  // user's browser would capture after loading the page
-
-  const finalPage = locationHook.history.slice(-1)[0];
-  if (finalPage !== req.path) {
-    // perform redirect
-  }
-};
+const root = hydrateRoot(
+  domNode,
+  // during hydration `ssrPath` is set to `location.pathname`
+  <Router>
+    <App />
+  </Router>
+);
 ```
 
 ### 1KB is too much, I can't afford it!

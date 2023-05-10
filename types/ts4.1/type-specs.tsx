@@ -222,11 +222,15 @@ const useNetwork: UseNetworkLocation = (() => {}) as UseNetworkLocation;
 
 const parentRouter = {
   base: "/app",
+  ownBase: "/app",
+  ssrPath: "/",
   matcher: (() => null) as unknown as MatcherFn,
   hook: useLocation,
 };
 
 <Router parent={parentRouter}>Parent router is inherited</Router>;
+
+<Router ssrPath="/foo">SSR</Router>;
 
 /*
  * Hooks API

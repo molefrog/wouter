@@ -11,7 +11,7 @@ import staticLocationHook from "../static-location.js";
 describe("server-side rendering", () => {
   it("works via staticHistory", () => {
     const App = () => (
-      <Router hook={staticLocationHook("/users/baz")}>
+      <Router ssrPath="/users/baz">
         <Route path="/users/baz">foo</Route>
         <Route path="/users/:any*">bar</Route>
         <Route path="/users/:id">{(params) => params.id}</Route>
@@ -30,7 +30,7 @@ describe("server-side rendering", () => {
     };
 
     const App = () => (
-      <Router hook={staticLocationHook("/pages/intro")}>
+      <Router ssrPath="/pages/intro">
         <HookRoute />
       </Router>
     );
@@ -41,7 +41,7 @@ describe("server-side rendering", () => {
 
   it("renders valid and accessible link elements", () => {
     const App = () => (
-      <Router hook={staticLocationHook("/")}>
+      <Router ssrPath="/">
         <Link href="/users/1" title="Profile">
           Mark
         </Link>
@@ -54,7 +54,7 @@ describe("server-side rendering", () => {
 
   it("renders redirects however they have effect only on a client-side", () => {
     const App = () => (
-      <Router hook={staticLocationHook("/")}>
+      <Router ssrPath="/">
         <Route path="/">
           <Redirect to="/foo" />
         </Route>

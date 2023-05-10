@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "2.10.2-dev.1",
+  "version": "2.11.0-dev.1",
   "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
   "keywords": [
     "react",
@@ -161,9 +161,8 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.2",
     "@size-limit/preset-small-lib": "^6.0.4",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/react-hooks": "^5.0.3",
-    "@types/react": "^17.0.1",
+    "@testing-library/react": "^14.0.0",
+    "@types/react": "^18.2.0",
     "copyfiles": "^2.4.1",
     "dtslint": "^3.4.2",
     "eslint": "^7.19.0",
@@ -173,9 +172,9 @@
     "jest-esm-jsx-transform": "^1.0.0",
     "preact": "^10.0.0",
     "prettier": "^2.4.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-test-renderer": "^17.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-test-renderer": "^18.2.0",
     "rimraf": "^3.0.2",
     "rollup": "^3.7.4",
     "size-limit": "^6.0.4",

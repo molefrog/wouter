@@ -37,14 +37,19 @@ const subscribeToLocationUpdates = (callback) => {
   };
 };
 
-export const useLocationProperty = (fn) =>
-  useSyncExternalStore(subscribeToLocationUpdates, fn);
+export const useLocationProperty = (fn, ssrFn) =>
+  useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
 const currentSearch = () => location.search;
 export const useSearch = () => useLocationProperty(currentSearch);
 
 const currentPathname = () => location.pathname;
-export const usePathname = () => useLocationProperty(currentPathname);
+
+export const usePathname = ({ ssrPath } = {}) =>
+  useLocationProperty(
+    currentPathname,
+    ssrPath ? () => ssrPath : currentPathname
+  );
 
 export const navigate = (to, { replace = false } = {}) =>
   history[replace ? eventReplaceState : eventPushState](null, "", to);
@@ -55,10 +60,12 @@ export const navigate = (to, { replace = false } = {}) =>
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
 // (This is achieved via `useEvent`.)
-export default (opts = {}) => [
-  relativePath(opts.base, usePathname()),
+const useLocation = (opts = {}) => [
+  relativePath(opts.base, usePathname(opts)),
   useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
 ];
+
+export default useLocation;
 
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`
