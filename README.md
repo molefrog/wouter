@@ -716,7 +716,7 @@ that to avoid having hydration warnings, the JSX rendered on the client must mat
 the server, so the `Router` component must be present.
 
 ```js
-import { hydrateRoot } from "react-dom/server";
+import { hydrateRoot } from "react-dom/client";
 
 const root = hydrateRoot(
   domNode,
