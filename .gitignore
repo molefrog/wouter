@@ -28,7 +28,8 @@ coverage/
 # preact dist: all files are ignored by default
 # expect sources that are Preact-specific
 preact/*
-!preact/types
+!preact/types/ts3.9.4
+!preact/types/ts4.1
 !preact/react-deps.js
 !preact/package.json
 
