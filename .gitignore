@@ -27,11 +27,11 @@ coverage/
 
 # preact dist: all files are ignored by default
 # expect sources that are Preact-specific
-preact/*
-!preact/types/ts3.9.4
-!preact/types/ts4.1
-!preact/react-deps.js
-!preact/package.json
+preact/index.js
+preact/matcher.js
+preact/use-location.js
+preact/static-location.js
+preact/types/*.d.ts
 
 # type definitions in the project root are copied from types/ folder
 # before publishing, so they should be ignored
