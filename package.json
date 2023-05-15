@@ -2,6 +2,7 @@
   "name": "wouter",
   "version": "2.11.0-alpha.1",
   "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
+  "type": "module",
   "keywords": [
     "react",
     "preact",
@@ -18,7 +19,6 @@
     "preact",
     "cjs"
   ],
-  "type": "module",
   "exports": {
     ".": {
       "types": "./types/ts4.1/index.d.ts",
@@ -87,6 +87,7 @@
     "prepublishOnly": "npm run clean && npm run preact && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
+  "repository": "molefrog/wouter",
   "license": "ISC",
   "peerDependencies": {
     "react": ">=16.8.0"
@@ -94,7 +95,6 @@
   "dependencies": {
     "use-sync-external-store": "^1.0.0"
   },
-  "repository": "molefrog/wouter",
   "prettier": {
     "tabWidth": 2,
     "semi": true,
