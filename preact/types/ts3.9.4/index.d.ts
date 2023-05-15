@@ -16,11 +16,19 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { DefaultParams, Params, Match, MatcherFn } from "../matcher";
+import { DefaultParams, Params, Match } from "../matcher";
+import { RouterObject, RouterOptions } from "../router";
 
-// re-export types from these modules
-export * from "../matcher";
-export * from "../use-location";
+// re-export some types from these modules
+export {
+  DefaultParams,
+  Params,
+  MatchWithParams,
+  NoMatch,
+  Match,
+} from "../matcher";
+export { Path, BaseLocationHook, LocationHook } from "../use-location";
+export * from "../router";
 
 /*
  * Components: <Route />
@@ -60,12 +68,13 @@ export type RedirectProps<H extends BaseLocationHook = LocationHook> =
     children?: never;
   };
 
-export function Link<H extends BaseLocationHook = LocationHook>(
-  props: LinkProps<H>
-): VNode<any> | null;
-
 export function Redirect<H extends BaseLocationHook = LocationHook>(
-  props: RedirectProps<H>
+  props: RedirectProps<H>,
+  context?: any
+): VNode<any> | null;
+export function Link<H extends BaseLocationHook = LocationHook>(
+  props: LinkProps<H>,
+  context?: any
 ): VNode<any> | null;
 
 /*
@@ -82,21 +91,17 @@ export const Switch: FunctionComponent<SwitchProps>;
  * Components: <Router />
  */
 
-export interface RouterProps {
-  hook: BaseLocationHook;
-  base: Path;
-  matcher: MatcherFn;
-}
-export const Router: FunctionComponent<
-  Partial<RouterProps> & {
-    children: ComponentChildren;
-  }
->;
+export type RouterProps = RouterOptions & {
+  children: ComponentChildren;
+};
+
+export const Router: FunctionComponent<RouterProps>;
 
 /*
  * Hooks
  */
-export function useRouter(): RouterProps;
+
+export function useRouter(): RouterObject;
 
 export function useRoute<T extends DefaultParams = DefaultParams>(
   pattern: Path
