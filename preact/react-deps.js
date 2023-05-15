@@ -13,11 +13,20 @@ export {
   useContext,
 } from "preact/hooks";
 
+// Copied from:
+// https://github.com/facebook/react/blob/main/packages/shared/ExecutionEnvironment.js
+const canUseDOM = !!(
+  typeof window !== "undefined" &&
+  typeof window.document !== "undefined" &&
+  typeof window.document.createElement !== "undefined"
+);
+
 // TODO: switch to `export { useSyncExternalStore } from "preact/compat"` once we update Preact to >= 10.11.3
 function is(x, y) {
   return (x === y && (x !== 0 || 1 / x === 1 / y)) || (x !== x && y !== y);
 }
-export function useSyncExternalStore(subscribe, getSnapshot) {
+export function useSyncExternalStore(subscribe, getSnapshot, getSSRSnapshot) {
+  if (getSSRSnapshot && !canUseDOM) getSnapshot = getSSRSnapshot;
   const value = getSnapshot();
 
   const [{ _instance }, forceUpdate] = useState({
