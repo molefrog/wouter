@@ -21,7 +21,7 @@
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
 
-- Zero dependency, only **1.36 KB** gzipped vs 11KB
+- Zero dependency, only **4.4 KB** minified vs 65.8KB
   [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read
   _["Preact support" section](#preact-support)_ for more details.
