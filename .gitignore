@@ -31,6 +31,7 @@ preact/index.js
 preact/matcher.js
 preact/use-location.js
 preact/static-location.js
+preact/path-functions.js
 preact/types/*.d.ts
 
 # type definitions in the project root are copied from types/ folder
