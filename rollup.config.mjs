@@ -1,4 +1,5 @@
 import replace from "@rollup/plugin-replace";
+import { defineConfig } from "rollup";
 
 // support for preact builds
 const isPreact = String(process.env.DIR).indexOf("preact") !== -1;
@@ -10,6 +11,7 @@ const ESM_SOURCES = [
   "matcher.js",
   "react-deps.js",
   "use-location.js",
+  "static-location.js",
   ...(isPreact
     ? []
     : // only included in React build
@@ -18,7 +20,7 @@ const ESM_SOURCES = [
 
 const OUTPUT_DIR = "cjs";
 
-export default [
+export default defineConfig([
   {
     input: ESM_SOURCES,
     external: [
@@ -48,13 +50,4 @@ export default [
       }),
     ],
   },
-  {
-    // TODO: migrate `static-location` to ESM object exports
-    input: "static-location.js",
-    output: {
-      dir: OUTPUT_DIR,
-      format: "cjs",
-      exports: "auto",
-    },
-  },
-];
+]);
