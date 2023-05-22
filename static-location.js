@@ -1,4 +1,4 @@
-import { absolutePath, relativePath } from './path-functions.js'
+import { absolutePath, relativePath } from "./path-functions.js";
 
 // Generates static `useLocation` hook. The hook always
 // responds with initial path provided.
