@@ -1,0 +1,84 @@
+{
+  "name": "wouter",
+  "version": "2.11.0",
+  "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
+  "type": "module",
+  "keywords": [
+    "react",
+    "preact",
+    "router",
+    "tiny",
+    "routing",
+    "hooks",
+    "useLocation"
+  ],
+  "files": [
+    "dist",
+    "types/**/*.d.ts",
+    "types/*.d.ts"
+  ],
+  "exports": {
+    ".": {
+      "types": "./types/ts4.1/index.d.ts",
+      "require": "./cjs/index.js",
+      "default": "./dist/index.js"
+    },
+    "./use-location": {
+      "types": "./types/use-location.d.ts",
+      "require": "./cjs/use-location.js",
+      "default": "./dist/use-location.js"
+    },
+    "./matcher": {
+      "types": "./types/matcher.d.ts",
+      "require": "./cjs/matcher.js",
+      "default": "./dist/matcher.js"
+    },
+    "./static-location": {
+      "types": "./types/static-location.d.ts",
+      "require": "./cjs/static-location.js",
+      "default": "./dist/static-location.js"
+    }
+  },
+  "main": "cjs/index.js",
+  "module": "src/index.js",
+  "types": "types/ts3.9.4/index.d.ts",
+  "typesVersions": {
+    ">=4.1": {
+      "types/ts3.9.4/index.d.ts": [
+        "types/ts4.1/index.d.ts"
+      ],
+      "use-location": [
+        "types/use-location.d.ts"
+      ],
+      "matcher": [
+        "types/matcher.d.ts"
+      ],
+      "static-location": [
+        "types/static-location.d.ts"
+      ]
+    },
+    "<4.1": {
+      "use-location": [
+        "types/use-location.d.ts"
+      ],
+      "matcher": [
+        "types/matcher.d.ts"
+      ],
+      "static-location": [
+        "types/static-location.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "author": "Alexey Taktarov <molefrog@gmail.com>",
+  "repository": "molefrog/wouter",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "dependencies": {
+    "use-sync-external-store": "^1.0.0"
+  }
+}

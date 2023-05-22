@@ -1,81 +1,17 @@
 {
-  "name": "wouter",
-  "version": "2.11.0",
+  "name": "wouter-monorepo",
+  "private": true,
   "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
   "type": "module",
-  "keywords": [
-    "react",
-    "preact",
-    "router",
-    "tiny",
-    "routing",
-    "hooks",
-    "useLocation"
+  "workspaces": [
+    "packages/wouter",
+    "packages/wouter-preact"
   ],
-  "files": [
-    "*.js",
-    "types/**/*.d.ts",
-    "types/*.d.ts",
-    "preact",
-    "cjs"
-  ],
-  "exports": {
-    ".": {
-      "types": "./types/ts4.1/index.d.ts",
-      "require": "./cjs/index.js",
-      "default": "./index.js"
-    },
-    "./use-location": {
-      "types": "./types/use-location.d.ts",
-      "require": "./cjs/use-location.js",
-      "default": "./use-location.js"
-    },
-    "./matcher": {
-      "types": "./types/matcher.d.ts",
-      "require": "./cjs/matcher.js",
-      "default": "./matcher.js"
-    },
-    "./static-location": {
-      "types": "./types/static-location.d.ts",
-      "require": "./cjs/static-location.js",
-      "default": "./static-location.js"
-    }
-  },
-  "main": "cjs/index.js",
-  "module": "index.js",
-  "types": "types/ts3.9.4/index.d.ts",
-  "typesVersions": {
-    ">=4.1": {
-      "types/ts3.9.4/index.d.ts": [
-        "types/ts4.1/index.d.ts"
-      ],
-      "use-location": [
-        "types/use-location.d.ts"
-      ],
-      "matcher": [
-        "types/matcher.d.ts"
-      ],
-      "static-location": [
-        "types/static-location.d.ts"
-      ]
-    },
-    "<4.1": {
-      "use-location": [
-        "types/use-location.d.ts"
-      ],
-      "matcher": [
-        "types/matcher.d.ts"
-      ],
-      "static-location": [
-        "types/static-location.d.ts"
-      ]
-    }
-  },
   "scripts": {
     "fix:p": "prettier --write './**/*.(js|ts){x,}'",
     "test": "jest --verbose --coverage",
     "size": "size-limit",
-    "build": "npm run bundle",
+    "build": "npm run build -ws",
     "clean": "rimraf cjs && rimraf preact/cjs",
     "lint": "eslint *.js preact/",
     "lint-types": "npm run lint-types-react && npm run lint-types-preact",
@@ -165,6 +101,8 @@
     ]
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^5.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-replace": "^5.0.2",
     "@size-limit/preset-small-lib": "^6.0.4",
     "@testing-library/react": "^14.0.0",
