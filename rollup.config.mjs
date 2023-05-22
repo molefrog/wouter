@@ -36,7 +36,6 @@ export default defineConfig([
     output: {
       dir: OUTPUT_DIR,
       format: "cjs",
-      preserveModules: true,
       exports: "named",
     },
     plugins: [
