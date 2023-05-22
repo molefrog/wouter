@@ -25,18 +25,6 @@ dist/
 # test coverage
 coverage/
 
-# preact dist: all files are ignored by default
-# expect sources that are Preact-specific
-preact/index.js
-preact/matcher.js
-preact/use-location.js
-preact/static-location.js
-preact/paths.js
-preact/types/*.d.ts
-
 # type definitions in the project root are copied from types/ folder
 # before publishing, so they should be ignored
 /*.d.ts
-
-# ignore bundled CommonJS files
-cjs/

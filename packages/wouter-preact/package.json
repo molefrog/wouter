@@ -70,10 +70,16 @@
       ]
     }
   },
+  "scripts": {
+    "build": "rollup -c"
+  },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": "molefrog/wouter",
   "license": "ISC",
   "peerDependencies": {
     "preact": "^10.0.0"
+  },
+  "devDependencies": {
+    "wouter": "latest"
   }
 }
