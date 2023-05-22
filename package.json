@@ -81,7 +81,7 @@
     "lint-types": "npm run lint-types-react && npm run lint-types-preact",
     "lint-types-react": "dtslint types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
     "lint-types-preact": "npm run preact && npm run types-preact && dtslint preact/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint preact/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
-    "preact": "copyfiles -f {index,matcher,use-location,static-location}.js preact/",
+    "preact": "copyfiles -f {index,matcher,use-location,static-location,path-functions}.js preact/",
     "types-preact": "copyfiles -f types/{matcher,use-location,static-location,router}.d.ts preact/types",
     "bundle": "rollup -c && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
     "prepublishOnly": "npm run clean && npm run preact && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
