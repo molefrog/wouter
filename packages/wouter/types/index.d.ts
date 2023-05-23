@@ -18,10 +18,10 @@ import {
   HookReturnValue,
   HookNavigationOptions,
   LocationHook,
-} from "../use-location";
+} from "./use-location";
 
-import { DefaultParams, Match } from "../matcher";
-import { RouterObject, RouterOptions } from "../router";
+import { DefaultParams, Match } from "./matcher";
+import { RouterObject, RouterOptions } from "./router";
 
 // re-export some types from these modules
 export {
@@ -30,9 +30,9 @@ export {
   MatchWithParams,
   NoMatch,
   Match,
-} from "../matcher";
-export { Path, BaseLocationHook, LocationHook } from "../use-location";
-export * from "../router";
+} from "./matcher";
+export { Path, BaseLocationHook, LocationHook } from "./use-location";
+export * from "./router";
 
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.
