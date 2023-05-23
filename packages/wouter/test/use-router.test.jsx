@@ -1,8 +1,8 @@
-import React, { cloneElement } from "react";
+import { cloneElement } from "react";
 import { renderHook } from "@testing-library/react";
 import TestRenderer from "react-test-renderer";
-
-import { Router, useRouter } from "..";
+import { it, expect } from "vitest";
+import { Router, useRouter } from "wouter";
 
 it("creates a router object on demand", () => {
   const { result } = renderHook(() => useRouter());

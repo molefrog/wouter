@@ -1,5 +1,5 @@
 {
-  "name": "wouter-monorepo",
+  "name": "monorepo",
   "private": true,
   "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
   "type": "module",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "fix:p": "prettier --write './**/*.(js|ts){x,}'",
-    "test": "jest --verbose --coverage",
+    "test": "vitest",
     "size": "size-limit",
     "build": "npm run build -ws",
     "lint": "eslint packages/**/*.js",
@@ -73,8 +73,7 @@
     },
     "env": {
       "browser": true,
-      "node": true,
-      "jest": true
+      "node": true
     },
     "rules": {
       "no-unused-vars": [
@@ -94,30 +93,21 @@
       "types/**"
     ]
   },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "transform": {
-      "\\.js$": "jest-esm-jsx-transform"
-    },
-    "collectCoverageFrom": [
-      "*.js",
-      "!use-sync-external-store*.js"
-    ]
-  },
   "devDependencies": {
+    "@preact/preset-vite": "^2.5.0",
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-replace": "^5.0.2",
     "@size-limit/preset-small-lib": "^6.0.4",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
     "copyfiles": "^2.4.1",
     "dtslint": "^3.4.2",
     "eslint": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.0",
-    "jest": "^27.3.1",
-    "jest-esm-jsx-transform": "^1.0.0",
+    "jsdom": "^22.0.0",
     "preact": "^10.0.0",
     "preact-render-to-string": "^6.0.3",
     "prettier": "^2.4.1",
@@ -127,7 +117,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^3.7.4",
     "size-limit": "^6.0.4",
-    "typescript": "4.4.2",
-    "typescript-3.9.4": "npm:typescript@3.9.4"
+    "typescript": "5.0.4",
+    "vitest": "^0.31.1"
   }
 }

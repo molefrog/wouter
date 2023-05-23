@@ -1,7 +1,8 @@
-import React from "react";
+import * as React from "react";
+import { it, expect, afterEach, vi } from "vitest";
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
-import { Router, Link } from "..";
+import { Router, Link } from "wouter";
 
 const LinkWithForwardedRef = (props) => {
   const ref = React.createRef();
@@ -151,7 +152,7 @@ it("ignores the navigation when event is cancelled", () => {
 });
 
 it("accepts an `onClick` prop, fired before the navigation", () => {
-  const clickHandler = jest.fn();
+  const clickHandler = vi.fn();
 
   const { getByTestId } = render(
     <Link href="/" onClick={clickHandler}>

@@ -1,8 +1,8 @@
-import React from "react";
+import { it, expect } from "vitest";
 import { render, act } from "@testing-library/react";
 import TestRenderer from "react-test-renderer";
 
-import { Router, Route } from "..";
+import { Router, Route } from "wouter";
 import { memoryLocation } from "./test-utils.js";
 
 const testRouteRender = (initialPath, jsx) => {

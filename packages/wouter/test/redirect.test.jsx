@@ -1,7 +1,7 @@
-import React from "react";
+import { it, expect } from "vitest";
 import { render } from "@testing-library/react";
 
-import { Redirect, Router } from "..";
+import { Redirect, Router } from "wouter";
 import { customHookWithReturn } from "./test-utils.js";
 
 it("renders nothing", () => {

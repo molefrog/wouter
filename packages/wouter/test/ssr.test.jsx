@@ -1,11 +1,10 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 
-import React from "react";
+import { it, expect, describe } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-
-import { Route, Router, useRoute, Link, Redirect } from "..";
+import { Route, Router, useRoute, Link, Redirect } from "wouter";
 
 describe("server-side rendering", () => {
   it("works via staticHistory", () => {
