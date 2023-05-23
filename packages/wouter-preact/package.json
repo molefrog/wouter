@@ -19,7 +19,7 @@
   ],
   "exports": {
     ".": {
-      "types": "./types/ts4.1/index.d.ts",
+      "types": "./types/index.d.ts",
       "default": "./esm/index.js"
     },
     "./use-location": {
@@ -35,32 +35,17 @@
       "default": "./esm/static-location.js"
     }
   },
-  "module": "esm/index.js",
-  "types": "types/ts3.9.4/index.d.ts",
+  "types": "types/index.d.ts",
   "typesVersions": {
-    ">=4.1": {
-      "types/ts3.9.4/index.d.ts": [
-        "types/ts4.1/index.d.ts"
+    "*": {
+      "types/index.d.ts": [
+        "types/index.d.ts"
       ],
       "use-location": [
         "types/use-location.d.ts"
       ],
       "matcher": [
         "types/matcher.d.ts"
-      ],
-      "static-location": [
-        "types/static-location.d.ts"
-      ]
-    },
-    "<4.1": {
-      "use-location": [
-        "types/use-location.d.ts"
-      ],
-      "matcher": [
-        "types/matcher.d.ts"
-      ],
-      "static-location": [
-        "types/static-location.d.ts"
       ]
     }
   },

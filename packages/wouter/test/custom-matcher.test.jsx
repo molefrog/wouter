@@ -1,7 +1,7 @@
-import React from "react";
+import { it, expect } from "vitest";
 import TestRenderer from "react-test-renderer";
 
-import { Router, Route } from "..";
+import { Router, Route } from "wouter";
 import { memoryLocation } from "./test-utils.js";
 
 const customMatcher = (pattern, path) => {
@@ -23,6 +23,7 @@ const routeMatches = (pattern, path) => {
 
   try {
     phrase = instance.findByType("h1").props.children;
+    // eslint-disable-next-line no-empty
   } catch (e) {}
 
   return phrase === "it worked!";

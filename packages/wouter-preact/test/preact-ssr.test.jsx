@@ -1,12 +1,10 @@
 /**
- * @jsx h
- * @jest-environment node
+ * @vitest-environment node
  */
 
-import { h } from "preact";
 import renderToString from "preact-render-to-string";
-
-import { Route, Link, Switch, Router, useLocation } from "..";
+import { it, expect, describe } from "vitest";
+import { Route, Link, Switch, Router, useLocation } from "wouter-preact";
 
 describe("Preact SSR", () => {
   it("supports SSR", () => {

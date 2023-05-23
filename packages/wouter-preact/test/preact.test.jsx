@@ -1,8 +1,8 @@
-/** @jsx h */
-import { h, Fragment, render } from "preact";
+import { render } from "preact";
+import { it, expect, describe, beforeEach, afterEach, vi } from "vitest";
 import { act, setupRerender, teardown } from "preact/test-utils";
 
-import { Route, Link, Switch } from "..";
+import { Route, Link, Switch } from 'wouter-preact'
 
 describe("Preact support", () => {
   beforeEach(() => {
@@ -16,10 +16,10 @@ describe("Preact support", () => {
 
   it("renders properly and reacts on navigation", () => {
     const container = document.body.appendChild(document.createElement("div"));
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     const App = () => (
-      <Fragment>
+      <>
         <nav>
           <Link href="/albums/all" onClick={fn} data-testid="index-link">
             The Best Albums Ever
@@ -41,7 +41,7 @@ describe("Preact support", () => {
             <Route path="/:anything*">Nothing was found!</Route>
           </Switch>
         </main>
-      </Fragment>
+      </>
     );
 
     let node = render(<App />, container);
