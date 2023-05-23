@@ -1,5 +1,5 @@
 import { useSyncExternalStore, useEvent } from "./react-deps.js";
-import { absolutePath, relativePath } from "./path-functions.js";
+import { absolutePath, relativePath } from "./paths.js";
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
