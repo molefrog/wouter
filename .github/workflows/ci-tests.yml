@@ -26,7 +26,10 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-      - name: Run Jest
+      - name: Build packages
+        run: |
+          npm run build
+      - name: Run test
         run: npm test
       - name: Lint Sources with ESLint
         run: npm run lint
