@@ -13,7 +13,7 @@ export default defineConfig([
     external: ["preact", "preact/hooks"],
 
     output: {
-      dir: "dist",
+      dir: "esm",
       format: "esm",
     },
     plugins: [
