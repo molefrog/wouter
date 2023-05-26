@@ -4,7 +4,7 @@ export default defineConfig([
   {
     input: ["src/react-deps.js"],
     output: {
-      dir: "dist",
+      dir: "esm",
       format: "esm",
     },
     external: [
@@ -22,7 +22,7 @@ export default defineConfig([
     ],
     external: [/react-deps/],
     output: {
-      dir: "dist",
+      dir: "esm",
       format: "esm",
     },
   },

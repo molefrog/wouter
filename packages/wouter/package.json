@@ -13,29 +13,29 @@
     "useLocation"
   ],
   "files": [
-    "dist",
+    "esm",
     "types/**/*.d.ts",
     "types/*.d.ts"
   ],
   "exports": {
     ".": {
       "types": "./types/ts4.1/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./esm/index.js"
     },
     "./use-location": {
       "types": "./types/use-location.d.ts",
-      "default": "./dist/use-location.js"
+      "default": "./esm/use-location.js"
     },
     "./matcher": {
       "types": "./types/matcher.d.ts",
-      "default": "./dist/matcher.js"
+      "default": "./esm/matcher.js"
     },
     "./static-location": {
       "types": "./types/static-location.d.ts",
-      "default": "./dist/static-location.js"
+      "default": "./esm/static-location.js"
     }
   },
-  "module": "dist/index.js",
+  "module": "esm/index.js",
   "types": "types/ts3.9.4/index.d.ts",
   "typesVersions": {
     ">=4.1": {

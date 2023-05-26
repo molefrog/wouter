@@ -35,24 +35,24 @@
   },
   "size-limit": [
     {
-      "path": "packages/wouter/dist/index.js",
+      "path": "packages/wouter/esm/index.js",
       "limit": "2000 B",
       "ignore": ["react", "use-sync-external-store"]
     },
     {
 
-      "path": "packages/wouter/dist/use-location.js",
+      "path": "packages/wouter/esm/use-location.js",
       "limit": "1000 B",
       "ignore": ["react", "use-sync-external-store"]
     },
     {
-      "path": "packages/wouter-preact/dist/index.js",
+      "path": "packages/wouter-preact/esm/index.js",
       "limit": "2000 B",
       "ignore": ["preact", "preact/hooks"]
     },
 
     {
-      "path": "packages/wouter-preact/dist/use-location.js",
+      "path": "packages/wouter-preact/esm/use-location.js",
       "limit": "1000 B",
       "ignore": ["preact", "preact/hooks"]
     }
