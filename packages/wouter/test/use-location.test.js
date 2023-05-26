@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { renderHook, act } from "@testing-library/react";
-import useLocation, { navigate, useSearch } from "../use-location.js";
+import useLocation, { navigate, useSearch } from "../src/use-location.js";
 
 it("returns a pair [value, update]", () => {
   const { result, unmount } = renderHook(() => useLocation());

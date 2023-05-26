@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 
-import { Redirect, Router } from "../index.js";
+import { Redirect, Router } from "..";
 import { customHookWithReturn } from "./test-utils.js";
 
 it("renders nothing", () => {

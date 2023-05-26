@@ -5,8 +5,7 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Route, Router, useRoute, Link, Redirect } from "../index";
-import staticLocationHook from "../static-location.js";
+import { Route, Router, useRoute, Link, Redirect } from "..";
 
 describe("server-side rendering", () => {
   it("works via staticHistory", () => {

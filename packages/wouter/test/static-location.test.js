@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import staticLocation from "../static-location.js";
+import staticLocation from "../src/static-location.js";
 
 it("is a static hook factory", () => {
   const hook = staticLocation("/never-gonna-give");
