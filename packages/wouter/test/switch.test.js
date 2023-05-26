@@ -1,7 +1,7 @@
 import React from "react";
 import TestRenderer from "react-test-renderer";
 
-import { Router, Route, Switch } from "../index.js";
+import { Router, Route, Switch } from "..";
 import { memoryLocation } from "./test-utils.js";
 
 import { render, act } from "@testing-library/react";

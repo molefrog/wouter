@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
-import { Router, Link } from "../index.js";
+import { Router, Link } from "..";
 
 const LinkWithForwardedRef = (props) => {
   const ref = React.createRef();

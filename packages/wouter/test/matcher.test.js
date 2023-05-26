@@ -1,4 +1,4 @@
-import createMatcher from "../matcher";
+import createMatcher from "../src/matcher.js";
 
 it("exports a factory function", () => {
   expect(createMatcher).toBeInstanceOf(Function);

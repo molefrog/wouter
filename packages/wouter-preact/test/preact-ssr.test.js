@@ -6,9 +6,7 @@
 import { h } from "preact";
 import renderToString from "preact-render-to-string";
 
-// make the library use Preact exports
-jest.mock("../react-deps.js", () => require("../preact/react-deps.js"));
-const { Route, Link, Switch, Router, useLocation } = require("../index.js");
+import { Route, Link, Switch, Router, useLocation } from "..";
 
 describe("Preact SSR", () => {
   it("supports SSR", () => {

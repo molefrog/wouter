@@ -2,9 +2,7 @@
 import { h, Fragment, render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
 
-// make the library use Preact exports
-jest.mock("../react-deps.js", () => require("../preact/react-deps.js"));
-const { Route, Link, Switch } = require("../index.js");
+import { Route, Link, Switch } from "..";
 
 describe("Preact support", () => {
   beforeEach(() => {

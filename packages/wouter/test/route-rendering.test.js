@@ -2,7 +2,7 @@ import React from "react";
 import { render, act } from "@testing-library/react";
 import TestRenderer from "react-test-renderer";
 
-import { Router, Route } from "../index.js";
+import { Router, Route } from "..";
 import { memoryLocation } from "./test-utils.js";
 
 const testRouteRender = (initialPath, jsx) => {
