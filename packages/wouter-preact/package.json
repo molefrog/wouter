@@ -13,35 +13,29 @@
     "useLocation"
   ],
   "files": [
-    "*.js",
+    "dist",
     "types/**/*.d.ts",
-    "types/*.d.ts",
-    "cjs"
+    "types/*.d.ts"
   ],
   "exports": {
     ".": {
       "types": "./types/ts4.1/index.d.ts",
-      "require": "./cjs/index.js",
-      "default": "./index.js"
+      "default": "./dist/index.js"
     },
     "./use-location": {
       "types": "./types/use-location.d.ts",
-      "require": "./cjs/use-location.js",
-      "default": "./use-location.js"
+      "default": "./dist/use-location.js"
     },
     "./matcher": {
       "types": "./types/matcher.d.ts",
-      "require": "./cjs/matcher.js",
-      "default": "./matcher.js"
+      "default": "./dist/matcher.js"
     },
     "./static-location": {
       "types": "./types/static-location.d.ts",
-      "require": "./cjs/static-location.js",
-      "default": "./static-location.js"
+      "default": "./dist/static-location.js"
     }
   },
-  "main": "cjs/index.js",
-  "module": "index.js",
+  "module": "dist/index.js",
   "types": "types/ts3.9.4/index.d.ts",
   "typesVersions": {
     ">=4.1": {
