@@ -12,7 +12,7 @@ describe("server-side rendering", () => {
       <Router ssrPath="/users/baz">
         <Route path="/users/baz">foo</Route>
         <Route path="/users/:any*">bar</Route>
-        <Route path="/users/:id">{(params) => params.id}</Route>
+        <Route<{ id: string }> path="/users/:id">{(params) => params.id}</Route>
         <Route path="/about">should not be rendered</Route>
       </Router>
     );
@@ -23,8 +23,8 @@ describe("server-side rendering", () => {
 
   it("supports hook-based routes", () => {
     const HookRoute = () => {
-      const [match, params] = useRoute("/pages/:name");
-      return match ? `Welcome to ${params.name}!` : "Not Found!";
+      const [match, params] = useRoute<{ name: string }>("/pages/:name");
+      return <>{match ? `Welcome to ${params.name}!` : "Not Found!"}</>;
     };
 
     const App = () => (
