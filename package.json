@@ -14,8 +14,8 @@
     "build": "npm run build -ws",
     "lint": "eslint packages/**/*.js",
     "lint-types": "npm run lint-types-react && npm run lint-types-preact",
-    "lint-types-react": "dtslint packages/wouter/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint packages/wouter/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
-    "lint-types-preact": "npm run types-preact && dtslint packages/wouter-preact/types/ts4.1 --localTs ./node_modules/typescript/lib && dtslint packages/wouter-preact/types/ts3.9.4 --localTs ./node_modules/typescript-3.9.4/lib",
+    "lint-types-react": "dtslint packages/wouter/types/ --localTs ./node_modules/typescript/lib",
+    "lint-types-preact": "npm run types-preact && dtslint packages/wouter-preact/types/ --localTs ./node_modules/typescript/lib",
     "types-preact": "copyfiles -f packages/wouter/types/{matcher,use-location,static-location,router}.d.ts packages/wouter-preact/types"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",

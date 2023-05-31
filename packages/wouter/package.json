@@ -46,6 +46,9 @@
       ],
       "matcher": [
         "types/matcher.d.ts"
+      ],
+      "static-location": [
+        "./types/static-location.d.ts"
       ]
     }
   },
