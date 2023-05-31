@@ -1,8 +1,8 @@
-import { render } from "preact";
 import { it, expect, describe, beforeEach, afterEach, vi } from "vitest";
+import { render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
 
-import { Route, Link, Switch } from 'wouter-preact'
+import { Route, Link, Switch } from "wouter-preact";
 
 describe("Preact support", () => {
   beforeEach(() => {
@@ -33,9 +33,9 @@ describe("Preact support", () => {
 
         <main data-testid="routes">
           <Switch>
-            Welcome to the list of {100} greatest albums of all time!
+            <>Welcome to the list of {100} greatest albums of all time!</>
             <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
-            <Route path="/albums/:name">
+            <Route<{ name: string }> path="/albums/:name">
               {(params) => `Album ${params.name}`}
             </Route>
             <Route path="/:anything*">Nothing was found!</Route>

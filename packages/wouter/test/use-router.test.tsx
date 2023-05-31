@@ -31,6 +31,7 @@ it("returns customized router provided by the <Router />", () => {
   const newMatcher = () => "n00p";
 
   const { result } = renderHook(() => useRouter(), {
+    // @ts-expect-error
     wrapper: (props) => <Router matcher={newMatcher}>{props.children}</Router>,
   });
   const router = result.current;
@@ -55,6 +56,7 @@ it("shares one router instance between components", () => {
   );
 
   const uniqRouters = [
+    // @ts-expect-error
     ...new Set(root.findAllByType("div").map((x) => x.props.router)),
   ];
   expect(uniqRouters.length).toBe(1);

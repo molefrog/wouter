@@ -8,10 +8,12 @@ const LinkWithForwardedRef = (props) => {
   const ref = React.createRef();
 
   React.useEffect(() => {
+    // @ts-expect-error
     ref.current.innerHTML = "Tested";
   }, [ref]);
 
   return (
+    // @ts-expect-error
     <Link href="/about" ref={ref}>
       {props.children}
     </Link>
@@ -29,8 +31,11 @@ it("renders a link with proper attributes", () => {
 
   const link = container.firstChild;
 
+  // @ts-expect-error
   expect(link.tagName).toBe("A");
+  // @ts-expect-error
   expect(link.className).toBe("link--active");
+  // @ts-expect-error
   expect(link.getAttribute("href")).toBe("/about");
   expect(link.textContent).toBe("Click Me");
 });
@@ -39,6 +44,7 @@ it("wraps children in an <a /> if needed", () => {
   const { container } = render(<Link href="/about">Testing</Link>);
   const link = container.firstChild;
 
+  // @ts-expect-error
   expect(link.tagName).toBe("A");
   expect(link.textContent).toBe("Testing");
 });
@@ -52,7 +58,9 @@ it("works for any other elements as well", () => {
 
   const link = container.firstChild;
 
+  // @ts-expect-error
   expect(link.tagName).toBe("DIV");
+  // @ts-expect-error
   expect(link.className).toBe("link--wannabe");
   expect(link.textContent).toBe("Click Me");
 });
@@ -63,6 +71,7 @@ it("passes ref to <a />", () => {
   );
   const link = container.firstChild;
 
+  // @ts-expect-error
   expect(link.tagName).toBe("A");
   expect(link.textContent).toBe("Tested");
 });
@@ -75,6 +84,7 @@ it("passes ref to any other child element", () => {
   );
   const link = container.firstChild;
 
+  // @ts-expect-error
   expect(link.tagName).toBe("DIV");
   expect(link.textContent).toBe("Tested");
 });
@@ -83,7 +93,9 @@ it("still creates a plain link when nothing is passed", () => {
   const { container } = render(<Link href="/about" />);
   const link = container.firstChild;
 
+  // @ts-expect-error
   expect(link.tagName).toBe("A");
+  // @ts-expect-error
   expect(link.getAttribute("href")).toBe("/about");
 });
 
@@ -91,6 +103,7 @@ it("supports `to` prop as an alias to `href`", () => {
   const { container } = render(<Link to="/about">Hello</Link>);
   const link = container.firstChild;
 
+  // @ts-expect-error
   expect(link.getAttribute("href")).toBe("/about");
 });
 

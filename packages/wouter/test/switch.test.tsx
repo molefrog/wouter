@@ -17,6 +17,7 @@ const testRouteRender = (initialPath, jsx) => {
 };
 
 it("works well when nothing is provided", () => {
+  // @ts-expect-error
   const result = testRouteRender("/users/12", <Switch />);
   expect(result.children[0].children.length).toBe(0);
 });
