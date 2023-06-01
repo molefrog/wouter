@@ -81,8 +81,7 @@ it("supports `base` routers with relative path", () => {
   act(() => history.replaceState(null, "", "/app/nested"));
 
   expect(container.childNodes.length).toBe(1);
-  // @ts-expect-error
-  expect(container.firstChild.tagName).toBe("H1");
+  expect((container.firstChild as HTMLElement).tagName).toBe("H1");
 
   unmount();
 });
@@ -102,8 +101,7 @@ it("supports `base` routers with absolute path", () => {
   act(() => history.replaceState(null, "", "/absolute"));
 
   expect(container.childNodes.length).toBe(1);
-  // @ts-expect-error
-  expect(container.firstChild.tagName).toBe("H2");
+  expect((container.firstChild as HTMLElement).tagName).toBe("H2");
 
   unmount();
 });

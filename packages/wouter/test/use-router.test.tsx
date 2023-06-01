@@ -2,7 +2,8 @@ import { cloneElement } from "react";
 import { renderHook } from "@testing-library/react";
 import TestRenderer from "react-test-renderer";
 import { it, expect } from "vitest";
-import { Router, useRouter } from "wouter";
+import { Router, DefaultParams, useRouter } from "wouter";
+import type { MatcherFn } from "wouter/matcher";
 
 it("creates a router object on demand", () => {
   const { result } = renderHook(() => useRouter());
@@ -28,10 +29,9 @@ it("caches the router object if Router rerenders", () => {
 });
 
 it("returns customized router provided by the <Router />", () => {
-  const newMatcher = () => "n00p";
+  const newMatcher: MatcherFn = () => [true, null];
 
   const { result } = renderHook(() => useRouter(), {
-    // @ts-expect-error
     wrapper: (props) => <Router matcher={newMatcher}>{props.children}</Router>,
   });
   const router = result.current;
@@ -56,8 +56,9 @@ it("shares one router instance between components", () => {
   );
 
   const uniqRouters = [
-    // @ts-expect-error
-    ...new Set(root.findAllByType("div").map((x) => x.props.router)),
+    ...new Set<DefaultParams>(
+      root.findAllByType("div").map((x) => x.props.router)
+    ),
   ];
   expect(uniqRouters.length).toBe(1);
 });
