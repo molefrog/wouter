@@ -1,9 +1,8 @@
-import { cloneElement } from "react";
+import { ComponentProps, ReactElement, ReactNode, cloneElement } from "react";
 import { renderHook } from "@testing-library/react";
-import TestRenderer from "react-test-renderer";
+import * as TestRenderer from "react-test-renderer";
 import { it, expect } from "vitest";
 import { Router, DefaultParams, useRouter } from "wouter";
-import type { MatcherFn } from "wouter/matcher";
 
 it("creates a router object on demand", () => {
   const { result } = renderHook(() => useRouter());
@@ -29,9 +28,10 @@ it("caches the router object if Router rerenders", () => {
 });
 
 it("returns customized router provided by the <Router />", () => {
-  const newMatcher: MatcherFn = () => [true, null];
+  const newMatcher = () => [true, null];
 
   const { result } = renderHook(() => useRouter(), {
+    // @ts-expect-error
     wrapper: (props) => <Router matcher={newMatcher}>{props.children}</Router>,
   });
   const router = result.current;
@@ -41,7 +41,7 @@ it("returns customized router provided by the <Router />", () => {
 });
 
 it("shares one router instance between components", () => {
-  const RouterGetter = ({ el }) => {
+  const RouterGetter = ({ el }: { el: ReactElement }) => {
     const router = useRouter();
     return cloneElement(el, { router: router });
   };
@@ -64,7 +64,9 @@ it("shares one router instance between components", () => {
 });
 
 it("inherits base path from the parent router when parent router is provided", () => {
-  const NestedRouter = (props) => {
+  const NestedRouter = (
+    props: ComponentProps<typeof Router> & { nested: boolean }
+  ) => {
     const parent = useRouter();
     return <Router {...props} parent={props.nested ? parent : undefined} />;
   };
@@ -80,7 +82,7 @@ it("inherits base path from the parent router when parent router is provided", (
   });
 
   const router = result.current;
-  expect(router.parent.base).toBe("/app");
+  expect(router.parent?.base).toBe("/app");
   expect(router.base).toBe("/app/users");
 });
 

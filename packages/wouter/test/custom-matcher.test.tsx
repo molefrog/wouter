@@ -1,17 +1,18 @@
 import { it, expect } from "vitest";
-import TestRenderer from "react-test-renderer";
+import * as TestRenderer from "react-test-renderer";
 
 import { Router, Route } from "wouter";
 import type { MatcherFn } from "wouter/matcher";
 import { memoryLocation } from "./test-utils.js";
 
+// @ts-expect-error
 const customMatcher: MatcherFn = (pattern: string, path: string) => {
   const reversed = path.replace(/^\//, "").split("").reverse().join("");
 
   return [pattern.replace(/^\//, "") === reversed, null];
 };
 
-const routeMatches = (pattern, path) => {
+const routeMatches = (pattern: string, path: string) => {
   const instance = TestRenderer.create(
     <Router hook={memoryLocation(path)} matcher={customMatcher}>
       <Route path={pattern}>

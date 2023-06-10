@@ -1,11 +1,12 @@
 import { it, expect } from "vitest";
 import { render, act } from "@testing-library/react";
-import TestRenderer from "react-test-renderer";
+import * as TestRenderer from "react-test-renderer";
 
 import { Router, Route } from "wouter";
 import { memoryLocation } from "./test-utils.js";
+import { ReactElement } from "react";
 
-const testRouteRender = (initialPath, jsx) => {
+const testRouteRender = (initialPath: string, jsx: ReactElement) => {
   const instance = TestRenderer.create(
     <Router hook={memoryLocation(initialPath)}>{jsx}</Router>
   ).root;
@@ -36,7 +37,7 @@ it("works with render props", () => {
 it("passes a match param object to the render function", () => {
   const result = testRouteRender(
     "/users/alex",
-    <Route<{ name: string }> path="/users/:name">
+    <Route path="/users/:name">
       {(params) => <h1>{params.name}</h1>}
     </Route>
   );

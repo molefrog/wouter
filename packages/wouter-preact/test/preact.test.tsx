@@ -35,7 +35,7 @@ describe("Preact support", () => {
           <Switch>
             <>Welcome to the list of {100} greatest albums of all time!</>
             <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
-            <Route<{ name: string }> path="/albums/:name">
+            <Route path="/albums/:name">
               {(params) => `Album ${params.name}`}
             </Route>
             <Route path="/:anything*">Nothing was found!</Route>
@@ -46,9 +46,9 @@ describe("Preact support", () => {
 
     let node = render(<App />, container);
 
-    const routesEl = container.querySelector('[data-testid="routes"]');
-    const indexLinkEl = container.querySelector('[data-testid="index-link"]');
-    const featLinkEl = container.querySelector('[data-testid="featured-link"]');
+    const routesEl = container.querySelector('[data-testid="routes"]')!;
+    const indexLinkEl = container.querySelector('[data-testid="index-link"]')!;
+    const featLinkEl = container.querySelector('[data-testid="featured-link"]')!;
 
     // default route should be rendered
     expect(routesEl.textContent).toBe("Nothing was found!");

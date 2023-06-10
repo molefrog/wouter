@@ -1,14 +1,15 @@
-import TestRenderer from "react-test-renderer";
+import * as TestRenderer from "react-test-renderer";
 import { it, expect } from "vitest";
 
 import { Router, Route, Switch } from "wouter";
 import { memoryLocation } from "./test-utils.js";
 
 import { render, act } from "@testing-library/react";
+import { PropsWithChildren, ReactElement } from "react";
 
 const raf = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
-const testRouteRender = (initialPath, jsx) => {
+const testRouteRender = (initialPath: string, jsx: ReactElement) => {
   const instance = TestRenderer.create(
     <Router hook={memoryLocation(initialPath)}>{jsx}</Router>
   ).root;
@@ -19,6 +20,7 @@ const testRouteRender = (initialPath, jsx) => {
 it("works well when nothing is provided", () => {
   // @ts-expect-error
   const result = testRouteRender("/users/12", <Switch />);
+  // @ts-expect-error
   expect(result.children[0].children.length).toBe(0);
 });
 
@@ -38,6 +40,7 @@ it("always renders no more than 1 matched children", () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -53,6 +56,7 @@ it("ignores mixed children", () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -71,6 +75,7 @@ it("ignores falsy children", () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -78,7 +83,9 @@ it("ignores falsy children", () => {
 });
 
 it("matches regular components as well", () => {
-  const Dummy = (props) => props.children;
+  const Dummy = (props: PropsWithChildren<{ path: string }>) => (
+    <>{props.children}</>
+  );
 
   const result = testRouteRender(
     "/",
@@ -88,6 +95,7 @@ it("matches regular components as well", () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -102,6 +110,7 @@ it("allows to specify which routes to render via `location` prop", () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -144,6 +153,7 @@ it("supports catch-all routes with wildcard segments", async () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -163,6 +173,7 @@ it("uses a route without a path prop as a fallback", async () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -187,6 +198,7 @@ it("correctly handles arrays as children", async () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
@@ -213,6 +225,7 @@ it("correctly handles fragments as children", async () => {
     </Switch>
   );
 
+  // @ts-expect-error
   const rendered = result.children[0].children;
 
   expect(rendered.length).toBe(1);
