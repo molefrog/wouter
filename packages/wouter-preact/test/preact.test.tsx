@@ -48,7 +48,9 @@ describe("Preact support", () => {
 
     const routesEl = container.querySelector('[data-testid="routes"]')!;
     const indexLinkEl = container.querySelector('[data-testid="index-link"]')!;
-    const featLinkEl = container.querySelector('[data-testid="featured-link"]')!;
+    const featLinkEl = container.querySelector(
+      '[data-testid="featured-link"]'
+    )!;
 
     // default route should be rendered
     expect(routesEl.textContent).toBe("Nothing was found!");

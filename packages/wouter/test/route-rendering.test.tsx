@@ -37,9 +37,7 @@ it("works with render props", () => {
 it("passes a match param object to the render function", () => {
   const result = testRouteRender(
     "/users/alex",
-    <Route path="/users/:name">
-      {(params) => <h1>{params.name}</h1>}
-    </Route>
+    <Route path="/users/:name">{(params) => <h1>{params.name}</h1>}</Route>
   );
 
   expect(result.findByType("h1").props.children).toBe("alex");
