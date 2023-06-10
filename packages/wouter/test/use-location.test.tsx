@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { it, expect, describe, beforeEach } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import useLocation, { navigate, useSearch } from "wouter/use-location";
 
 it("returns a pair [value, update]", () => {
@@ -32,20 +32,17 @@ describe("`value` first argument", () => {
     unmount();
   });
 
-  // Vitest doesn't support Jest's legacy timers.
-  it.skip("supports history.back() navigation", () => {
-    // jest.useFakeTimers();
+  it("supports history.back() navigation", async () => {
     const { result, unmount } = renderHook(() => useLocation());
 
     act(() => history.pushState(null, "", "/foo"));
-    expect(result.current[0]).toBe("/foo");
+    await waitFor(() => expect(result.current[0]).toBe("/foo"));
 
     act(() => {
       history.back();
-      // jest.runAllTimers();
     });
 
-    expect(result.current[0]).toBe("/");
+    await waitFor(() => expect(result.current[0]).toBe("/"));
     unmount();
   });
 
