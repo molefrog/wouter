@@ -10,7 +10,9 @@ describe("edge cases", () => {
     const match = createMatcher();
 
     expect(() => {
+      // @ts-expect-error
       match(null, "foo");
+      // @ts-expect-error
       match(undefined, "foo");
       match("", "foo");
     }).not.toThrow();

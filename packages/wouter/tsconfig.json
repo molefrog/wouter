@@ -3,6 +3,6 @@
     "target": "ES2022",
     "moduleResolution": "node",
     "jsx": "react-jsx",
-    "types": ["vitest/globals"]
+    "strict": true,
   }
 }

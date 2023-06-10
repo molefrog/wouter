@@ -1,14 +1,16 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, PropsWithChildren, MouseEventHandler } from "react";
 import { it, expect, afterEach, vi } from "vitest";
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
 import { Router, Link } from "wouter";
 
-const LinkWithForwardedRef = (props) => {
-  const ref = useRef(null);
+const LinkWithForwardedRef = (props: PropsWithChildren<{}>) => {
+  const ref = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    ref.current.innerHTML = "Tested";
+    if (ref.current) {
+      ref.current.innerHTML = "Tested";
+    }
   }, [ref]);
 
   return (
@@ -138,7 +140,7 @@ it("ignores the navigation when clicked with modifiers", () => {
 });
 
 it("ignores the navigation when event is cancelled", () => {
-  const clickHandler = (e) => {
+  const clickHandler: MouseEventHandler = (e) => {
     e.preventDefault();
   };
 

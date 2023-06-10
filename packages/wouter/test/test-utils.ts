@@ -9,7 +9,7 @@ export const customHookWithReturn =
   (initialPath = "/") =>
   () => {
     const [path, updatePath] = useState(initialPath);
-    const navigate = (path) => {
+    const navigate = (path: string) => {
       updatePath(path);
       return "foo";
     };

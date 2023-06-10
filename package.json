@@ -101,6 +101,7 @@
     "@size-limit/preset-small-lib": "^6.0.4",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.0",
+    "@types/react-test-renderer": "^18.0.0",
     "@vitejs/plugin-react": "^4.0.0",
     "copyfiles": "^2.4.1",
     "dtslint": "^3.4.2",

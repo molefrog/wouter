@@ -51,6 +51,7 @@ it("supports replace navigation", () => {
 
 it("useLayoutEffect should return nothing", () => {
   const { unmount } = render(
+    // @ts-expect-error
     <Router hook={customHookWithReturn()}>
       <Redirect to="/users" replace />
     </Router>
