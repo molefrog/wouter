@@ -748,6 +748,56 @@ const UsersRoute = () => {
 
 Wouter's motto is **"Minimalist-friendly"**.
 
+### Testing?
+
+Testing Wouter is a breeze with [React Testing
+Library](https://github.com/testing-library/react-testing-library). Add a
+custom render function with a parameter to initialize the route and test
+against the render or `window.location`.
+
+```js
+/* testUtils.js */
+import {render} from '@testing-library/react'
+
+export const renderWithRouter = (ui, {route = '/'} = {}) => {
+  window.history.pushState({}, 'Test page', route)
+
+  return {
+    ...render(ui),
+  }
+}
+
+export * from '@testing-library/react';
+```
+
+```js
+/* App.test.js */
+import { renderWithRouter, screen } from './testUtils';
+import App from './App';
+
+describe('<App />', () => {
+  it('displays Orders at /orders', () => {
+    renderWithRouter(<App />, {route: '/orders'});
+    const title = screen.getByRole('heading', {name: /All Orders/});
+    expect(title).toBeInTheDocument();
+  });
+
+  it('displays Orders by id /orders/:id', () => {
+    renderWithRouter(<App />, {route: '/orders/1'});
+    const title = screen.getByRole('heading', {name: /Order 1/});
+    expect(title).toBeInTheDocument();
+  });
+
+  it('redirects a deprecated route', () => {
+    renderWithRouter(<App />, {route: '/deprecated'});
+
+    const title = screen.getByRole('heading', {name: /Home/});
+    expect(title).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/');
+  });
+});
+```
+
 ## Acknowledgements
 
 Wouter illustrations and logos were made by [Katya Simacheva](https://simachevakatya.com/) and
