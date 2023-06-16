@@ -788,7 +788,7 @@ function App() {
         <Route path="/deprecated">
           <Redirect to="/" />
         </Route>
-        <Route>This is rendered when nothing above has matched</Route>
+        <Route>Sorry, we couldn't find that page.</Route>
       </Switch>
     </div>
   );
@@ -803,6 +803,12 @@ import { renderWithRouter, screen } from './testUtils';
 import App from './App';
 
 describe('<App />', () => {
+  it('displays a message on unknown routes', () => {
+    renderWithRouter(<App />, {route: '/unknown'});
+    const title = screen.getByText("Sorry, we couldn't find that page.");
+    expect(title).toBeInTheDocument();
+  });
+
   it('displays Orders at /orders', () => {
     renderWithRouter(<App />, {route: '/orders'});
     const title = screen.getByRole('heading', {name: /All Orders/});
