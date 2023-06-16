@@ -771,6 +771,33 @@ export * from '@testing-library/react';
 ```
 
 ```js
+/* App.js */
+import { Redirect, Route, Switch } from "wouter";
+
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <Switch>
+        <Route path="/"><h1>Home</h1></Route>
+        <Route path="/orders"><h1>All Orders</h1></Route>
+        <Route path="/orders/:id">
+          {params => <h1>Order {params?.id}</h1>}
+        </Route>
+        <Route path="/deprecated">
+          <Redirect to="/" />
+        </Route>
+        <Route>This is rendered when nothing above has matched</Route>
+      </Switch>
+    </div>
+  );
+}
+
+export default App;
+```
+
+```js
 /* App.test.js */
 import { renderWithRouter, screen } from './testUtils';
 import App from './App';
