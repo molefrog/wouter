@@ -40,8 +40,8 @@ export const usePathname = ({ ssrPath } = {}) =>
     ssrPath ? () => ssrPath : currentPathname
   );
 
-export const navigate = (to, { replace = false } = {}) =>
-  history[replace ? eventReplaceState : eventPushState](null, "", to);
+export const navigate = (to, { replace = false, state = null } = {}) =>
+  history[replace ? eventReplaceState : eventPushState](state, "", to);
 
 // the 2nd argument of the `useLocation` return value is a function
 // that allows to perform a navigation.
@@ -52,6 +52,7 @@ export const navigate = (to, { replace = false } = {}) =>
 const useLocation = (opts = {}) => [
   relativePath(opts.base, usePathname(opts)),
   useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
+  history.state,
 ];
 
 export default useLocation;
