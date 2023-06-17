@@ -26,6 +26,14 @@ const subscribeToLocationUpdates = (callback) => {
   };
 };
 
+const getHistoryState = () => {
+  try {
+    return history.state;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const useLocationProperty = (fn, ssrFn) =>
   useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
@@ -52,7 +60,7 @@ export const navigate = (to, { replace = false, state = null } = {}) =>
 const useLocation = (opts = {}) => [
   relativePath(opts.base, usePathname(opts)),
   useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
-  history.state,
+  getHistoryState(),
 ];
 
 export default useLocation;
