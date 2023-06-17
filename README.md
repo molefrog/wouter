@@ -168,7 +168,7 @@ from the `useState` hook:
 import { useLocation } from "wouter";
 
 const CurrentLocation = () => {
-  const [location, setLocation] = useLocation();
+  const [location, setLocation, state] = useLocation();
 
   return (
     <div>
@@ -198,6 +198,7 @@ const [location, navigate] = useLocation();
 
 navigate("/jobs"); // `pushState` is used
 navigate("/home", { replace: true }); // `replaceState` is used
+navigate("/user", { state: { msg: "hello" } }); // pass state to route
 ```
 
 #### Customizing the location hook
@@ -300,6 +301,9 @@ import { Link } from "wouter"
 
 // lazy form: `a` element is constructed around children
 <Link href="/foo" className="active">Hello!</Link>
+
+// pass state to route
+<Link href="/foo" state={{ msg: "hello" }} className="active">Hello!</Link>
 
 // when using your own component or jsx the `href` prop
 // will be passed down to an element
