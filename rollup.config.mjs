@@ -11,6 +11,7 @@ const ESM_SOURCES = [
   "matcher.js",
   "react-deps.js",
   "use-location.js",
+  "use-params.js",
   "static-location.js",
   ...(isPreact
     ? []

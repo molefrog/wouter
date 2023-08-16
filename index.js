@@ -1,4 +1,5 @@
 import locationHook from "./use-location.js";
+import { useParams as useParamsInternal, ParamsWrapper } from "./use-params.js";
 import matcherWithCache from "./matcher.js";
 
 import {
@@ -37,7 +38,7 @@ const RouterCtx = createContext(defaultRouter);
 export const useRouter = () => useContext(RouterCtx);
 
 /*
- * Part 1, Hooks API: useRoute and useLocation
+ * Part 1, Hooks API: useRoute, useLocation and useParams
  */
 
 // Internal version of useLocation to avoid redundant useRouter calls
@@ -50,6 +51,8 @@ export const useRoute = (pattern) => {
   const [path] = useLocationFromRouter(router);
   return router.matcher(pattern, path);
 };
+
+export const useParams = useParamsInternal;
 
 /*
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
@@ -109,10 +112,13 @@ export const Route = ({ path, match, component, children }) => {
   if (!matches) return null;
 
   // React-Router style `component` prop
-  if (component) return h(component, { params });
+  if (component) return ParamsWrapper(params, h(component, { params }));
 
   // support render prop or plain children
-  return typeof children === "function" ? children(params) : children;
+  return ParamsWrapper(
+    params,
+    typeof children === "function" ? children(params) : children
+  );
 };
 
 export const Link = forwardRef((props, ref) => {

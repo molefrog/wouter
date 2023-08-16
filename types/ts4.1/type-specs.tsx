@@ -8,6 +8,7 @@ import {
   Router,
   Switch,
   useLocation,
+  useParams,
   useRoute,
   useRouter,
 } from "wouter";
@@ -256,6 +257,9 @@ setLocation("/app", { unknownOption: true }); // $ExpectError
 // custom hook
 const [networkLoc, setNetworkLoc] = useLocation<UseNetworkLocation>();
 setNetworkLoc("/home", { delay: 2000 });
+
+const useParamsResults = useParams();
+useParamsResults; // $ExpectType Record<string, string | undefined>
 
 useRoute(Symbol()); // $ExpectError
 useRoute(); // $ExpectError

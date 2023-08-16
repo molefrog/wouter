@@ -30,6 +30,11 @@
       "require": "./cjs/use-location.js",
       "default": "./use-location.js"
     },
+    "./use-params": {
+      "types": "./types/use-params.d.ts",
+      "require": "./cjs/use-params.js",
+      "default": "./use-params.js"
+    },
     "./matcher": {
       "types": "./types/matcher.d.ts",
       "require": "./cjs/matcher.js",
@@ -52,6 +57,9 @@
       "use-location": [
         "types/use-location.d.ts"
       ],
+      "use-params": [
+        "types/use-params.d.ts"
+      ],
       "matcher": [
         "types/matcher.d.ts"
       ],
@@ -62,6 +70,9 @@
     "<4.1": {
       "use-location": [
         "types/use-location.d.ts"
+      ],
+      "use-params": [
+        "types/use-params.d.ts"
       ],
       "matcher": [
         "types/matcher.d.ts"

@@ -30,6 +30,7 @@ coverage/
 preact/index.js
 preact/matcher.js
 preact/use-location.js
+preact/use-params.js
 preact/static-location.js
 preact/paths.js
 preact/types/*.d.ts
