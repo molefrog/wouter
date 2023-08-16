@@ -8,6 +8,7 @@ import {
   Router,
   Switch,
   useLocation,
+  useParams,
   useRoute,
 } from "wouter/preact";
 
@@ -143,6 +144,9 @@ setLocation("/app", { replace: true });
 setLocation("/app", { unknown: true }); // $ExpectError
 
 useLocation({ base: "/app" }); // $ExpectError
+
+const useParamsResults = useParams();
+useParamsResults; // $ExpectType Record<string, string | undefined>
 
 useRoute(Symbol()); // $ExpectError
 useRoute(); // $ExpectError

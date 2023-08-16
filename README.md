@@ -31,6 +31,7 @@
   **[`Switch`](#switch-)** and **[`Redirect`](#redirect-topath-)** components.
 - Has hook-based API for more granular control over routing (like animations):
   **[`useLocation`](#uselocation-hook-working-with-the-history)**,
+  **[`useParams`](#uselocation-hook-working-with-parameters)**,
   **[`useRoute`](#useroute-the-power-of-hooks)** and
   **[`useRouter`](#userouter-accessing-the-router-object)**.
 
@@ -54,6 +55,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - **[Hooks](#hooks-api)**
     - **[`useRoute`](#useroute-the-power-of-hooks)**
     - **[`useLocation`](#uselocation-hook-working-with-the-history)**
+    - **[`useParams`](#useparams-hook-working-with-parameters)**
     - **[`useRouter`](#userouter-accessing-the-router-object)**
   - **[Components](#component-api)**
     - **[`<Route />`](#route-pathpattern-)**
@@ -126,6 +128,7 @@ links, default routes etc.
   pattern provided.
 - **[`useLocation`](#uselocation-hook-working-with-the-history)** — allows to manipulate current
   browser location, a tiny wrapper around the History API.
+- **[`useParams`](#useparams-hook-working-with-parameters)** — returns the parameters of the current route.
 - **[`useRouter`](#userouter-accessing-the-router-object)** — returns a global router object that
   holds the configuration. Only use it if you want to customize the routing.
 
@@ -236,6 +239,22 @@ const App = () => (
 ```
 
 **[▶ Demo Sandbox: hash-based routing](https://codesandbox.io/s/wouter-hash-based-hook-5fp9g)**
+
+### `useParams` hook: working with parameters
+
+This hook allows you to access the parameters exposed through [matching dynamic segments](#matching-dynamic-segments). Beneath, we simply wrap your components with a context provider allowing you to access this data anywhere within the `Route` component.
+
+```js
+import { Route, useParams } from "wouter";
+
+const User = () => {
+  const params = useParams();
+
+  console.log(params.id)
+};
+
+<Route path="/user/:id" component={User}> />
+```
 
 ### `useRouter`: accessing the router object
 
