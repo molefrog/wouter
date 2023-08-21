@@ -1,5 +1,4 @@
 import locationHook from "./use-location.js";
-import { useParams as useParamsInternal, ParamsWrapper } from "./use-params.js";
 import matcherWithCache from "./matcher.js";
 
 import {
@@ -52,7 +51,8 @@ export const useRoute = (pattern) => {
   return router.matcher(pattern, path);
 };
 
-export const useParams = useParamsInternal;
+const ParamsCtx = createContext({ params: {} });
+export const useParams = () => useContext(ParamsCtx).params;
 
 /*
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
@@ -102,6 +102,13 @@ export const Router = ({
     children,
   });
 };
+
+// Helper to wrap children component inside the ParamsCtx provider
+const ParamsWrapper = (params, children) =>
+  h(ParamsCtx.Provider, {
+    value: { params },
+    children,
+  });
 
 export const Route = ({ path, match, component, children }) => {
   const useRouteMatch = useRoute(path);

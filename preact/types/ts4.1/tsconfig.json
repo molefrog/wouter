@@ -9,7 +9,6 @@
     "paths": {
       "wouter/preact": ["."],
       "wouter/use-location": ["../use-location"],
-      "wouter/use-params": ["../use-params"],
       "wouter/static-location": ["../static-location"],
       "wouter/matcher": ["../matcher"]
     }
