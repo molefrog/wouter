@@ -10,12 +10,9 @@ node_modules/
 # ignore package-lock.json since it's a package
 # see https://github.com/sindresorhus/ama/issues/479#issuecomment-310661514
 /package-lock.json
-/yarn.lock
-/pnpm-lock.yaml
 
 # bundler
 esm/
-dist/
 .cache
 
 # OSX

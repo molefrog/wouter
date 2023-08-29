@@ -1,7 +1,7 @@
 {
   "name": "monorepo",
   "private": true,
-  "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
+  "description": "A minimalistic routing for React and Preact. Monorepo package.",
   "type": "module",
   "workspaces": [
     "packages/wouter",
@@ -21,12 +21,6 @@
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": "molefrog/wouter",
   "license": "ISC",
-  "peerDependencies": {
-    "react": ">=16.8.0"
-  },
-  "dependencies": {
-    "use-sync-external-store": "^1.0.0"
-  },
   "prettier": {
     "tabWidth": 2,
     "semi": true,
@@ -37,24 +31,34 @@
     {
       "path": "packages/wouter/esm/index.js",
       "limit": "2000 B",
-      "ignore": ["react", "use-sync-external-store"]
+      "ignore": [
+        "react",
+        "use-sync-external-store"
+      ]
     },
     {
-
       "path": "packages/wouter/esm/use-location.js",
       "limit": "1000 B",
-      "ignore": ["react", "use-sync-external-store"]
+      "ignore": [
+        "react",
+        "use-sync-external-store"
+      ]
     },
     {
       "path": "packages/wouter-preact/esm/index.js",
       "limit": "2000 B",
-      "ignore": ["preact", "preact/hooks"]
+      "ignore": [
+        "preact",
+        "preact/hooks"
+      ]
     },
-
     {
       "path": "packages/wouter-preact/esm/use-location.js",
       "limit": "1000 B",
-      "ignore": ["preact", "preact/hooks"]
+      "ignore": [
+        "preact",
+        "preact/hooks"
+      ]
     }
   ],
   "husky": {

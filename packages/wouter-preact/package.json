@@ -1,7 +1,7 @@
 {
   "name": "wouter-preact",
   "version": "2.11.0",
-  "description": "A minimalistic routing for React and Preact (Preact-only version).",
+  "description": "Minimalist-friendly ~1.5KB router for Preact",
   "type": "module",
   "keywords": [
     "react",

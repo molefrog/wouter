@@ -1,7 +1,7 @@
 {
   "name": "wouter",
   "version": "2.11.0",
-  "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
+  "description": "Minimalist-friendly ~1.5KB router for React",
   "type": "module",
   "keywords": [
     "react",
