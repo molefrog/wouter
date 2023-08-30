@@ -12,6 +12,7 @@
     "test": "vitest",
     "size": "size-limit",
     "build": "npm run build -ws",
+    "watch": "concurrently -n wouter,wouter-preact \"npm run -w packages/wouter watch\" \"npm run -w packages/wouter-preact watch\"",
     "lint": "eslint packages/**/*.js",
     "lint-types": "npm run lint-types-react && npm run lint-types-preact",
     "lint-types-react": "dtslint packages/wouter/types/ --localTs ./node_modules/typescript/lib",
