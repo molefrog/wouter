@@ -107,6 +107,7 @@
     "@types/react": "^18.2.0",
     "@types/react-test-renderer": "^18.0.0",
     "@vitejs/plugin-react": "^4.0.0",
+    "@vitest/coverage-c8": "^0.33.0",
     "copyfiles": "^2.4.1",
     "dtslint": "^3.4.2",
     "eslint": "^7.19.0",
