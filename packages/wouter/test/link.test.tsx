@@ -127,15 +127,18 @@ it("ignores the navigation when clicked with modifiers", () => {
       click
     </Link>
   );
-  fireEvent(
-    getByTestId("link"),
-    new MouseEvent("click", {
-      bubbles: true,
-      cancelable: true,
-      button: 0,
-      ctrlKey: true,
-    })
-  );
+  const clickEvt = new MouseEvent("click", {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+    ctrlKey: true,
+  });
+
+  // js-dom doesn't implement browser navigation (e.g. changing location
+  // when a link is clicked) so we need just ingore it to avoid warnings
+  clickEvt.preventDefault();
+
+  fireEvent(getByTestId("link"), clickEvt);
   expect(location.pathname).not.toBe("/users");
 });
 
