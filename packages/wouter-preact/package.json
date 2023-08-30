@@ -53,7 +53,8 @@
     }
   },
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": "molefrog/wouter",
@@ -62,6 +63,6 @@
     "preact": "^10.0.0"
   },
   "devDependencies": {
-    "wouter": "latest"
+    "wouter": "*"
   }
 }
