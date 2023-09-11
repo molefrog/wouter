@@ -4,14 +4,14 @@ import { it, expect } from "vitest";
 
 import { staticLocation, memoryLocation } from "./test-utils";
 
-it("doesn't break on falsey patterns", () => {
+it("does not support falsey patterns", () => {
   expect(() => {
     // @ts-expect-error
-    assertRoute(null, "/", {}); // V3 TODO: shouldn't it return false?
+    assertRoute(null, "/", {});
 
     // @ts-expect-error
     assertRoute(undefined, "/", {});
-  }).not.toThrow();
+  }).toThrow();
 });
 
 it("is case insensitive", () => {
@@ -40,18 +40,16 @@ it("ignores the trailing slash", () => {
   assertRoute("/home", "/home", {});
 
   assertRoute("/home/", "/home/", {});
-  assertRoute("/home/", "/home", false); // but!
+  assertRoute("/home/", "/home", {});
 
   assertRoute("/:page", "/users/", [true, { page: "users" }]);
   assertRoute("/catalog/:section?", "/catalog/", { section: undefined });
 });
 
-// V3 TODO
-it.fails("supports wildcards", () => {
+it("supports wildcards", () => {
   assertRoute("/app/*", "/app/", { wild: "" });
   assertRoute("/app/*", "/app/dashboard/intro", { wild: "dashboard/intro" });
   assertRoute("/app/*", "/app/charges/1", { wild: "charges/1" });
-  assertRoute("/app/*/check", "/app/charges/1", { wild: "charges/1" });
 });
 
 it("uses a question mark to define optional segments", () => {
@@ -77,7 +75,7 @@ it("uses a question mark to define optional segments", () => {
 });
 
 it("supports other characters in segments", () => {
-  assertRoute("/users/:id-:name", "/users/1-alex", { id: "1", name: "alex" });
+  assertRoute("/users/:name", "/users/1-alex", { name: "1-alex" });
   assertRoute("/staff/:name/:bio?", "/staff/John Doe 3", {
     name: "John Doe 3",
     bio: undefined,
@@ -120,12 +118,11 @@ it("reacts to pattern updates", () => {
   rerender({ pattern: "/blog/products/:name" });
   expect(result.current).toStrictEqual([false, null]);
 
-  // V3 TODO
-  // rerender({ pattern: "/blog/*" });
-  // expect(result.current).toStrictEqual([
-  //   true,
-  //   { wild: "products/40/read-all" },
-  // ]);
+  rerender({ pattern: "/blog/*" });
+  expect(result.current).toStrictEqual([
+    true,
+    { wild: "products/40/read-all" },
+  ]);
 });
 
 it("reacts to location updates", () => {

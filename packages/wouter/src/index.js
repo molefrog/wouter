@@ -1,6 +1,8 @@
 import locationHook from "./use-location.js";
 import matcherWithCache from "./matcher.js";
 
+import { parse as parsePattern } from "regexparam";
+
 import {
   useContext,
   createContext,
@@ -48,7 +50,19 @@ export const useLocation = () => useLocationFromRouter(useRouter());
 export const useRoute = (pattern) => {
   const router = useRouter();
   const [path] = useLocationFromRouter(router);
-  return router.matcher(pattern, path);
+
+  const { pattern: regexp, keys } = parsePattern(pattern || "*");
+
+  let matches = regexp.exec(path);
+  if (!matches) return [false, null];
+
+  let i = 0;
+  const params = {};
+  while (i < keys.length) {
+    params[keys[i]] = matches[++i];
+  }
+
+  return [true, params];
 };
 
 /*

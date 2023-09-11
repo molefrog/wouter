@@ -63,6 +63,7 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
+    "regexparam": "^2.0.1",
     "use-sync-external-store": "^1.0.0"
   }
 }
