@@ -11,7 +11,7 @@ const raf = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
 const testRouteRender = (initialPath: string, jsx: ReactElement) => {
   const instance = TestRenderer.create(
-    <Router hook={memoryLocation(initialPath)}>{jsx}</Router>
+    <Router hook={memoryLocation(initialPath).hook}>{jsx}</Router>
   ).root;
 
   return instance;
