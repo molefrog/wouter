@@ -14,7 +14,7 @@ const customMatcher: MatcherFn = (pattern: string, path: string) => {
 
 const routeMatches = (pattern: string, path: string) => {
   const instance = TestRenderer.create(
-    <Router hook={memoryLocation(path)} matcher={customMatcher}>
+    <Router hook={memoryLocation(path).hook} matcher={customMatcher}>
       <Route path={pattern}>
         <h1>it worked!</h1>
       </Route>

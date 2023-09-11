@@ -1,28 +1,24 @@
-import { ReactNode, useMemo, useState, useSyncExternalStore } from "react";
-import { Path, LocationHook, BaseLocationHook, Router } from "wouter";
+import { useState, useSyncExternalStore } from "react";
+import { Path, LocationHook, BaseLocationHook } from "wouter";
 import mitt from "mitt";
 
-export const RouterWithStaticLocation = ({
-  children,
-  location,
-}: {
-  children: ReactNode;
-  location: Path;
-}) => {
-  const useStaticLocation: LocationHook = () => [location, () => null];
-  return <Router hook={useStaticLocation}>{children}</Router>;
-};
+/**
+ * Static location that never changes
+ */
+export const staticLocation = (path: Path): { hook: BaseLocationHook } => ({
+  hook: () => [path, (to: Path) => {} /* does nothing */],
+});
 
 /**
  * In-memory location that supports navigation
  */
-export const createMemoryLocation = (
-  initialPath: string = "/"
-): { hook: BaseLocationHook; navigate: (path: string) => void } => {
+export const memoryLocation = (
+  initialPath: Path = "/"
+): { hook: BaseLocationHook; navigate: (path: Path) => void } => {
   let currentPath = initialPath;
   const emitter = mitt();
 
-  const navigate = (path: string) => {
+  const navigate = (path: Path) => {
     currentPath = path;
     emitter.emit("navigate", path);
   };
@@ -41,8 +37,6 @@ export const createMemoryLocation = (
 
   return { hook: useMemoryLocation, navigate };
 };
-
-export const memoryLocation = createMemoryLocation;
 
 export const customHookWithReturn =
   (initialPath = "/") =>

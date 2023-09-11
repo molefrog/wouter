@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { useRoute, Match, Router } from "wouter";
 import { it, expect } from "vitest";
 
-import { RouterWithStaticLocation, createMemoryLocation } from "./test-utils";
+import { staticLocation, memoryLocation } from "./test-utils";
 
 it("doesn't break on falsey patterns", () => {
   expect(() => {
@@ -97,8 +97,8 @@ it("reacts to pattern updates", () => {
     ({ pattern }: { pattern: string }) => useRoute(pattern),
     {
       wrapper: (props) => (
-        <RouterWithStaticLocation
-          location="/blog/products/40/read-all"
+        <Router
+          hook={staticLocation("/blog/products/40/read-all").hook}
           {...props}
         />
       ),
@@ -129,7 +129,7 @@ it("reacts to pattern updates", () => {
 });
 
 it("reacts to location updates", () => {
-  const { hook, navigate } = createMemoryLocation("/");
+  const { hook, navigate } = memoryLocation("/");
 
   const { result } = renderHook(() => useRoute("/cities/:city?"), {
     wrapper: (props) => <Router hook={hook} {...props} />,
@@ -161,7 +161,7 @@ const assertRoute = (
 ) => {
   const { result } = renderHook(() => useRoute(pattern), {
     wrapper: (props) => (
-      <RouterWithStaticLocation location={location} {...props} />
+      <Router hook={staticLocation(location).hook} {...props} />
     ),
   });
 
