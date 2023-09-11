@@ -1,14 +1,8 @@
-import { ReactNode } from "react";
-import { renderHook } from "@testing-library/react";
-import { useRoute, Path, Match, Router, LocationHook } from "wouter";
+import { renderHook, act } from "@testing-library/react";
+import { useRoute, Match, Router } from "wouter";
 import { it, expect } from "vitest";
 
-/**
- * regexparam different from v2:
- * - no plus sign modifiers "/:user+"
- * - no named wildcards "/:user*"
- * - no optional wildcards "/*?" (yet!)
- */
+import { RouterWithStaticLocation, createMemoryLocation } from "./test-utils";
 
 it("doesn't break on falsey patterns", () => {
   expect(() => {
@@ -92,34 +86,84 @@ it("supports other characters in segments", () => {
     name: "John Doe 3",
     bio: "bio",
   });
+
+  assertRoute("/users/:name/bio", "/users/$102_Kathrine&/bio", {
+    name: "$102_Kathrine&",
+  });
 });
 
-it.todo("reacts to pattern updates");
-it.todo("reacts to location changes");
-
-const RouterWithStaticLocation = ({
-  children,
-  location,
-}: {
-  children: ReactNode;
-  location: Path;
-}) => {
-  const useStaticLocation: LocationHook = () => [location, () => null];
-  return <Router hook={useStaticLocation}>{children}</Router>;
-};
-
-type AssertRHS = false | Match | Record<string, string | undefined>;
-
-const assertRoute = (pattern: string, location: string, rhs: AssertRHS) => {
-  const { result } = renderHook(
+it("reacts to pattern updates", () => {
+  const { result, rerender } = renderHook(
     ({ pattern }: { pattern: string }) => useRoute(pattern),
     {
       wrapper: (props) => (
-        <RouterWithStaticLocation location={location} {...props} />
+        <RouterWithStaticLocation
+          location="/blog/products/40/read-all"
+          {...props}
+        />
       ),
-      initialProps: { pattern },
+      initialProps: { pattern: "/" },
     }
   );
+
+  expect(result.current).toStrictEqual([false, null]);
+
+  rerender({ pattern: "/blog/:category/:post/:action" });
+  expect(result.current).toStrictEqual([
+    true,
+    { category: "products", post: "40", action: "read-all" },
+  ]);
+
+  rerender({ pattern: "/blog/products/:id?/read-all" });
+  expect(result.current).toStrictEqual([true, { id: "40" }]);
+
+  rerender({ pattern: "/blog/products/:name" });
+  expect(result.current).toStrictEqual([false, null]);
+
+  // V3 TODO
+  // rerender({ pattern: "/blog/*" });
+  // expect(result.current).toStrictEqual([
+  //   true,
+  //   { wild: "products/40/read-all" },
+  // ]);
+});
+
+it("reacts to location updates", () => {
+  const { hook, navigate } = createMemoryLocation("/");
+
+  const { result } = renderHook(() => useRoute("/cities/:city?"), {
+    wrapper: (props) => <Router hook={hook} {...props} />,
+  });
+
+  expect(result.current).toStrictEqual([false, null]);
+
+  act(() => navigate("/cities/berlin"));
+  expect(result.current).toStrictEqual([true, { city: "berlin" }]);
+
+  act(() => navigate("/cities/Tokyo"));
+  expect(result.current).toStrictEqual([true, { city: "Tokyo" }]);
+
+  act(() => navigate("/about"));
+  expect(result.current).toStrictEqual([false, null]);
+
+  act(() => navigate("/cities"));
+  expect(result.current).toStrictEqual([true, { city: undefined }]);
+});
+
+/**
+ * Assertion helper to test useRoute() return values.
+ */
+
+const assertRoute = (
+  pattern: string,
+  location: string,
+  rhs: false | Match | Record<string, string | undefined>
+) => {
+  const { result } = renderHook(() => useRoute(pattern), {
+    wrapper: (props) => (
+      <RouterWithStaticLocation location={location} {...props} />
+    ),
+  });
 
   if (rhs === false) {
     expect(result.current).toStrictEqual([false, null]);
