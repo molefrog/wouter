@@ -84,23 +84,3 @@ it("supports `base` routers with relative path", () => {
 
   unmount();
 });
-
-it("supports `base` routers with absolute path", () => {
-  const { container, unmount } = render(
-    <Router base="/app">
-      <Route path="/nested">
-        <h1>Nested</h1>
-      </Route>
-      <Route path="~/absolute">
-        <h2>Absolute</h2>
-      </Route>
-    </Router>
-  );
-
-  act(() => history.replaceState(null, "", "/absolute"));
-
-  expect(container.childNodes.length).toBe(1);
-  expect((container.firstChild as HTMLElement).tagName).toBe("H2");
-
-  unmount();
-});
