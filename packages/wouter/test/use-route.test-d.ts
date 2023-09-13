@@ -1,4 +1,4 @@
-import { it, expectTypeOf, assertType, assert, expect } from "vitest";
+import { it, expectTypeOf, assertType } from "vitest";
 import { useRoute } from "wouter";
 
 it("should only accept strings", () => {
@@ -40,7 +40,7 @@ it("infers parameters from the route path", () => {
 
   if (inferedParams) {
     expectTypeOf(inferedParams).toMatchTypeOf<{
-      name: string | undefined;
+      name?: string;
       id: string;
     }>();
   }
