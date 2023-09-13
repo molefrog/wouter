@@ -28,16 +28,16 @@ it("caches the router object if Router rerenders", () => {
 });
 
 it("returns customized router provided by the <Router />", () => {
-  const newMatcher = () => [true, null];
+  const newParser = () => "noop";
 
   const { result } = renderHook(() => useRouter(), {
     // @ts-expect-error
-    wrapper: (props) => <Router matcher={newMatcher}>{props.children}</Router>,
+    wrapper: (props) => <Router parser={newParser}>{props.children}</Router>,
   });
   const router = result.current;
 
   expect(router).toBeInstanceOf(Object);
-  expect(router.matcher).toBe(newMatcher);
+  expect(router.parser).toBe(newParser);
 });
 
 it("shares one router instance between components", () => {
