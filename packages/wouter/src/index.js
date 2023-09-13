@@ -28,6 +28,7 @@ import {
 const defaultRouter = {
   hook: locationHook,
   matcher: matcherWithCache(),
+  parser: parsePattern,
   base: "",
   // this option is used to override the current location during SSR
   // ssrPath: undefined,
@@ -47,8 +48,8 @@ const useLocationFromRouter = (router) => router.hook(router);
 
 export const useLocation = () => useLocationFromRouter(useRouter());
 
-export const useMatch = (route) => {
-  const { pattern, keys } = parsePattern(route || "*");
+const matchRoute = (router, route) => {
+  const { pattern, keys } = router.parser(route);
 
   return (path) => {
     const matches = pattern.exec(path);
@@ -59,17 +60,22 @@ export const useMatch = (route) => {
   };
 };
 
+// V3 TODO:
+// handle falsey routes
+export const useMatch = (route) => matchRoute(useRouter(), route || "*");
+
 export const useRoute = (pattern) =>
   /* match pattern with current location */
   useMatch(pattern)(useLocation()[0]);
 
-/*
+/*a
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
 export const Router = ({
   hook,
   matcher,
+  parser,
   ssrPath,
   base = "",
   parent,
@@ -80,6 +86,7 @@ export const Router = ({
     router.hook = hook || proto.hook;
     router.matcher = matcher || proto.matcher;
     router.ssrPath = ssrPath || proto.ssrPath;
+    router.parser = parser || proto.parser;
     router.ownBase = base;
 
     // store reference to parent router
@@ -179,8 +186,7 @@ const flattenChildren = (children) => {
 
 export const Switch = ({ children, location }) => {
   const router = useRouter();
-  const matcher = router.matcher;
-  const [originalLocation] = useLocationFromRouter(router);
+  const [originalLocation] = useLocation();
 
   for (const element of flattenChildren(children)) {
     let match = 0;
@@ -192,7 +198,7 @@ export const Switch = ({ children, location }) => {
       // this allows to use different components that wrap Route
       // inside of a switch, for example <AnimatedRoute />.
       (match = element.props.path
-        ? matcher(element.props.path, location || originalLocation)
+        ? matchRoute(router, element.props.path)(location || originalLocation)
         : [true, {}])[0]
     )
       return cloneElement(element, { match });
