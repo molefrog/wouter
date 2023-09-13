@@ -47,23 +47,21 @@ const useLocationFromRouter = (router) => router.hook(router);
 
 export const useLocation = () => useLocationFromRouter(useRouter());
 
-export const useRoute = (pattern) => {
-  const router = useRouter();
-  const [path] = useLocationFromRouter(router);
+export const useMatch = (route) => {
+  const { pattern, keys } = parsePattern(route || "*");
 
-  const { pattern: regexp, keys } = parsePattern(pattern || "*");
+  return (path) => {
+    const matches = pattern.exec(path);
 
-  let matches = regexp.exec(path);
-  if (!matches) return [false, null];
-
-  let i = 0;
-  const params = {};
-  while (i < keys.length) {
-    params[keys[i]] = matches[++i];
-  }
-
-  return [true, params];
+    return matches
+      ? [true, Object.fromEntries(keys.map((key, i) => [key, matches[i + 1]]))] // convert to object
+      : [false, null]; //  no match
+  };
 };
+
+export const useRoute = (pattern) =>
+  /* match pattern with current location */
+  useMatch(pattern)(useLocation()[0]);
 
 /*
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
