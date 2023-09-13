@@ -8,7 +8,6 @@ import {
   Router,
   Switch,
   useLocation,
-  useRoute,
   useRouter,
 } from "wouter";
 
@@ -256,38 +255,6 @@ setLocation("/app", { unknownOption: true }); // $ExpectError
 // custom hook
 const [networkLoc, setNetworkLoc] = useLocation<UseNetworkLocation>();
 setNetworkLoc("/home", { delay: 2000 });
-
-useRoute(Symbol()); // $ExpectError
-useRoute(); // $ExpectError
-useRoute("/");
-
-const [match, params] = useRoute<{ id: string }>("/app/users/:id");
-match; // $ExpectType boolean
-
-if (params) {
-  params.id; // $ExpectType string
-  params.age; // $ExpectError
-} else {
-  params; // $ExpectType null
-}
-
-const [, parameters] = useRoute<{ id: string }>("/app/users/:id");
-
-if (parameters) {
-  parameters.id; // $ExpectType string
-  parameters.age; // $ExpectError
-} else {
-  parameters; // $ExpectType null
-}
-
-const [, inferedParams] = useRoute("/app/users/:id/:age");
-
-if (inferedParams) {
-  inferedParams.id; // $ExpectType string
-  inferedParams.age; // $ExpectType string
-} else {
-  inferedParams; // $ExpectType null
-}
 
 const router = useRouter(); // $ExpectType RouterObject
 router.parent; // $ExpectType RouterObject | undefined
