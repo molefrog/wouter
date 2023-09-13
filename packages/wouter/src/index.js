@@ -58,13 +58,12 @@ const matchRoute = (router, route) => {
   };
 };
 
-// V3 TODO:
-// handle falsey routes
-export const useMatch = (route) => matchRoute(useRouter(), route || "*");
+export const useRoute = (pattern) => {
+  const [location] = useLocation();
+  const router = useRouter();
 
-export const useRoute = (pattern) =>
-  /* match pattern with current location */
-  useMatch(pattern)(useLocation()[0]);
+  return pattern ? matchRoute(router, pattern)(location) : [true, {}];
+};
 
 /*a
  * Part 2, Low Carb Router API: Router, Route, Link, Switch

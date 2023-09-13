@@ -13,7 +13,6 @@ import {
 
 import useBrowserLocation from "wouter/use-location";
 import staticLocationHook from "wouter/static-location";
-import { MatcherFn } from "wouter/matcher";
 
 const Header: React.FunctionComponent = () => <div />;
 const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (

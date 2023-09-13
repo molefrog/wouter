@@ -4,16 +4,6 @@ import { it, expect } from "vitest";
 
 import { staticLocation, memoryLocation } from "./test-utils";
 
-it("does not support falsey patterns", () => {
-  expect(() => {
-    // @ts-expect-error
-    assertRoute(null, "/", {});
-
-    // @ts-expect-error
-    assertRoute(undefined, "/", {});
-  }).toThrow();
-});
-
 it("is case insensitive", () => {
   assertRoute("/Users", "/users", {});
   assertRoute("/HomePage", "/Homepage", {});
