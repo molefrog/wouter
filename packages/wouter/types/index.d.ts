@@ -26,6 +26,8 @@ import { RouterObject, RouterOptions } from "./router";
 export { Path, BaseLocationHook, LocationHook } from "./use-location";
 export * from "./router";
 
+import { RouteParams } from "regexparam";
+
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.
 // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/56210
@@ -55,29 +57,6 @@ export type Match<T extends DefaultParams = DefaultParams> =
   | MatchWithParams<T>
   | NoMatch;
 
-export type ExtractRouteOptionalParam<PathType extends Path> =
-  PathType extends `${infer Param}?`
-    ? { readonly [k in Param]: string | undefined }
-    : PathType extends `${infer Param}*`
-    ? { readonly [k in Param]: string | undefined }
-    : PathType extends `${infer Param}+`
-    ? { readonly [k in Param]: string }
-    : { readonly [k in PathType]: string };
-
-export type ExtractRouteParams<PathType extends string> =
-  string extends PathType
-    ? DefaultParams
-    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
-    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-      ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
-      : ExtractRouteOptionalParam<ParamWithOptionalRegExp> &
-          ExtractRouteParams<Rest>
-    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}`
-    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-      ? ExtractRouteOptionalParam<Param>
-      : ExtractRouteOptionalParam<ParamWithOptionalRegExp>
-    : {};
-
 /*
  * Components: <Route />
  */
@@ -92,14 +71,12 @@ export interface RouteProps<
 > {
   children?:
     | ((
-        params: T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
+        params: T extends DefaultParams ? T : RouteParams<RoutePath>
       ) => ReactNode)
     | ReactNode;
   path?: RoutePath;
   component?: ComponentType<
-    RouteComponentProps<
-      T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
-    >
+    RouteComponentProps<T extends DefaultParams ? T : RouteParams<RoutePath>>
   >;
 }
 
@@ -170,7 +147,7 @@ export function useRoute<
   RoutePath extends Path = Path
 >(
   pattern: RoutePath
-): Match<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>;
+): Match<T extends DefaultParams ? T : RouteParams<RoutePath>>;
 
 export function useLocation<
   H extends BaseLocationHook = LocationHook
