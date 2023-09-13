@@ -17,42 +17,31 @@ import {
   LocationHook,
 } from "./use-location";
 
-import { DefaultParams, Match } from "./matcher";
 import { RouterObject, RouterOptions } from "./router";
 
 // re-export some types from these modules
-export {
-  DefaultParams,
-  Params,
-  MatchWithParams,
-  NoMatch,
-  Match,
-} from "./matcher";
 export { Path, BaseLocationHook, LocationHook } from "./use-location";
 export * from "./router";
 
-export type ExtractRouteOptionalParam<PathType extends Path> =
-  PathType extends `${infer Param}?`
-    ? { readonly [k in Param]: string | undefined }
-    : PathType extends `${infer Param}*`
-    ? { readonly [k in Param]: string | undefined }
-    : PathType extends `${infer Param}+`
-    ? { readonly [k in Param]: string }
-    : { readonly [k in PathType]: string };
+import { RouteParams } from "regexparam";
 
-export type ExtractRouteParams<PathType extends string> =
-  string extends PathType
-    ? DefaultParams
-    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}/${infer Rest}`
-    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-      ? ExtractRouteOptionalParam<Param> & ExtractRouteParams<Rest>
-      : ExtractRouteOptionalParam<ParamWithOptionalRegExp> &
-          ExtractRouteParams<Rest>
-    : PathType extends `${infer _Start}:${infer ParamWithOptionalRegExp}`
-    ? ParamWithOptionalRegExp extends `${infer Param}(${infer _RegExp})`
-      ? ExtractRouteOptionalParam<Param>
-      : ExtractRouteOptionalParam<ParamWithOptionalRegExp>
-    : {};
+/**
+ * Route patterns and parameters
+ */
+export interface DefaultParams {
+  readonly [paramName: string]: string | undefined;
+}
+
+export type Params<T extends DefaultParams = DefaultParams> = T;
+
+export type MatchWithParams<T extends DefaultParams = DefaultParams> = [
+  true,
+  Params<T>
+];
+export type NoMatch = [false, null];
+export type Match<T extends DefaultParams = DefaultParams> =
+  | MatchWithParams<T>
+  | NoMatch;
 
 /*
  * Components: <Route />
@@ -68,14 +57,12 @@ export interface RouteProps<
 > {
   children?:
     | ((
-        params: T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
+        params: T extends DefaultParams ? T : RouteParams<RoutePath>
       ) => ComponentChildren)
     | ComponentChildren;
   path?: RoutePath;
   component?: ComponentType<
-    RouteComponentProps<
-      T extends DefaultParams ? T : ExtractRouteParams<RoutePath>
-    >
+    RouteComponentProps<T extends DefaultParams ? T : RouteParams<RoutePath>>
   >;
 }
 
@@ -145,7 +132,7 @@ export function useRoute<
   RoutePath extends Path = Path
 >(
   pattern: RoutePath
-): Match<T extends DefaultParams ? T : ExtractRouteParams<RoutePath>>;
+): Match<T extends DefaultParams ? T : RouteParams<RoutePath>>;
 
 export function useLocation<
   H extends BaseLocationHook = LocationHook
