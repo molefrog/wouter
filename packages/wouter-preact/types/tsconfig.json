@@ -9,8 +9,7 @@
     "paths": {
       "wouter/preact": ["."],
       "wouter/use-location": ["../use-location"],
-      "wouter/static-location": ["../static-location"],
-      "wouter/matcher": ["../matcher"]
+      "wouter/static-location": ["../static-location"]
     }
   },
   "files": ["./type-specs.tsx"]

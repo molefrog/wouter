@@ -1,7 +1,6 @@
-import locationHook from "./use-location.js";
-import matcherWithCache from "./matcher.js";
-
 import { parse as parsePattern } from "regexparam";
+
+import locationHook from "./use-location.js";
 
 import {
   useContext,
@@ -27,7 +26,6 @@ import {
 
 const defaultRouter = {
   hook: locationHook,
-  matcher: matcherWithCache(),
   parser: parsePattern,
   base: "",
   // this option is used to override the current location during SSR
@@ -74,7 +72,6 @@ export const useRoute = (pattern) =>
 
 export const Router = ({
   hook,
-  matcher,
   parser,
   ssrPath,
   base = "",
@@ -84,7 +81,6 @@ export const Router = ({
   // updates the current router with the props passed down to the component
   const updateRouter = (router, proto = parent || defaultRouter) => {
     router.hook = hook || proto.hook;
-    router.matcher = matcher || proto.matcher;
     router.ssrPath = ssrPath || proto.ssrPath;
     router.parser = parser || proto.parser;
     router.ownBase = base;
