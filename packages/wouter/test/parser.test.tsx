@@ -1,12 +1,9 @@
 import { it, expect } from "vitest";
 
 import { pathToRegexp, Key } from "path-to-regexp";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 
-import * as TestRenderer from "react-test-renderer";
-
-import { Router, Route, useRouter, useRoute } from "wouter";
-import type { MatcherFn } from "wouter/matcher";
+import { Router, useRouter, useRoute } from "wouter";
 import { memoryLocation } from "./test-utils.js";
 
 // Custom parser that uses `path-to-regexp` instead of `regexparam`
