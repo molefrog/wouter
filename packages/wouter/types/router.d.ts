@@ -1,12 +1,13 @@
-import { MatcherFn } from "./matcher";
 import { Path, BaseLocationHook } from "./use-location";
+
+export type Parser = (route: Path) => { pattern: RegExp; keys: string[] };
 
 // the object returned from `useRouter`
 export interface RouterObject {
   readonly hook: BaseLocationHook;
   readonly base: Path;
   readonly ownBase: Path;
-  readonly matcher: MatcherFn;
+  readonly parser: Parser;
   readonly parent?: RouterObject;
   readonly ssrPath?: Path;
 }
@@ -15,7 +16,7 @@ export interface RouterObject {
 export type RouterOptions = {
   hook?: BaseLocationHook;
   base?: Path;
-  matcher?: MatcherFn;
+  parser?: Parser;
   parent?: RouterObject;
   ssrPath?: Path;
 };

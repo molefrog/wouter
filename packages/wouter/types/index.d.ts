@@ -20,17 +20,9 @@ import {
   LocationHook,
 } from "./use-location";
 
-import { DefaultParams, Match } from "./matcher";
 import { RouterObject, RouterOptions } from "./router";
 
 // re-export some types from these modules
-export {
-  DefaultParams,
-  Params,
-  MatchWithParams,
-  NoMatch,
-  Match,
-} from "./matcher";
 export { Path, BaseLocationHook, LocationHook } from "./use-location";
 export * from "./router";
 
@@ -44,6 +36,24 @@ type ReactNode =
   | boolean
   | null
   | undefined;
+
+/**
+ * Route patterns and parameters
+ */
+export interface DefaultParams {
+  readonly [paramName: string]: string | undefined;
+}
+
+export type Params<T extends DefaultParams = DefaultParams> = T;
+
+export type MatchWithParams<T extends DefaultParams = DefaultParams> = [
+  true,
+  Params<T>
+];
+export type NoMatch = [false, null];
+export type Match<T extends DefaultParams = DefaultParams> =
+  | MatchWithParams<T>
+  | NoMatch;
 
 export type ExtractRouteOptionalParam<PathType extends Path> =
   PathType extends `${infer Param}?`

@@ -3,15 +3,15 @@ import { it, expect } from "vitest";
 import { pathToRegexp, Key } from "path-to-regexp";
 import { renderHook } from "@testing-library/react";
 
-import { Router, useRouter, useRoute } from "wouter";
+import { Router, useRouter, useRoute, Parser } from "wouter";
 import { memoryLocation } from "./test-utils.js";
 
 // Custom parser that uses `path-to-regexp` instead of `regexparam`
-const pathToRegexpParser = (route: string) => {
+const pathToRegexpParser: Parser = (route: string) => {
   const keys: Key[] = [];
   const pattern = pathToRegexp(route, keys);
 
-  return { pattern, keys: keys.map((k) => k.name) };
+  return { pattern, keys: keys.map((k) => String(k.name)) };
 };
 
 it("overrides the `parser` prop on the current router", () => {
