@@ -26,10 +26,6 @@
       "types": "./types/use-location.d.ts",
       "default": "./esm/use-location.js"
     },
-    "./matcher": {
-      "types": "./types/matcher.d.ts",
-      "default": "./esm/matcher.js"
-    },
     "./static-location": {
       "types": "./types/static-location.d.ts",
       "default": "./esm/static-location.js"
@@ -43,9 +39,6 @@
       ],
       "use-location": [
         "types/use-location.d.ts"
-      ],
-      "matcher": [
-        "types/matcher.d.ts"
       ],
       "static-location": [
         "./types/static-location.d.ts"
