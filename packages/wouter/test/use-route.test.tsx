@@ -36,10 +36,21 @@ it("ignores the trailing slash", () => {
   assertRoute("/catalog/:section?", "/catalog/", { section: undefined });
 });
 
-it("supports wildcards", () => {
+it("supports trailing wildcards", () => {
   assertRoute("/app/*", "/app/", { wild: "" });
   assertRoute("/app/*", "/app/dashboard/intro", { wild: "dashboard/intro" });
   assertRoute("/app/*", "/app/charges/1", { wild: "charges/1" });
+});
+
+it("supports wildcards in the middle of the pattern", () => {
+  assertRoute("/app/*/settings", "/app/users/settings", { wild: "users" });
+  assertRoute("/app/*/settings", "/app/users/1/settings", { wild: "users/1" });
+
+  assertRoute("/*/payments/:id", "/home/payments/1", { wild: "home", id: "1" });
+  assertRoute("/*/payments/:id?", "/home/payments", {
+    wild: "home",
+    id: undefined,
+  });
 });
 
 it("uses a question mark to define optional segments", () => {
