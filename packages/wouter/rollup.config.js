@@ -15,7 +15,7 @@ export default defineConfig([
   },
   {
     input: ["src/index.js", "src/static-location.js", "src/use-location.js"],
-    external: [/react-deps/],
+    external: [/react-deps/, "regexparam"],
     output: {
       dir: "esm",
       format: "esm",
