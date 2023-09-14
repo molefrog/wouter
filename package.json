@@ -14,8 +14,7 @@
     "build": "npm run build -ws",
     "watch": "concurrently -n wouter,wouter-preact \"npm run -w packages/wouter watch\" \"npm run -w packages/wouter-preact watch\"",
     "lint": "eslint packages/**/*.js",
-    "lint-types": "vitest typecheck",
-    "types-preact": "copyfiles -f packages/wouter/types/{use-location,static-location,router}.d.ts packages/wouter-preact/types"
+    "lint-types": "vitest typecheck"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": "molefrog/wouter",
