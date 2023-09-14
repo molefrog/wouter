@@ -14,9 +14,7 @@
     "build": "npm run build -ws",
     "watch": "concurrently -n wouter,wouter-preact \"npm run -w packages/wouter watch\" \"npm run -w packages/wouter-preact watch\"",
     "lint": "eslint packages/**/*.js",
-    "lint-types": "npm run lint-types-react && npm run lint-types-preact",
-    "lint-types-react": "dtslint packages/wouter/types/ --localTs ./node_modules/typescript/lib",
-    "lint-types-preact": "npm run types-preact && dtslint packages/wouter-preact/types/ --localTs ./node_modules/typescript/lib",
+    "lint-types": "vitest typecheck",
     "types-preact": "copyfiles -f packages/wouter/types/{use-location,static-location,router}.d.ts packages/wouter-preact/types"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
@@ -111,7 +109,6 @@
     "@vitest/coverage-v8": "^0.34.3",
     "concurrently": "^8.2.1",
     "copyfiles": "^2.4.1",
-    "dtslint": "^3.4.2",
     "eslint": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.0",
