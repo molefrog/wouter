@@ -33,5 +33,7 @@ jobs:
         run: npm test -- run --coverage
       - name: Lint Sources with ESLint
         run: npm run lint
+      - name: Run type check
+        run: npm run typecheck
       - name: Upload Coverage Report to Codecov
         run: bash <(curl -s https://codecov.io/bash) -t 7a260fc2-03ff-4e98-b0a5-11a2d5c53a29
