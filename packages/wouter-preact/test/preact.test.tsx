@@ -6,7 +6,7 @@ import { Route, Link, Switch } from "wouter-preact";
 
 describe("Preact support", () => {
   beforeEach(() => {
-    history.replaceState(null, "", "/");
+    history.replaceState(null, "", "/non-existing/route");
     setupRerender();
   });
 
@@ -38,7 +38,7 @@ describe("Preact support", () => {
             <Route path="/albums/:name">
               {(params) => `Album ${params.name}`}
             </Route>
-            <Route path="/:anything*">Nothing was found!</Route>
+            <Route path="*">Nothing was found!</Route>
           </Switch>
         </main>
       </>
