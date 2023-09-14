@@ -11,7 +11,7 @@ import {
   useRouter,
 } from "wouter";
 
-import useBrowserLocation from "wouter/use-location";
+import { useLocation as useBrowserLocation } from "wouter/use-location";
 
 const Header: React.FunctionComponent = () => <div />;
 const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (

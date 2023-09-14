@@ -11,7 +11,7 @@ import {
   useRoute,
 } from "wouter/preact";
 
-import useBrowserLocation from "wouter/use-location";
+import { useLocation as useBrowserLocation } from "wouter/use-location";
 import { MouseEventHandler } from "react";
 
 const Header: FunctionComponent = () => <div />;

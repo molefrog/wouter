@@ -1,6 +1,6 @@
 import { parse as parsePattern } from "regexparam";
 
-import locationHook from "./use-location.js";
+import { useLocation as locationHook } from "./use-location.js";
 
 import {
   useContext,
@@ -214,5 +214,3 @@ export const Redirect = (props) => {
 
   return null;
 };
-
-export default useRoute;
