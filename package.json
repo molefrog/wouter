@@ -17,7 +17,7 @@
     "lint-types": "npm run lint-types-react && npm run lint-types-preact",
     "lint-types-react": "dtslint packages/wouter/types/ --localTs ./node_modules/typescript/lib",
     "lint-types-preact": "npm run types-preact && dtslint packages/wouter-preact/types/ --localTs ./node_modules/typescript/lib",
-    "types-preact": "copyfiles -f packages/wouter/types/{use-location,static-location,router}.d.ts packages/wouter-preact/types"
+    "types-preact": "copyfiles -f packages/wouter/types/{use-location,router}.d.ts packages/wouter-preact/types"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": "molefrog/wouter",

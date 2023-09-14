@@ -12,7 +12,6 @@ import {
 } from "wouter/preact";
 
 import useBrowserLocation from "wouter/use-location";
-import staticLocationHook from "wouter/static-location";
 import { MouseEventHandler } from "react";
 
 const Header: FunctionComponent = () => <div />;
@@ -258,19 +257,3 @@ loc; // $ExpectType string
 
 useBrowserLocation({ base: "/something" });
 useBrowserLocation({ foo: "bar" }); // $ExpectError
-
-/*
- * staticLocationHook
- */
-
-const myStaticHook = staticLocationHook();
-const [staticLoc, staticNavigate] = myStaticHook();
-staticLoc; // $ExpectType string
-staticNavigate("/something");
-staticNavigate("/something", { replace: true });
-staticNavigate("/something", { foo: "bar" }); // $ExpectError
-myStaticHook.history; // $ExpectType readonly string[]
-
-staticLocationHook("/");
-staticLocationHook("/", { record: true });
-staticLocationHook("/", { foo: "bar" }); // $ExpectError
