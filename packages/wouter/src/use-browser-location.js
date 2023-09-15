@@ -59,7 +59,13 @@ export const useBrowserLocation = (opts = {}) => [
 // is to monkey-patch these methods.
 //
 // See https://stackoverflow.com/a/4585031
-if (typeof history !== "undefined") {
+// eslint-disable-next-line no-undef
+const patchKey = Symbol.for("wouter_v3");
+if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
+  // patch history object only once
+  // See: https://github.com/molefrog/wouter/issues/167
+  Object.defineProperty(window, patchKey, { value: true });
+
   for (const type of [eventPushState, eventReplaceState]) {
     const original = history[type];
     // TODO: we should be using unstable_batchedUpdates to avoid multiple re-renders,
