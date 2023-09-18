@@ -6,9 +6,5 @@ export default defineProject({
   test: {
     name: "wouter-react",
     environment: "jsdom",
-    typecheck: {
-      // TODO: remove this option when all types will moved to the new tooling
-      ignoreSourceErrors: true,
-    },
   },
 });
