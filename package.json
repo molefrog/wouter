@@ -102,6 +102,7 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@size-limit/preset-small-lib": "^6.0.4",
     "@testing-library/react": "^14.0.0",
+    "@types/babel__core": "^7.20.2",
     "@types/react": "^18.2.0",
     "@types/react-test-renderer": "^18.0.0",
     "@vitejs/plugin-react": "^4.0.4",
