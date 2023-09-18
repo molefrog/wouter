@@ -4,5 +4,7 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "strict": true,
-  }
+  },
+  // ignore legacy type test
+  "exclude": ["./types/type-specs.tsx"]
 }
