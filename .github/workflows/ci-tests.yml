@@ -31,6 +31,8 @@ jobs:
           npm run build
       - name: Run test
         run: npm test -- run --coverage
+      - name: Run type check
+        run: npm run lint-types
       - name: Lint Sources with ESLint
         run: npm run lint
       - name: Upload Coverage Report to Codecov
