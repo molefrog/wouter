@@ -4,7 +4,7 @@ import { defineConfig } from "rollup";
 
 export default defineConfig([
   {
-    input: ["wouter", "wouter/static-location", "wouter/use-location"],
+    input: ["wouter", "wouter/use-location"],
     external: ["preact", "preact/hooks"],
 
     output: {

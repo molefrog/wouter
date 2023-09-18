@@ -25,10 +25,6 @@
     "./use-location": {
       "types": "./types/use-location.d.ts",
       "default": "./esm/use-location.js"
-    },
-    "./static-location": {
-      "types": "./types/static-location.d.ts",
-      "default": "./esm/static-location.js"
     }
   },
   "types": "types/index.d.ts",
@@ -39,9 +35,6 @@
       ],
       "use-location": [
         "types/use-location.d.ts"
-      ],
-      "static-location": [
-        "./types/static-location.d.ts"
       ]
     }
   },

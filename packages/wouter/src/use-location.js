@@ -49,12 +49,10 @@ export const navigate = (to, { replace = false } = {}) =>
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
 // (This is achieved via `useEvent`.)
-const useLocation = (opts = {}) => [
+export const useLocation = (opts = {}) => [
   relativePath(opts.base, usePathname(opts)),
   useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
 ];
-
-export default useLocation;
 
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`
