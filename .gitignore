@@ -23,6 +23,9 @@ esm/
 # test coverage
 coverage/
 
+# vitest internals
+tsconfig.vitest-temp.json
+
 # type definitions in the project root are copied from types/ folder
 # before publishing, so they should be ignored
 /*.d.ts
