@@ -621,38 +621,43 @@ const App = () => (
 
 ### Are relative routes and links supported?
 
-Unlike [React Router](https://reach.tech/router/nesting), there is no first-class support for route
-nesting. However, thanks to the
-[base path support](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path), you can easily
-implement a nesting router yourself!
+Since v2.9.0, you can easily implement route nesting by using [`base`](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path) 
+and `parent` props together passed to the Router component. Declaring `base` path means that all child routes, links and hooks will 
+use current location relative to the base. For example:
 
 ```js
-const NestedRoutes = (props) => {
+<Router base="/app">
+  <Route path="/users">Users</Router> {/* Location here is "/users", not "/app/users"! */}
+</Router>
+```
+
+Additionally, to create multiple nesting contexts, base paths can be inherited from the parent router. This 
+isn't done be default for performance reasons, so you'll have to provide it manually via the `parent` prop.
+
+```js
+const UserRoutes = () => {
   const router = useRouter();
-  const [parentLocation] = useLocation();
 
-  const nestedBase = `${router.base}${props.base}`;
-
-  // don't render anything outside of the scope
-  if (!parentLocation.startsWith(nestedBase)) return null;
-
-  // we need key to make sure the router will remount when base changed
+  // takes current base path and appends "/users" to it 
   return (
-    <Router base={nestedBase} key={nestedBase}>
-      {props.children}
+    <Router base="/users" parent={router}>
+      <Route path="/all">All users</Route>
+      <Route path="/:id">User profile</Route>
     </Router>
   );
 };
 
-const App = () => (
-  <Router base="/app">
-    <NestedRoutes base="/dashboard">
-      {/* the real url is /app/dashboard/users */}
-      <Link to="/users" />
-      <Route path="/users" />
-    </NestedRoutes>
-  </Router>
-);
+const App = () => {
+  return (
+    <Router base="/app">
+      {/* matches "/app/home" */}
+      <Route path="/home" /> 
+
+      {/* matches "/app/users/all" and "/app/users/:id" */}
+      <UserRoutes />
+    </Router>
+  )
+}
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-nested-routes-ffd5h)**
