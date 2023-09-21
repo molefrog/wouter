@@ -14,6 +14,17 @@ const testRouteRender = (initialPath: string, jsx: ReactElement) => {
   return instance;
 };
 
+it("always renders its content when `path` is empty", () => {
+  const result = testRouteRender(
+    "/nothing",
+    <Route>
+      <h1>Hello!</h1>
+    </Route>
+  );
+
+  expect(result.findByType("h1").props.children).toBe("Hello!");
+});
+
 it("accepts plain children", () => {
   const result = testRouteRender(
     "/foo",
