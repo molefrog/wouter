@@ -78,6 +78,7 @@ export interface RouteProps<
   component?: ComponentType<
     RouteComponentProps<T extends DefaultParams ? T : RouteParams<RoutePath>>
   >;
+  nest?: boolean;
 }
 
 export function Route<
