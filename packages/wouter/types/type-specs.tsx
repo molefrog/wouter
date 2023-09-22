@@ -129,39 +129,6 @@ Redirect<UseLocWithNoOptions>({ href: "/app" });
 <Switch />; // $ExpectError
 
 /*
- * Router specs
- */
-
-<Router hook="wat?" />; // $ExpectError
-
-const useNetwork: UseNetworkLocation = (() => {}) as UseNetworkLocation;
-
-<Router hook={useNetwork}>this is a valid router</Router>;
-
-<Router>
-  <Route path="/" />
-  <b>Hello!</b>
-</Router>;
-
-<Router>
-  Hello, we have <Header /> and some {1337} numbers here.
-</Router>;
-
-<Router base="/app">Hello World!</Router>;
-
-const parentRouter = {
-  base: "/app",
-  ownBase: "/app",
-  ssrPath: "/",
-  matcher: (() => null) as unknown as MatcherFn,
-  hook: useLocation,
-};
-
-<Router parent={parentRouter}>Parent router is inherited</Router>;
-
-<Router ssrPath="/foo">SSR</Router>;
-
-/*
  * Hooks API
  */
 const [location, setLocation] = useLocation();
