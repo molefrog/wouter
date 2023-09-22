@@ -8,7 +8,6 @@ export interface RouterObject {
   readonly base: Path;
   readonly ownBase: Path;
   readonly parser: Parser;
-  readonly parent?: RouterObject;
   readonly ssrPath?: Path;
 }
 
@@ -17,6 +16,5 @@ export type RouterOptions = {
   hook?: BaseLocationHook;
   base?: Path;
   parser?: Parser;
-  parent?: RouterObject;
   ssrPath?: Path;
 };

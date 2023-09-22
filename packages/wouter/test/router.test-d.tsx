@@ -1,5 +1,6 @@
+import { ComponentProps } from "react";
 import { it, expectTypeOf, assertType } from "vitest";
-import { Router, Route, BaseLocationHook } from "wouter";
+import { Router, Route, BaseLocationHook, useRouter } from "wouter";
 
 it("should have at least one child", () => {
   // @ts-expect-error
@@ -33,8 +34,10 @@ it("can be customized with router properties passed as props", () => {
   <Router hook="wat?" />;
 
   const useFakeLocation: BaseLocationHook = () => ["/foo", () => {}];
-
   <Router hook={useFakeLocation}>this is a valid router</Router>;
+
+  let fn: ComponentProps<typeof Router>["hook"];
+  expectTypeOf(fn).exclude<undefined>().toBeFunction();
 
   <Router base="/app">Hello World!</Router>;
 
@@ -43,4 +46,11 @@ it("can be customized with router properties passed as props", () => {
   <Router base="/users" ssrPath="/users/all" hook={useFakeLocation}>
     Custom
   </Router>;
+});
+
+it("does not accept other props", () => {
+  const router = useRouter();
+
+  // @ts-expect-error `parent` prop isn't defined
+  <Router parent={router}>Parent router</Router>;
 });
