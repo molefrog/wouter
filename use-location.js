@@ -30,26 +30,23 @@ export const useLocationProperty = (fn, ssrFn) =>
   useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
 const currentSearch = () => {
-  if (typeof location!="undefined")
-    location.search;
-}
+  if (typeof location != "undefined") location.search;
+};
 
 export const useSearch = () => useLocationProperty(currentSearch);
 
 const currentPathname = () => {
-  if (typeof location!="undefined")
-    return location.pathname;
-}
+  if (typeof location != "undefined") return location.pathname;
+};
 
 export const usePathname = ({ ssrPath } = {}) => {
-  if (ssrPath)
-    return ssrPath;
+  if (ssrPath) return ssrPath;
 
   return useLocationProperty(
     currentPathname,
     ssrPath ? () => ssrPath : currentPathname
   );
-}
+};
 
 export const navigate = (to, { replace = false } = {}) =>
   history[replace ? eventReplaceState : eventPushState](null, "", to);
