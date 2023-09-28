@@ -43,13 +43,13 @@ export const usePathname = ({ ssrPath } = {}) =>
 export const navigate = (to, { replace = false } = {}) =>
   history[replace ? eventReplaceState : eventPushState](null, "", to);
 
-// the 2nd argument of the `useLocation` return value is a function
+// the 2nd argument of the `useBrowserLocation` return value is a function
 // that allows to perform a navigation.
 //
 // the function reference should stay the same between re-renders, so that
 // it can be passed down as an element prop without any performance concerns.
 // (This is achieved via `useEvent`.)
-export const useLocation = (opts = {}) => [
+export const useBrowserLocation = (opts = {}) => [
   relativePath(opts.base, usePathname(opts)),
   useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
 ];
