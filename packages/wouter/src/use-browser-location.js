@@ -8,7 +8,7 @@ const eventPopstate = "popstate";
 const eventPushState = "pushState";
 const eventReplaceState = "replaceState";
 const eventHashchange = "hashchange";
-export const events = [
+const events = [
   eventPopstate,
   eventPushState,
   eventReplaceState,
