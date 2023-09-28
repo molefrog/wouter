@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { it, expect, describe, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { useBrowserLocation as useLocation, navigate, useSearch } from "wouter/use-browser-location";
+import {
+  useBrowserLocation as useLocation,
+  navigate,
+  useSearch,
+} from "wouter/use-browser-location";
 
 it("returns a pair [value, update]", () => {
   const { result, unmount } = renderHook(() => useLocation());
