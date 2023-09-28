@@ -55,6 +55,6 @@ export type LocationHook = (options?: {
   base?: Path;
 }) => [Path, (to: Path, options?: { replace?: boolean }) => void];
 
-export const useLocation: LocationHook;
+export const useBrowserLocation: LocationHook;
 
 export type LocationTuple = HookReturnValue<LocationHook>;

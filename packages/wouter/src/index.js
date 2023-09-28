@@ -1,6 +1,6 @@
 import { parse as parsePattern } from "regexparam";
 
-import { useLocation as locationHook } from "./use-location.js";
+import { useBrowserLocation as locationHook } from "./use-browser-location.js";
 
 import {
   useContext,
