@@ -3,17 +3,17 @@ import { parse as parsePattern } from "regexparam";
 import { useLocation as locationHook } from "./use-location.js";
 
 import {
+  useRef,
+  useState,
   useContext,
   createContext,
   isValidElement,
   cloneElement,
   createElement as h,
   Fragment,
-  useState,
   forwardRef,
   useIsomorphicLayoutEffect,
   useEvent,
-  useInsertionEffect,
 } from "./react-deps.js";
 
 /*
@@ -29,7 +29,7 @@ const defaultRouter = {
   parser: parsePattern,
   base: "",
   // this option is used to override the current location during SSR
-  // ssrPath: undefined,
+  ssrPath: undefined,
 };
 
 const RouterCtx = createContext(defaultRouter);
@@ -69,47 +69,41 @@ export const useRoute = (pattern) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = ({
-  hook,
-  parser,
-  ssrPath,
-  base = "",
-  parent,
-  children,
-}) => {
-  // updates the current router with the props passed down to the component
-  const updateRouter = (router, proto = parent || defaultRouter) => {
-    router.hook = hook || proto.hook;
-    router.ssrPath = ssrPath || proto.ssrPath;
-    router.parser = parser || proto.parser;
-    router.ownBase = base;
+export const Router = (props) => {
+  const { hook, children } = props;
 
-    // store reference to parent router
-    router.parent = parent;
+  // the router we will inherit from - it is the closest router in the tree,
+  // unless the custom `hook` is provided (in that case it's the default one)
+  const parent_ = useRouter();
+  const parent = hook ? defaultRouter : parent_;
 
-    return router;
-  };
+  // holds the reference to the router object provided to the context
+  let router = parent;
 
-  // we use `useState` here, but it only catches the first render and never changes.
-  // https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
-  const [value] = useState(() =>
-    updateRouter({
-      // We must store base as a property accessor because effects
-      // somewhat counter-intuitively run in child components *first*!
-      // This means that by the time a parent's base is updated in the
-      // parent effect, the child effect has already run, and saw
-      // the parent's *previous* base during its own execution.
-      get base() {
-        return (value.parent || defaultRouter).base + value.ownBase;
-      },
-    })
-  ); // create the object once...
-  useInsertionEffect(() => {
-    updateRouter(value);
-  }); // ...then update it on each render
+  // this is needed for caching
+  let ref = useRef({}),
+    prev = ref.current,
+    next = prev;
+
+  for (let [k, v] of Object.entries(parent)) {
+    const option =
+      k === "base"
+        ? /* base is special case, it is appended to the parent's base */
+          v + (props[k] || "")
+        : props[k] || v;
+
+    if (prev === next && option !== next[k]) {
+      ref.current = next = Object.assign({}, next);
+    }
+
+    next[k] = option;
+
+    // the new router is no different from the parent, use parent
+    if (option !== parent[k]) router = next;
+  }
 
   return h(RouterCtx.Provider, {
-    value,
+    value: router,
     children,
   });
 };
