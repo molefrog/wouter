@@ -35,7 +35,7 @@
       ]
     },
     {
-      "path": "packages/wouter/esm/use-location.js",
+      "path": "packages/wouter/esm/use-browser-location.js",
       "limit": "1000 B",
       "ignore": [
         "react",
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "path": "packages/wouter-preact/esm/use-location.js",
+      "path": "packages/wouter-preact/esm/use-browser-location.js",
       "limit": "1000 B",
       "ignore": [
         "preact",
