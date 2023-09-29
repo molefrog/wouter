@@ -4,7 +4,6 @@ import { useLocation as locationHook } from "./use-location.js";
 
 import {
   useRef,
-  useState,
   useContext,
   createContext,
   isValidElement,
