@@ -92,15 +92,15 @@ export const Router = ({ children, ...props }) => {
     prev = ref.current,
     next = prev;
 
-  for (let [k, v] of Object.entries(parent)) {
+  for (let k in parent) {
     const option =
       k === "base"
         ? /* base is special case, it is appended to the parent's base */
-          v + (props[k] || "")
-        : props[k] || v;
+          parent[k] + (props[k] || "")
+        : props[k] || parent[k];
 
     if (prev === next && option !== next[k]) {
-      ref.current = next = Object.assign({}, next);
+      ref.current = next = { ...next };
     }
 
     next[k] = option;
