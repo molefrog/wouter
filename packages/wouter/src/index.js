@@ -69,18 +69,25 @@ export const useRoute = (pattern) => {
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
-export const Router = (props) => {
-  const { hook, children } = props;
-
+export const Router = ({ children, ...props }) => {
   // the router we will inherit from - it is the closest router in the tree,
   // unless the custom `hook` is provided (in that case it's the default one)
   const parent_ = useRouter();
-  const parent = hook ? defaultRouter : parent_;
+  const parent = props.hook ? defaultRouter : parent_;
 
-  // holds the reference to the router object provided to the context
-  let router = parent;
+  // holds to the context value: the router object
+  let value = parent;
 
-  // this is needed for caching
+  // what is happening below: to avoid unnecessary rerenders in child components,
+  // we ensure that the router object reference is stable, unless there are any
+  // changes that require reload (e.g. `base` prop changes -> all components that
+  // get the router from the context should rerender, even if the component is memoized).
+  // the expected behaviour is:
+  //
+  //   1) when the resulted router is no different from the parent, use parent
+  //   2) if the custom `hook` prop is provided, we always inherit from the
+  //      default router instead. this resets all previously overridden options.
+  //   3) when the router is customized here, it should stay stable between renders
   let ref = useRef({}),
     prev = ref.current,
     next = prev;
@@ -99,13 +106,10 @@ export const Router = (props) => {
     next[k] = option;
 
     // the new router is no different from the parent, use parent
-    if (option !== parent[k]) router = next;
+    if (option !== parent[k]) value = next;
   }
 
-  return h(RouterCtx.Provider, {
-    value: router,
-    children,
-  });
+  return h(RouterCtx.Provider, { value, children });
 };
 
 export const Route = ({ path, match, component, children }) => {
