@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import { it, expect, describe, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import {
-  useBrowserLocation as useLocation,
+  useBrowserLocation,
   navigate,
   useSearch,
 } from "wouter/use-browser-location";
 
 it("returns a pair [value, update]", () => {
-  const { result, unmount } = renderHook(() => useLocation());
+  const { result, unmount } = renderHook(() => useBrowserLocation());
   const [value, update] = result.current;
 
   expect(typeof value).toBe("string");
@@ -20,13 +20,13 @@ describe("`value` first argument", () => {
   beforeEach(() => history.replaceState(null, "", "/"));
 
   it("reflects the current pathname", () => {
-    const { result, unmount } = renderHook(() => useLocation());
+    const { result, unmount } = renderHook(() => useBrowserLocation());
     expect(result.current[0]).toBe("/");
     unmount();
   });
 
   it("reacts to `pushState` / `replaceState`", () => {
-    const { result, unmount } = renderHook(() => useLocation());
+    const { result, unmount } = renderHook(() => useBrowserLocation());
 
     act(() => history.pushState(null, "", "/foo"));
     expect(result.current[0]).toBe("/foo");
@@ -37,7 +37,7 @@ describe("`value` first argument", () => {
   });
 
   it("supports history.back() navigation", async () => {
-    const { result, unmount } = renderHook(() => useLocation());
+    const { result, unmount } = renderHook(() => useBrowserLocation());
 
     act(() => history.pushState(null, "", "/foo"));
     await waitFor(() => expect(result.current[0]).toBe("/foo"));
@@ -51,7 +51,9 @@ describe("`value` first argument", () => {
   });
 
   it("returns a pathname without a basepath", () => {
-    const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
+    const { result, unmount } = renderHook(() =>
+      useBrowserLocation({ base: "/app" })
+    );
 
     act(() => history.pushState(null, "", "/app/dashboard"));
     expect(result.current[0]).toBe("/dashboard");
@@ -59,7 +61,9 @@ describe("`value` first argument", () => {
   });
 
   it("returns `/` when URL contains only a basepath", () => {
-    const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
+    const { result, unmount } = renderHook(() =>
+      useBrowserLocation({ base: "/app" })
+    );
 
     act(() => history.pushState(null, "", "/app"));
     expect(result.current[0]).toBe("/");
@@ -68,7 +72,7 @@ describe("`value` first argument", () => {
 
   it("basepath should be case-insensitive", () => {
     const { result, unmount } = renderHook(() =>
-      useLocation({ base: "/MyApp" })
+      useBrowserLocation({ base: "/MyApp" })
     );
 
     act(() => history.pushState(null, "", "/myAPP/users/JohnDoe"));
@@ -78,7 +82,7 @@ describe("`value` first argument", () => {
 
   it("returns an absolute path in case of unmatched base path", () => {
     const { result, unmount } = renderHook(() =>
-      useLocation({ base: "/MyApp" })
+      useBrowserLocation({ base: "/MyApp" })
     );
 
     act(() => history.pushState(null, "", "/MyOtherApp/users/JohnDoe"));
@@ -96,7 +100,7 @@ describe("`value` first argument", () => {
       useEffect(() => {
         locationRenders.current += 1;
       });
-      return useLocation();
+      return useBrowserLocation();
     });
 
     const { result: searchResult, unmount: searchUnmount } = renderHook(() => {
@@ -142,7 +146,7 @@ describe("`value` first argument", () => {
 
 describe("`update` second parameter", () => {
   it("rerenders the component", () => {
-    const { result, unmount } = renderHook(() => useLocation());
+    const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     act(() => update("/about"));
@@ -151,7 +155,7 @@ describe("`update` second parameter", () => {
   });
 
   it("changes the current location", () => {
-    const { result, unmount } = renderHook(() => useLocation());
+    const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     act(() => update("/about"));
@@ -160,7 +164,7 @@ describe("`update` second parameter", () => {
   });
 
   it("saves a new entry in the History object", () => {
-    const { result, unmount } = renderHook(() => useLocation());
+    const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     const histBefore = history.length;
@@ -171,7 +175,7 @@ describe("`update` second parameter", () => {
   });
 
   it("replaces last entry with a new entry in the History object", () => {
-    const { result, unmount } = renderHook(() => useLocation());
+    const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     const histBefore = history.length;
@@ -183,7 +187,9 @@ describe("`update` second parameter", () => {
   });
 
   it("stays the same reference between re-renders (function ref)", () => {
-    const { result, rerender, unmount } = renderHook(() => useLocation());
+    const { result, rerender, unmount } = renderHook(() =>
+      useBrowserLocation()
+    );
 
     const updateWas = result.current[1];
     rerender();
@@ -194,7 +200,9 @@ describe("`update` second parameter", () => {
   });
 
   it("supports a basepath", () => {
-    const { result, unmount } = renderHook(() => useLocation({ base: "/app" }));
+    const { result, unmount } = renderHook(() =>
+      useBrowserLocation({ base: "/app" })
+    );
     const update = result.current[1];
 
     act(() => update("/dashboard"));
