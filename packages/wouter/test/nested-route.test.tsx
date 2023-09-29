@@ -4,7 +4,7 @@ import { act, render, renderHook } from "@testing-library/react";
 import { Route, Router, Switch, useRouter } from "wouter";
 import { memoryLocation, staticLocation } from "./test-utils.js";
 
-describe.skip("when `nest` prop is given", () => {
+describe("when `nest` prop is given", () => {
   it("renders by default", () => {
     const { container } = render(<Route nest>matched!</Route>);
     expect(container.innerHTML).toBe("matched!");
@@ -83,7 +83,7 @@ describe.skip("when `nest` prop is given", () => {
   });
 
   it("reacts to `nest` updates", () => {
-    const { hook } = staticLocation("/app");
+    const { hook } = staticLocation("/app/apple/products");
 
     const App = ({ nested }: { nested: boolean }) => {
       return (
