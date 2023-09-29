@@ -4,7 +4,6 @@ import { useBrowserLocation } from "./use-browser-location.js";
 
 import {
   useRef,
-  useState,
   useContext,
   createContext,
   isValidElement,
