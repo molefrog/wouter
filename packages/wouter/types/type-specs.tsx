@@ -11,8 +11,6 @@ import {
   useRouter,
 } from "wouter";
 
-import { useLocation as useBrowserLocation } from "wouter/use-location";
-
 const Header: React.FunctionComponent = () => <div />;
 const Profile = ({ params }: RouteComponentProps<{ id: string }>) => (
   <div>User id: {params.id}</div>
@@ -256,13 +254,3 @@ setNetworkLoc("/home", { delay: 2000 });
 
 const router = useRouter(); // $ExpectType RouterObject
 router.parent; // $ExpectType RouterObject | undefined
-
-/*
- * Standalone useLocation hook
- */
-
-const [loc, navigate] = useBrowserLocation();
-loc; // $ExpectType string
-
-useBrowserLocation({ base: "/something" });
-useBrowserLocation({ foo: "bar" }); // $ExpectError
