@@ -81,7 +81,7 @@ describe("`base` prop", () => {
     expect(result.current.base).toBe("/foo");
   });
 
-  it.skip("appends provided path to the parent router's base", () => {
+  it("appends provided path to the parent router's base", () => {
     const { result } = renderHook(() => useRouter(), {
       wrapper: (props) => (
         <Router base="/baz">
@@ -95,7 +95,7 @@ describe("`base` prop", () => {
   });
 });
 
-describe.skip("`hook` prop", () => {
+describe("`hook` prop", () => {
   it("when provided, the router isn't inherited from the parent", () => {
     const customHook: LocationHook = () => ["/foo", () => {}];
     const newParser: Parser = () => ({ pattern: /(.*)/, keys: [] });
@@ -118,7 +118,7 @@ describe.skip("`hook` prop", () => {
   });
 });
 
-it.skip("updates the context when settings are changed", () => {
+it("updates the context when settings are changed", () => {
   const state: { renders: number } & Partial<ComponentProps<typeof Router>> = {
     renders: 0,
   };
