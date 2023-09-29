@@ -49,14 +49,14 @@ const matchRoute = (parser, route, path, loose) => {
   if (!route) return [true, {}];
 
   const { pattern, keys } = parser(route, loose);
-  const matches = pattern.exec(path);
+  const [$base, ...matches] = pattern.exec(path) || [];
 
-  if (!matches) return [false, null];
-
-  let params = Object.fromEntries(keys.map((key, i) => [key, matches[i + 1]]));
-  if (loose) params.base = matches[0];
-
-  return [true, params];
+  return $base
+    ? [
+        true,
+        keys.reduce((prm, k, i) => (prm[k] = matches[i] && prm), { $base }),
+      ]
+    : [false, null];
 };
 
 export const useRoute = (pattern) =>
@@ -109,7 +109,7 @@ export const Router = ({ children, ...props }) => {
   return h(RouterCtx.Provider, { value, children });
 };
 
-const hRoute = ({ children, component }, params) => {
+const h_route = ({ children, component }, params) => {
   // React-Router style `component` prop
   if (component) return h(component, { params });
 
@@ -128,8 +128,8 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
   const { base, ...params } = params_;
 
   return base
-    ? h(Router, { base }, hRoute(renderProps, params))
-    : hRoute(renderProps, params);
+    ? h(Router, { base }, h_route(renderProps, params))
+    : h_route(renderProps, params);
 };
 
 export const Link = forwardRef((props, ref) => {
