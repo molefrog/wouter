@@ -1,6 +1,6 @@
 import { parse as parsePattern } from "regexparam";
 
-import { useBrowserLocation as locationHook } from "./use-browser-location.js";
+import { useBrowserLocation } from "./use-browser-location.js";
 
 import {
   useContext,
@@ -25,7 +25,7 @@ import {
  */
 
 const defaultRouter = {
-  hook: locationHook,
+  hook: useBrowserLocation,
   parser: parsePattern,
   base: "",
   // this option is used to override the current location during SSR
