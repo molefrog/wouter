@@ -2,11 +2,16 @@ import { useState, useSyncExternalStore } from "react";
 import { Path, LocationHook, BaseLocationHook } from "wouter";
 import mitt from "mitt";
 
+import { relativePath } from "../src/paths";
+
 /**
  * Static location that never changes
  */
 export const staticLocation = (path: Path): { hook: BaseLocationHook } => ({
-  hook: () => [path, (to: Path) => {} /* does nothing */],
+  hook: ({ base }) => [
+    relativePath(base, path),
+    (to: Path) => {} /* does nothing */,
+  ],
 });
 
 /**

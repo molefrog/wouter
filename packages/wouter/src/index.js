@@ -45,26 +45,24 @@ const useLocationFromRouter = (router) => router.hook(router);
 
 export const useLocation = () => useLocationFromRouter(useRouter());
 
-const matchRoute = (router, route) => {
-  const { pattern, keys } = router.parser(route);
+const matchRoute = (parser, route, path, loose) => {
+  if (!route) return [true, {}];
 
-  return (path) => {
-    const matches = pattern.exec(path);
+  const { pattern, keys } = parser(route, loose);
+  const matches = pattern.exec(path);
 
-    return matches
-      ? [true, Object.fromEntries(keys.map((key, i) => [key, matches[i + 1]]))] // convert to object
-      : [false, null]; //  no match
-  };
+  if (!matches) return [false, null];
+
+  let params = Object.fromEntries(keys.map((key, i) => [key, matches[i + 1]]));
+  if (loose) params.base = matches[0];
+
+  return [true, params];
 };
 
-export const useRoute = (pattern) => {
-  const [location] = useLocation();
-  const router = useRouter();
+export const useRoute = (pattern) =>
+  matchRoute(useRouter().parser, pattern, useLocation()[0]);
 
-  return pattern ? matchRoute(router, pattern)(location) : [true, {}];
-};
-
-/*a
+/*
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
  */
 
@@ -111,19 +109,27 @@ export const Router = ({ children, ...props }) => {
   return h(RouterCtx.Provider, { value, children });
 };
 
-export const Route = ({ path, match, component, children }) => {
-  const useRouteMatch = useRoute(path);
-
-  // `props.match` is present - Route is controlled by the Switch
-  const [matches, params] = match || useRouteMatch;
-
-  if (!matches) return null;
-
+const hRoute = ({ children, component }, params) => {
   // React-Router style `component` prop
   if (component) return h(component, { params });
 
   // support render prop or plain children
   return typeof children === "function" ? children(params) : children;
+};
+
+export const Route = ({ path, nest, match, ...renderProps }) => {
+  const router = useRouter();
+  const [location] = useLocationFromRouter(router);
+
+  const [matches, params_] =
+    match ?? matchRoute(router.parser, path, location, nest);
+
+  if (!matches) return null;
+  const { base, ...params } = params_;
+
+  return base
+    ? h(Router, { base }, hRoute(renderProps, params))
+    : hRoute(renderProps, params);
 };
 
 export const Link = forwardRef((props, ref) => {
@@ -189,9 +195,12 @@ export const Switch = ({ children, location }) => {
       // but we do require it to contain a truthy `path` prop.
       // this allows to use different components that wrap Route
       // inside of a switch, for example <AnimatedRoute />.
-      (match = element.props.path
-        ? matchRoute(router, element.props.path)(location || originalLocation)
-        : [true, {}])[0]
+      (match = matchRoute(
+        router.parser,
+        element.props.path,
+        location || originalLocation,
+        element.props.nest
+      ))[0]
     )
       return cloneElement(element, { match });
   }
