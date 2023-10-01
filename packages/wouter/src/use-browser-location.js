@@ -54,13 +54,13 @@ export const useBrowserLocation = (opts = {}) => [
   useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
 ];
 
+const patchKey = Symbol.for("wouter_v3");
+
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`
 // is to monkey-patch these methods.
 //
 // See https://stackoverflow.com/a/4585031
-// eslint-disable-next-line no-undef
-const patchKey = Symbol.for("wouter_v3");
 if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
   // patch history object only once
   // See: https://github.com/molefrog/wouter/issues/167
