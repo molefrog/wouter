@@ -5,6 +5,8 @@ import {
   useBrowserLocation,
   navigate,
   useSearch,
+  // @ts-expect-error
+  useHistoryState,
 } from "wouter/use-browser-location";
 
 it("returns a pair [value, update]", () => {
@@ -141,6 +143,23 @@ describe("`value` first argument", () => {
 
     unmount();
     searchUnmount();
+  });
+
+  it("supports history state", () => {
+    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result: state, unmount: unmountState } = renderHook(() =>
+      useHistoryState()
+    );
+
+    const navigate = result.current[1];
+
+    // @ts-expect-error
+    act(() => navigate("/path", { state: { hello: "world" } }));
+
+    expect(state.current).toStrictEqual({ hello: "world" });
+
+    unmount();
+    unmountState();
   });
 });
 
