@@ -54,12 +54,14 @@ export const useBrowserLocation = (opts = {}) => [
   useEvent((to, navOpts) => navigate(absolutePath(to, opts.base), navOpts)),
 ];
 
+const patchKey = Symbol.for("wouter_v3");
+
 // While History API does have `popstate` event, the only
 // proper way to listen to changes via `push/replaceState`
 // is to monkey-patch these methods.
 //
 // See https://stackoverflow.com/a/4585031
-if (typeof history !== "undefined") {
+if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
   for (const type of [eventPushState, eventReplaceState]) {
     const original = history[type];
     // TODO: we should be using unstable_batchedUpdates to avoid multiple re-renders,
@@ -74,4 +76,8 @@ if (typeof history !== "undefined") {
       return result;
     };
   }
+
+  // patch history object only once
+  // See: https://github.com/molefrog/wouter/issues/167
+  Object.defineProperty(window, patchKey, { value: true });
 }
