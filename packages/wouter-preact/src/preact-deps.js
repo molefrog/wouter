@@ -7,6 +7,7 @@ export {
   Fragment,
 } from "preact";
 export {
+  useRef,
   useLayoutEffect as useIsomorphicLayoutEffect,
   useLayoutEffect as useInsertionEffect,
   useState,
