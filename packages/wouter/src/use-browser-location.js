@@ -62,10 +62,6 @@ const patchKey = Symbol.for("wouter_v3");
 //
 // See https://stackoverflow.com/a/4585031
 if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
-  // patch history object only once
-  // See: https://github.com/molefrog/wouter/issues/167
-  Object.defineProperty(window, patchKey, { value: true });
-
   for (const type of [eventPushState, eventReplaceState]) {
     const original = history[type];
     // TODO: we should be using unstable_batchedUpdates to avoid multiple re-renders,
@@ -80,4 +76,8 @@ if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
       return result;
     };
   }
+
+  // patch history object only once
+  // See: https://github.com/molefrog/wouter/issues/167
+  Object.defineProperty(window, patchKey, { value: true });
 }
