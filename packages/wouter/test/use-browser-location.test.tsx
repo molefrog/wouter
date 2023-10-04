@@ -152,7 +152,6 @@ describe("`value` first argument", () => {
 
     const navigate = result.current[1];
 
-    // @ts-expect-error
     act(() => navigate("/path", { state: { hello: "world" } }));
 
     expect(state.current).toStrictEqual({ hello: "world" });
