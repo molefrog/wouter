@@ -6,6 +6,7 @@ import {
   AnchorHTMLAttributes,
   FunctionComponent,
   PropsWithChildren,
+  RefAttributes,
   ComponentType,
   ReactElement,
   ReactChild,
@@ -113,7 +114,7 @@ export function Redirect<H extends BaseLocationHook = LocationHook>(
 ): ReactElement<any, any> | null;
 
 export function Link<H extends BaseLocationHook = LocationHook>(
-  props: PropsWithChildren<LinkProps<H>>,
+  props: PropsWithChildren<LinkProps<H>> & RefAttributes<HTMLAnchorElement>,
   context?: any
 ): ReactElement<any, any> | null;
 
