@@ -49,6 +49,15 @@ it("supports replace navigation", () => {
   unmount();
 });
 
+it("supports history state", () => {
+  const testState = { hello: "world" };
+  const { unmount } = render(<Redirect to="/users" state={testState} />);
+
+  expect(location.pathname).toBe("/users");
+  expect(history.state).toBe(testState);
+  unmount();
+});
+
 it("useLayoutEffect should return nothing", () => {
   const { unmount } = render(
     // @ts-expect-error
