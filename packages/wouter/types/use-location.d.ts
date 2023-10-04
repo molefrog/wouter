@@ -39,6 +39,8 @@ export const useSearch: () => string;
 
 export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
+export const useHistoryState: <T = any>() => T;
+
 export const navigate: (
   to: string | URL,
   options?: { replace?: boolean }

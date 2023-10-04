@@ -5,7 +5,6 @@ import {
   useBrowserLocation,
   navigate,
   useSearch,
-  // @ts-expect-error
   useHistoryState,
 } from "wouter/use-browser-location";
 
