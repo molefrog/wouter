@@ -14,7 +14,6 @@ const LinkWithForwardedRef = (props: PropsWithChildren<{}>) => {
   }, [ref]);
 
   return (
-    // @ts-expect-error link doesn't have ref type
     <Link href="/about" ref={ref}>
       {props.children}
     </Link>
