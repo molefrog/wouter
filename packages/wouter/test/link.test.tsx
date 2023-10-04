@@ -191,3 +191,17 @@ it("renders `href` with absolute links", () => {
   const link = getByTestId("link");
   expect(link.getAttribute("href")).toBe("/home");
 });
+
+it("supports history state", () => {
+  const testState = { hello: "world" };
+  const { getByTestId, unmount } = render(
+    <Link href="/goo-baz" state={testState}>
+      <a data-testid="link" />
+    </Link>
+  );
+
+  fireEvent.click(getByTestId("link"));
+  expect(location.pathname).toBe("/goo-baz");
+  expect(history.state).toBe(testState);
+  unmount();
+});
