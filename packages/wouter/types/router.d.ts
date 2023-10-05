@@ -1,4 +1,4 @@
-import { Path, BaseLocationHook } from "./use-location";
+import { Path, BaseLocationHook } from "./use-browser-location";
 
 export type Parser = (route: Path) => { pattern: RegExp; keys: string[] };
 
