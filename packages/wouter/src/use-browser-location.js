@@ -41,7 +41,8 @@ export const usePathname = ({ ssrPath } = {}) =>
   );
 
 const currentHistoryState = () => history.state;
-export const useHistoryState = () => useLocationProperty(currentHistoryState);
+export const useHistoryState = () =>
+  useLocationProperty(currentHistoryState, () => null);
 
 export const navigate = (to, { replace = false, state = null } = {}) =>
   history[replace ? eventReplaceState : eventPushState](state, "", to);
