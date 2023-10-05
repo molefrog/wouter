@@ -41,9 +41,10 @@ export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
 export const useHistoryState: <T = any>() => T;
 
-type NavigateOptions = { replace?: boolean; state?: any };
-
-export const navigate: (to: string | URL, options?: NavigateOptions) => void;
+export const navigate: (
+  to: string | URL,
+  options?: { replace?: boolean; state?: any }
+) => void;
 
 /*
  * Default `useLocation`
@@ -54,7 +55,7 @@ export const navigate: (to: string | URL, options?: NavigateOptions) => void;
 // navigate with `pushState` or `replaceState`.
 export type LocationHook = (options?: {
   base?: Path;
-}) => [Path, (to: Path, options?: NavigateOptions) => void];
+}) => [Path, typeof navigate];
 
 export const useBrowserLocation: LocationHook;
 
