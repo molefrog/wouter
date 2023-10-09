@@ -46,15 +46,28 @@ const useLocationFromRouter = (router) => router.hook(router);
 export const useLocation = () => useLocationFromRouter(useRouter());
 
 const matchRoute = (parser, route, path, loose) => {
+  // falsy patterns mean this route "always matches"
   if (!route) return [true, {}];
 
+  // when parser is in "loose" mode, `$base` is equal to the
+  // first part of the route that matches the pattern
+  // (e.g. for pattern `/a/:b` and path `/a/1/2/3` the `$base` is `a/1`)
+  // we use this for route nesting
   const { pattern, keys } = parser(route, loose);
   const [$base, ...matches] = pattern.exec(path) || [];
 
   return $base
     ? [
         true,
-        keys.reduce((prm, k, i) => (prm[k] = matches[i] && prm), { $base }),
+
+        // an object with parameters matched, e.g. { foo: "bar" } for "/:foo"
+        // we "zip" two arrays here to construct the object
+        // ["foo"], ["bar"] → { foo: "bar" }
+        Object.fromEntries(keys.map((key, i) => [key, matches[i]])),
+
+        // the third value if only present when parser is in "loose" mode,
+        // so that we can extract the base path for nested routes
+        ...(loose ? [$base] : []),
       ]
     : [false, null];
 };
