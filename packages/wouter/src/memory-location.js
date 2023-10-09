@@ -48,5 +48,3 @@ export const memoryLocation = ({
     history: record ? history : undefined,
   };
 };
-
-// TYPE: { hook: BaseLocationHook; navigate: (path: Path) => void }
