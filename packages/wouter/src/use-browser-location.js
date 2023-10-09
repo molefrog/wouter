@@ -31,11 +31,8 @@ export const useLocationProperty = (fn, ssrFn) =>
 
 const currentSearch = () => location.search;
 
-export const useSearch = ({ ssrSearch } = {}) =>
-  useLocationProperty(
-    currentSearch,
-    ssrSearch ? () => ssrSearch : currentSearch
-  );
+export const useSearch = ({ ssrSearch = "" } = {}) =>
+  useLocationProperty(currentSearch, () => ssrSearch);
 
 const currentPathname = () => location.pathname;
 
@@ -86,3 +83,4 @@ if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
   // See: https://github.com/molefrog/wouter/issues/167
   Object.defineProperty(window, patchKey, { value: true });
 }
+ 
