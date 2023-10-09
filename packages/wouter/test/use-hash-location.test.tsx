@@ -72,7 +72,16 @@ it("does not change anything besides the hash", () => {
   expect(location.search).toBe("?bar");
 });
 
-it.todo("supports `state` option when navigating", () => {
+it("creates a new history entry when navigating", () => {
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+
+  const initialLength = history.length;
+  navigate("/about");
+  expect(history.length).toBe(initialLength + 1);
+});
+
+it("supports `state` option when navigating", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
