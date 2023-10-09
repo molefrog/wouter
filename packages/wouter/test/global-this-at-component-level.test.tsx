@@ -2,7 +2,7 @@
  * @vitest-environment node
  */
 
-import { test, expect } from "vitest";
+import { test, expect, describe } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   useSearch,
@@ -10,16 +10,26 @@ import {
   useBrowserLocation,
 } from "wouter/use-browser-location";
 
-test("useSearch works in node", () => {
-  const App = () => {
-    // todo: fix type
-    // @ts-ignore
-    const search = useSearch({ ssrSearch: "foo=1" });
-    return <>{search}</>;
-  };
+describe("useSearch", () => {
+  test("works in node", () => {
+    const App = () => {
+      const search = useSearch({ ssrSearch: "?foo=1" });
+      return <>{search}</>;
+    };
 
-  const rendered = renderToStaticMarkup(<App />);
-  expect(rendered).toBe("foo=1");
+    const rendered = renderToStaticMarkup(<App />);
+    expect(rendered).toBe("?foo=1");
+  });
+
+  test("works in node without options", () => {
+    const App = () => {
+      const search = useSearch();
+      return <>search: {search}</>;
+    };
+
+    const rendered = renderToStaticMarkup(<App />);
+    expect(rendered).toBe("search: ");
+  });
 });
 
 test("usePathname works in node", () => {
@@ -34,8 +44,6 @@ test("usePathname works in node", () => {
 
 test("useBrowserLocation works in node", () => {
   const App = () => {
-    // todo: fix type
-    // @ts-ignore
     const [location] = useBrowserLocation({ ssrPath: "hello-from-server" });
     return <>{location}</>;
   };
