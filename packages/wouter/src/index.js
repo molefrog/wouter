@@ -198,7 +198,7 @@ const flattenChildren = (children) => {
 
 export const Switch = ({ children, location }) => {
   const router = useRouter();
-  const [originalLocation] = useLocation();
+  const [originalLocation] = useLocationFromRouter(router);
 
   for (const element of flattenChildren(children)) {
     let match = 0;
