@@ -30,7 +30,9 @@ export const useLocationProperty = (fn, ssrFn) =>
   useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
 const currentSearch = () => location.search;
-export const useSearch = () => useLocationProperty(currentSearch);
+
+export const useSearch = ({ ssrSearch = "" } = {}) =>
+  useLocationProperty(currentSearch, () => ssrSearch);
 
 const currentPathname = () => location.pathname;
 

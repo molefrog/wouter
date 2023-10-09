@@ -35,7 +35,10 @@ export const useLocationProperty: <S extends Primitive>(
   ssrFn?: () => S
 ) => S;
 
-export const useSearch: () => string;
+type SearchString = `?${string}` | "";
+export const useSearch: (options?: {
+  ssrSearch?: SearchString;
+}) => SearchString;
 
 export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
@@ -55,6 +58,7 @@ export const navigate: (
 // navigate with `pushState` or `replaceState`.
 export type LocationHook = (options?: {
   base?: Path;
+  ssrPath?: Path;
 }) => [Path, typeof navigate];
 
 export const useBrowserLocation: LocationHook;

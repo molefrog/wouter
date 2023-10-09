@@ -2,7 +2,7 @@
  * Transforms `path` into its relative `base` version
  * If base isn't part of the path provided returns absolute path e.g. `~/app`
  */
-export const relativePath = (base = "", path = location.pathname) =>
+export const relativePath = (base = "", path) =>
   !path.toLowerCase().indexOf(base.toLowerCase())
     ? path.slice(base.length) || "/"
     : "~" + path;
