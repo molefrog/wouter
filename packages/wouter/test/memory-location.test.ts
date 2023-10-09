@@ -35,12 +35,12 @@ it('should return location hook that has initial path "/" by default', () => {
 });
 
 it("should return location hook that supports `base` option for nested routing", () => {
-  const { hook } = memoryLocation();
+  const { hook } = memoryLocation({ path: "/nested/test" });
 
   const { result, unmount } = renderHook(() => hook({ base: "/nested" }));
   const [value] = result.current;
 
-  expect(value).toBe("/nested");
+  expect(value).toBe("/test");
   unmount();
 });
 
