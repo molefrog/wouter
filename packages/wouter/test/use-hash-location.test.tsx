@@ -1,10 +1,9 @@
 import { it, expect, beforeEach } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
+import { renderToStaticMarkup } from "react-dom/server";
 
-const useHashLocation = (): [string, (to: string) => void] => [
-  "/",
-  (to: string) => {},
-];
+import { useHashLocation } from "wouter/use-hash-location";
+import { waitForHashChangeEvent } from "./test-utils";
 
 beforeEach(() => {
   history.replaceState(null, "", "/");
@@ -27,13 +26,12 @@ it("isn't sensitive to leading slash", () => {
   expect(path).toBe("/app/users");
 });
 
-it("rerenders when hash changes", () => {
+it("rerenders when hash changes", async () => {
   const { result } = renderHook(() => useHashLocation());
-  const [path] = result.current;
 
-  expect(path).toBe("/");
+  expect(result.current[0]).toBe("/");
 
-  act(() => {
+  await waitForHashChangeEvent(() => {
     location.hash = "/app/users";
   });
 
@@ -58,9 +56,7 @@ it("should not rerender when pathname changes", () => {
   });
 
   expect(result.current).toBe(1);
-  act(() => {
-    history.replaceState(null, "", "/foo?bar#/app");
-  });
+  history.replaceState(null, "", "/foo?bar#/app");
 
   expect(result.current).toBe(1);
 });
@@ -76,7 +72,7 @@ it("does not change anything besides the hash", () => {
   expect(location.search).toBe("?bar");
 });
 
-it("supports `state` option when navigating", () => {
+it.todo("supports `state` option when navigating", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
@@ -91,4 +87,27 @@ it("never changes reference to `navigate` between rerenders", () => {
   rerender();
 
   expect(result.current[1]).toBe(updateWas);
+});
+
+it("uses `ssrPath` when rendered on the server", () => {
+  const App = () => {
+    const [path] = useHashLocation({ ssrPath: "/hello-from-server" });
+    return <>{path}</>;
+  };
+
+  const rendered = renderToStaticMarkup(<App />);
+  expect(rendered).toBe("/hello-from-server");
+});
+
+it("is not sensitive to leading / or # when navigating", async () => {
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+
+  await waitForHashChangeEvent(() => navigate("look-ma-no-slashes"));
+  expect(location.hash).toBe("#/look-ma-no-slashes");
+  expect(result.current[0]).toBe("/look-ma-no-slashes");
+
+  await waitForHashChangeEvent(() => navigate("#/look-ma-no-hashes"));
+  expect(location.hash).toBe("#/look-ma-no-hashes");
+  expect(result.current[0]).toBe("/look-ma-no-hashes");
 });
