@@ -113,7 +113,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.0",
     "jsdom": "^22.1.0",
-    "mitt": "^3.0.1",
     "path-to-regexp": "^6.2.1",
     "preact": "^10.0.0",
     "preact-render-to-string": "^6.0.3",
