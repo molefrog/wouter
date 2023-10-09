@@ -23,7 +23,7 @@
       "default": "./esm/index.js"
     },
     "./use-browser-location": {
-      "types": "./types/use-location.d.ts",
+      "types": "./types/use-browser-location.d.ts",
       "default": "./esm/use-browser-location.js"
     }
   },
@@ -34,7 +34,7 @@
         "types/index.d.ts"
       ],
       "use-browser-location": [
-        "types/use-location.d.ts"
+        "types/use-browser-location.d.ts"
       ]
     }
   },

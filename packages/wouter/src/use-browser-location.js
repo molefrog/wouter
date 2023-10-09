@@ -42,8 +42,12 @@ export const usePathname = ({ ssrPath } = {}) =>
     ssrPath ? () => ssrPath : currentPathname
   );
 
-export const navigate = (to, { replace = false } = {}) =>
-  history[replace ? eventReplaceState : eventPushState](null, "", to);
+const currentHistoryState = () => history.state;
+export const useHistoryState = () =>
+  useLocationProperty(currentHistoryState, () => null);
+
+export const navigate = (to, { replace = false, state = null } = {}) =>
+  history[replace ? eventReplaceState : eventPushState](state, "", to);
 
 // the 2nd argument of the `useBrowserLocation` return value is a function
 // that allows to perform a navigation.

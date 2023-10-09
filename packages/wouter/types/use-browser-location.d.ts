@@ -39,9 +39,11 @@ export const useSearch: () => string;
 
 export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
+export const useHistoryState: <T = any>() => T;
+
 export const navigate: (
   to: string | URL,
-  options?: { replace?: boolean }
+  options?: { replace?: boolean; state?: any }
 ) => void;
 
 /*
@@ -53,8 +55,8 @@ export const navigate: (
 // navigate with `pushState` or `replaceState`.
 export type LocationHook = (options?: {
   base?: Path;
-}) => [Path, (to: Path, options?: { replace?: boolean }) => void];
+}) => [Path, typeof navigate];
 
-export const useLocation: LocationHook;
+export const useBrowserLocation: LocationHook;
 
 export type LocationTuple = HookReturnValue<LocationHook>;
