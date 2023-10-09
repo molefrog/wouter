@@ -1,8 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { useRoute, Match, Router } from "wouter";
 import { it, expect } from "vitest";
-
-import { staticLocation, memoryLocation } from "./test-utils";
+import { memoryLocation } from "wouter/memory-location";
 
 it("is case insensitive", () => {
   assertRoute("/Users", "/users", {});
@@ -97,7 +96,10 @@ it("reacts to pattern updates", () => {
     {
       wrapper: (props) => (
         <Router
-          hook={staticLocation("/blog/products/40/read-all").hook}
+          hook={
+            memoryLocation({ path: "/blog/products/40/read-all", static: true })
+              .hook
+          }
           {...props}
         />
       ),
@@ -127,7 +129,7 @@ it("reacts to pattern updates", () => {
 });
 
 it("reacts to location updates", () => {
-  const { hook, navigate } = memoryLocation("/");
+  const { hook, navigate } = memoryLocation();
 
   const { result } = renderHook(() => useRoute("/cities/:city?"), {
     wrapper: (props) => <Router hook={hook} {...props} />,
@@ -159,7 +161,10 @@ const assertRoute = (
 ) => {
   const { result } = renderHook(() => useRoute(pattern), {
     wrapper: (props) => (
-      <Router hook={staticLocation(location).hook} {...props} />
+      <Router
+        hook={memoryLocation({ path: location, static: true }).hook}
+        {...props}
+      />
     ),
   });
 

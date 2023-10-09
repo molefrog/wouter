@@ -1,5 +1,4 @@
 import { it, assertType, expectTypeOf } from "vitest";
-// @ts-expect-error todo: implement memory location
 import { memoryLocation } from "wouter/memory-location";
 
 it("should return hook that supports location spec", () => {
