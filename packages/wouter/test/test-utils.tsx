@@ -1,7 +1,8 @@
 import { useState, useSyncExternalStore } from "react";
-import { Path, LocationHook, BaseLocationHook } from "wouter";
+import { Path, BaseLocationHook } from "wouter";
 import mitt from "mitt";
 
+// @ts-ignore todo: when wouter/memory-location is ready remove this import
 import { relativePath } from "../src/paths";
 
 /**
