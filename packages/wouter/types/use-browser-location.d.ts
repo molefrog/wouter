@@ -35,8 +35,10 @@ export const useLocationProperty: <S extends Primitive>(
   ssrFn?: () => S
 ) => S;
 
-type SearchString = `?${string}` | ''
-export const useSearch: (options?: { ssrSearch?: SearchString }) => SearchString;
+type SearchString = `?${string}` | "";
+export const useSearch: (options?: {
+  ssrSearch?: SearchString;
+}) => SearchString;
 
 export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
