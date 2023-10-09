@@ -2,7 +2,7 @@ import { it, expect, describe } from "vitest";
 import { act, render, renderHook } from "@testing-library/react";
 
 import { Route, Router, Switch, useRouter } from "wouter";
-import { memoryLocation, staticLocation } from "./test-utils.js";
+import { memoryLocation } from "wouter/memory-location";
 
 describe("when `nest` prop is given", () => {
   it("renders by default", () => {
@@ -11,7 +11,7 @@ describe("when `nest` prop is given", () => {
   });
 
   it("matches the pattern loosely", () => {
-    const { hook, navigate } = memoryLocation("/");
+    const { hook, navigate } = memoryLocation();
 
     const { container } = render(
       <Router hook={hook}>
@@ -35,7 +35,11 @@ describe("when `nest` prop is given", () => {
 
   it("can be used inside a Switch", () => {
     const { container } = render(
-      <Router hook={staticLocation("/posts/13/2012/sort").hook}>
+      <Router
+        hook={
+          memoryLocation({ path: "/posts/13/2012/sort", static: true }).hook
+        }
+      >
         <Switch>
           <Route path="/about">about</Route>
           <Route path="/posts/:slug" nest>
@@ -52,7 +56,9 @@ describe("when `nest` prop is given", () => {
   it("sets the base to the matched segment", () => {
     const { result } = renderHook(() => useRouter().base, {
       wrapper: (props) => (
-        <Router hook={staticLocation("/2012/04/posts").hook}>
+        <Router
+          hook={memoryLocation({ path: "/2012/04/posts", static: true }).hook}
+        >
           <Route path="/:year/:month" nest>
             <Route path="/posts">{props.children}</Route>
           </Route>
@@ -67,7 +73,12 @@ describe("when `nest` prop is given", () => {
     const { container } = render(
       <Router
         base="/app"
-        hook={staticLocation("/app/users/alexey/settings/all").hook}
+        hook={
+          memoryLocation({
+            path: "/app/users/alexey/settings/all",
+            static: true,
+          }).hook
+        }
       >
         <Route path="/users/:name" nest>
           <Route path="/settings">should not be rendered</Route>
@@ -83,7 +94,10 @@ describe("when `nest` prop is given", () => {
   });
 
   it("reacts to `nest` updates", () => {
-    const { hook } = staticLocation("/app/apple/products");
+    const { hook } = memoryLocation({
+      path: "/app/apple/products",
+      static: true,
+    });
 
     const App = ({ nested }: { nested: boolean }) => {
       return (

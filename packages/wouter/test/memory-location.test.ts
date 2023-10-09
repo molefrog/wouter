@@ -1,6 +1,5 @@
 import { it, expect } from "vitest";
-import { renderHook, act, waitFor } from "@testing-library/react";
-// @ts-expect-error todo: implement memory location
+import { renderHook, act } from "@testing-library/react";
 import { memoryLocation } from "wouter/memory-location";
 
 it("returns a hook that is compatible with location spec", () => {

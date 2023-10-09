@@ -2,7 +2,7 @@ import * as TestRenderer from "react-test-renderer";
 import { it, expect } from "vitest";
 
 import { Router, Route, Switch } from "wouter";
-import { memoryLocation } from "./test-utils.js";
+import { memoryLocation } from "wouter/memory-location";
 
 import { render, act } from "@testing-library/react";
 import { PropsWithChildren, ReactElement } from "react";
@@ -11,7 +11,7 @@ const raf = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
 const testRouteRender = (initialPath: string, jsx: ReactElement) => {
   const instance = TestRenderer.create(
-    <Router hook={memoryLocation(initialPath).hook}>{jsx}</Router>
+    <Router hook={memoryLocation({ path: initialPath }).hook}>{jsx}</Router>
   ).root;
 
   return instance;
