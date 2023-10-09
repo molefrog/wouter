@@ -134,11 +134,12 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
   const router = useRouter();
   const [location] = useLocationFromRouter(router);
 
-  const [matches, params_] =
+  const [matches, params, base] =
+    // `match` is a special prop to give up control to the parent,
+    // it is used by the `Switch` to avoid double matching
     match ?? matchRoute(router.parser, path, location, nest);
 
   if (!matches) return null;
-  const { base, ...params } = params_;
 
   return base
     ? h(Router, { base }, h_route(renderProps, params))
