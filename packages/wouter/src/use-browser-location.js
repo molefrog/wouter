@@ -83,4 +83,3 @@ if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
   // See: https://github.com/molefrog/wouter/issues/167
   Object.defineProperty(window, patchKey, { value: true });
 }
- 
