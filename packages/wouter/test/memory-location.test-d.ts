@@ -1,10 +1,11 @@
 import { it, assertType, expectTypeOf } from "vitest";
 import { memoryLocation } from "wouter/memory-location";
+import { BaseLocationHook } from "wouter/use-browser-location";
 
 it("should return hook that supports location spec", () => {
   const { hook } = memoryLocation();
 
-  assertType<Function>(hook);
+  expectTypeOf(hook).toMatchTypeOf<BaseLocationHook>();
 
   const [location, navigate] = hook();
 
@@ -33,11 +34,11 @@ it("should have history only wheen record is true", () => {
 it("should support initial path", () => {
   const { hook } = memoryLocation({ path: "/initial-path" });
 
-  assertType<Function>(hook);
+  expectTypeOf(hook).toMatchTypeOf<BaseLocationHook>();
 });
 
 it("should support `static` option", () => {
   const { hook } = memoryLocation({ static: true });
 
-  assertType<Function>(hook);
+  expectTypeOf(hook).toMatchTypeOf<BaseLocationHook>();
 });
