@@ -12,7 +12,7 @@ export const memoryLocation = ({
   record,
 } = {}) => {
   let currentPath = path;
-  const history = [];
+  const history = [currentPath];
   const emitter = mitt();
 
   const navigateImplementation = (path, { replace = false } = {}) => {
