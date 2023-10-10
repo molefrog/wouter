@@ -27,7 +27,7 @@ it("should support `record` option for saving the navigation history", () => {
 it("should have history only wheen record is true", () => {
   // @ts-expect-error
   const { history } = memoryLocation({ record: false });
-  assertType(history)
+  assertType(history);
 });
 
 it("should support initial path", () => {
