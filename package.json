@@ -43,6 +43,14 @@
       ]
     },
     {
+      "path": "packages/wouter/esm/use-hash-location.js",
+      "limit": "1000 B",
+      "ignore": [
+        "react",
+        "use-sync-external-store"
+      ]
+    },
+    {
       "path": "packages/wouter-preact/esm/index.js",
       "limit": "2000 B",
       "ignore": [
@@ -52,6 +60,14 @@
     },
     {
       "path": "packages/wouter-preact/esm/use-browser-location.js",
+      "limit": "1000 B",
+      "ignore": [
+        "preact",
+        "preact/hooks"
+      ]
+    },
+    {
+      "path": "packages/wouter-preact/esm/use-hash-location.js",
       "limit": "1000 B",
       "ignore": [
         "preact",
