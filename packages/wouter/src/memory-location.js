@@ -30,14 +30,13 @@ export const memoryLocation = ({
 
   const navigate = !staticLocation ? navigateImplementation : () => null;
 
+  const subscribe = (cb) => {
+    emitter.on("navigate", cb);
+    return () => emitter.off("navigate", cb);
+  };
+
   const useMemoryLocation = ({ base } = {}) => {
-    const location = useSyncExternalStore(
-      (cb) => {
-        emitter.on("navigate", cb);
-        return () => emitter.off("navigate", cb);
-      },
-      () => currentPath
-    );
+    const location = useSyncExternalStore(subscribe, () => currentPath);
 
     return [relativePath(base, location), navigate];
   };
