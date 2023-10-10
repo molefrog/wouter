@@ -67,7 +67,7 @@ it("should return location hook that supports navigation", () => {
   unmount();
 });
 
-it("should record all history", () => {
+it("should record all history when `record` option is provided", () => {
   const {
     hook,
     history,
