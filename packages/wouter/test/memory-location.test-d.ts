@@ -24,14 +24,14 @@ it("should support `record` option for saving the navigation history", () => {
   assertType<string[]>(history);
 });
 
-it("should support initial path", () => {
-  const { hook } = memoryLocation({ path: "/initial-path" });
-
-  assertType<Function>(hook);
+it("should have history only wheen record is true", () => {
+  // @ts-expect-error
+  const { history } = memoryLocation({ record: false });
+  assertType(history)
 });
 
-it("should support `static` option", () => {
-  const { hook } = memoryLocation({ static: true });
+it("should support initial path", () => {
+  const { hook } = memoryLocation({ path: "/initial-path" });
 
   assertType<Function>(hook);
 });
