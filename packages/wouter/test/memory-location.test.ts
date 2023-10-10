@@ -93,3 +93,9 @@ it("should record all history when `record` option is provided", () => {
 
   unmount();
 });
+
+it("should not have history when `record` option is falsy", () => {
+  // @ts-expect-error
+  const { history } = memoryLocation();
+  expect(history).not.toBeDefined();
+});
