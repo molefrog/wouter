@@ -54,3 +54,42 @@ it("should return standalone `navigate` method", () => {
   expect(value).toBe("/standalone");
   unmount();
 });
+
+it("should return location hook that supports navigation", () => {
+  const { hook } = memoryLocation();
+
+  const { result, unmount } = renderHook(() => hook());
+
+  act(() => result.current[1]("/location"));
+
+  const [value] = result.current;
+  expect(value).toBe("/location");
+  unmount();
+});
+
+it("should record all history", () => {
+  const {
+    hook,
+    history,
+    navigate: standalone,
+  } = memoryLocation({ record: true, path: "/test" });
+
+  const { result, unmount } = renderHook(() => hook());
+
+  act(() => standalone("/standalone"));
+  act(() => result.current[1]("/location"));
+
+  expect(result.current[0]).toBe("/location");
+
+  expect(history).toStrictEqual(["/test", "/standalone", "/location"]);
+
+  act(() => standalone("/standalone", { replace: true }));
+
+  expect(history).toStrictEqual(["/test", "/standalone", "/standalone"]);
+
+  act(() => result.current[1]("/location", { replace: true }));
+
+  expect(history).toStrictEqual(["/test", "/standalone", "/location"]);
+
+  unmount();
+});
