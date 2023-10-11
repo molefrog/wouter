@@ -43,6 +43,26 @@ it("should return location hook that supports `base` option for nested routing",
   unmount();
 });
 
+it("should return location hook that handle `base` option while navigation", () => {
+  const { hook, history } = memoryLocation({
+    path: "/nested/test",
+    record: true,
+  });
+
+  const { result, unmount } = renderHook(() => hook({ base: "/nested" }));
+
+  act(() => result.current[1]("/change-1"));
+  act(() => result.current[1]("/change-2"));
+
+  expect(history).toStrictEqual([
+    "/nested/test",
+    "/nested/change-1",
+    "/nested/change-2",
+  ]);
+
+  unmount();
+});
+
 it("should return standalone `navigate` method", () => {
   const { hook, navigate } = memoryLocation();
 
