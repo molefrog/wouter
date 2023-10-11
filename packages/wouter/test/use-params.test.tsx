@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import { vi, it, expect } from "vitest";
 import { useParams, Router, Route } from "wouter";
 
-import { memoryLocation } from "./test-utils";
+import { memoryLocation } from "wouter/memory-location";
 
 it("returns `null` when used outside of <Route />", () => {
   const { result } = renderHook(() => useParams());
@@ -20,7 +20,7 @@ it("returns an empty object when there are no params", () => {
 it("returns parameters from the closest parent <Route /> match", () => {
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => (
-      <Router hook={memoryLocation("/app/users/1/maria").hook}>
+      <Router hook={memoryLocation({ path: "/app/users/1/maria" }).hook}>
         <Route path="/app/:foo/*">
           <Route path="/app/users/:id/:name">{props.children}</Route>
         </Route>
@@ -32,7 +32,7 @@ it("returns parameters from the closest parent <Route /> match", () => {
 });
 
 it("rerenders with parameters change", () => {
-  const { hook, navigate } = memoryLocation("/");
+  const { hook, navigate } = memoryLocation({ path: "/" });
 
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => (
