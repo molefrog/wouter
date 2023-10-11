@@ -36,6 +36,15 @@ const RouterCtx = createContext(defaultRouter);
 // gets the closest parent router from the context
 export const useRouter = () => useContext(RouterCtx);
 
+/**
+ * Parameters context. Used by `useParams()` to get the
+ * matched params from the innermost `Route` component.
+ */
+
+const ParamsCtx = createContext(null);
+
+export const useParams = () => useContext(ParamsCtx);
+
 /*
  * Part 1, Hooks API: useRoute and useLocation
  */
@@ -141,9 +150,11 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
 
   if (!matches) return null;
 
-  return base
+  const children = base
     ? h(Router, { base }, h_route(renderProps, params))
     : h_route(renderProps, params);
+
+  return h(ParamsCtx.Provider, { value: params, children });
 };
 
 export const Link = forwardRef((props, ref) => {

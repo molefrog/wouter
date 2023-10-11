@@ -1,10 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
 import { vi, it, expect } from "vitest";
-import { Router, Route } from "wouter";
+import { useParams, Router, Route } from "wouter";
 
 import { memoryLocation } from "./test-utils";
-
-const useParams = () => ({});
 
 it("returns `null` when used outside of <Route />", () => {
   const { result } = renderHook(() => useParams());
@@ -16,7 +14,7 @@ it("returns an empty object when there are no params", () => {
     wrapper: (props) => <Route path="/">{props.children}</Route>,
   });
 
-  expect(result.current).toBeNull();
+  expect(result.current).toEqual({});
 });
 
 it("returns parameters from the closest parent <Route /> match", () => {
@@ -44,7 +42,7 @@ it("rerenders with parameters change", () => {
     ),
   });
 
-  expect(result.current).toBeUndefined();
+  expect(result.current).toBeNull();
 
   act(() => navigate("/posts/all"));
   expect(result.current).toEqual({ a: "posts", b: "all" });
