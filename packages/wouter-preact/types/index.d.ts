@@ -138,4 +138,10 @@ export function useLocation<
   H extends BaseLocationHook = LocationHook
 >(): HookReturnValue<H>;
 
+export function useParams<T = undefined>(): T extends string
+  ? RouteParams<T>
+  : T extends undefined
+  ? DefaultParams
+  : T;
+
 // tslint:enable:no-unnecessary-generics

@@ -41,7 +41,7 @@ export const useRouter = () => useContext(RouterCtx);
  * matched params from the innermost `Route` component.
  */
 
-const ParamsCtx = createContext(null);
+const ParamsCtx = createContext({});
 
 export const useParams = () => useContext(ParamsCtx);
 

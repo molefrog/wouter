@@ -4,9 +4,9 @@ import { useParams, Router, Route } from "wouter";
 
 import { memoryLocation } from "wouter/memory-location";
 
-it("returns `null` when used outside of <Route />", () => {
+it("returns empty object when used outside of <Route />", () => {
   const { result } = renderHook(() => useParams());
-  expect(result.current).toBeNull();
+  expect(result.current).toEqual({});
 });
 
 it("returns an empty object when there are no params", () => {
