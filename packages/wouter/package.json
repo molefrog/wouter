@@ -29,6 +29,10 @@
     "./use-hash-location": {
       "types": "./types/use-hash-location.d.ts",
       "default": "./esm/use-hash-location.js"
+    },
+    "./memory-location": {
+      "types": "./types/memory-location.d.ts",
+      "default": "./esm/memory-location.js"
     }
   },
   "types": "types/index.d.ts",
@@ -42,6 +46,9 @@
       ],
       "use-hash-location": [
         "types/use-hash-location.d.ts"
+      ],
+      "memory-location": [
+        "types/memory-location.d.ts"
       ]
     }
   },
@@ -56,6 +63,7 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
+    "mitt": "^3.0.1",
     "regexparam": "^2.0.1",
     "use-sync-external-store": "^1.0.0"
   }

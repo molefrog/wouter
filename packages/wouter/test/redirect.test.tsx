@@ -1,8 +1,20 @@
 import { it, expect } from "vitest";
 import { render } from "@testing-library/react";
+import { useState } from "react";
 
 import { Redirect, Router } from "wouter";
-import { customHookWithReturn } from "./test-utils.js";
+
+export const customHookWithReturn =
+  (initialPath = "/") =>
+  () => {
+    const [path, updatePath] = useState(initialPath);
+    const navigate = (path: string) => {
+      updatePath(path);
+      return "foo";
+    };
+
+    return [path, navigate];
+  };
 
 it("renders nothing", () => {
   const { container, unmount } = render(<Redirect to="/users" />);

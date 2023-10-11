@@ -43,6 +43,14 @@
       ]
     },
     {
+      "path": "packages/wouter/esm/memory-location.js",
+      "limit": "1000 B",
+      "ignore": [
+        "react",
+        "use-sync-external-store"
+      ]
+    },
+    {
       "path": "packages/wouter/esm/use-hash-location.js",
       "limit": "1000 B",
       "ignore": [
@@ -68,6 +76,14 @@
     },
     {
       "path": "packages/wouter-preact/esm/use-hash-location.js",
+      "limit": "1000 B",
+      "ignore": [
+        "preact",
+        "preact/hooks"
+      ]
+    },
+    {
+      "path": "packages/wouter-preact/esm/memory-location.js",
       "limit": "1000 B",
       "ignore": [
         "preact",
@@ -129,7 +145,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.0",
     "jsdom": "^22.1.0",
-    "mitt": "^3.0.1",
     "path-to-regexp": "^6.2.1",
     "preact": "^10.0.0",
     "preact-render-to-string": "^6.0.3",

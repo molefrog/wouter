@@ -4,7 +4,7 @@ import { pathToRegexp, Key } from "path-to-regexp";
 import { renderHook } from "@testing-library/react";
 
 import { Router, useRouter, useRoute, Parser } from "wouter";
-import { memoryLocation } from "./test-utils.js";
+import { memoryLocation } from "wouter/memory-location";
 
 // Custom parser that uses `path-to-regexp` instead of `regexparam`
 const pathToRegexpParser: Parser = (route: string) => {
@@ -31,7 +31,7 @@ it("allows to change the behaviour of route matching", () => {
     {
       wrapper: ({ children }) => (
         <Router
-          hook={memoryLocation("/home/users/10/bio").hook}
+          hook={memoryLocation({ path: "/home/users/10/bio" }).hook}
           parser={pathToRegexpParser}
         >
           {children}
