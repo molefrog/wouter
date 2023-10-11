@@ -3,7 +3,6 @@ import { renderHook } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { useHashLocation } from "wouter/use-hash-location";
-import { waitForHashChangeEvent } from "./test-utils";
 
 beforeEach(() => {
   history.replaceState(null, "", "/");
@@ -120,3 +119,26 @@ it("is not sensitive to leading / or # when navigating", async () => {
   expect(location.hash).toBe("#/look-ma-no-hashes");
   expect(result.current[0]).toBe("/look-ma-no-hashes");
 });
+
+/**
+ * Executes a callback and returns a promise that resolve when `hashchange` event is fired.
+ * Rejects after `throwAfter` milliseconds.
+ */
+const waitForHashChangeEvent = async (cb: () => void, throwAfter = 1000) =>
+  new Promise<void>((resolve, reject) => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const onChange = () => {
+      resolve();
+      clearTimeout(timeout);
+      window.removeEventListener("hashchange", onChange);
+    };
+
+    window.addEventListener("hashchange", onChange);
+    cb();
+
+    timeout = setTimeout(() => {
+      reject(new Error("Timed out: `hashchange` event did not fire!"));
+      window.removeEventListener("hashchange", onChange);
+    }, throwAfter);
+  });
