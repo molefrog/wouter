@@ -26,6 +26,10 @@
       "types": "./types/use-browser-location.d.ts",
       "default": "./esm/use-browser-location.js"
     },
+    "./use-hash-location": {
+      "types": "./types/use-hash-location.d.ts",
+      "default": "./esm/use-hash-location.js"
+    },
     "./memory-location": {
       "types": "./types/memory-location.d.ts",
       "default": "./esm/memory-location.js"
@@ -39,6 +43,9 @@
       ],
       "use-browser-location": [
         "types/use-browser-location.d.ts"
+      ],
+      "use-hash-location": [
+        "types/use-hash-location.d.ts"
       ],
       "memory-location": [
         "types/memory-location.d.ts"
