@@ -1,5 +1,4 @@
-import { useSyncExternalStore, useEvent } from "./react-deps.js";
-import { absolutePath, relativePath } from "./paths.js";
+import { useSyncExternalStore } from "./react-deps.js";
 
 // fortunately `hashchange` is a native event, so there is no need to
 // patch `history` object (unlike `pushState/replaceState` events)
@@ -21,15 +20,11 @@ export const navigate = (to, { state = null } = {}) => {
   );
 };
 
-export const useHashLocation = ({ base, ssrPath = "/" } = {}) => [
-  relativePath(
-    base,
-    useSyncExternalStore(
-      subscribeToHashUpdates,
-      currentHashLocation,
-      () => ssrPath
-    )
+export const useHashLocation = ({ ssrPath = "/" } = {}) => [
+  useSyncExternalStore(
+    subscribeToHashUpdates,
+    currentHashLocation,
+    () => ssrPath
   ),
-
-  useEvent((to, navOpts) => navigate(absolutePath(to, base), navOpts)),
+  navigate,
 ];
