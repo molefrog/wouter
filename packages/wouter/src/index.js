@@ -14,6 +14,7 @@ import {
   useIsomorphicLayoutEffect,
   useEvent,
 } from "./react-deps.js";
+import { absolutePath, relativePath } from "./paths.js";
 
 /*
  * Router and router context. Router is a lightweight object that represents the current
@@ -41,7 +42,18 @@ export const useRouter = () => useContext(RouterCtx);
  */
 
 // Internal version of useLocation to avoid redundant useRouter calls
-const useLocationFromRouter = (router) => router.hook(router);
+
+const useLocationFromRouter = (router) => {
+  const [location, navigate] = router.hook(router);
+
+  // the function reference should stay the same between re-renders, so that
+  // it can be passed down as an element prop without any performance concerns.
+  // (This is achieved via `useEvent`.)
+  return [
+    relativePath(router.base, location),
+    useEvent((to, navOpts) => navigate(absolutePath(to, router.base), navOpts)),
+  ];
+};
 
 export const useLocation = () => useLocationFromRouter(useRouter());
 

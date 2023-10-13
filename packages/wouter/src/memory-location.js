@@ -1,6 +1,5 @@
 import mitt from "mitt";
-import { useSyncExternalStore, useEvent } from "./react-deps.js";
-import { absolutePath, relativePath } from "./paths.js";
+import { useSyncExternalStore } from "./react-deps.js";
 
 /**
  * In-memory location that supports navigation
@@ -35,13 +34,8 @@ export const memoryLocation = ({
     return () => emitter.off("navigate", cb);
   };
 
-  const useMemoryLocation = ({ base } = {}) => {
-    const location = useSyncExternalStore(subscribe, () => currentPath);
-
-    return [
-      relativePath(base, location),
-      useEvent((to, options) => navigate(absolutePath(to, base), options)),
-    ];
+  const useMemoryLocation = () => {
+    return [useSyncExternalStore(subscribe, () => currentPath), navigate];
   };
 
   return {
