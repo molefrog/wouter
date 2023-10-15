@@ -51,46 +51,6 @@ describe("`value` first argument", () => {
     unmount();
   });
 
-  it.skip("returns a pathname without a basepath", () => {
-    const { result, unmount } = renderHook(() =>
-      useBrowserLocation({ base: "/app" })
-    );
-
-    act(() => history.pushState(null, "", "/app/dashboard"));
-    expect(result.current[0]).toBe("/dashboard");
-    unmount();
-  });
-
-  it.skip("returns `/` when URL contains only a basepath", () => {
-    const { result, unmount } = renderHook(() =>
-      useBrowserLocation({ base: "/app" })
-    );
-
-    act(() => history.pushState(null, "", "/app"));
-    expect(result.current[0]).toBe("/");
-    unmount();
-  });
-
-  it.skip("basepath should be case-insensitive", () => {
-    const { result, unmount } = renderHook(() =>
-      useBrowserLocation({ base: "/MyApp" })
-    );
-
-    act(() => history.pushState(null, "", "/myAPP/users/JohnDoe"));
-    expect(result.current[0]).toBe("/users/JohnDoe");
-    unmount();
-  });
-
-  it.skip("returns an absolute path in case of unmatched base path", () => {
-    const { result, unmount } = renderHook(() =>
-      useBrowserLocation({ base: "/MyApp" })
-    );
-
-    act(() => history.pushState(null, "", "/MyOtherApp/users/JohnDoe"));
-    expect(result.current[0]).toBe("~/MyOtherApp/users/JohnDoe");
-    unmount();
-  });
-
   it("supports search url", () => {
     // count how many times each hook is rendered
     const locationRenders = { current: 0 };
@@ -213,17 +173,6 @@ describe("`update` second parameter", () => {
     const updateNow = result.current[1];
 
     expect(updateWas).toBe(updateNow);
-    unmount();
-  });
-
-  it.skip("supports a basepath", () => {
-    const { result, unmount } = renderHook(() =>
-      useBrowserLocation({ base: "/app" })
-    );
-    const update = result.current[1];
-
-    act(() => update("/dashboard"));
-    expect(location.pathname).toBe("/app/dashboard");
     unmount();
   });
 });
