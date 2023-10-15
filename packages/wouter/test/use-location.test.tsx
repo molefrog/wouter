@@ -1,5 +1,5 @@
 import { ComponentProps, ReactNode } from "react";
-import { it, expect, describe } from "vitest";
+import { it, expect, describe, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { Router, useLocation } from "wouter";
 import {
@@ -28,10 +28,13 @@ type StubType = {
   hook: BaseLocationHook;
   location: () => string;
   navigate: ReturnType<BaseLocationHook>[1];
+  clear: () => void;
 };
 
 function createLocationSpec(stub: StubType) {
   describe(stub.name, () => {
+    beforeEach(() => stub.clear());
+
     it("returns a pair [value, update]", () => {
       const { result, unmount } = renderHook(() => useLocation(), {
         wrapper: createContainer({ hook: stub.hook }),
@@ -132,13 +135,20 @@ createLocationSpec({
   hook: useBrowserLocation,
   location: () => location.pathname,
   navigate: browserNavigation,
+  clear: () => {
+    history.replaceState(null, "", "/");
+  },
 });
 
 createLocationSpec({
   name: "useHashLocation",
   hook: useHashLocation,
-  location: () => location.hash.replace(/^#?\/?/, ""),
+  location: () => "/" + location.hash.replace(/^#?\/?/, ""),
   navigate: hashNavigation,
+  clear: () => {
+    location.hash = "";
+    history.replaceState(null, "", "/");
+  },
 });
 
 const memory = memoryLocation({ record: true });
@@ -147,4 +157,5 @@ createLocationSpec({
   hook: memory.hook,
   location: () => memory.history.at(-1) ?? "",
   navigate: memory.navigate,
+  clear: () => null,
 });
