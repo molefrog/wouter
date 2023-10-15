@@ -8,10 +8,10 @@ import {
   BaseLocationHook,
 } from "wouter/use-browser-location";
 
-import {
-  useHashLocation,
-  navigate as hashNavigation,
-} from "wouter/use-hash-location";
+// import {
+//   useHashLocation,
+//   navigate as hashNavigation,
+// } from "wouter/use-hash-location";
 
 import { memoryLocation } from "wouter/memory-location";
 
@@ -140,16 +140,16 @@ createLocationSpec({
   },
 });
 
-createLocationSpec({
-  name: "useHashLocation",
-  hook: useHashLocation,
-  location: () => "/" + location.hash.replace(/^#?\/?/, ""),
-  navigate: hashNavigation,
-  clear: () => {
-    location.hash = "";
-    history.replaceState(null, "", "/");
-  },
-});
+// createLocationSpec({
+//   name: "useHashLocation",
+//   hook: useHashLocation,
+//   location: () => "/" + location.hash.replace(/^#?\/?/, ""),
+//   navigate: hashNavigation,
+//   clear: () => {
+//     location.hash = "";
+//     history.replaceState(null, "", "/");
+//   },
+// });
 
 const memory = memoryLocation({ record: true });
 createLocationSpec({
