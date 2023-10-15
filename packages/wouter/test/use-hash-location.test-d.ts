@@ -7,9 +7,9 @@ it("is a location hook", () => {
   expectTypeOf(useHashLocation()).toMatchTypeOf<[string, Function]>();
 });
 
-it("accepts a `base` path option", () => {
-  useHashLocation({ base: "/foo" });
-  useHashLocation({ base: "" });
+it("accepts a `ssrPath` path option", () => {
+  useHashLocation({ ssrPath: "/foo" });
+  useHashLocation({ ssrPath: "" });
 
   // @ts-expect-error
   useHashLocation({ base: 123 });

@@ -29,8 +29,8 @@ describe("useBrowserLocation", () => {
     assertType(navigate("/path", { unknownOption: true }));
   });
 
-  it("should support base option", () => {
-    assertType(useBrowserLocation({ base: "/something" }));
+  it("should support `ssrPath` option", () => {
+    assertType(useBrowserLocation({ ssrPath: "/something" }));
     // @ts-expect-error
     assertType(useBrowserLocation({ foo: "bar" }));
   });
