@@ -57,7 +57,6 @@ export const navigate: (
 // It operates on current URL using History API, supports base path and can
 // navigate with `pushState` or `replaceState`.
 export type LocationHook = (options?: {
-  base?: Path;
   ssrPath?: Path;
 }) => [Path, typeof navigate];
 
