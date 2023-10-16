@@ -12,6 +12,7 @@ import {
   useHashLocation,
   navigate as hashNavigation,
 } from "wouter/use-hash-location";
+import { waitForHashChangeEvent } from "./test-utils";
 
 import { memoryLocation } from "wouter/memory-location";
 
@@ -31,25 +32,6 @@ type StubType = {
   act: (cb: () => void) => Promise<void>;
   clear: () => void;
 };
-
-const waitForHashChangeEvent = async (cb: () => void, throwAfter = 1000) =>
-  new Promise<void>((resolve, reject) => {
-    let timeout: ReturnType<typeof setTimeout>;
-
-    const onChange = () => {
-      resolve();
-      clearTimeout(timeout);
-      window.removeEventListener("hashchange", onChange);
-    };
-
-    window.addEventListener("hashchange", onChange);
-    cb();
-
-    timeout = setTimeout(() => {
-      reject(new Error("Timed out: `hashchange` event did not fire!"));
-      window.removeEventListener("hashchange", onChange);
-    }, throwAfter);
-  });
 
 function createLocationSpec(stub: StubType) {
   describe(stub.name, () => {
