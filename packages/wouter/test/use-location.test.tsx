@@ -53,7 +53,9 @@ describe.each([
     location: () => memory.history.at(-1) ?? "",
     navigate: memory.navigate,
     act,
-    clear: () => {},
+    clear: () => {
+      memory.reset();
+    },
   },
 ])("$name", (stub) => {
   beforeEach(() => stub.clear());
