@@ -39,9 +39,15 @@ export const memoryLocation = ({
     navigate,
   ];
 
+  function reset() {
+    history.splice(0, history.length);
+    history.push(path);
+  }
+
   return {
     hook: useMemoryLocation,
     navigate,
     history: record ? history : undefined,
+    reset: record ? reset : undefined,
   };
 };

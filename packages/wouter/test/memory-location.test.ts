@@ -86,6 +86,23 @@ it("should record all history when `record` option is provided", () => {
 
 it("should not have history when `record` option is falsy", () => {
   // @ts-expect-error
-  const { history } = memoryLocation();
+  const { history, reset } = memoryLocation();
   expect(history).not.toBeDefined();
+  expect(reset).not.toBeDefined();
+});
+
+it("should have reset method when `record` option is provided", () => {
+  const { history, reset, navigate } = memoryLocation({
+    path: "/initial",
+    record: true,
+  });
+  expect(history).toBeDefined();
+  expect(reset).toBeDefined();
+
+  navigate("test-1");
+  navigate("test-2");
+
+  reset();
+
+  expect(history).toStrictEqual(["/initial"]);
 });

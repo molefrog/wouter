@@ -20,15 +20,17 @@ it("should return `navigate` method for navigating outside of components", () =>
 });
 
 it("should support `record` option for saving the navigation history", () => {
-  const { history } = memoryLocation({ record: true });
+  const { history, reset } = memoryLocation({ record: true });
 
   assertType<string[]>(history);
+  assertType<Function>(reset);
 });
 
 it("should have history only wheen record is true", () => {
   // @ts-expect-error
-  const { history } = memoryLocation({ record: false });
+  const { history, reset } = memoryLocation({ record: false });
   assertType(history);
+  assertType(reset);
 });
 
 it("should support initial path", () => {
