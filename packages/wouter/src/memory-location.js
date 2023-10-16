@@ -34,9 +34,8 @@ export const memoryLocation = ({
     return () => emitter.off("navigate", cb);
   };
 
-  const useMemoryLocation = () => {
-    return [useSyncExternalStore(subscribe, () => currentPath), navigate];
-  };
+  const useMemoryLocation = () =>
+    [useSyncExternalStore(subscribe, () => currentPath), navigate];
 
   return {
     hook: useMemoryLocation,
