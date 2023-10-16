@@ -8,10 +8,10 @@ import {
   BaseLocationHook,
 } from "wouter/use-browser-location";
 
-// import {
-//   useHashLocation,
-//   navigate as hashNavigation,
-// } from "wouter/use-hash-location";
+import {
+  useHashLocation,
+  navigate as hashNavigation,
+} from "wouter/use-hash-location";
 
 import { memoryLocation } from "wouter/memory-location";
 
@@ -28,8 +28,28 @@ type StubType = {
   hook: BaseLocationHook;
   location: () => string;
   navigate: ReturnType<BaseLocationHook>[1];
+  act: (cb: () => void) => Promise<void>;
   clear: () => void;
 };
+
+const waitForHashChangeEvent = async (cb: () => void, throwAfter = 1000) =>
+  new Promise<void>((resolve, reject) => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const onChange = () => {
+      resolve();
+      clearTimeout(timeout);
+      window.removeEventListener("hashchange", onChange);
+    };
+
+    window.addEventListener("hashchange", onChange);
+    cb();
+
+    timeout = setTimeout(() => {
+      reject(new Error("Timed out: `hashchange` event did not fire!"));
+      window.removeEventListener("hashchange", onChange);
+    }, throwAfter);
+  });
 
 function createLocationSpec(stub: StubType) {
   describe(stub.name, () => {
@@ -47,7 +67,7 @@ function createLocationSpec(stub: StubType) {
     });
 
     describe("`value` first argument", () => {
-      it("returns `/` when URL contains only a basepath", () => {
+      it("returns `/` when URL contains only a basepath", async () => {
         const { result, unmount } = renderHook(() => useLocation(), {
           wrapper: createContainer({
             base: "/app",
@@ -55,12 +75,12 @@ function createLocationSpec(stub: StubType) {
           }),
         });
 
-        act(() => stub.navigate("/app"));
+        await stub.act(() => stub.navigate("/app"));
         expect(result.current[0]).toBe("/");
         unmount();
       });
 
-      it("basepath should be case-insensitive", () => {
+      it("basepath should be case-insensitive", async () => {
         const { result, unmount } = renderHook(() => useLocation(), {
           wrapper: createContainer({
             base: "/MyApp",
@@ -68,12 +88,12 @@ function createLocationSpec(stub: StubType) {
           }),
         });
 
-        act(() => stub.navigate("/myAPP/users/JohnDoe"));
+        await stub.act(() => stub.navigate("/myAPP/users/JohnDoe"));
         expect(result.current[0]).toBe("/users/JohnDoe");
         unmount();
       });
 
-      it("returns an absolute path in case of unmatched base path", () => {
+      it("returns an absolute path in case of unmatched base path", async () => {
         const { result, unmount } = renderHook(() => useLocation(), {
           wrapper: createContainer({
             base: "/MyApp",
@@ -81,20 +101,20 @@ function createLocationSpec(stub: StubType) {
           }),
         });
 
-        act(() => stub.navigate("/MyOtherApp/users/JohnDoe"));
+        await stub.act(() => stub.navigate("/MyOtherApp/users/JohnDoe"));
         expect(result.current[0]).toBe("~/MyOtherApp/users/JohnDoe");
         unmount();
       });
     });
 
     describe("`update` second parameter", () => {
-      it("rerenders the component", () => {
+      it("rerenders the component", async () => {
         const { result, unmount } = renderHook(() => useLocation(), {
           wrapper: createContainer({ hook: stub.hook }),
         });
         const update = result.current[1];
 
-        act(() => update("/about"));
+        await stub.act(() => update("/about"));
         expect(stub.location()).toBe("/about");
         unmount();
       });
@@ -112,7 +132,7 @@ function createLocationSpec(stub: StubType) {
         unmount();
       });
 
-      it("supports a basepath", () => {
+      it("supports a basepath", async () => {
         const { result, unmount } = renderHook(() => useLocation(), {
           wrapper: createContainer({
             base: "/app",
@@ -122,7 +142,7 @@ function createLocationSpec(stub: StubType) {
 
         const update = result.current[1];
 
-        act(() => update("/dashboard"));
+        await stub.act(() => update("/dashboard"));
         expect(stub.location()).toBe("/app/dashboard");
         unmount();
       });
@@ -135,21 +155,23 @@ createLocationSpec({
   hook: useBrowserLocation,
   location: () => location.pathname,
   navigate: browserNavigation,
+  act,
   clear: () => {
     history.replaceState(null, "", "/");
   },
 });
 
-// createLocationSpec({
-//   name: "useHashLocation",
-//   hook: useHashLocation,
-//   location: () => "/" + location.hash.replace(/^#?\/?/, ""),
-//   navigate: hashNavigation,
-//   clear: () => {
-//     location.hash = "";
-//     history.replaceState(null, "", "/");
-//   },
-// });
+createLocationSpec({
+  name: "useHashLocation",
+  hook: useHashLocation,
+  location: () => "/" + location.hash.replace(/^#?\/?/, ""),
+  navigate: hashNavigation,
+  act: (cb) => waitForHashChangeEvent(() => act(cb)),
+  clear: () => {
+    location.hash = "";
+    history.replaceState(null, "", "/");
+  },
+});
 
 const memory = memoryLocation({ record: true });
 createLocationSpec({
@@ -157,5 +179,6 @@ createLocationSpec({
   hook: memory.hook,
   location: () => memory.history.at(-1) ?? "",
   navigate: memory.navigate,
+  act,
   clear: () => null,
 });
