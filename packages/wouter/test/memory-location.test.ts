@@ -106,3 +106,25 @@ it("should have reset method when `record` option is provided", () => {
 
   expect(history).toStrictEqual(["/initial"]);
 });
+
+it("should have reset method that reset hook location", () => {
+  const { hook, history, navigate, reset } = memoryLocation({
+    record: true,
+    path: "/test",
+  });
+  const { result, unmount } = renderHook(() => hook());
+
+  act(() => navigate("/location"));
+
+  expect(result.current[0]).toBe("/location");
+
+  expect(history).toStrictEqual(["/test", "/location"]);
+
+  act(() => reset());
+
+  expect(history).toStrictEqual(["/test"]);
+
+  expect(result.current[0]).toBe("/test");
+
+  unmount();
+});
