@@ -42,11 +42,8 @@ export const memoryLocation = ({
   function reset() {
     // clean history array with mutation to preserve link
     history.splice(0, history.length);
-    history.push(path);
 
-    // change path to initial
-    currentPath = path;
-    emitter.emit("navigate", path);
+    navigateImplementation(path);
   }
 
   return {
