@@ -6,7 +6,5 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "types": ["preact"]
-  },
-  // ignore legacy type test
-  "exclude": ["./types/type-specs.tsx"]
+  }
 }

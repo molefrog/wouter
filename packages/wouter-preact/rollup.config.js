@@ -7,8 +7,8 @@ export default defineConfig([
     input: [
       "wouter",
       "wouter/use-browser-location",
-      "wouter/memory-location",
       "wouter/use-hash-location",
+      "wouter/memory-location",
     ],
     external: ["preact", "preact/hooks", "regexparam", "mitt"],
 
