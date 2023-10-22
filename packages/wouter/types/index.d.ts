@@ -18,13 +18,14 @@ import {
   BaseLocationHook,
   HookReturnValue,
   HookNavigationOptions,
-  LocationHook,
-} from "./use-browser-location";
+} from "./location-hook";
+import { LocationHook } from "./use-browser-location";
 
 import { RouterObject, RouterOptions } from "./router";
 
 // re-export some types from these modules
-export { Path, BaseLocationHook, LocationHook } from "./use-browser-location";
+export { Path, BaseLocationHook } from "./location-hook";
+export { LocationHook } from "./use-browser-location";
 export * from "./router";
 
 import { RouteParams } from "regexparam";
