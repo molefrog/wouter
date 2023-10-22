@@ -15,9 +15,9 @@ export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
 export const useHistoryState: <T = any>() => T;
 
-export const navigate: (
+export const navigate: <S = any>(
   to: string | URL,
-  options?: { replace?: boolean; state?: any }
+  options?: { replace?: boolean; state?: S }
 ) => void;
 
 /*
