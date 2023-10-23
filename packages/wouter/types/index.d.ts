@@ -91,10 +91,9 @@ export function Route<
  * Components: <Link /> & <Redirect />
  */
 
-export type NavigationalProps<H extends BaseLocationHook = BrowserLocationHook> = (
-  | { to: Path; href?: never }
-  | { href: Path; to?: never }
-) &
+export type NavigationalProps<
+  H extends BaseLocationHook = BrowserLocationHook
+> = ({ to: Path; href?: never } | { href: Path; to?: never }) &
   HookNavigationOptions<H>;
 
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> = Omit<
