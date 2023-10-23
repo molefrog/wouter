@@ -1,6 +1,6 @@
 import { it, assertType, describe, expectTypeOf } from "vitest";
 import { useHashLocation, navigate } from "wouter/use-hash-location";
-import { BaseLocationHook } from "wouter/use-browser-location";
+import { BaseLocationHook } from "wouter";
 
 it("is a location hook", () => {
   expectTypeOf(useHashLocation).toMatchTypeOf<BaseLocationHook>();

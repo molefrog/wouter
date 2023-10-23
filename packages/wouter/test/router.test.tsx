@@ -2,7 +2,13 @@ import { memo, ReactElement, cloneElement, ComponentProps } from "react";
 import { renderHook, render } from "@testing-library/react";
 import * as TestRenderer from "react-test-renderer";
 import { it, expect, describe } from "vitest";
-import { Router, DefaultParams, useRouter, Parser, LocationHook } from "wouter";
+import {
+  Router,
+  DefaultParams,
+  useRouter,
+  Parser,
+  BaseLocationHook,
+} from "wouter";
 
 it("creates a router object on demand", () => {
   const { result } = renderHook(() => useRouter());
@@ -29,7 +35,7 @@ it("does not create new router when <Router /> rerenders", () => {
 
 it("alters the current router with `parser` and `hook` options", () => {
   const newParser: Parser = () => ({ pattern: /(.*)/, keys: [] });
-  const hook: LocationHook = () => ["/foo", () => {}];
+  const hook: BaseLocationHook = () => ["/foo", () => {}];
 
   const { result } = renderHook(() => useRouter(), {
     wrapper: (props) => (
@@ -97,7 +103,7 @@ describe("`base` prop", () => {
 
 describe("`hook` prop", () => {
   it("when provided, the router isn't inherited from the parent", () => {
-    const customHook: LocationHook = () => ["/foo", () => {}];
+    const customHook: BaseLocationHook = () => ["/foo", () => {}];
     const newParser: Parser = () => ({ pattern: /(.*)/, keys: [] });
 
     const {
@@ -150,7 +156,7 @@ it("updates the context when settings are changed", () => {
   expect(state.renders).toEqual(1); // nothing changed
 
   // should re-render the hook
-  const newHook: LocationHook = () => ["/location", () => {}];
+  const newHook: BaseLocationHook = () => ["/location", () => {}];
   rerender(
     <Router hook={newHook} base="/app">
       <Memoized />

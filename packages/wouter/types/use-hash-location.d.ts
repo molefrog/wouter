@@ -1,4 +1,4 @@
-import { Path } from "./use-browser-location";
+import { Path } from "./location-hook";
 
 export function navigate<S = any>(to: Path, options?: { state: S }): void;
 

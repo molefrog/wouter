@@ -14,13 +14,13 @@ import {
   BaseLocationHook,
   HookReturnValue,
   HookNavigationOptions,
-  LocationHook,
-} from "./use-browser-location";
+} from "./location-hook";
+import { BrowserLocationHook } from "./use-browser-location";
 
 import { RouterObject, RouterOptions } from "./router";
 
 // re-export some types from these modules
-export { Path, BaseLocationHook, LocationHook } from "./use-browser-location";
+export { Path, BaseLocationHook } from "./location-hook";
 export * from "./router";
 
 import { RouteParams } from "regexparam";
@@ -75,28 +75,27 @@ export function Route<
  * Components: <Link /> & <Redirect />
  */
 
-export type NavigationalProps<H extends BaseLocationHook = LocationHook> = (
-  | { to: Path; href?: never }
-  | { href: Path; to?: never }
-) &
+export type NavigationalProps<
+  H extends BaseLocationHook = BrowserLocationHook
+> = ({ to: Path; href?: never } | { href: Path; to?: never }) &
   HookNavigationOptions<H>;
 
-export type LinkProps<H extends BaseLocationHook = LocationHook> = Omit<
+export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> = Omit<
   JSX.HTMLAttributes,
   "href"
 > &
   NavigationalProps<H>;
 
-export type RedirectProps<H extends BaseLocationHook = LocationHook> =
+export type RedirectProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> & {
     children?: never;
   };
 
-export function Redirect<H extends BaseLocationHook = LocationHook>(
+export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
   props: RedirectProps<H>,
   context?: any
 ): VNode<any> | null;
-export function Link<H extends BaseLocationHook = LocationHook>(
+export function Link<H extends BaseLocationHook = BrowserLocationHook>(
   props: LinkProps<H>,
   context?: any
 ): VNode<any> | null;
@@ -135,7 +134,7 @@ export function useRoute<
 ): Match<T extends DefaultParams ? T : RouteParams<RoutePath>>;
 
 export function useLocation<
-  H extends BaseLocationHook = LocationHook
+  H extends BaseLocationHook = BrowserLocationHook
 >(): HookReturnValue<H>;
 
 export function useParams<T = undefined>(): T extends string

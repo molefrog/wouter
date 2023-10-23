@@ -1,6 +1,6 @@
 import { it, assertType, expectTypeOf } from "vitest";
 import { memoryLocation } from "wouter/memory-location";
-import { BaseLocationHook } from "wouter/use-browser-location";
+import { BaseLocationHook } from "wouter";
 
 it("should return hook that supports location spec", () => {
   const { hook } = memoryLocation();

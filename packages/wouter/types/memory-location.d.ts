@@ -1,6 +1,11 @@
-import { BaseLocationHook, navigate, Path } from "./use-browser-location";
+import { BaseLocationHook, Path } from "./location-hook";
 
-type HookReturnValue = { hook: BaseLocationHook; navigate: typeof navigate };
+type Navigate<S = any> = (
+  to: Path,
+  options?: { replace?: boolean; state?: S }
+) => void;
+
+type HookReturnValue = { hook: BaseLocationHook; navigate: Navigate };
 type StubHistory = { history: Path[]; reset: () => void };
 
 export function memoryLocation(options?: {
