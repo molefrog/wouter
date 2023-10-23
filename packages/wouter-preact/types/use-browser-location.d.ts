@@ -1,4 +1,4 @@
-import { Path, HookReturnValue } from "./location-hook";
+import { Path } from "./location-hook";
 
 type Primitive = string | number | bigint | boolean | null | undefined | symbol;
 export const useLocationProperty: <S extends Primitive>(
@@ -27,10 +27,8 @@ export const navigate: <S = any>(
 // The type of the default `useLocation` hook that wouter uses.
 // It operates on current URL using History API, supports base path and can
 // navigate with `pushState` or `replaceState`.
-export type LocationHook = (options?: {
+export type BrowserLocationHook = (options?: {
   ssrPath?: Path;
 }) => [Path, typeof navigate];
 
-export const useBrowserLocation: LocationHook;
-
-export type LocationTuple = HookReturnValue<LocationHook>;
+export const useBrowserLocation: BrowserLocationHook;
