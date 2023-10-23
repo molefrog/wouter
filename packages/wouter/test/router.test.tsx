@@ -2,7 +2,13 @@ import { memo, ReactElement, cloneElement, ComponentProps } from "react";
 import { renderHook, render } from "@testing-library/react";
 import * as TestRenderer from "react-test-renderer";
 import { it, expect, describe } from "vitest";
-import { Router, DefaultParams, useRouter, Parser, BaseLocationHook } from "wouter";
+import {
+  Router,
+  DefaultParams,
+  useRouter,
+  Parser,
+  BaseLocationHook,
+} from "wouter";
 
 it("creates a router object on demand", () => {
   const { result } = renderHook(() => useRouter());
