@@ -38,9 +38,11 @@ describe("useBrowserLocation", () => {
 
 describe("useSearch", () => {
   it("should return string", () => {
+    type Search = ReturnType<typeof useSearch>;
     const search = useSearch();
 
     assertType<string>(search);
+    const allowedSearchValues: Search[] = ["", "?leading", "no-?-sign"];
   });
 });
 
