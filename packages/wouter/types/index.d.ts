@@ -25,7 +25,7 @@ import { BrowserLocationHook, BrowserSearchHook } from "./use-browser-location";
 import { RouterObject, RouterOptions } from "./router";
 
 // re-export some types from these modules
-export { Path, BaseLocationHook } from "./location-hook";
+export { Path, BaseLocationHook, BaseSearchHook } from "./location-hook";
 export * from "./router";
 
 import { RouteParams } from "regexparam";

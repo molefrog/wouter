@@ -14,13 +14,14 @@ import {
   BaseLocationHook,
   HookReturnValue,
   HookNavigationOptions,
+  BaseSearchHook,
 } from "./location-hook";
-import { BrowserLocationHook } from "./use-browser-location";
+import { BrowserLocationHook, BrowserSearchHook } from "./use-browser-location";
 
 import { RouterObject, RouterOptions } from "./router";
 
 // re-export some types from these modules
-export { Path, BaseLocationHook } from "./location-hook";
+export { Path, BaseLocationHook, BaseSearchHook } from "./location-hook";
 export * from "./router";
 
 import { RouteParams } from "regexparam";
@@ -136,6 +137,10 @@ export function useRoute<
 export function useLocation<
   H extends BaseLocationHook = BrowserLocationHook
 >(): HookReturnValue<H>;
+
+export function useSearch<
+  H extends BaseSearchHook = BrowserSearchHook
+>(): ReturnType<H>;
 
 export function useParams<T = undefined>(): T extends string
   ? RouteParams<T>

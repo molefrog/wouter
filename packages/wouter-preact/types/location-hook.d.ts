@@ -4,11 +4,15 @@
 
 export type Path = string;
 
+export type SearchString = string;
+
 // the base useLocation hook type. Any custom hook (including the
 // default one) should inherit from it.
 export type BaseLocationHook = (
   ...args: any[]
 ) => [Path, (path: Path, ...args: any[]) => any];
+
+export type BaseSearchHook = (...args: any[]) => SearchString;
 
 /*
  * Utility types that operate on hook
