@@ -51,59 +51,6 @@ describe("`value` first argument", () => {
     unmount();
   });
 
-  it("supports search url", () => {
-    // count how many times each hook is rendered
-    const locationRenders = { current: 0 };
-    const searchRenders = { current: 0 };
-
-    // count number of rerenders for each hook
-    const { result, unmount } = renderHook(() => {
-      useEffect(() => {
-        locationRenders.current += 1;
-      });
-      return useBrowserLocation();
-    });
-
-    const { result: searchResult, unmount: searchUnmount } = renderHook(() => {
-      useEffect(() => {
-        searchRenders.current += 1;
-      });
-      return useSearch();
-    });
-
-    expect(result.current[0]).toBe("/");
-    expect(locationRenders.current).toBe(1);
-    expect(searchResult.current).toBe("");
-    expect(searchRenders.current).toBe(1);
-
-    act(() => navigate("/foo"));
-
-    expect(result.current[0]).toBe("/foo");
-    expect(locationRenders.current).toBe(2);
-
-    act(() => navigate("/foo"));
-
-    expect(result.current[0]).toBe("/foo");
-    expect(locationRenders.current).toBe(2); // no re-render
-
-    act(() => navigate("/foo?hello=world"));
-
-    expect(result.current[0]).toBe("/foo");
-    expect(locationRenders.current).toBe(2);
-    expect(searchResult.current).toBe("?hello=world");
-    expect(searchRenders.current).toBe(2);
-
-    act(() => navigate("/foo?goodbye=world"));
-
-    expect(result.current[0]).toBe("/foo");
-    expect(locationRenders.current).toBe(2);
-    expect(searchResult.current).toBe("?goodbye=world");
-    expect(searchRenders.current).toBe(3);
-
-    unmount();
-    searchUnmount();
-  });
-
   it("supports history state", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
     const { result: state, unmount: unmountState } = renderHook(() =>
@@ -118,6 +65,66 @@ describe("`value` first argument", () => {
 
     unmount();
     unmountState();
+  });
+});
+
+describe("`useSearh` hook", () => {
+  beforeEach(() => history.replaceState(null, "", "/"));
+
+  it("allows to get current search string", () => {
+    const { result: searchResult } = renderHook(() => useSearch());
+    act(() => navigate("/foo?hello=worl&whats=up"));
+
+    expect(searchResult.current).toBe("hello=worl&whats=up");
+  });
+
+  it("returns empty string when there is no search string", () => {
+    const { result: searchResult } = renderHook(() => useSearch());
+
+    expect(searchResult.current).toBe("");
+
+    act(() => navigate("/foo"));
+    expect(searchResult.current).toBe("");
+
+    act(() => navigate("/foo? "));
+    expect(searchResult.current).toBe("");
+  });
+
+  it("does not re-render when only pathname is changed", () => {
+    // count how many times each hook is rendered
+    const locationRenders = { current: 0 };
+    const searchRenders = { current: 0 };
+
+    // count number of rerenders for each hook
+    renderHook(() => {
+      useEffect(() => {
+        locationRenders.current += 1;
+      });
+      return useBrowserLocation();
+    });
+
+    renderHook(() => {
+      useEffect(() => {
+        searchRenders.current += 1;
+      });
+      return useSearch();
+    });
+
+    expect(locationRenders.current).toBe(1);
+    expect(searchRenders.current).toBe(1);
+
+    act(() => navigate("/foo"));
+
+    expect(locationRenders.current).toBe(2);
+    expect(searchRenders.current).toBe(1);
+
+    act(() => navigate("/foo?bar"));
+    expect(locationRenders.current).toBe(2); // no re-render
+    expect(searchRenders.current).toBe(2);
+
+    act(() => navigate("/baz?bar"));
+    expect(locationRenders.current).toBe(3); // no re-render
+    expect(searchRenders.current).toBe(2);
   });
 });
 
