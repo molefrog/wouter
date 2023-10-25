@@ -7,6 +7,16 @@ import { useSyncExternalStore } from "./react-deps.js";
 // removes leading question mark
 const stripQm = (str) => (str[0] === "?" ? str.slice(1) : str);
 
+// decodes escape sequences such as %20
+const unescape = (str) => {
+  try {
+    return decodeURIComponent(str);
+  } catch (_e) {
+    // fail-safe mode: if string can't be decoded do nothing
+    return str;
+  }
+};
+
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
  */
@@ -35,7 +45,7 @@ const subscribeToLocationUpdates = (callback) => {
 export const useLocationProperty = (fn, ssrFn) =>
   useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
-const currentSearch = () => stripQm(location.search);
+const currentSearch = () => unescape(stripQm(location.search));
 
 export const useSearch = ({ ssrSearch = "" } = {}) =>
   useLocationProperty(currentSearch, () => stripQm(ssrSearch));
@@ -43,9 +53,11 @@ export const useSearch = ({ ssrSearch = "" } = {}) =>
 const currentPathname = () => location.pathname;
 
 export const usePathname = ({ ssrPath } = {}) =>
-  useLocationProperty(
-    currentPathname,
-    ssrPath ? () => ssrPath : currentPathname
+  unescape(
+    useLocationProperty(
+      currentPathname,
+      ssrPath ? () => ssrPath : currentPathname
+    )
   );
 
 const currentHistoryState = () => history.state;
