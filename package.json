@@ -37,6 +37,7 @@
     {
       "path": "packages/wouter/esm/use-browser-location.js",
       "limit": "1000 B",
+      "import": "{ useBrowserLocation }",
       "ignore": [
         "react",
         "use-sync-external-store"
@@ -69,6 +70,7 @@
     {
       "path": "packages/wouter-preact/esm/use-browser-location.js",
       "limit": "1000 B",
+      "import": "{ useBrowserLocation }",
       "ignore": [
         "preact",
         "preact/hooks"
