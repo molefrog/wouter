@@ -66,6 +66,36 @@ describe("`value` first argument", () => {
     unmount();
     unmountState();
   });
+
+  it("decodes escaped characters", () => {
+    const { result } = renderHook(() => useBrowserLocation());
+    const navigate = result.current[1];
+
+    act(() => navigate("/users/John Doe"));
+    expect(result.current[0]).toBe("/users/John Doe");
+
+    act(() => navigate("/%D1%88%D0%B5%D0%BB%D0%BB%D1%8B"));
+    expect(result.current[0]).toBe("/шеллы");
+
+    // slashes are also decoded
+    act(() => navigate("/%2F%2F"));
+    expect(result.current[0]).toBe("///");
+
+    // so are percent signs
+    act(() => navigate("/this-is/100%25 true"));
+    expect(result.current[0]).toBe("/this-is/100% true");
+  });
+
+  it("uses fail-safe escaping", () => {
+    const { result } = renderHook(() => useBrowserLocation());
+    const navigate = result.current[1];
+
+    act(() => navigate("/%not-valid"));
+    expect(result.current[0]).toBe("/%not-valid");
+
+    act(() => navigate("/99%"));
+    expect(result.current[0]).toBe("/99%");
+  });
 });
 
 describe("`useSearh` hook", () => {
@@ -125,6 +155,19 @@ describe("`useSearh` hook", () => {
     act(() => navigate("/baz?bar"));
     expect(locationRenders.current).toBe(3); // no re-render
     expect(searchRenders.current).toBe(2);
+  });
+
+  it("unescapes search string", () => {
+    const { result: searchResult } = renderHook(() => useSearch());
+
+    expect(searchResult.current).toBe("");
+
+    act(() => navigate("/?nonce=not Found&country=საქართველო"));
+    expect(searchResult.current).toBe("nonce=not Found&country=საქართველო");
+
+    // question marks
+    act(() => navigate("/?вопрос=как дела?"));
+    expect(searchResult.current).toBe("вопрос=как дела?");
   });
 });
 
