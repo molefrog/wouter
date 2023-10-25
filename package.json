@@ -132,7 +132,7 @@
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-replace": "^5.0.2",
-    "@size-limit/preset-small-lib": "^6.0.4",
+    "@size-limit/preset-small-lib": "^10.0.1",
     "@testing-library/react": "^14.0.0",
     "@types/babel__core": "^7.20.2",
     "@types/react": "^18.2.0",
