@@ -4,10 +4,18 @@
 
 import { it, expect, describe } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { Route, Router, useRoute, Link, Redirect } from "wouter";
+import {
+  Route,
+  Router,
+  useRoute,
+  Link,
+  Redirect,
+  useSearch,
+  useLocation,
+} from "wouter";
 
 describe("server-side rendering", () => {
-  it("works via staticHistory", () => {
+  it("works via `ssrPath` prop", () => {
     const App = () => (
       <Router ssrPath="/users/baz">
         <Route path="/users/baz">foo</Route>
@@ -63,5 +71,40 @@ describe("server-side rendering", () => {
 
     const rendered = renderToStaticMarkup(<App />);
     expect(rendered).toBe("");
+  });
+
+  describe("rendering with given search string", () => {
+    it("is empty when not specified", () => {
+      const PrintSearch = () => <>{useSearch()}</>;
+
+      const rendered = renderToStaticMarkup(
+        <Router ssrPath="/">
+          <PrintSearch />
+        </Router>
+      );
+
+      expect(rendered).toBe("");
+    });
+
+    it("allows to override search string", () => {
+      const App = () => {
+        const search = useSearch();
+        const [location] = useLocation();
+
+        return (
+          <>
+            {location} filter by {search}
+          </>
+        );
+      };
+
+      const rendered = renderToStaticMarkup(
+        <Router ssrPath="/catalog" ssrSearch="sort=created_at">
+          <App />
+        </Router>
+      );
+
+      expect(rendered).toBe("/catalog filter by sort=created_at");
+    });
   });
 });
