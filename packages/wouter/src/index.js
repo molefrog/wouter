@@ -1,6 +1,9 @@
 import { parse as parsePattern } from "regexparam";
 
-import { useBrowserLocation } from "./use-browser-location.js";
+import {
+  useBrowserLocation,
+  useSearch as useBrowserSearch,
+} from "./use-browser-location.js";
 
 import {
   useRef,
@@ -26,10 +29,12 @@ import { absolutePath, relativePath } from "./paths.js";
 
 const defaultRouter = {
   hook: useBrowserLocation,
+  searchHook: useBrowserSearch,
   parser: parsePattern,
   base: "",
   // this option is used to override the current location during SSR
   ssrPath: undefined,
+  ssrSearch: undefined,
 };
 
 const RouterCtx = createContext(defaultRouter);
@@ -65,6 +70,11 @@ const useLocationFromRouter = (router) => {
 };
 
 export const useLocation = () => useLocationFromRouter(useRouter());
+
+export const useSearch = () => {
+  const router = useRouter();
+  return router.searchHook(router);
+};
 
 const matchRoute = (parser, route, path, loose) => {
   // falsy patterns mean this route "always matches"
