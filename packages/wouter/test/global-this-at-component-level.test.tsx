@@ -18,7 +18,7 @@ describe("useSearch", () => {
     };
 
     const rendered = renderToStaticMarkup(<App />);
-    expect(rendered).toBe("?foo=1");
+    expect(rendered).toBe("foo=1");
   });
 
   test("works in node without options", () => {
