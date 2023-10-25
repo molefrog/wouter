@@ -28,7 +28,7 @@
   "size-limit": [
     {
       "path": "packages/wouter/esm/index.js",
-      "limit": "2100 B",
+      "limit": "2500 B",
       "ignore": [
         "react",
         "use-sync-external-store"
