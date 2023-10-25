@@ -10,7 +10,7 @@ it("returns browser search string", () => {
 });
 
 it("can be customized in the Router", () => {
-  const customSearchHook = () => "none";
+  const customSearchHook = ({ customOption = "unused" }) => "none";
 
   const { result } = renderHook(() => useSearch(), {
     wrapper: (props) => {

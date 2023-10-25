@@ -1,4 +1,4 @@
-import { Path } from "./location-hook";
+import { Path, SearchString } from "./location-hook";
 
 type Primitive = string | number | bigint | boolean | null | undefined | symbol;
 export const useLocationProperty: <S extends Primitive>(
@@ -6,10 +6,11 @@ export const useLocationProperty: <S extends Primitive>(
   ssrFn?: () => S
 ) => S;
 
-type SearchString = string;
-export const useSearch: (options?: {
+export type BrowserSearchHook = (options?: {
   ssrSearch?: SearchString;
 }) => SearchString;
+
+export const useSearch: BrowserSearchHook;
 
 export const usePathname: (options?: { ssrPath?: Path }) => Path;
 
