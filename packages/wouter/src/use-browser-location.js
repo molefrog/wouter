@@ -1,5 +1,12 @@
 import { useSyncExternalStore } from "./react-deps.js";
 
+/*
+ * Utility functions
+ */
+
+// removes leading question mark
+const stripQm = (str) => (str[0] === "?" ? str.slice(1) : str);
+
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
  */
@@ -28,10 +35,10 @@ const subscribeToLocationUpdates = (callback) => {
 export const useLocationProperty = (fn, ssrFn) =>
   useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
-const currentSearch = () => location.search;
+const currentSearch = () => stripQm(location.search);
 
 export const useSearch = ({ ssrSearch = "" } = {}) =>
-  useLocationProperty(currentSearch, () => ssrSearch);
+  useLocationProperty(currentSearch, () => stripQm(ssrSearch));
 
 const currentPathname = () => location.pathname;
 
