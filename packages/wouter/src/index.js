@@ -87,7 +87,7 @@ const matchRoute = (parser, route, path, loose) => {
   const { pattern, keys } = parser(route, loose);
   const [$base, ...matches] = pattern.exec(path) || [];
 
-  return $base
+  return $base !== undefined
     ? [
         true,
 
