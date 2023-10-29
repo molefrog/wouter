@@ -115,4 +115,29 @@ describe("when `nest` prop is given", () => {
     rerender(<App nested={false} />);
     expect(container.innerHTML).toBe("");
   });
+
+  it("works with one optional segment", () => {
+    const { hook, navigate } = memoryLocation({
+      path: "/",
+    });
+
+    const App = () => {
+      return (
+        <Router hook={hook}>
+          <Route path="/:version?" nest>
+            {({ version }) => version ?? "default"}
+          </Route>
+        </Router>
+      );
+    };
+
+    const { container } = render(<App />);
+    expect(container.innerHTML).toBe("default");
+
+    act(() => navigate("/v1"));
+    expect(container.innerHTML).toBe("v1");
+
+    act(() => navigate("/v2/dashboard"));
+    expect(container.innerHTML).toBe("v2");
+  });
 });
