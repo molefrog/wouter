@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { vi, it, expect } from "vitest";
+import { it, expect } from "vitest";
 import { useParams, Router, Route } from "wouter";
 
 import { memoryLocation } from "wouter/memory-location";
@@ -49,4 +49,23 @@ it("rerenders with parameters change", () => {
 
   act(() => navigate("/posts/latest"));
   expect(result.current).toEqual({ a: "posts", b: "latest" });
+});
+
+it("extracts parameters of the nested route", () => {
+  const { hook } = memoryLocation({
+    path: "/v2/eth/txns",
+    static: true,
+  });
+
+  const { result } = renderHook(() => useParams(), {
+    wrapper: (props) => (
+      <Router hook={hook}>
+        <Route path="/:version/:chain?" nest>
+          {props.children}
+        </Route>
+      </Router>
+    ),
+  });
+
+  expect(result.current).toEqual({ version: "v2", chain: "eth" });
 });
