@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "2.11.0",
+  "version": "3.0.0-dev.1",
   "description": "Minimalist-friendly ~1.5KB router for React",
   "type": "module",
   "keywords": [
@@ -57,7 +57,10 @@
     "watch": "rollup -c -w"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
-  "repository": "molefrog/wouter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molefrog/wouter.git"
+  },
   "license": "ISC",
   "peerDependencies": {
     "react": ">=16.8.0"
