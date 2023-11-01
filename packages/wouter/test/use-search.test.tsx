@@ -1,6 +1,9 @@
-import { renderHook } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import { useSearch, Router } from "wouter";
-import { it, expect } from "vitest";
+import { navigate } from "wouter/use-browser-location";
+import { it, expect, beforeEach } from "vitest";
+
+beforeEach(() => history.replaceState(null, "", "/"));
 
 it("returns browser search string", () => {
   history.replaceState(null, "", "/users?active=true");
@@ -19,4 +22,17 @@ it("can be customized in the Router", () => {
   });
 
   expect(result.current).toEqual("none");
+});
+
+it("unescapes search string", () => {
+  const { result: searchResult } = renderHook(() => useSearch());
+
+  expect(searchResult.current).toBe("");
+
+  act(() => navigate("/?nonce=not Found&country=საქართველო"));
+  expect(searchResult.current).toBe("nonce=not Found&country=საქართველო");
+
+  // question marks
+  act(() => navigate("/?вопрос=как дела?"));
+  expect(searchResult.current).toBe("вопрос=как дела?");
 });

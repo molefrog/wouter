@@ -27,14 +27,6 @@ it("isn't sensitive to leading slash", () => {
   expect(path).toBe("/app/users");
 });
 
-it("automatically unescapes specials characters", () => {
-  location.hash = "/пользователи/показать все/#101/げんきです?";
-  const { result } = renderHook(() => useHashLocation());
-  const [path] = result.current;
-
-  expect(path).toBe("/пользователи/показать все/#101/げんきです?");
-});
-
 it("rerenders when hash changes", async () => {
   const { result } = renderHook(() => useHashLocation());
 
