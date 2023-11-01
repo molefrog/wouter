@@ -46,5 +46,3 @@ it("infers parameters from the route path", () => {
     }>();
   }
 });
-
-it.todo("accepts custom parser type for parameter inference");
