@@ -74,6 +74,17 @@ it("uses a question mark to define optional segments", () => {
   });
 });
 
+it("supports optional wildcards", () => {
+  assertRoute("/app/*?", "/app/blog/mac", { wild: "blog/mac" });
+  assertRoute("/app/*?", "/app", { wild: undefined });
+  assertRoute("/app/*?/dashboard", "/app/v1/dashboard", { wild: "v1" });
+  assertRoute("/app/*?/dashboard", "/app/dashboard", { wild: undefined });
+  assertRoute("/app/*?/users/:name", "/app/users/karen", {
+    wild: undefined,
+    name: "karen",
+  });
+});
+
 it("supports other characters in segments", () => {
   assertRoute("/users/:name", "/users/1-alex", { name: "1-alex" });
   assertRoute("/staff/:name/:bio?", "/staff/John Doe 3", {
