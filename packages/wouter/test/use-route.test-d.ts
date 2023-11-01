@@ -36,12 +36,13 @@ it("accepts the type of parameters as a generic argument", () => {
 });
 
 it("infers parameters from the route path", () => {
-  const [, inferedParams] = useRoute("/app/users/:name?/:id");
+  const [, inferedParams] = useRoute("/app/users/:name?/:id/*?");
 
   if (inferedParams) {
     expectTypeOf(inferedParams).toMatchTypeOf<{
       name?: string;
       id: string;
+      wildcard?: string;
     }>();
   }
 });
