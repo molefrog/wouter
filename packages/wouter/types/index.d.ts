@@ -28,7 +28,7 @@ import { RouterObject, RouterOptions } from "./router";
 export { Path, BaseLocationHook, BaseSearchHook } from "./location-hook";
 export * from "./router";
 
-import { RouteParams } from "regexparam";
+import { RouteParams } from "./regexparam";
 
 // React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
 // This issue has been fixed in React 18 type declaration.

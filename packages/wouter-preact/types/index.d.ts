@@ -24,7 +24,7 @@ import { RouterObject, RouterOptions } from "./router";
 export { Path, BaseLocationHook, BaseSearchHook } from "./location-hook";
 export * from "./router";
 
-import { RouteParams } from "regexparam";
+import { RouteParams } from "./regexparam";
 
 /**
  * Route patterns and parameters
