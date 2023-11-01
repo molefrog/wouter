@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from "./react-deps.js";
-import { stripQm, unescape } from "./paths.js";
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -29,19 +28,17 @@ const subscribeToLocationUpdates = (callback) => {
 export const useLocationProperty = (fn, ssrFn) =>
   useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
-const currentSearch = () => unescape(stripQm(location.search));
+const currentSearch = () => location.search;
 
 export const useSearch = ({ ssrSearch = "" } = {}) =>
-  useLocationProperty(currentSearch, () => stripQm(ssrSearch));
+  useLocationProperty(currentSearch, () => ssrSearch);
 
 const currentPathname = () => location.pathname;
 
 export const usePathname = ({ ssrPath } = {}) =>
-  unescape(
-    useLocationProperty(
-      currentPathname,
-      ssrPath ? () => ssrPath : currentPathname
-    )
+  useLocationProperty(
+    currentPathname,
+    ssrPath ? () => ssrPath : currentPathname
   );
 
 const currentHistoryState = () => history.state;
