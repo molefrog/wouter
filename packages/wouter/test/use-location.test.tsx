@@ -110,6 +110,25 @@ describe.each([
       expect(result.current[0]).toBe("~/MyOtherApp/users/JohnDoe");
       unmount();
     });
+
+    it("automatically unescapes specials characters", async () => {
+      const { result, unmount } = renderHook(() => useLocation(), {
+        wrapper: createContainer({
+          hook: stub.hook,
+        }),
+      });
+
+      await stub.act(() =>
+        stub.navigate("/пользователи/показать все/101/げんきです")
+      );
+      expect(result.current[0]).toBe(
+        "/пользователи/показать все/101/げんきです"
+      );
+
+      await stub.act(() => stub.navigate("/%D1%88%D0%B5%D0%BB%D0%BB%D1%8B"));
+      expect(result.current[0]).toBe("/шеллы");
+      unmount();
+    });
   });
 
   describe("`update` second parameter", () => {

@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from "./react-deps.js";
-import { unescape } from "./paths.js";
 
 // fortunately `hashchange` is a native event, so there is no need to
 // patch `history` object (unlike `pushState/replaceState` events)
@@ -9,8 +8,7 @@ const subscribeToHashUpdates = (callback) => {
 };
 
 // leading '#' is ignored, leading '/' is optional
-const currentHashLocation = () =>
-  unescape("/" + location.hash.replace(/^#?\/?/, ""));
+const currentHashLocation = () => "/" + location.hash.replace(/^#?\/?/, "");
 
 export const navigate = (to, { state = null } = {}) => {
   history.pushState(

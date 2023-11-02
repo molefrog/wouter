@@ -4,20 +4,20 @@
 
 import { test, expect, describe } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import {
-  useSearch,
-  usePathname,
-  useBrowserLocation,
-} from "wouter/use-browser-location";
+import { useSearch, useLocation, Router } from "wouter";
 
 describe("useSearch", () => {
   test("works in node", () => {
     const App = () => {
-      const search = useSearch({ ssrSearch: "?foo=1" });
+      const search = useSearch();
       return <>{search}</>;
     };
 
-    const rendered = renderToStaticMarkup(<App />);
+    const rendered = renderToStaticMarkup(
+      <Router ssrSearch="?foo=1">
+        <App />
+      </Router>
+    );
     expect(rendered).toBe("foo=1");
   });
 
@@ -32,22 +32,16 @@ describe("useSearch", () => {
   });
 });
 
-test("usePathname works in node", () => {
+test("useLocation works in node", () => {
   const App = () => {
-    const path = usePathname({ ssrPath: "hello-from-server" });
+    const path = useLocation();
     return <>{path}</>;
   };
 
-  const rendered = renderToStaticMarkup(<App />);
-  expect(rendered).toBe("hello-from-server");
-});
-
-test("useBrowserLocation works in node", () => {
-  const App = () => {
-    const [location] = useBrowserLocation({ ssrPath: "hello-from-server" });
-    return <>{location}</>;
-  };
-
-  const rendered = renderToStaticMarkup(<App />);
-  expect(rendered).toBe("hello-from-server");
+  const rendered = renderToStaticMarkup(
+    <Router ssrPath="/hello-from-server">
+      <App />
+    </Router>
+  );
+  expect(rendered).toBe("/hello-from-server");
 });
