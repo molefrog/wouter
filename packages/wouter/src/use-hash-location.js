@@ -11,12 +11,12 @@ const subscribeToHashUpdates = (callback) => {
 const currentHashLocation = () => "/" + location.hash.replace(/^#?\/?/, "");
 
 export const navigate = (to, { state = null } = {}) => {
-  history.pushState(
+  history.replaceState(
     state,
     "",
     // keep the current pathname, current query string, but replace the hash
     // (leading '#' and '/' are optional, see above)
-    location.pathname + location.search + `#/${to.replace(/^#?\/?/, "")}`
+    location.pathname + location.search + `#/${location.hash = to.replace(/^#?\/?/, "")}`
   );
 };
 
