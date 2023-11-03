@@ -34,7 +34,7 @@ describe("useSearch", () => {
 
 test("useLocation works in node", () => {
   const App = () => {
-    const path = useLocation();
+    const [path] = useLocation();
     return <>{path}</>;
   };
 
