@@ -97,11 +97,6 @@ export type NavigationalProps<
 > = ({ to: Path; href?: never } | { href: Path; to?: never }) &
   HookNavigationOptions<H>;
 
-export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> = Omit<
-  AnchorHTMLAttributes<HTMLAnchorElement>,
-  "href"
-> &
-  NavigationalProps<H>;
 
 export type RedirectProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> & {
@@ -113,8 +108,17 @@ export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
   context?: any
 ): ReactElement<any, any> | null;
 
+type AsChildProps<RequiredProps, DefaultElementProps> =
+  | ({ asChild?: false } & RequiredProps & DefaultElementProps)
+  | ({ asChild: true; children: React.ReactNode } & RequiredProps);
+
+export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> = AsChildProps<
+  NavigationalProps<H>,
+  AnchorHTMLAttributes<HTMLAnchorElement> & RefAttributes<HTMLAnchorElement>
+>;
+
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
-  props: PropsWithChildren<LinkProps<H>> & RefAttributes<HTMLAnchorElement>,
+  props: LinkProps<H>,
   context?: any
 ): ReactElement<any, any> | null;
 

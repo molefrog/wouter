@@ -183,7 +183,7 @@ export const Link = forwardRef((props, ref) => {
   const router = useRouter();
   const [, navigate] = useLocationFromRouter(router);
 
-  const { to, href = to, children, onClick } = props;
+  const { to, href = to, children, asChild, onClick } = props;
 
   const handleClick = useEvent((event) => {
     // ignores the navigation when clicked using right mouse button or
@@ -204,17 +204,18 @@ export const Link = forwardRef((props, ref) => {
     }
   });
 
-  // wraps children in `a` if needed
-  const extraProps = {
-    // handle nested routers and absolute paths
-    href: href[0] === "~" ? href.slice(1) : router.base + href,
-    onClick: handleClick,
-    to: null,
-    ref,
-  };
-  const jsx = isValidElement(children) ? children : h("a", props);
+  const link = href[0] === "~" ? href.slice(1) : router.base + href;
 
-  return cloneElement(jsx, extraProps);
+  if (asChild) {
+    const jsx = isValidElement(children) ? children : null;
+    return cloneElement(jsx, {
+      // handle nested routers and absolute paths
+      href: link,
+      onClick: handleClick,
+    });
+  }
+
+  return h("a", { ...props, href: link, onClick: handleClick, to: null, ref });
 });
 
 const flattenChildren = (children) => {
