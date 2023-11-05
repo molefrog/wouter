@@ -5,6 +5,7 @@ export default defineProject({
   plugins: [react({ jsxRuntime: "automatic" })],
   test: {
     name: "wouter-react",
+    setupFiles: "./setup-vitest.ts",
     environment: "jsdom",
   },
 });
