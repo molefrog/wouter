@@ -167,4 +167,3 @@ describe("base link", () => {
     expect(history.state).toBe(testState);
   });
 });
-
