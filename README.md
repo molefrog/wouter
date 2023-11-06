@@ -627,7 +627,7 @@ use current location relative to the base. For example:
 
 ```js
 <Router base="/app">
-  <Route path="/users">Users</Router> {/* Location here is "/users", not "/app/users"! */}
+  <Route path="/users">Users</Route> {/* Location here is "/users", not "/app/users"! */}
 </Router>
 ```
 
