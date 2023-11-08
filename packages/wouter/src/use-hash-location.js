@@ -1,10 +1,22 @@
 import { useSyncExternalStore } from "./react-deps.js";
 
-// fortunately `hashchange` is a native event, so there is no need to
-// patch `history` object (unlike `pushState/replaceState` events)
+// array of callback subscribed to hash updates
+const listeners = {
+  v: [],
+};
+
+const onHashChange = () => listeners.v.forEach((cb) => cb());
+
+// we subscribe to `hashchange` only once when needed to guarantee that
+// all listeners are called synchronously
 const subscribeToHashUpdates = (callback) => {
-  addEventListener("hashchange", callback);
-  return () => removeEventListener("hashchange", callback);
+  if (listeners.v.push(callback) === 1)
+    addEventListener("hashchange", onHashChange);
+
+  return () => {
+    listeners.v = listeners.v.filter((i) => i !== callback);
+    if (!listeners.v.length) removeEventListener("hashchange", onHashChange);
+  };
 };
 
 // leading '#' is ignored, leading '/' is optional
