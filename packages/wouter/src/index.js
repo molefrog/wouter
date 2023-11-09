@@ -215,7 +215,15 @@ export const Link = forwardRef((props, ref) => {
     });
   }
 
-  return h("a", { ...props, href: link, onClick: handleClick, to: null, ref });
+  return h("a", {
+    ...props,
+    href: link,
+    onClick: handleClick,
+    to: null,
+    replace: null,
+    state: null,
+    ref,
+  });
 });
 
 const flattenChildren = (children) => {

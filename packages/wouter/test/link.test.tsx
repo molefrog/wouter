@@ -123,9 +123,7 @@ describe("base link", () => {
     const clickHandler = vi.fn();
 
     const { getByTestId } = render(
-      <Link href="/" onClick={clickHandler}>
-        <a data-testid="link" />
-      </Link>
+      <Link href="/" onClick={clickHandler} data-testid="link" />
     );
 
     fireEvent.click(getByTestId("link"));
