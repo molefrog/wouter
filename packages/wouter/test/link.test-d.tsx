@@ -1,44 +1,60 @@
-import { describe, it, assertType } from "vitest";
+import { describe, it } from "vitest";
 import { Link } from "wouter";
 import * as React from "react";
 
-describe("Link types", () => {
+describe("<Link /> types", () => {
   it("should have required prop href", () => {
     // @ts-expect-error
-    assertType(<Link>test</Link>);
-    assertType(<Link href="/">test</Link>);
+    <Link>test</Link>;
+    <Link href="/">test</Link>;
   });
 
-  it("should support state prop", () => {
-    assertType(
-      <Link href="/" state={{ a: "foo" }}>
-        test
-      </Link>
-    );
-    assertType(
-      <Link href="/" state={null}>
-        test
-      </Link>
-    );
-    assertType(
-      <Link href="/" state={undefined}>
-        test
-      </Link>
-    );
-    assertType(
-      <Link href="/" state="string">
-        test
-      </Link>
-    );
+  it("should throw error when `to` and `href` props are used in same time", () => {
+    // @ts-expect-error
+    <Link to="/hello" href="/world">
+      Hello
+    </Link>;
+  });
+
+  it("should inherit props from `HTMLAnchorElements`", () => {
+    <Link to="/hello" className="hello">
+      Hello
+    </Link>;
+
+    <Link to="/hello" style={{}}>
+      Hello
+    </Link>;
+
+    <Link to="/hello" target="_blank">
+      Hello
+    </Link>;
+
+    <Link to="/hello" download ping="he-he">
+      Hello
+    </Link>;
+  });
+
+  it("should support other navigation params", () => {
+    <Link href="/" state={{ a: "foo" }}>
+      test
+    </Link>;
+
+    <Link href="/" replace>
+      test
+    </Link>;
+
+    <Link href="/" state={undefined}>
+      test
+    </Link>;
   });
 });
 
-describe("Link's ref", () => {
+describe("<Link /> with ref", () => {
   it("should work", () => {
     const ref = React.useRef<HTMLAnchorElement>(null);
 
     <Link to="/" ref={ref}>
-      HELLO
+      Hello
     </Link>;
   });
 
@@ -47,7 +63,7 @@ describe("Link's ref", () => {
 
     // @ts-expect-error
     <Link to="/" ref={ref}>
-      HELLO
+      Hello
     </Link>;
   });
 
@@ -56,19 +72,61 @@ describe("Link's ref", () => {
 
     // @ts-expect-error
     <Link to="/" ref={ref}>
-      HELLO
-    </Link>;
-  });
-
-  it("should work with composed components", () => {
-    const ref = React.useRef<React.ElementRef<typeof Component>>(null);
-
-    <Link to="/">
-      <Component ref={ref}></Component>
+      Hello
     </Link>;
   });
 });
 
-const Component = React.forwardRef<{ hello: "world" }>((props, ref) => {
-  return <>test</>;
+describe("<Link /> in asChild mode", () => {
+  it("should work", () => {
+    <Link to="/" asChild>
+      <a>Hello</a>
+    </Link>;
+  });
+
+  it("should throw error when `to` and `href` props are used in same time", () => {
+    // @ts-expect-error
+    <Link to="/hello" href="/world" asChild>
+      <a>Hello</a>
+    </Link>;
+  });
+
+  it("should throw error when unsupported props are provided", () => {
+    // @ts-expect-error
+    <Link to="/" asChild className="">
+      <a>Hello</a>
+    </Link>;
+
+    // @ts-expect-error
+    <Link to="/" asChild style={{}}>
+      <a>Hello</a>
+    </Link>;
+
+    // @ts-expect-error
+    <Link to="/" asChild unknown={10}>
+      <a>Hello</a>
+    </Link>;
+
+    // @ts-expect-error
+    <Link to="/" asChild ref={null}>
+      <a>Hello</a>
+    </Link>;
+  });
+
+  it("should throw error when to and href props are used in same time", () => {
+    // @ts-expect-error
+    <Link to="/hello" href="/world" asChild>
+      <a>Hello</a>
+    </Link>;
+  });
+
+  it("should support other navigation params", () => {
+    <Link to="/" asChild replace>
+      <a>Hello</a>
+    </Link>;
+
+    <Link to="/" asChild state={{ hello: "world" }}>
+      <a>Hello</a>
+    </Link>;
+  });
 });

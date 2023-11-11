@@ -1,4 +1,4 @@
-import { useRef, useEffect, PropsWithChildren, MouseEventHandler } from "react";
+import { type MouseEventHandler } from "react";
 import { it, expect, afterEach, vi, describe } from "vitest";
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
@@ -6,7 +6,7 @@ import { Router, Link } from "wouter";
 
 afterEach(cleanup);
 
-describe("base link", () => {
+describe("<Link />", () => {
   it("renders a link with proper attributes", () => {
     const { getByText } = render(
       <Link href="/about" className="link--active">
@@ -163,5 +163,37 @@ describe("base link", () => {
     fireEvent.click(getByTestId("link"));
     expect(location.pathname).toBe("/goo-baz");
     expect(history.state).toBe(testState);
+  });
+});
+
+describe("<Link /> in asChild mode", () => {
+  it("works for any other elements as well", () => {
+    const { getByText } = render(
+      <Link href="/about">
+        <div className="link--wannabe">Click Me</div>
+      </Link>
+    );
+
+    const link = getByText("Click Me");
+
+    expect(link.tagName).toBe("DIV");
+    expect(link).not.toHaveAttribute("href");
+    expect(link).toHaveClass("link--wannabe");
+    expect(link).toHaveTextContent("Click Me");
+  });
+
+  it("injects href prop when rendered with `asChild`", () => {
+    const { getByText } = render(
+      <Link href="/about" asChild>
+        <div className="link--wannabe">Click Me</div>
+      </Link>
+    );
+
+    const link = getByText("Click Me");
+
+    expect(link.tagName).toBe("DIV");
+    expect(link).toHaveClass("link--wannabe");
+    expect(link).toHaveAttribute("href", "/about");
+    expect(link).toHaveTextContent("Click Me");
   });
 });
