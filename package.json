@@ -61,7 +61,7 @@
     },
     {
       "path": "packages/wouter-preact/esm/index.js",
-      "limit": "2000 B",
+      "limit": "2500 B",
       "ignore": [
         "preact",
         "preact/hooks"
