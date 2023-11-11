@@ -24,7 +24,6 @@ describe("Preact support", () => {
           <Link href="/albums/all" onClick={fn} data-testid="index-link">
             The Best Albums Ever
           </Link>
-          {/* @ts-ignore */}
           <Link to="/albums/london-calling" asChild>
             <a data-testid="featured-link">
               Featured Now: London Calling, Clash
