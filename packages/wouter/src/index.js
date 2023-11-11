@@ -204,12 +204,15 @@ export const Link = forwardRef((props, ref) => {
     }
   });
 
+  // handle nested routers and absolute paths
   const link = href[0] === "~" ? href.slice(1) : router.base + href;
 
   if (asChild) {
-    const jsx = isValidElement(children) ? children : null;
-    return cloneElement(jsx, {
-      // handle nested routers and absolute paths
+    if (!isValidElement(children)) {
+      throw Error("Only one child allowed");
+    }
+
+    return cloneElement(children, {
       href: link,
       onClick: handleClick,
     });
