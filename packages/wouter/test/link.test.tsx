@@ -182,6 +182,28 @@ describe("<Link /> in asChild mode", () => {
     expect(link).toHaveTextContent("Click Me");
   });
 
+  it("throws error when invalid element is provided", () => {
+    expect(() =>
+      render(
+        <Link href="/about" asChild>
+          Click Me
+        </Link>
+      )
+    ).throw();
+  });
+
+  it("throws error when more than one element is provided", () => {
+    expect(() =>
+      render(
+        <Link href="/about" asChild>
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+        </Link>
+      )
+    ).throw();
+  });
+
   it("injects href prop when rendered with `asChild`", () => {
     const { getByText } = render(
       <Link href="/about" asChild>
