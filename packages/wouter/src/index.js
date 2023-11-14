@@ -183,9 +183,18 @@ export const Link = forwardRef((props, ref) => {
   const router = useRouter();
   const [, navigate] = useLocationFromRouter(router);
 
-  const { to, href = to, children, asChild, onClick } = props;
+  const {
+    to,
+    href: _href = to,
+    onClick: _onClick,
+    asChild,
+    children,
+    replace /* ignore nav props */,
+    state /* ignore nav props */,
+    ...restProps
+  } = props;
 
-  const handleClick = useEvent((event) => {
+  const onClick = useEvent((event) => {
     // ignores the navigation when clicked using right mouse button or
     // by holding a special modifier key: ctrl, command, win, alt, shift
     if (
@@ -197,36 +206,19 @@ export const Link = forwardRef((props, ref) => {
     )
       return;
 
-    onClick && onClick(event);
+    _onClick && _onClick(event); // TODO: is it safe to use _onClick?.(event)
     if (!event.defaultPrevented) {
       event.preventDefault();
-      navigate(to || href, props);
+      navigate(_href, props);
     }
   });
 
   // handle nested routers and absolute paths
-  const link = href[0] === "~" ? href.slice(1) : router.base + href;
+  const href = _href[0] === "~" ? _href.slice(1) : router.base + _href;
 
-  if (asChild) {
-    if (!isValidElement(children)) {
-      throw Error("Only one child allowed");
-    }
-
-    return cloneElement(children, {
-      href: link,
-      onClick: handleClick,
-    });
-  }
-
-  return h("a", {
-    ...props,
-    href: link,
-    onClick: handleClick,
-    to: null,
-    replace: null,
-    state: null,
-    ref,
-  });
+  return asChild && isValidElement(children)
+    ? cloneElement(children, { href, onClick })
+    : h("a", { ...restProps, href, onClick, children, ref });
 });
 
 const flattenChildren = (children) => {
