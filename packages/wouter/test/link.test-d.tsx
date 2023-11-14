@@ -16,7 +16,7 @@ describe("<Link /> types", () => {
     </Link>;
   });
 
-  it("should inherit props from `HTMLAnchorElements`", () => {
+  it("should inherit props from `HTMLAnchorElement`", () => {
     <Link to="/hello" className="hello">
       Hello
     </Link>;
