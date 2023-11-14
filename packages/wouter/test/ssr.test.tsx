@@ -55,7 +55,7 @@ describe("server-side rendering", () => {
     );
 
     const rendered = renderToStaticMarkup(<App />);
-    expect(rendered).toBe(`<a href="/users/1" title="Profile">Mark</a>`);
+    expect(rendered).toBe(`<a title="Profile" href="/users/1">Mark</a>`);
   });
 
   it("renders redirects however they have effect only on a client-side", () => {

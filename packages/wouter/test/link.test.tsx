@@ -180,28 +180,40 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link).not.toHaveAttribute("href");
     expect(link).toHaveClass("link--wannabe");
     expect(link).toHaveTextContent("Click Me");
+
+    expect(link.parentElement?.tagName).toBe("A");
+    expect(link.parentElement).toHaveAttribute("href", "/about");
   });
 
-  it("throws error when invalid element is provided", () => {
-    expect(() =>
-      render(
-        <Link href="/about" asChild>
-          Click Me
-        </Link>
-      )
-    ).throw();
+  it("when invalid element is provided, wraps the children in an <a />", () => {
+    const { getByText } = render(
+      <Link href="/about" asChild>
+        Click Me
+      </Link>
+    );
+
+    const link = getByText("Click Me");
+
+    expect(link.tagName).toBe("A");
+    expect(link).toHaveAttribute("href", "/about");
+    expect(link).toHaveTextContent("Click Me");
   });
 
-  it("throws error when more than one element is provided", () => {
-    expect(() =>
-      render(
-        <Link href="/about" asChild>
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-        </Link>
-      )
-    ).throw();
+  it("when more than one element is provided, wraps the children in an <a />", async () => {
+    const { getByText } = render(
+      <Link href="/about" asChild>
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+      </Link>
+    );
+
+    const span = getByText("1");
+
+    expect(span.parentElement?.tagName).toBe("A");
+
+    expect(span.parentElement).toHaveAttribute("href", "/about");
+    expect(span.parentElement).toHaveTextContent("123");
   });
 
   it("injects href prop when rendered with `asChild`", () => {
