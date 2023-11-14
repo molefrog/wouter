@@ -167,7 +167,7 @@ describe("<Link />", () => {
 });
 
 describe("<Link /> with `asChild` prop", () => {
-  it("works for any other elements as well", () => {
+  it("when `asChild` is not specified, wraps the children in an <a />", () => {
     const { getByText } = render(
       <Link href="/about">
         <div className="link--wannabe">Click Me</div>
