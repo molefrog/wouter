@@ -166,7 +166,7 @@ describe("<Link />", () => {
   });
 });
 
-describe("<Link /> in asChild mode", () => {
+describe("<Link /> with `asChild` prop", () => {
   it("works for any other elements as well", () => {
     const { getByText } = render(
       <Link href="/about">

@@ -43,6 +43,11 @@ describe("<Link /> types", () => {
       test
     </Link>;
 
+    // @ts-expect-error
+    <Link to="/" replace={{ nope: 1 }}>
+      Hello
+    </Link>;
+
     <Link href="/" state={undefined}>
       test
     </Link>;
@@ -77,21 +82,21 @@ describe("<Link /> with ref", () => {
   });
 });
 
-describe("<Link /> in asChild mode", () => {
+describe("<Link /> with `asChild` prop", () => {
   it("should work", () => {
     <Link to="/" asChild>
       <a>Hello</a>
     </Link>;
   });
 
-  it("should throw error when `to` and `href` props are used in same time", () => {
+  it("does not allow `to` and `href` props to be used at the same time", () => {
     // @ts-expect-error
     <Link to="/hello" href="/world" asChild>
       <a>Hello</a>
     </Link>;
   });
 
-  it("should throw error when unsupported props are provided", () => {
+  it("does not allow other props", () => {
     // @ts-expect-error
     <Link to="/" asChild className="">
       <a>Hello</a>
@@ -113,15 +118,13 @@ describe("<Link /> in asChild mode", () => {
     </Link>;
   });
 
-  it("should throw error when to and href props are used in same time", () => {
-    // @ts-expect-error
-    <Link to="/hello" href="/world" asChild>
-      <a>Hello</a>
-    </Link>;
-  });
-
   it("should support other navigation params", () => {
     <Link to="/" asChild replace>
+      <a>Hello</a>
+    </Link>;
+
+    // @ts-expect-error
+    <Link to="/" asChild replace={12}>
       <a>Hello</a>
     </Link>;
 
