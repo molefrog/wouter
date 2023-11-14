@@ -9,7 +9,7 @@ describe("<Link /> types", () => {
     <Link href="/">test</Link>;
   });
 
-  it("should throw error when `to` and `href` props are used in same time", () => {
+  it("does not allow `to` and `href` props to be used at the same time", () => {
     // @ts-expect-error
     <Link to="/hello" href="/world">
       Hello
