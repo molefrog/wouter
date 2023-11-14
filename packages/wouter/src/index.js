@@ -189,8 +189,10 @@ export const Link = forwardRef((props, ref) => {
     onClick: _onClick,
     asChild,
     children,
+    /* eslint-disable no-unused-vars */
     replace /* ignore nav props */,
     state /* ignore nav props */,
+    /* eslint-enable no-unused-vars */
     ...restProps
   } = props;
 
