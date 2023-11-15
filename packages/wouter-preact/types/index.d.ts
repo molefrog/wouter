@@ -81,9 +81,9 @@ export type NavigationalProps<
 > = ({ to: Path; href?: never } | { href: Path; to?: never }) &
   HookNavigationOptions<H>;
 
-type AsChildProps<RequiredProps, DefaultElementProps> =
-  | ({ asChild?: false } & RequiredProps & DefaultElementProps)
-  | ({ asChild: true; children: ComponentChildren } & RequiredProps);
+type AsChildProps<ComponentProps, DefaultElementProps> =
+  | ({ asChild?: false } & ComponentProps & DefaultElementProps)
+  | ({ asChild: true; children: ComponentChildren } & ComponentProps);
 
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   AsChildProps<NavigationalProps<H>, JSX.HTMLAttributes>;

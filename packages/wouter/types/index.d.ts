@@ -107,9 +107,9 @@ export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
   context?: any
 ): ReactElement<any, any> | null;
 
-type AsChildProps<RequiredProps, DefaultElementProps> =
-  | ({ asChild?: false } & RequiredProps & DefaultElementProps)
-  | ({ asChild: true; children: React.ReactNode } & RequiredProps);
+type AsChildProps<ComponentProps, DefaultElementProps> =
+  | ({ asChild?: false } & ComponentProps & DefaultElementProps)
+  | ({ asChild: true; children: React.ReactNode } & ComponentProps);
 
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   AsChildProps<
