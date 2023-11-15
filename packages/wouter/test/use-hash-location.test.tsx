@@ -6,7 +6,7 @@ import { Router, Route, useLocation } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 
 import { waitForHashChangeEvent } from "./test-utils";
-import { ReactElement, useSyncExternalStore } from "react";
+import { ReactNode, useSyncExternalStore } from "react";
 
 beforeEach(() => {
   history.replaceState(null, "", "/");
@@ -149,7 +149,7 @@ it("works even if `hashchange` listeners are called asynchronously ", async () =
   const InterceptAndStopHashchange = ({
     children,
   }: {
-    children: ReactElement;
+    children: ReactNode;
   }) => {
     useSyncExternalStore(subscribeToHashchange, () => true);
     return children;
