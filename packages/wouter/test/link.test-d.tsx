@@ -1,6 +1,11 @@
 import { describe, it } from "vitest";
-import { Link } from "wouter";
+import { Link, type Path } from "wouter";
 import * as React from "react";
+
+type NetworkLocationHook = () => [
+  Path,
+  (path: string, options: { host: string; retries?: number }) => void
+];
 
 describe("<Link /> types", () => {
   it("should have required prop href", () => {
@@ -49,6 +54,19 @@ describe("<Link /> types", () => {
     </Link>;
 
     <Link href="/" state={undefined}>
+      test
+    </Link>;
+  });
+
+  it("should work with generic type", () => {
+    <Link<NetworkLocationHook> href="/" host="wouter.com">
+      test
+    </Link>;
+
+    // @ts-expect-error
+    <Link<NetworkLocationHook> href="/">test</Link>;
+
+    <Link<NetworkLocationHook> href="/" host="wouter.com" retries={4}>
       test
     </Link>;
   });
@@ -130,6 +148,21 @@ describe("<Link /> with `asChild` prop", () => {
 
     <Link to="/" asChild state={{ hello: "world" }}>
       <a>Hello</a>
+    </Link>;
+  });
+
+  it("should work with generic type", () => {
+    <Link<NetworkLocationHook> asChild to="/" host="wouter.com">
+      <div>test</div>
+    </Link>;
+
+    // @ts-expect-error
+    <Link<NetworkLocationHook> asChild to="/">
+      <div>test</div>
+    </Link>;
+
+    <Link<NetworkLocationHook> asChild to="/" host="wouter.com" retries={4}>
+      <div>test</div>
     </Link>;
   });
 });
