@@ -8,7 +8,6 @@ import {
   PropsWithChildren,
   RefAttributes,
   ComponentType,
-  ReactElement,
   ReactNode,
 } from "react";
 
@@ -74,7 +73,7 @@ export interface RouteProps<
 export function Route<
   T extends DefaultParams | undefined = undefined,
   RoutePath extends Path = Path
->(props: RouteProps<T, RoutePath>): ReactElement | null;
+>(props: RouteProps<T, RoutePath>): ReturnType<FunctionComponent>;
 
 /*
  * Components: <Link /> & <Redirect />
@@ -104,7 +103,7 @@ export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
   props: PropsWithChildren<LinkProps<H>> & RefAttributes<HTMLAnchorElement>,
   context?: any
-): ReactElement<any, any> | null;
+): ReturnType<FunctionComponent>;
 
 /*
  * Components: <Switch />
