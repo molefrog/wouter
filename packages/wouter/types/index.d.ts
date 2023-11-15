@@ -5,7 +5,6 @@
 import {
   AnchorHTMLAttributes,
   FunctionComponent,
-  PropsWithChildren,
   RefAttributes,
   ComponentType,
   ReactNode,
