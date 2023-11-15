@@ -152,7 +152,7 @@ it("works even if `hashchange` listeners are called asynchronously ", async () =
     children: ReactNode;
   }) => {
     useSyncExternalStore(subscribeToHashchange, () => true);
-    return children;
+    return <>{children}</>;
   };
 
   const paths: string[] = [];
