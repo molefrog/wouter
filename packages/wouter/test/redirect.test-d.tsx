@@ -14,4 +14,13 @@ describe("Redirect types", () => {
     assertType(<Redirect href="/" state={undefined} />);
     assertType(<Redirect href="/" state="string" />);
   });
+
+  it("always renders nothing", () => {
+    // can be used in JSX
+    <div>
+      <Redirect href="/" />
+    </div>;
+
+    assertType<null>(Redirect({ href: "/" }));
+  });
 });
