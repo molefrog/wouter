@@ -6,7 +6,6 @@ import {
   FunctionComponent,
   ComponentType,
   ComponentChildren,
-  VNode,
 } from "preact";
 
 import {
@@ -70,7 +69,7 @@ export interface RouteProps<
 export function Route<
   T extends DefaultParams | undefined = undefined,
   RoutePath extends Path = Path
->(props: RouteProps<T, RoutePath>): VNode<any> | null;
+>(props: RouteProps<T, RoutePath>): ReturnType<FunctionComponent>;
 
 /*
  * Components: <Link /> & <Redirect />
@@ -96,10 +95,11 @@ export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
   props: RedirectProps<H>,
   context?: any
 ): null;
+
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
   props: LinkProps<H>,
   context?: any
-): VNode<any> | null;
+): ReturnType<FunctionComponent>;
 
 /*
  * Components: <Switch />
@@ -107,7 +107,7 @@ export function Link<H extends BaseLocationHook = BrowserLocationHook>(
 
 export interface SwitchProps {
   location?: string;
-  children: Array<VNode<RouteProps>>;
+  children: ComponentChildren;
 }
 export const Switch: FunctionComponent<SwitchProps>;
 
