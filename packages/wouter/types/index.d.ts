@@ -9,8 +9,7 @@ import {
   RefAttributes,
   ComponentType,
   ReactElement,
-  ReactChild,
-  ReactPortal,
+  ReactNode,
 } from "react";
 
 import {
@@ -29,17 +28,6 @@ export { Path, BaseLocationHook, BaseSearchHook } from "./location-hook";
 export * from "./router";
 
 import { RouteParams } from "./regexparam";
-
-// React <18 only: fixes incorrect `ReactNode` declaration that had `{}` in the union.
-// This issue has been fixed in React 18 type declaration.
-// https://github.com/DefinitelyTyped/DefinitelyTyped/pull/56210
-type ReactNode =
-  | ReactChild
-  | Iterable<ReactNode>
-  | ReactPortal
-  | boolean
-  | null
-  | undefined;
 
 /**
  * Route patterns and parameters
