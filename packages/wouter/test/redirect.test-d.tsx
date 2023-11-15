@@ -23,4 +23,13 @@ describe("Redirect types", () => {
 
     assertType<null>(Redirect({ href: "/" }));
   });
+
+  it("can not accept children", () => {
+    // @ts-expect-error
+    <Redirect href="/">hi!</Redirect>;
+
+    // prettier-ignore
+    // @ts-expect-error
+    <Redirect href="/"><><div>Fragment</div></></Redirect>;
+  });
 });
