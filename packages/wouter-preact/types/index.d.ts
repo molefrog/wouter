@@ -96,7 +96,7 @@ export type RedirectProps<H extends BaseLocationHook = BrowserLocationHook> =
 export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
   props: RedirectProps<H>,
   context?: any
-): VNode<any> | null;
+): null;
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
   props: LinkProps<H>,
   context?: any
