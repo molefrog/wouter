@@ -67,14 +67,18 @@ it("supports functions as children", () => {
     }}
   </Route>;
 
-  // @ts-expect-error function should return JSX
-  <Route path="/app">{() => {}}</Route>;
-
   <Route path="/users/:id">{({ id }) => `User id: ${id}`}</Route>;
 
   <Route path="/users/:id">
     {({ age }: { age: string }) => `User age: ${age}`}
   </Route>;
+
+  // @ts-expect-error function should return valid JSX
+  <Route path="/app">{() => {}}</Route>;
+
+  // prettier-ignore
+  // @ts-expect-error you can't use JSX together with render function
+  <Route path="/">{() => <div />}<a>Link</a></Route>;
 });
 
 describe("parameter inference", () => {
