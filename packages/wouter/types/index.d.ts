@@ -91,7 +91,7 @@ export type RedirectProps<H extends BaseLocationHook = BrowserLocationHook> =
   };
 
 export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
-  props: PropsWithChildren<RedirectProps<H>>,
+  props: RedirectProps<H>,
   context?: any
 ): null;
 
