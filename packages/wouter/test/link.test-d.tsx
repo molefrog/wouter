@@ -1,4 +1,4 @@
-import { describe, it } from "vitest";
+import { describe, expectTypeOf, it } from "vitest";
 import { Link, type Path } from "wouter";
 import * as React from "react";
 
@@ -114,6 +114,19 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
+  it("can only have valid element as a child", () => {
+    // @ts-expect-error strings are not valid children
+    <Link to="/" asChild>
+      {true ? "Hello" : "World"}
+    </Link>;
+
+    // @ts-expect-error can't use multiple nodes as children
+    <Link to="/" asChild>
+      <a>Link</a>
+      <div>icon</div>
+    </Link>;
+  });
+
   it("does not allow other props", () => {
     // @ts-expect-error
     <Link to="/" asChild className="">
@@ -163,6 +176,18 @@ describe("<Link /> with `asChild` prop", () => {
 
     <Link<NetworkLocationHook> asChild to="/" host="wouter.com" retries={4}>
       <div>test</div>
+    </Link>;
+  });
+
+  it("accepts `onClick` prop that overwrites child's handler", () => {
+    <Link
+      to="/"
+      asChild
+      onClick={(e) => {
+        expectTypeOf(e).toEqualTypeOf<React.MouseEvent>();
+      }}
+    >
+      <a>Hello</a>
     </Link>;
   });
 });

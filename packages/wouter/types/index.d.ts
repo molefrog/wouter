@@ -8,6 +8,8 @@ import {
   RefAttributes,
   ComponentType,
   ReactNode,
+  ReactElement,
+  MouseEventHandler,
 } from "react";
 
 import {
@@ -93,14 +95,15 @@ export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
   context?: any
 ): null;
 
-type AsChildProps<ComponentProps, DefaultElementProps> =
-  | ({ asChild?: false } & ComponentProps & DefaultElementProps)
-  | ({ asChild: true; children: React.ReactNode } & ComponentProps);
+type AsChildProps<ComponentProps, DefaultElementProps, AsChildProps = {}> =
+  | ({ asChild?: false } & DefaultElementProps & ComponentProps)
+  | ({ asChild: true } & AsChildProps & ComponentProps);
 
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   AsChildProps<
     NavigationalProps<H>,
-    AnchorHTMLAttributes<HTMLAnchorElement> & RefAttributes<HTMLAnchorElement>
+    AnchorHTMLAttributes<HTMLAnchorElement> & RefAttributes<HTMLAnchorElement>,
+    { children: ReactElement; onClick?: MouseEventHandler }
   >;
 
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
