@@ -18,31 +18,40 @@ describe("Preact support", () => {
     const container = document.body.appendChild(document.createElement("div"));
     const fn = vi.fn();
 
-    const App = () => (
-      <>
-        <nav>
-          <Link href="/albums/all" onClick={fn} data-testid="index-link">
-            The Best Albums Ever
-          </Link>
-          <Link to="/albums/london-calling" asChild>
-            <a data-testid="featured-link">
-              Featured Now: London Calling, Clash
-            </a>
-          </Link>
-        </nav>
+    const App = () => {
+      const handleAsChildClick = vi.fn();
 
-        <main data-testid="routes">
-          <Switch>
-            <>Welcome to the list of {100} greatest albums of all time!</>
-            <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
-            <Route path="/albums/:name">
-              {(params) => `Album ${params.name}`}
-            </Route>
-            <Route path="*">Nothing was found!</Route>
-          </Switch>
-        </main>
-      </>
-    );
+      return (
+        <>
+          <nav>
+            <Link href="/albums/all" onClick={fn} data-testid="index-link">
+              The Best Albums Ever
+            </Link>
+
+            <Link
+              to="/albums/london-calling"
+              asChild
+              onClick={handleAsChildClick}
+            >
+              <a data-testid="featured-link">
+                Featured Now: London Calling, Clash
+              </a>
+            </Link>
+          </nav>
+
+          <main data-testid="routes">
+            <Switch>
+              <>Welcome to the list of {100} greatest albums of all time!</>
+              <Route path="/albums/all">Rolling Stones Best 100 Albums</Route>
+              <Route path="/albums/:name">
+                {(params) => `Album ${params.name}`}
+              </Route>
+              <Route path="*">Nothing was found!</Route>
+            </Switch>
+          </main>
+        </>
+      );
+    };
 
     let node = render(<App />, container);
 
