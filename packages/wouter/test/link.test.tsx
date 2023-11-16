@@ -187,6 +187,7 @@ describe("<Link /> with `asChild` prop", () => {
 
   it("when invalid element is provided, wraps the children in an <a />", () => {
     const { getByText } = render(
+      /* @ts-expect-error */
       <Link href="/about" asChild>
         Click Me
       </Link>
@@ -201,6 +202,7 @@ describe("<Link /> with `asChild` prop", () => {
 
   it("when more than one element is provided, wraps the children in an <a />", async () => {
     const { getByText } = render(
+      /* @ts-expect-error */
       <Link href="/about" asChild>
         <span>1</span>
         <span>2</span>
