@@ -95,16 +95,16 @@ export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
   context?: any
 ): null;
 
-type AsChildProps<ComponentProps, DefaultElementProps, AsChildProps = {}> =
-  | ({ asChild?: false } & DefaultElementProps & ComponentProps)
-  | ({ asChild: true } & AsChildProps & ComponentProps);
+type AsChildProps<ComponentProps, DefaultElementProps> =
+  | ({ asChild?: false } & DefaultElementProps)
+  | ({ asChild: true } & ComponentProps);
 
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
-  AsChildProps<
-    NavigationalProps<H>,
-    AnchorHTMLAttributes<HTMLAnchorElement> & RefAttributes<HTMLAnchorElement>,
-    { children: ReactElement; onClick?: MouseEventHandler }
-  >;
+  NavigationalProps<H> &
+    AsChildProps<
+      { children: ReactElement; onClick?: MouseEventHandler },
+      AnchorHTMLAttributes<HTMLAnchorElement> & RefAttributes<HTMLAnchorElement>
+    >;
 
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
   props: LinkProps<H>,
