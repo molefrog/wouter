@@ -80,16 +80,16 @@ export type NavigationalProps<
 > = ({ to: Path; href?: never } | { href: Path; to?: never }) &
   HookNavigationOptions<H>;
 
-type AsChildProps<ComponentProps, DefaultElementProps, AsChildProps = {}> =
-  | ({ asChild?: false } & DefaultElementProps & ComponentProps)
-  | ({ asChild: true } & AsChildProps & ComponentProps);
+type AsChildProps<ComponentProps, DefaultElementProps> =
+  | ({ asChild?: false } & DefaultElementProps)
+  | ({ asChild: true } & ComponentProps);
 
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
-  AsChildProps<
-    NavigationalProps<H>,
-    JSX.HTMLAttributes,
-    { children: ComponentChildren; onClick?: JSX.MouseEventHandler<Element> }
-  >;
+  NavigationalProps<H> &
+    AsChildProps<
+      { children: ComponentChildren; onClick?: JSX.MouseEventHandler<Element> },
+      JSX.HTMLAttributes
+    >;
 
 export type RedirectProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> & {
