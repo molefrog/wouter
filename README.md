@@ -21,6 +21,14 @@
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
 
+> 🔥🚒 **Breaking News!**
+> The first [release candidate of wouter@3.0.0 is out](https://github.com/molefrog/wouter/releases/tag/v3.0.0-rc.1)!
+> It comes packed with new features: nested routing, wildcard patterns, `useSearch`, `useParams`, hash location, memory location,
+> history state and many more.
+>
+> Give it a try in your projects and tell us what you think. The current version v2 will no longer receive new features,
+> only bugfixes and security updates will be accepted. Stay tuned for documentation and more details.
+
 - Zero dependency, only **1.36 KB** gzipped vs 11KB
   [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read
