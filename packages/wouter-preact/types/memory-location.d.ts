@@ -1,4 +1,4 @@
-import { BaseLocationHook, Path } from "./location-hook";
+import { BaseLocationHook, Path } from "./location-hook.js";
 
 type Navigate<S = any> = (
   to: Path,

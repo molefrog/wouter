@@ -1,4 +1,4 @@
-import { Path, SearchString } from "./location-hook";
+import { Path, SearchString } from "./location-hook.js";
 
 type Primitive = string | number | bigint | boolean | null | undefined | symbol;
 export const useLocationProperty: <S extends Primitive>(

@@ -1,4 +1,4 @@
-import { Path } from "./location-hook";
+import { Path } from "./location-hook.js";
 
 export function navigate<S = any>(to: Path, options?: { state: S }): void;
 

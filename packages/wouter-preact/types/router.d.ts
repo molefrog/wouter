@@ -3,7 +3,7 @@ import {
   SearchString,
   BaseLocationHook,
   BaseSearchHook,
-} from "./location-hook";
+} from "./location-hook.js";
 
 export type Parser = (route: Path) => { pattern: RegExp; keys: string[] };
 
