@@ -37,7 +37,7 @@
   },
   "types": "types/index.d.ts",
   "typesVersions": {
-    "*": {
+    ">=4.1": {
       "types/index.d.ts": [
         "types/index.d.ts"
       ],
