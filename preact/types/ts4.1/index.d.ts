@@ -17,7 +17,7 @@ import {
   LocationHook,
 } from "../use-location";
 
-import { DefaultParams, Match } from "../matcher";
+import { DefaultParams, Params, Match } from "../matcher";
 import { RouterObject, RouterOptions } from "../router";
 
 // re-export some types from these modules
