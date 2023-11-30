@@ -18,10 +18,12 @@ import {
   HookReturnValue,
   HookNavigationOptions,
   BaseSearchHook,
+  BaseSearchParamsHook,
 } from "./location-hook.js";
 import {
   BrowserLocationHook,
   BrowserSearchHook,
+  BrowserSearchParamsHook,
 } from "./use-browser-location.js";
 
 import { RouterObject, RouterOptions } from "./router.js";
@@ -153,6 +155,10 @@ export function useLocation<
 
 export function useSearch<
   H extends BaseSearchHook = BrowserSearchHook
+>(): ReturnType<H>;
+
+export function useSearchParams<
+  H extends BaseSearchParamsHook = BrowserSearchParamsHook
 >(): ReturnType<H>;
 
 export function useParams<T = undefined>(): T extends string

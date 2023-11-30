@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "./react-deps.js";
+import { useCallback, useMemo, useSyncExternalStore } from "./react-deps.js";
 
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
@@ -33,6 +33,23 @@ const currentSearch = () => location.search;
 export const useSearch = ({ ssrSearch = "" } = {}) =>
   useLocationProperty(currentSearch, () => ssrSearch);
 
+export const useSearchParams = ({ ssrSearch = "" } = {}) => {
+  const search = useSearch({ ssrSearch });
+  const searchParams = useMemo(() => new URLSearchParams(search), [search]);
+
+  const setSearchParams = useCallback(
+    (nextInit, navOpts) => {
+      const newSearchParams = new URLSearchParams(
+        typeof nextInit === "function" ? nextInit(searchParams) : nextInit
+      );
+      navigate("?" + newSearchParams, navOpts);
+    },
+    [searchParams]
+  );
+
+  return [searchParams, setSearchParams];
+};
+
 const currentPathname = () => location.pathname;
 
 export const usePathname = ({ ssrPath } = {}) =>
@@ -42,6 +59,7 @@ export const usePathname = ({ ssrPath } = {}) =>
   );
 
 const currentHistoryState = () => history.state;
+
 export const useHistoryState = () =>
   useLocationProperty(currentHistoryState, () => null);
 

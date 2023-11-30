@@ -11,7 +11,9 @@ const {
 export {
   useRef,
   useState,
+  useCallback,
   useContext,
+  useMemo,
   createContext,
   isValidElement,
   cloneElement,

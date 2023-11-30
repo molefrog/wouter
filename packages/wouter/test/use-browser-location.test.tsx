@@ -5,6 +5,7 @@ import {
   useBrowserLocation,
   navigate,
   useSearch,
+  useSearchParams,
   useHistoryState,
 } from "wouter/use-browser-location";
 
@@ -192,5 +193,101 @@ describe("`update` second parameter", () => {
 
     expect(updateWas).toBe(updateNow);
     unmount();
+  });
+});
+
+describe("`useSearchParams` hook", () => {
+  beforeEach(() => history.replaceState(null, "", "/"));
+
+  it("returns a pair [value, update]", () => {
+    const { result } = renderHook(() => useSearchParams());
+    const [value, update] = result.current;
+
+    expect(value).toBeInstanceOf(URLSearchParams);
+    expect(typeof update).toBe("function");
+  });
+
+  it("allows to get current url search params", () => {
+    const { result } = renderHook(() => useSearchParams());
+    act(() => navigate("/foo?hello=world&whats=up"));
+
+    expect(result.current[0].get("hello")).toBe("world");
+    expect(result.current[0].get("whats")).toBe("up");
+  });
+
+  it("returns empty url search params when there is no search string", () => {
+    const { result } = renderHook(() => useSearchParams());
+
+    expect(Array.from(result.current[0]).length).toBe(0);
+
+    act(() => navigate("/foo"));
+    expect(Array.from(result.current[0]).length).toBe(0);
+
+    act(() => navigate("/foo? "));
+    expect(Array.from(result.current[0]).length).toBe(0);
+  });
+
+  it("does not re-render when only pathname is changed", () => {
+    // count how many times each hook is rendered
+    const locationRenders = { current: 0 };
+    const searchParamsRenders = { current: 0 };
+
+    // count number of rerenders for each hook
+    renderHook(() => {
+      useEffect(() => {
+        locationRenders.current += 1;
+      });
+      return useBrowserLocation();
+    });
+
+    renderHook(() => {
+      useEffect(() => {
+        searchParamsRenders.current += 1;
+      });
+      return useSearchParams();
+    });
+
+    expect(locationRenders.current).toBe(1);
+    expect(searchParamsRenders.current).toBe(1);
+
+    act(() => navigate("/foo"));
+
+    expect(locationRenders.current).toBe(2);
+    expect(searchParamsRenders.current).toBe(1);
+
+    act(() => navigate("/foo?bar"));
+    expect(locationRenders.current).toBe(2); // no re-render
+    expect(searchParamsRenders.current).toBe(2);
+
+    act(() => navigate("/baz?bar"));
+    expect(locationRenders.current).toBe(3); // no re-render
+    expect(searchParamsRenders.current).toBe(2);
+  });
+
+  it("support setting search params with different formats", () => {
+    const { result } = renderHook(() => useSearchParams());
+
+    expect(Array.from(result.current[0]).length).toBe(0);
+
+    act(() => result.current[1]("hello=world"));
+    expect(result.current[0].get("hello")).toBe("world");
+
+    act(() => result.current[1]("?whats=up"));
+    expect(result.current[0].get("whats")).toBe("up");
+
+    act(() => result.current[1]({ object: "previous" }));
+    expect(result.current[0].get("object")).toBe("previous");
+
+    act(() =>
+      result.current[1]((prev) => ({
+        object: prev.get("object")!,
+        function: "syntax",
+      }))
+    );
+    expect(result.current[0].get("object")).toBe("previous");
+    expect(result.current[0].get("function")).toBe("syntax");
+
+    act(() => result.current[1]([["key", "value"]]));
+    expect(result.current[0].get("key")).toBe("value");
   });
 });
