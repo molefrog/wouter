@@ -76,9 +76,10 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
 - [FAQ and How-to's](#faq-and-code-recipes)
   - [Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
   - [Default route](#how-do-i-make-a-default-route)
+  - [Strict routes](#are-strict-routes-supported)
   - [Active links](#how-do-i-make-a-link-active-for-the-current-route)
   - [Nested routes](#are-relative-routes-and-links-supported)
-  - [Multipath routes](#is-it-possible-to-match-an-array-of-paths)
+  - [Navigating outside components](#can-i-initiate-navigation-from-outside-a-component)
   - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
   - [Using with Preact](#preact-support)
   - [Server-side Rendering (SSR)](#server-side-rendering-support-ssr)
@@ -700,6 +701,18 @@ const App = () => (
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-multipath-routes-42bi3)**
+
+### Can I initiate navigation from outside a component?
+
+Yes, the `navigate` function is exposed from the `"wouter/use-location"` module:
+
+```js
+import { navigate } from "wouter/use-location" 
+
+navigate("/", { replace: true });
+```
+
+It's the same function that is used internally.
 
 ### Can I use _wouter_ in my TypeScript project?
 
