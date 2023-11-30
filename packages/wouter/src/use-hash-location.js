@@ -1,3 +1,4 @@
+import { navigate as browserNavigate } from "./use-browser-location.js";
 import { useSyncExternalStore } from "./react-deps.js";
 
 // array of callback subscribed to hash updates
@@ -23,17 +24,18 @@ const subscribeToHashUpdates = (callback) => {
 const currentHashLocation = () => "/" + location.hash.replace(/^#?\/?/, "");
 
 export const navigate = (to, { state = null } = {}) => {
-  // calling `replaceState` allows us to set the history
-  // state without creating an extra entry
-  history.replaceState(
-    state,
-    "",
-    // keep the current pathname, current query string, but replace the hash
+  browserNavigate(
     location.pathname +
       location.search +
       // update location hash, this will cause `hashchange` event to fire
       // normalise the value before updating, so it's always preceeded with "#/"
-      (location.hash = `#/${to.replace(/^#?\/?/, "")}`)
+      (location.hash = `#/${to.replace(/^#?\/?/, "")}`),
+    {
+      // calling `replaceState` allows us to set the history
+      // state without creating an extra entry
+      replace: true,
+      state,
+    }
   );
 };
 
