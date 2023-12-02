@@ -83,19 +83,25 @@ export const useSearchParams = () => {
   const [, navigate] = useLocationFromRouter(router);
 
   const search = unescape(stripQm(router.searchHook(router)));
-  const searchParams = useMemo(() => new URLSearchParams(search), [search]);
+  const searchParamsRef = useRef(new URLSearchParams(search));
+  searchParamsRef.current = useMemo(
+    () => new URLSearchParams(search),
+    [search]
+  );
 
   const setSearchParams = useCallback(
     (nextInit, navOpts) => {
       const newSearchParams = new URLSearchParams(
-        typeof nextInit === "function" ? nextInit(searchParams) : nextInit
+        typeof nextInit === "function"
+          ? nextInit(searchParamsRef.current)
+          : nextInit
       );
       navigate("?" + newSearchParams, navOpts);
     },
-    [navigate, searchParams]
+    [navigate]
   );
 
-  return [searchParams, setSearchParams];
+  return [searchParamsRef.current, setSearchParams];
 };
 
 const matchRoute = (parser, route, path, loose) => {
