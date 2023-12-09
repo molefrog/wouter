@@ -10,7 +10,7 @@ export default defineConfig([
       "wouter/use-hash-location",
       "wouter/memory-location",
     ],
-    external: ["preact", "preact/hooks", "mitt"],
+    external: ["preact", "preact/hooks", "regexparam", "mitt"],
 
     output: {
       dir: "esm",
@@ -21,7 +21,6 @@ export default defineConfig([
       alias({
         entries: {
           "./react-deps.js": "./src/preact-deps.js",
-          regexparam: "wouter/src/regexparam.js",
         },
       }),
     ],
