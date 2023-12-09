@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "mitt": "^3.0.1",
-    "regexparam": "^2.0.1"
+    "regexparam": "^3.0.0"
   },
   "devDependencies": {
     "wouter": "*"
