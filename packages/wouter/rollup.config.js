@@ -1,5 +1,4 @@
 import { defineConfig } from "rollup";
-import alias from "@rollup/plugin-alias";
 
 export default defineConfig([
   {
@@ -21,18 +20,10 @@ export default defineConfig([
       "src/use-hash-location.js",
       "src/memory-location.js",
     ],
-    external: [/react-deps/, "mitt"],
+    external: [/react-deps/, "regexparam", "mitt"],
     output: {
       dir: "esm",
       format: "esm",
     },
-
-    plugins: [
-      alias({
-        entries: {
-          regexparam: "./src/regexparam.js",
-        },
-      }),
-    ],
   },
 ]);

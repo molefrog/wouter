@@ -30,7 +30,7 @@ import { RouterObject, RouterOptions } from "./router.js";
 export { Path, BaseLocationHook, BaseSearchHook } from "./location-hook.js";
 export * from "./router.js";
 
-import { RouteParams } from "./regexparam.js";
+import { RouteParams } from "regexparam";
 
 /**
  * Route patterns and parameters
