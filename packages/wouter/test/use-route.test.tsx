@@ -36,18 +36,18 @@ it("ignores the trailing slash", () => {
 });
 
 it("supports trailing wildcards", () => {
-  assertRoute("/app/*", "/app/", { wild: "" });
-  assertRoute("/app/*", "/app/dashboard/intro", { wild: "dashboard/intro" });
-  assertRoute("/app/*", "/app/charges/1", { wild: "charges/1" });
+  assertRoute("/app/*", "/app/", { "*": "" });
+  assertRoute("/app/*", "/app/dashboard/intro", { "*": "dashboard/intro" });
+  assertRoute("/app/*", "/app/charges/1", { "*": "charges/1" });
 });
 
 it("supports wildcards in the middle of the pattern", () => {
-  assertRoute("/app/*/settings", "/app/users/settings", { wild: "users" });
-  assertRoute("/app/*/settings", "/app/users/1/settings", { wild: "users/1" });
+  assertRoute("/app/*/settings", "/app/users/settings", { "*": "users" });
+  assertRoute("/app/*/settings", "/app/users/1/settings", { "*": "users/1" });
 
-  assertRoute("/*/payments/:id", "/home/payments/1", { wild: "home", id: "1" });
+  assertRoute("/*/payments/:id", "/home/payments/1", { "*": "home", id: "1" });
   assertRoute("/*/payments/:id?", "/home/payments", {
-    wild: "home",
+    "*": "home",
     id: undefined,
   });
 });
@@ -75,12 +75,12 @@ it("uses a question mark to define optional segments", () => {
 });
 
 it("supports optional wildcards", () => {
-  assertRoute("/app/*?", "/app/blog/mac", { wild: "blog/mac" });
-  assertRoute("/app/*?", "/app", { wild: undefined });
-  assertRoute("/app/*?/dashboard", "/app/v1/dashboard", { wild: "v1" });
-  assertRoute("/app/*?/dashboard", "/app/dashboard", { wild: undefined });
+  assertRoute("/app/*?", "/app/blog/mac", { "*": "blog/mac" });
+  assertRoute("/app/*?", "/app", { "*": undefined });
+  assertRoute("/app/*?/dashboard", "/app/v1/dashboard", { "*": "v1" });
+  assertRoute("/app/*?/dashboard", "/app/dashboard", { "*": undefined });
   assertRoute("/app/*?/users/:name", "/app/users/karen", {
-    wild: undefined,
+    "*": undefined,
     name: "karen",
   });
 });
@@ -133,10 +133,7 @@ it("reacts to pattern updates", () => {
   expect(result.current).toStrictEqual([false, null]);
 
   rerender({ pattern: "/blog/*" });
-  expect(result.current).toStrictEqual([
-    true,
-    { wild: "products/40/read-all" },
-  ]);
+  expect(result.current).toStrictEqual([true, { "*": "products/40/read-all" }]);
 });
 
 it("reacts to location updates", () => {
