@@ -26,8 +26,9 @@ import {
 
 import { RouterObject, RouterOptions } from "./router.js";
 
-// re-export some types from these modules
-export { Path, BaseLocationHook, BaseSearchHook } from "./location-hook.js";
+// these files only export types, so we can re-export them as-is
+// in TS 5.0 we'll be able to use `export type * from ...`
+export * from "./location-hook.js";
 export * from "./router.js";
 
 import { RouteParams } from "regexparam";
