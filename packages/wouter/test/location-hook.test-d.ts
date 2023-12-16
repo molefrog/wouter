@@ -1,9 +1,5 @@
-import { it, assertType, expectTypeOf, describe, expect } from "vitest";
-import {
-  BaseLocationHook,
-  HookNavigationOptions,
-  HookReturnValue,
-} from "wouter";
+import { it, expectTypeOf, describe } from "vitest";
+import { HookNavigationOptions, HookReturnValue } from "wouter";
 
 describe("`HookNavigationOptions` utility type", () => {
   it("should return empty interface for hooks with no nav options", () => {
