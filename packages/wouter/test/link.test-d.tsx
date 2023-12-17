@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, it } from "vitest";
-import { Link, type Path } from "wouter";
+import { Link, LinkProps, type Path } from "wouter";
 import * as React from "react";
 
 type NetworkLocationHook = () => [
@@ -189,5 +189,12 @@ describe("<Link /> with `asChild` prop", () => {
     >
       <a>Hello</a>
     </Link>;
+  });
+
+  it.skip("should work with `ComponentProps`", () => {
+    type LinkComponentProps = React.ComponentProps<typeof Link>;
+
+    // @ts-expect-error FIXME
+    expectTypeOf<LinkComponentProps>().toEqualTypeOf<LinkProps>();
   });
 });
