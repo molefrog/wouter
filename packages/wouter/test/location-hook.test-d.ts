@@ -1,9 +1,5 @@
 import { it, expectTypeOf, describe } from "vitest";
-import {
-  BaseLocationHook,
-  HookNavigationOptions,
-  HookReturnValue,
-} from "wouter";
+import { BaseLocationHook, HookNavigationOptions } from "wouter";
 
 describe("`HookNavigationOptions` utility type", () => {
   it("should return empty interface for hooks with no nav options", () => {
@@ -63,10 +59,8 @@ describe("`HookNavigationOptions` utility type", () => {
     type C = HookNavigationOptions<() => []>;
   });
 
-  it("should return arbitrary object when `BaseLocationHook` is given", () => {
+  it("should return empty object when `BaseLocationHook` is given", () => {
     type Options = HookNavigationOptions<BaseLocationHook>;
-
-    const opts: Options = { a: 1, b: 2 };
-    opts.anything = 1;
+    expectTypeOf<Options>().toEqualTypeOf<{}>();
   });
 });

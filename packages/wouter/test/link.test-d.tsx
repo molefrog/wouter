@@ -191,10 +191,13 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  it.skip("should work with `ComponentProps`", () => {
+  it("should work with `ComponentProps`", () => {
     type LinkComponentProps = React.ComponentProps<typeof Link>;
 
-    // @ts-expect-error FIXME
-    expectTypeOf<LinkComponentProps>().toEqualTypeOf<LinkProps>();
+    // Because Link is a generic component, the props
+    // cant't contain navigation options of the default generic
+    // parameter `BrowserLocationHook`.
+    // So the best we can get are the props such as `href` etc.
+    expectTypeOf<LinkComponentProps>().toMatchTypeOf<LinkProps>();
   });
 });
