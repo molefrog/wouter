@@ -11,9 +11,7 @@ export {
   useLayoutEffect as useIsomorphicLayoutEffect,
   useLayoutEffect as useInsertionEffect,
   useState,
-  useCallback,
   useContext,
-  useMemo,
 } from "preact/hooks";
 
 // Copied from:

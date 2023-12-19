@@ -7,9 +7,7 @@ import {
 
 import {
   useRef,
-  useCallback,
   useContext,
-  useMemo,
   createContext,
   isValidElement,
   cloneElement,
@@ -83,25 +81,16 @@ export const useSearchParams = () => {
   const [, navigate] = useLocationFromRouter(router);
 
   const search = unescape(stripQm(router.searchHook(router)));
-  const searchParamsRef = useRef(new URLSearchParams(search));
-  searchParamsRef.current = useMemo(
-    () => new URLSearchParams(search),
-    [search]
-  );
+  const searchParams = new URLSearchParams(search);
 
-  const setSearchParams = useCallback(
-    (nextInit, navOpts) => {
-      const newSearchParams = new URLSearchParams(
-        typeof nextInit === "function"
-          ? nextInit(searchParamsRef.current)
-          : nextInit
-      );
-      navigate("?" + newSearchParams, navOpts);
-    },
-    [navigate]
-  );
+  const setSearchParams = useEvent((nextInit, navOpts) => {
+    const newSearchParams = new URLSearchParams(
+      typeof nextInit === "function" ? nextInit(searchParams) : nextInit
+    );
+    navigate("?" + newSearchParams, navOpts);
+  });
 
-  return [searchParamsRef.current, setSearchParams];
+  return [searchParams, setSearchParams];
 };
 
 const matchRoute = (parser, route, path, loose) => {
