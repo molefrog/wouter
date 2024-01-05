@@ -29,7 +29,7 @@
 > Give it a try in your projects and tell us what you think. The current version v2 will no longer receive new features,
 > only bugfixes and security updates will be accepted. Stay tuned for documentation and more details.
 
-- Zero dependency, only **1.36 KB** gzipped vs 11KB
+- Zero dependency, only **1.36 KB** gzipped vs 18.7KB
   [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read
   _["Preact support" section](#preact-support)_ for more details.
