@@ -457,7 +457,7 @@ const [match, params] = useRoute("/users/:name");
 Express, and it supports the following patterns:
 
 - Named dynamic segments: `/users/:foo`.
-- Dynamic segments with modifiers: `/foo/:bar*`, `/foo/baz?` or `/foo/bar+`.
+- Dynamic segments with modifiers: `/foo/:bar*`, `/foo/:baz?` or `/foo/:bar+`.
 
 The library was designed to be as small as possible, so most of the additional matching features
 were left out (see [this issue](https://github.com/molefrog/wouter/issues/1) for more info).
