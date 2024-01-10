@@ -101,6 +101,13 @@ it("supports other characters in segments", () => {
   });
 });
 
+it("ignores escaped slashes", () => {
+  assertRoute("/:param/bar", "/foo%2Fbar/bar", { param: "foo%2Fbar" });
+  assertRoute("/:param", "/foo%2Fbar%D1%81%D0%B0%D0%BD%D1%8F", {
+    param: "foo%2Fbarсаня",
+  });
+});
+
 it("reacts to pattern updates", () => {
   const { result, rerender } = renderHook(
     ({ pattern }: { pattern: string }) => useRoute(pattern),
