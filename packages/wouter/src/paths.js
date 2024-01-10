@@ -20,7 +20,7 @@ export const stripQm = (str) => (str[0] === "?" ? str.slice(1) : str);
  */
 export const unescape = (str) => {
   try {
-    return decodeURIComponent(str);
+    return decodeURI(str);
   } catch (_e) {
     // fail-safe mode: if string can't be decoded do nothing
     return str;

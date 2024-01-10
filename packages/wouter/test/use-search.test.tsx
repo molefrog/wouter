@@ -36,3 +36,13 @@ it("unescapes search string", () => {
   act(() => navigate("/?вопрос=как дела?"));
   expect(searchResult.current).toBe("вопрос=как дела?");
 });
+
+it("is safe against parameter injection", () => {
+  history.replaceState(null, "", "/?search=foo%26parameter_injection%3Dbar");
+  const { result } = renderHook(() => useSearch());
+
+  const searchParams = new URLSearchParams(result.current);
+  const query = Object.fromEntries(searchParams.entries());
+
+  expect(query).toEqual({ search: "foo&parameter_injection=bar" });
+});
