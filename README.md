@@ -59,31 +59,38 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-- [API](#wouter-api)
-  - **[Hooks](#hooks-api)**
-    - **[`useRoute`](#useroute-the-power-of-hooks)**
-    - **[`useLocation`](#uselocation-hook-working-with-the-history)**
-    - **[`useParams`](#useparams-hook-working-with-parameters)**
-    - **[`useRouter`](#userouter-accessing-the-router-object)**
-  - **[Components](#component-api)**
-    - **[`<Route />`](#route-pathpattern-)**
-    - **[`<Link />`](#link-hrefpath-)**
-    - **[`<Switch />`](#switch-)**
-    - **[`<Redirect />`](#redirect-topath-)**
-    - **[`<Router />`](#router-hookhook-matchermatchfn-basebasepath-)**
-      - [Matching Dynamic Segments](#matching-dynamic-segments)
-      - [Using a `path-to-regexp`-based matcher](#using-a-path-to-regexp-based-matcher)
-- [FAQ and How-to's](#faq-and-code-recipes)
-  - [Base path](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
-  - [Default route](#how-do-i-make-a-default-route)
-  - [Strict routes](#are-strict-routes-supported)
-  - [Active links](#how-do-i-make-a-link-active-for-the-current-route)
-  - [Nested routes](#are-relative-routes-and-links-supported)
-  - [Navigating outside components](#can-i-initiate-navigation-from-outside-a-component)
-  - [TypeScript support](#can-i-use-wouter-in-my-typescript-project)
-  - [Using with Preact](#preact-support)
-  - [Server-side Rendering (SSR)](#server-side-rendering-support-ssr)
-  - [Routing in less than 400B](#1kb-is-too-much-i-cant-afford-it)
+  - [Supporting IE11 and obsolete platforms](#supporting-ie11-and-obsolete-platforms)
+- [Wouter API](#wouter-api)
+  - [The list of methods available](#the-list-of-methods-available)
+- [Hooks API](#hooks-api)
+  - [`useRoute`: the power of HOOKS!](#useroute-the-power-of-hooks)
+  - [`useLocation` hook: working with the history](#uselocation-hook-working-with-the-history)
+    - [Additional navigation parameters](#additional-navigation-parameters)
+    - [Customizing the location hook](#customizing-the-location-hook)
+  - [`useParams` hook: working with parameters](#useparams-hook-working-with-parameters)
+  - [`useRouter`: accessing the router object](#userouter-accessing-the-router-object)
+- [Component API](#component-api)
+  - [`<Route path={pattern} />`](#route-pathpattern-)
+  - [`<Link href={path} />`](#link-hrefpath-)
+  - [`<Switch />`](#switch-)
+  - [`<Redirect to={path} />`](#redirect-topath-)
+  - [`<Router hook={hook} matcher={matchFn} base={basepath} />`](#router-hookhook-matchermatchfn-basebasepath-)
+    - [Matching Dynamic Segments](#matching-dynamic-segments)
+    - [Using a `path-to-regexp`-based matcher](#using-a-path-to-regexp-based-matcher)
+- [FAQ and Code Recipes](#faq-and-code-recipes)
+  - [I deploy my app to the subfolder. Can I specify a base path?](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
+  - [How do I make a default route?](#how-do-i-make-a-default-route)
+  - [How do I make a link active for the current route?](#how-do-i-make-a-link-active-for-the-current-route)
+  - [Are strict routes supported?](#are-strict-routes-supported)
+  - [Are relative routes and links supported?](#are-relative-routes-and-links-supported)
+  - [Is it possible to match an array of paths?](#is-it-possible-to-match-an-array-of-paths)
+  - [Can I initiate navigation from outside a component?](#can-i-initiate-navigation-from-outside-a-component)
+  - [Can I use _wouter_ in my TypeScript project?](#can-i-use-wouter-in-my-typescript-project)
+  - [Preact support?](#preact-support)
+  - [Server-side Rendering support (SSR)?](#server-side-rendering-support-ssr)
+  - [1KB is too much, I can't afford it!](#1kb-is-too-much-i-cant-afford-it)
+- [Acknowledgements](#acknowledgements)
+
 
 ## Getting Started
 
