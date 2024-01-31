@@ -263,29 +263,13 @@ history.state; // { modal: "promo" }
 #### Customizing the location hook
 
 By default, **wouter** uses `useLocation` hook that reacts to `pushState` and `replaceState`
-navigation and observes the current pathname including the leading slash e.g. **`/app/users`**.
+navigation via `useBrowserLocation`.
 
-If you do need a custom history observer, for example, for hash-based routing, you can
-[implement your own hook](https://github.com/molefrog/wouter/blob/master/use-location.js) and
-customize it in a `<Router />` component.
-
-As an exercise, let's implement a simple location hook that listens to hash changes:
+To customize this, wrap your app in a `Router` component:
 
 ```js
-import { useState, useEffect } from "react";
 import { Router, Route } from "wouter";
-import { useLocationProperty, navigate } from "wouter/use-location";
-
-// returns the current hash location in a normalized form
-// (excluding the leading '#' symbol)
-const hashLocation = () => window.location.hash.replace(/^#/, "") || "/";
-
-const hashNavigate = (to) => navigate("#" + to);
-
-const useHashLocation = () => {
-  const location = useLocationProperty(hashLocation);
-  return [location, hashNavigate];
-};
+import { useHashLocation } from "wouter/use-hash-location";
 
 const App = () => (
   <Router hook={useHashLocation}>
@@ -295,7 +279,7 @@ const App = () => (
 );
 ```
 
-**[▶ Demo Sandbox: hash-based routing](https://codesandbox.io/s/wouter-hash-based-hook-5fp9g)**
+Because these hooks have return values similar to `useState`, it is easy and fun to build your own location hooks: `useCrossTabLocation`, `useLocalStorage`, `useMicroFrontendLocation` and whatever routing logic you want to support in the app. Give it a try!
 
 ### `useRouter`: accessing the router object
 
