@@ -74,7 +74,6 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [How do I make a link active for the current route?](#how-do-i-make-a-link-active-for-the-current-route)
   - [Are strict routes supported?](#are-strict-routes-supported)
   - [Are relative routes and links supported?](#are-relative-routes-and-links-supported)
-  - [Is it possible to match an array of paths?](#is-it-possible-to-match-an-array-of-paths)
   - [Can I initiate navigation from outside a component?](#can-i-initiate-navigation-from-outside-a-component)
   - [Can I use _wouter_ in my TypeScript project?](#can-i-use-wouter-in-my-typescript-project)
   - [Preact support?](#preact-support)
@@ -597,19 +596,20 @@ import { Switch, Route } from "wouter";
 </Switch>;
 ```
 
-_Note:_ the order of switch children matters, default route should always come last. If you want to
-have access to the matched segment of the path you can use `:param*`:
+_Note:_ the order of switch children matters, default route should always come last.
+
+If you want to have access to the matched segment of the path you can use wildcard parameters:
 
 ```js
 <Switch>
   <Route path="/users">...</Route>
 
   {/* will match anything that starts with /users/, e.g. /users/foo, /users/1/edit etc. */}
-  <Route path="/users/:rest*">...</Route>
+  <Route path="/users/*">...</Route>
 
   {/* will match everything else */}
-  <Route path="/:rest*">
-    {(params) => `404, Sorry the page ${params.rest} does not exist!`}
+  <Route path="*">
+    {(params) => `404, Sorry the page ${params.wild} does not exist!`}
   </Route>
 </Switch>
 ```
@@ -638,21 +638,22 @@ return (
 
 ### Are strict routes supported?
 
-If a trailing slash is important for your app's routing, you could specify a custom matcher that
-implements the `strict` option support.
+If a trailing slash is important for your app's routing, you could specify a custom parser.
 
 ```js
-import makeMatcher from "wouter/matcher";
-import { pathToRegexp } from "path-to-regexp";
+import { parse } from "regexparam";
 
-const customMatcher = makeMatcher((path) => {
-  let keys = [];
-  const regexp = pathToRegexp(path, keys, { strict: true });
-  return { keys, regexp };
-});
+const strictParser = (path, opts) => {
+  const result = parse(path, opts);
+
+  // modify the returned `result.pattern` regexp to
+  // require a trailing slash here
+
+  return result;
+};
 
 const App = () => (
-  <Router matcher={customMatcher}>
+  <Router parser={strictParser}>
     <Route path="/foo">...</Route>
     <Route path="/foo/">...</Route>
   </Router>
@@ -698,37 +699,6 @@ const App = () => (
 ```
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-nested-routes-ffd5h)**
-
-### Is it possible to match an array of paths?
-
-While wouter doesn't currently support multipath routes, you can achieve that in your app by
-specifying a custom [`matcher` function](#router-hookhook-matchermatchfn-basebasepath-):
-
-```js
-import makeMatcher from "wouter/matcher";
-
-const defaultMatcher = makeMatcher();
-
-/*
- * A custom routing matcher function that supports multipath routes
- */
-const multipathMatcher = (patterns, path) => {
-  for (let pattern of [patterns].flat()) {
-    const [match, params] = defaultMatcher(pattern, path);
-    if (match) return [match, params];
-  }
-
-  return [false, null];
-};
-
-const App = () => (
-  <Router matcher={multipathMatcher}>
-    <Route path={["/app", "/home"]}>...</Route>
-  </Router>
-);
-```
-
-**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-multipath-routes-42bi3)**
 
 ### Can I use _wouter_ in my TypeScript project?
 
