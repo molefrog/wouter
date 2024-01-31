@@ -664,36 +664,19 @@ const App = () => (
 
 ### Are relative routes and links supported?
 
-Unlike [React Router](https://reach.tech/router/nesting), there is no first-class support for route
-nesting. However, thanks to the
-[base path support](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path), you can easily
-implement a nesting router yourself!
+Yes! Any route with `nest` prop present creates a nesting context. Keep in mind, that the location inside a nested route will be scoped.
 
 ```js
-const NestedRoutes = (props) => {
-  const router = useRouter();
-  const [parentLocation] = useLocation();
-
-  const nestedBase = `${router.base}${props.base}`;
-
-  // don't render anything outside of the scope
-  if (!parentLocation.startsWith(nestedBase)) return null;
-
-  // we need key to make sure the router will remount when base changed
-  return (
-    <Router base={nestedBase} key={nestedBase}>
-      {props.children}
-    </Router>
-  );
-};
-
 const App = () => (
   <Router base="/app">
-    <NestedRoutes base="/dashboard">
-      {/* the real url is /app/dashboard/users */}
+    <Route path="/dashboard" nest>
+      {/* the href is "/app/dashboard/users" */}
       <Link to="/users" />
-      <Route path="/users" />
-    </NestedRoutes>
+
+      <Route path="/users">
+        {/* Here `useLocation()` returns "/users"! */}
+      </Route>
+    </Route>
   </Router>
 );
 ```
