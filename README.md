@@ -30,7 +30,7 @@
   familiar **[`Route`](#route-pathpattern-)**, **[`Link`](#link-hrefpath-)**,
   **[`Switch`](#switch-)** and **[`Redirect`](#redirect-topath-)** components.
 - Has hook-based API for more granular control over routing (like animations):
-  **[`useLocation`](#uselocation-hook-working-with-the-history)**,
+  **[`useLocation`](#uselocation-working-with-the-history)**,
   **[`useRoute`](#useroute-the-power-of-hooks)** and
   **[`useRouter`](#userouter-accessing-the-router-object)**.
 
@@ -55,7 +55,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [The list of methods available](#the-list-of-methods-available)
 - [Hooks API](#hooks-api)
   - [`useRoute`: route matching and parameters](#useroute-route-matching-and-parameters)
-  - [`useLocation` hook: working with the history](#uselocation-hook-working-with-the-history)
+  - [`useLocation` hook: working with the history](#uselocation-working-with-the-history)
     - [Additional navigation parameters](#additional-navigation-parameters)
     - [Customizing the location hook](#customizing-the-location-hook)
   - [`useParams` hook: working with parameters](#useparams-hook-working-with-parameters)
@@ -139,13 +139,13 @@ These can be used separately from the main module and have an interface similar 
 
 - **[`import { useHashLocation } from "wouter/use-hash-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-hash-location.js)** — similarly, gets location from the hash part of the address, i.e. the string after a `#`.
 
-- **[`import { memoryLocation } from "wouter/memory-location"`](#uselocation-hook-working-with-the-history)** — an in-memory location hook with history support, external navigation and immutable mode for testing. **Note** the module name because it is a high-order hook.
+- **[`import { memoryLocation } from "wouter/memory-location"`](#uselocation-working-with-the-history)** — an in-memory location hook with history support, external navigation and immutable mode for testing. **Note** the module name because it is a high-order hook.
 
 **Routing Hooks**
 
 Import from `wouter` module.
 
-- **[`useLocation`](#uselocation-hook-working-with-the-history)** — allows to manipulate current
+- **[`useLocation`](#uselocation-working-with-the-history)** — allows to manipulate current
   router's location, by default subscribes to browser location. **Note:** this isn't the same as `useBrowserLocation`, read below.
 - **[`useRoute`](#useroute-the-power-of-hooks)** — shows whether or not current page matches the
   pattern provided.
@@ -214,7 +214,7 @@ The second item in the pair `params` is an object with parameters or null if the
 useRoute("/app*");
 ```
 
-### `useLocation` hook: working with the history
+### `useLocation`: working with the history
 
 To get the current path and navigate between pages, call the `useLocation` hook. Similarly to `useState`, it returns a value and a setter: the component will re-render when the location changes and by calling `navigate` you can update this value and perform navigation.
 
@@ -283,27 +283,24 @@ Because these hooks have return values similar to `useState`, it is easy and fun
 
 ### `useRouter`: accessing the router object
 
-If you're building an advanced integration, for example custom location hook, you might want to get
-access to the global router object. The router is a simple object that holds current matcher
-function and a custom location hook function.
-
-Normally, router is constructed internally on demand, but it can also be customized via a top-level
-`Router` component (see [the section above](#uselocation-hook-working-with-the-history)). The
-`useRouter` hook simply returns a current router object:
+If you're building advanced integration, for example custom location hook, you might want to get
+access to the global router object. Router is a simple object that holds routing options that you configure in the `Router` component.
 
 ```js
 import { useRouter } from "wouter";
-import useLocation from "wouter/use-location";
 
 const Custom = () => {
   const router = useRouter();
 
-  // router.hook is useLocation by default
-
-  // you can also use router as a mediator object
-  // and store arbitrary data on it:
-  router.lastTransition = { path: "..." };
+  router.hook; // `useBrowserLocation` by default
+  router.base; // "/app"
 };
+
+const App = () => (
+  <Router base="/app">
+    <Custom />
+  </Router>
+);
 ```
 
 ## Component API
@@ -405,7 +402,7 @@ the navigation inside of a `useEffect` block.
 
 If you need more advanced logic for navigation, for example, to trigger the redirect inside of an
 event handler, consider using
-[`useLocation` hook instead](#uselocation-hook-working-with-the-history):
+[`useLocation` hook instead](#uselocation-working-with-the-history):
 
 ```js
 import { useLocation } from "wouter";
@@ -434,7 +431,7 @@ available options:
 - **`hook: () => [location: string, setLocation: fn]`** — is a React Hook function that subscribes
   to location changes. It returns a pair of current `location` string e.g. `/app/users` and a
   `setLocation` function for navigation. You can use this hook from any component of your app by
-  calling [`useLocation()` hook](#uselocation-hook-working-with-the-history).
+  calling [`useLocation()` hook](#uselocation-working-with-the-history).
 
 Read more → [Customizing the location hook](#customizing-the-location-hook).
 
