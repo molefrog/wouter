@@ -54,7 +54,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
 - [Wouter API](#wouter-api)
   - [The list of methods available](#the-list-of-methods-available)
 - [Hooks API](#hooks-api)
-  - [`useRoute`: the power of HOOKS!](#useroute-the-power-of-hooks)
+  - [`useRoute`: route matching and parameters](#useroute-route-matching-and-parameters)
   - [`useLocation` hook: working with the history](#uselocation-hook-working-with-the-history)
     - [Additional navigation parameters](#additional-navigation-parameters)
     - [Customizing the location hook](#customizing-the-location-hook)
@@ -166,7 +166,7 @@ Import from `wouter` module.
 
 ## Hooks API
 
-### `useRoute`: route patterns and parameters
+### `useRoute`: route matching and parameters
 
 Checks if the current location matches the pattern provided and returns an object with parameters. This is powered by a wonderful [`regexparam`](https://github.com/lukeed/regexparam) library, so all its pattern syntax is fully supported.
 
@@ -205,6 +205,13 @@ useRoute("/app*");
 // optional wildcards, matches "/orders", "/orders/"
 // and "/orders/completed/list"
 useRoute("/orders/*?");
+```
+
+The second item in the pair `params` is an object with parameters or null if there was no match. For wildcard segments the parameter name is `"wild"`:
+
+```js
+// wildcards, matches "/app", "/app-1", "/app/home"
+useRoute("/app*");
 ```
 
 ### `useLocation` hook: working with the history
