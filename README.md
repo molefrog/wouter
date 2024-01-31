@@ -216,10 +216,9 @@ useRoute("/app*");
 
 ### `useLocation` hook: working with the history
 
-The low-level navigation in wouter is powered by the `useLocation` hook, which is basically a
-wrapper around the native browser location object. The hook rerenders when the location changes and
-you can also perform a navigation with it, this is very similar to how you work with values returned
-from the `useState` hook:
+To get the current path and navigate between pages, call the `useLocation` hook. Similarly to `useState`, it returns a value and a setter: the component will re-render when the location changes and by calling `navigate` you can update this value and perform navigation.
+
+By default, it uses `useBrowserLocation` under the hood, though you can configure this in a top-level `Router` component (for example, if you decide at some point to switch to a hash-based routing). `useLocation` will also return scoped path when used within nested routes or with base path setting.
 
 ```js
 import { useLocation } from "wouter";
@@ -236,25 +235,29 @@ const CurrentLocation = () => {
 };
 ```
 
-All the components including the `useRoute` rely on `useLocation` hook, so normally you only need
-the hook to perform the navigation using a second value `setLocation`. You can check out the source
-code of the [`Redirect` component](https://github.com/molefrog/wouter/blob/master/index.js#L142) as
-a reference.
+All the components internally call the `useLocation` hook.
 
 #### Additional navigation parameters
 
 The setter method of `useLocation` can also accept an optional object with parameters to control how
 the navigation update will happen.
 
-It is not mandatory for custom location hooks to support this, however the built-in
-`pushState`-powered `useLocation` hook accepts `replace` flag to tell the hook to modify the current
-history entry instead of adding a new one. It is the same as calling `replaceState`. Example:
+When browser location is used (default), `useLocation` hook accepts `replace` flag to tell the hook to modify the current
+history entry instead of adding a new one. It is the same as calling `replaceState`.
 
 ```jsx
 const [location, navigate] = useLocation();
 
 navigate("/jobs"); // `pushState` is used
 navigate("/home", { replace: true }); // `replaceState` is used
+```
+
+Additionally, you can provide a `state` option to update `history.state` while navigating:
+
+```jsx
+navigate("/home", { modal: "promo" });
+
+history.state; // { modal: "promo" }
 ```
 
 #### Customizing the location hook
@@ -785,6 +788,6 @@ Wouter's motto is **"Minimalist-friendly"**.
 ## Acknowledgements
 
 Wouter illustrations and logos were made by [Katya Simacheva](https://simachevakatya.com/) and
-[Katya Vakulenko](https://katyavakulenko.com/). Thank you to **[@jeetiss](https://github.com/jeetiss)** 
-and all the amazing [contributors](https://github.com/molefrog/wouter/graphs/contributors) for 
+[Katya Vakulenko](https://katyavakulenko.com/). Thank you to **[@jeetiss](https://github.com/jeetiss)**
+and all the amazing [contributors](https://github.com/molefrog/wouter/graphs/contributors) for
 helping with the development.
