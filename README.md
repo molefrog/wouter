@@ -6,7 +6,7 @@
 
 <div align="center">
   <a href="https://npmjs.org/package/wouter"><img alt="npm" src="https://img.shields.io/npm/v/wouter.svg?color=black&labelColor=888" /></a>
-  <a href="https://travis-ci.org/molefrog/wouter"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/molefrog/wouter/size.yml?color=black&labelColor=888&label=1.5KB+limit" /></a>
+  <a href="https://travis-ci.org/molefrog/wouter"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/molefrog/wouter/size.yml?color=black&labelColor=888&label=2.5KB+limit" /></a>
   <a href="https://codecov.io/gh/molefrog/wouter"><img alt="Coverage" src="https://img.shields.io/codecov/c/github/molefrog/wouter.svg?color=black&labelColor=888" /></a>
   <a href="https://www.npmjs.com/package/wouter"><img alt="Coverage" src="https://img.shields.io/npm/dm/wouter.svg?color=black&labelColor=888" /></a>
   <a href="https://pr.new/molefrog/wouter"><img alt="Edit in StackBlitz IDE" src="https://img.shields.io/badge/StackBlitz-New%20PR-black?labelColor=888" /></a>
@@ -21,7 +21,7 @@
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
 
-- Zero dependency, only **1.36 KB** gzipped vs 11KB
+- Zero dependency, only **2.1 KB** gzipped vs 18.7KB
   [React Router](https://github.com/ReactTraining/react-router).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read
   _["Preact support" section](#preact-support)_ for more details.
@@ -135,13 +135,12 @@ links, default routes, server-side rendering etc.
 
 These can be used separately from the main module and have an interface similar to `useState`. These hooks don't support nesting, base path, route matching.
 
-- **[`import { useBrowserLocation } from "wouter/use-browser-location"`](#uselocation-hook-working-with-the-history)**
-  allows to manipulate current
-  browser location, a tiny wrapper around the History API.
+- **[`import { useBrowserLocation } from "wouter/use-browser-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-browser-location.js)** —
+  allows to manipulate current location in the browser's address bar, a tiny wrapper around the History API.
 
-  - **[`import { useBrowserLocation } from "wouter/use-browser-location"`](#uselocation-hook-working-with-the-history)**
-    allows to manipulate current
-    browser location, a tiny wrapper around the History API.
+- **[`import { useHashLocation } from "wouter/use-hash-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-hash-location.js)** — similarly, gets location from the hash part of the address, i.e. the string after a `#`.
+
+- **[`import { memoryLocation } from "wouter/memory-location"`](#uselocation-hook-working-with-the-history)** — an in-memory location hook with history support, external navigation and immutable mode for testing. **Note** the module name because it is a high-order hook.
 
 **Routing Hooks**
 
