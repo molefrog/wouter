@@ -169,9 +169,9 @@ Import from `wouter` module.
 
 ### `useRoute`: route patterns and parameters
 
-Checks if current location matches the pattern provided and returns an object with parameters. This is powered by a wounderful [`regexparam`](https://github.com/lukeed/regexparam) library, so all its pattern syntax is fully supported.
+Checks if the current location matches the pattern provided and returns an object with parameters. This is powered by a wonderful [`regexparam`](https://github.com/lukeed/regexparam) library, so all its pattern syntax is fully supported.
 
-You can use `useRoute` to perform manual routing or implement custom logic such as route transitions etc.
+You can use `useRoute` to perform manual routing or implement custom logic, such as route transitions, etc.
 
 ```js
 import { useRoute } from "wouter";
@@ -186,6 +186,26 @@ const Users = () => {
     return null;
   }
 };
+```
+
+A quick cheatsheet of what types of segments are supported:
+
+```js
+useRoute("/app/:page");
+useRoute("/app/:page/:section");
+
+// optional parameter, matches "/en/home" and "/home"
+useRoute("/:locale?/home");
+
+// suffixes
+useRoute("/movies/:title.(mp4|mov)");
+
+// wildcards, matches "/app", "/app-1", "/app/home"
+useRoute("/app*");
+
+// optional wildcards, matches "/orders", "/orders/"
+// and "/orders/completed/list"
+useRoute("/orders/*?");
 ```
 
 ### `useLocation` hook: working with the history
@@ -550,9 +570,17 @@ const App = () => (
 );
 ```
 
-**Note:** _the base path feature is only supported by the default browser History API location hook
-(the one exported from `"wouter/use-location"`). If you're implementing your own location hook,
-you'll need to add base path support yourself._
+Calling `useLocation()` within a route in an app with base path will return a path scoped to the base. Meaning that when base is `"/app"` and pathname is `"/app/users"` the returned string is `"/users"`. Accordingly, calling `navigate` will automatically append the base to the path argument for you.
+
+When you have multiple nested routers, base paths are inherited and stack up.
+
+```js
+<Router base="/app">
+  <Router base="/cms">
+    <Route path="/users">Path is /app/cms/users!</Route>
+  </Router>
+</Router>
+```
 
 ### How do I make a default route?
 
