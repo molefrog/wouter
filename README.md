@@ -700,6 +700,18 @@ const App = () => (
 
 **[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-nested-routes-ffd5h)**
 
+### Can I initiate navigation from outside a component?
+
+Yes, the `navigate` function is exposed from the `"wouter/use-browser-location"` module:
+
+```js
+import { navigate } from "wouter/use-browser-location";
+
+navigate("/", { replace: true });
+```
+
+It's the same function that is used internally.
+
 ### Can I use _wouter_ in my TypeScript project?
 
 Yes! Although the project isn't written in TypeScript, the type definition files are bundled with
@@ -742,6 +754,8 @@ const handleRequest = (req, res) => {
 };
 ```
 
+Optionally, `Router` accepts `ssrSearch` parameter if need to have access to a search string on a server.
+
 On the client, the static markup must be hydrated in order for your app to become interactive. Note
 that to avoid having hydration warnings, the JSX rendered on the client must match the one used by
 the server, so the `Router` component must be present.
@@ -761,15 +775,14 @@ const root = hydrateRoot(
 ### 1KB is too much, I can't afford it!
 
 We've got some great news for you! If you're a minimalist bundle-size nomad and you need a damn
-simple routing in your app, you can just use the
-[`useLocation` hook](#uselocation-hook-working-with-the-history) which is only **400 bytes gzipped**
+simple routing in your app, you can just use bare location hooks. For example, `useBrowserLocation` hook which is only **650 bytes gzipped**
 and manually match the current location with it:
 
 ```js
-import useLocation from "wouter/use-location";
+import { useBrowserLocation } from "wouter/use-browser-location";
 
 const UsersRoute = () => {
-  const [location] = useLocation();
+  const [location] = useBrowserLocation();
 
   if (location !== "/users") return null;
 
