@@ -167,20 +167,24 @@ Import from `wouter` module.
 
 ## Hooks API
 
-### `useRoute`: the power of HOOKS!
+### `useRoute`: route patterns and parameters
 
-Hooks make creating custom interactions such as route transitions or accessing router directly
-easier. You can check if a particular route matches the current location by using a `useRoute` hook:
+Checks if current location matches the pattern provided and returns an object with parameters. This is powered by a wounderful [`regexparam`](https://github.com/lukeed/regexparam) library, so all its pattern syntax is fully supported.
+
+You can use `useRoute` to perform manual routing or implement custom logic such as route transitions etc.
 
 ```js
 import { useRoute } from "wouter";
-import { Transition } from "react-transition-group";
 
-const AnimatedRoute = () => {
-  // `match` is boolean
-  const [match, params] = useRoute("/users/:id");
+const Users = () => {
+  // `match` is a boolean
+  const [match, params] = useRoute("/users/:name");
 
-  return <Transition in={match}>Hi, this is: {params.id}</Transition>;
+  if (match) {
+    return <>Hello, {params.name}!</>;
+  } else {
+    return null;
+  }
 };
 ```
 
