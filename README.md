@@ -95,7 +95,10 @@ const App = () => (
 
     <Route path="/about">About Us</Route>
 
-    {/* Routes below are matched exclusively */}
+    {/* 
+      Routes below are matched exclusively -
+      the first matched route gets rendered
+    */}
     <Switch>
       <Route path="/inbox" component={InboxPage} />
 
@@ -116,29 +119,45 @@ This library is designed for **ES2019+** compatibility. If you need to support o
 
 ## Wouter API
 
-Wouter comes with two kinds of APIs: low-level
-[React Hooks](https://reactjs.org/docs/hooks-intro.html) API and more traditional component-based
-API similar to React Router's one.
+Wouter comes with three kinds of APIs: low-level **standalone location hooks**, hooks for **routing and pattern matching** and more traditional **component-based
+API** similar to React Router's one.
 
-You are free to choose whatever works for you: use hooks when you want to keep your app as small as
-possible or you want to build custom routing components; or if you're building a traditional app
+You are free to choose whatever works for you: use location hooks when you want to keep your app as small as
+possible and don't need pattern matching; use routing hooks when you want to build custom routing components; or if you're building a traditional app
 with pages and navigation — components might come in handy.
 
 Check out also [FAQ and Code Recipes](#faq-and-code-recipes) for more advanced things like active
-links, default routes etc.
+links, default routes, server-side rendering etc.
 
 ### The list of methods available
 
-**Hooks API:**
+**Location Hooks**
 
+These can be used separately from the main module and have an interface similar to `useState`. These hooks don't support nesting, base path, route matching.
+
+- **[`import { useBrowserLocation } from "wouter/use-browser-location"`](#uselocation-hook-working-with-the-history)**
+  allows to manipulate current
+  browser location, a tiny wrapper around the History API.
+
+  - **[`import { useBrowserLocation } from "wouter/use-browser-location"`](#uselocation-hook-working-with-the-history)**
+    allows to manipulate current
+    browser location, a tiny wrapper around the History API.
+
+**Routing Hooks**
+
+Import from `wouter` module.
+
+- **[`useLocation`](#uselocation-hook-working-with-the-history)** — allows to manipulate current
+  router's location, by default subscribes to browser location. **Note:** this isn't the same as `useBrowserLocation`, read below.
 - **[`useRoute`](#useroute-the-power-of-hooks)** — shows whether or not current page matches the
   pattern provided.
-- **[`useLocation`](#uselocation-hook-working-with-the-history)** — allows to manipulate current
-  browser location, a tiny wrapper around the History API.
+
 - **[`useRouter`](#userouter-accessing-the-router-object)** — returns a global router object that
   holds the configuration. Only use it if you want to customize the routing.
 
-**Component API:**
+**Components**
+
+Import from `wouter` module.
 
 - **[`<Route />`](#route-pathpattern-)** — conditionally renders a component based on a pattern.
 - **[`<Link />`](#link-hrefpath-)** — wraps `<a>`, allows to perfom a navigation.
