@@ -778,4 +778,6 @@ Wouter's motto is **"Minimalist-friendly"**.
 ## Acknowledgements
 
 Wouter illustrations and logos were made by [Katya Simacheva](https://simachevakatya.com/) and
-[Katya Vakulenko](https://katyavakulenko.com/).
+[Katya Vakulenko](https://katyavakulenko.com/). Thank you to **[@jeetiss](https://github.com/jeetiss)** 
+and all the amazing [contributors](https://github.com/molefrog/wouter/graphs/contributors) for 
+helping with the development.
