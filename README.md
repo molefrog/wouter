@@ -58,7 +58,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [`useLocation` hook: working with the history](#uselocation-working-with-the-history)
     - [Additional navigation parameters](#additional-navigation-parameters)
     - [Customizing the location hook](#customizing-the-location-hook)
-  - [`useParams` hook: working with parameters](#useparams-hook-working-with-parameters)
+  - [`useParams`: extract matched parameters](#useparams-extract-matched-parameters)
   - [`useRouter`: accessing the router object](#userouter-accessing-the-router-object)
 - [Component API](#component-api)
   - [`<Route path={pattern} />`](#route-pathpattern-)
@@ -280,6 +280,24 @@ const App = () => (
 ```
 
 Because these hooks have return values similar to `useState`, it is easy and fun to build your own location hooks: `useCrossTabLocation`, `useLocalStorage`, `useMicroFrontendLocation` and whatever routing logic you want to support in the app. Give it a try!
+
+### `useParams`: extracting matched parameters
+
+This hook allows you to access the parameters exposed through [matching dynamic segments](#matching-dynamic-segments). Internally, we simply wrap your components with a context provider allowing you to access this data anywhere within the `Route` component.
+
+This allows you to avoid "prop drilling" when dealing with deeply nested components within the route. **Note:** `useParams` will only extract parameters from the closest parent route.
+
+```js
+import { Route, useParams } from "wouter";
+
+const User = () => {
+  const params = useParams();
+
+  params.id; // "1"
+};
+
+<Route path="/user/:id" component={User}> />
+```
 
 ### `useRouter`: accessing the router object
 
