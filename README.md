@@ -346,6 +346,36 @@ import { Route } from "wouter";
 <Route path="/orders/:status" component={Orders} />
 ```
 
+#### Nested Routes
+
+Nesting is a core feature of wouter and can be enabled on a route via the `nest` prop. When this prop is present, the route matches everything that starts with a given pattern and it creates a nested routing context. All child routes will receive location relative to that pattern.
+
+Let's take a look at this example:
+
+```js
+<Route path="/app" nest>
+  <Route path="/users/:id" nest>
+    <Route path="/orders" />
+  </Route>
+</Route>
+```
+
+1. This first route will be active for all paths that start with `/app`, this is equivalent to having a base path in your app.
+
+2. The second one uses dynamic pattern to match paths like `/app/user/1`, `/app/user/1/anything` and so on.
+
+3. Finally, the inner-most route will only work for paths that look like `/app/users/1/orders`. The match is strict, since that route does not have a `nest` prop and it works as usual.
+
+If you call `useLocation()` inside the last route, it will return `/orders` and not `/app/users/1/orders`. This creates a nice isolation and it makes it easier to make changes to parent route without worrying that the rest of the app will stop working. If you need to navigate to a top-level page however, you can use a prefix to refer to an absolute path:
+
+```js
+<Route path="/payments" nest>
+  <Route path="/all">
+    <Link to="~/home">Back to Home</Link>
+  </Route>
+</Route>
+```
+
 ### `<Link href={path} />`
 
 Link component renders an `<a />` element that, when clicked, performs a navigation. You can
