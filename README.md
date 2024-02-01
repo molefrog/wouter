@@ -778,7 +778,7 @@ You might need to ensure you have the latest version of
 ### Server-side Rendering support (SSR)?
 
 In order to render your app on the server, you'll need to wrap your app with top-level Router and
-specify `ssrPath` prop (usually, derived from current request).
+specify `ssrPath` prop (usually, derived from current request). Optionally, `Router` accepts `ssrSearch` parameter if need to have access to a search string on a server.
 
 ```js
 import { renderToString } from "react-dom/server";
@@ -787,7 +787,7 @@ import { Router } from "wouter";
 const handleRequest = (req, res) => {
   // top-level Router is mandatory in SSR mode
   const prerendered = renderToString(
-    <Router ssrPath={req.path}>
+    <Router ssrPath={req.path} ssrSearch={req.search}>
       <App />
     </Router>
   );
@@ -795,8 +795,6 @@ const handleRequest = (req, res) => {
   // respond with prerendered html
 };
 ```
-
-Optionally, `Router` accepts `ssrSearch` parameter if need to have access to a search string on a server.
 
 On the client, the static markup must be hydrated in order for your app to become interactive. Note
 that to avoid having hydration warnings, the JSX rendered on the client must match the one used by
@@ -807,7 +805,9 @@ import { hydrateRoot } from "react-dom/client";
 
 const root = hydrateRoot(
   domNode,
-  // during hydration `ssrPath` is set to `location.pathname`
+  // during hydration, `ssrPath` is set to `location.pathname`,
+  // `ssrSearch` set to `location.search` accordingly
+  // so there is no need to explicitly specify them
   <Router>
     <App />
   </Router>
