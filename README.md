@@ -209,11 +209,16 @@ useRoute("/app*");
 useRoute("/orders/*?");
 ```
 
-The second item in the pair `params` is an object with parameters or null if there was no match. For wildcard segments the parameter name is `"wild"`:
+The second item in the pair `params` is an object with parameters or null if there was no match. For wildcard segments the parameter name is `"*"`:
 
 ```js
 // wildcards, matches "/app", "/app-1", "/app/home"
-useRoute("/app*");
+const [match, params] = useRoute("/app*");
+
+if (match) {
+  // "/home" for "/app/home"
+  const page = params["*"];
+}
 ```
 
 ### `useLocation`: working with the history
@@ -670,7 +675,7 @@ If you want to have access to the matched segment of the path you can use wildca
 
   {/* will match everything else */}
   <Route path="*">
-    {(params) => `404, Sorry the page ${params.wild} does not exist!`}
+    {(params) => `404, Sorry the page ${params["*"]} does not exist!`}
   </Route>
 </Switch>
 ```
