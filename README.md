@@ -319,6 +319,8 @@ For the SSR, use `ssrSearch` prop passed to the router.
 <Router ssrSearch={request.search}>{/* SSR! */}</Router>
 ```
 
+Refer to [Server-Side Rendering](#server-side-rendering-support-ssr) for more info on rendering and hydration.
+
 ### `useRouter`: accessing the router object
 
 If you're building advanced integration, for example custom location hook, you might want to get
