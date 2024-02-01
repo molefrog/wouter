@@ -352,9 +352,7 @@ const App = () => (
 
 ### `<Route path={pattern} />`
 
-`Route` represents a piece of the app that is rendered conditionally based on a pattern. Pattern is
-a string, which may contain special characters to describe dynamic segments, see
-[**Matching Dynamic Segments** section](#matching-dynamic-segments) below for details.
+`Route` represents a piece of the app that is rendered conditionally based on a pattern `path`. Pattern has the same syntax as the argument you pass to [`useRoute`](#useroute-route-matching-and-parameters).
 
 The library provides multiple ways to declare a route's body:
 
