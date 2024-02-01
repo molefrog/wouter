@@ -59,9 +59,11 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
     - [Additional navigation parameters](#additional-navigation-parameters)
     - [Customizing the location hook](#customizing-the-location-hook)
   - [`useParams`: extracting matched parameters](#useparams-extracting-matched-parameters)
+  - [`useSearch`: query strings](#usesearch-query-strings)
   - [`useRouter`: accessing the router object](#userouter-accessing-the-router-object)
 - [Component API](#component-api)
   - [`<Route path={pattern} />`](#route-pathpattern-)
+    - [Route nesting](#route-nesting)
   - [`<Link href={path} />`](#link-hrefpath-)
   - [`<Switch />`](#switch-)
   - [`<Redirect to={path} />`](#redirect-topath-)
@@ -299,6 +301,24 @@ const User = () => {
 <Route path="/user/:id" component={User}> />
 ```
 
+### `useSearch`: query strings
+
+Use this hook to get the current search (query) string value. It will cause your component to re-render only when the string itself and not the full location updates. The search string returned **does not** contain a `?` character.
+
+```jsx
+import { useSearch } from "wouter";
+
+// returns "tab=settings&id=1"
+// the hook for extracting search parameters is coming soon!
+const searchString = useSearch();
+```
+
+For the SSR, use `ssrSearch` prop passed to the router.
+
+```jsx
+<Router ssrSearch={request.search}>{/* SSR! */}</Router>
+```
+
 ### `useRouter`: accessing the router object
 
 If you're building advanced integration, for example custom location hook, you might want to get
@@ -346,7 +366,7 @@ import { Route } from "wouter";
 <Route path="/orders/:status" component={Orders} />
 ```
 
-#### Nested Routes
+#### Route Nesting
 
 Nesting is a core feature of wouter and can be enabled on a route via the `nest` prop. When this prop is present, the route matches everything that starts with a given pattern and it creates a nested routing context. All child routes will receive location relative to that pattern.
 
@@ -366,7 +386,7 @@ Let's take a look at this example:
 
 3. Finally, the inner-most route will only work for paths that look like `/app/users/1/orders`. The match is strict, since that route does not have a `nest` prop and it works as usual.
 
-If you call `useLocation()` inside the last route, it will return `/orders` and not `/app/users/1/orders`. This creates a nice isolation and it makes it easier to make changes to parent route without worrying that the rest of the app will stop working. If you need to navigate to a top-level page however, you can use a prefix to refer to an absolute path:
+If you call `useLocation()` inside the last route, it will return `/orders` and not `/app/users/1/orders`. This creates a nice isolation and it makes it easier to make changes to parent route without worrying that the rest of the app will stop working. If you need to navigate to a top-level page however, you can use a prefix `~` to refer to an absolute path:
 
 ```js
 <Route path="/payments" nest>
