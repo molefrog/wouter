@@ -465,8 +465,7 @@ import { Route, Switch } from "wouter";
 </Switch>;
 ```
 
-Check out [**FAQ and Code Recipes** section](#how-do-i-make-a-default-route) for more advanced use
-of `Switch`.
+When no route in switch matches, the last empty `Route` will be used as a fallback. See [**FAQ and Code Recipes** section](#how-do-i-make-a-default-route) to read about default routes.
 
 ### `<Redirect to={path} />`
 
