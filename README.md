@@ -528,103 +528,6 @@ Read more → [Customizing the location hook](#customizing-the-location-hook).
   application routes will be relative to that path. Prefixing a route with `~` will make it
   absolute, bypassing the base path.
 
-#### Matching Dynamic Segments
-
-Just like in React Router, you can make dynamic matches either with `Route` component or `useRoute`
-hook. `useRoute` returns a second parameter which is a hash of all dynamic segments matched.
-Similarily, the `Route` component passes these parameters down to its children via a function prop.
-
-```js
-import { useRoute } from "wouter";
-
-// /users/alex => [true, { name: "alex "}]
-// /anything   => [false, null]
-const [match, params] = useRoute("/users/:name");
-
-// or with Route component
-<Route path="/users/:name">
-  {(params) => {
-    /* { name: "alex" } */
-  }}
-</Route>;
-```
-
-**wouter** implements a limited subset of
-[`path-to-regexp` package](https://github.com/pillarjs/path-to-regexp) used by React Router or
-Express, and it supports the following patterns:
-
-- Named dynamic segments: `/users/:foo`.
-- Dynamic segments with modifiers: `/foo/:bar*`, `/foo/baz?` or `/foo/bar+`.
-
-The library was designed to be as small as possible, so most of the additional matching features
-were left out (see [this issue](https://github.com/molefrog/wouter/issues/1) for more info).
-
-#### Using a `path-to-regexp`-based matcher
-
-The `<Router />` component accepts an optional prop called `matcher` which allows to customize how a
-path is matched against the pattern. By default, a built-in matcher function is used, which
-implements basic functionality such as wildcard parameters (see above).
-
-However, if you do need to have more advanced functionality, you can specify your own matcher which
-should look like:
-
-```js
-/*
- * accepts a pattern and a path as strings, should return a pair of values:
- * [success, params]
- */
-
-// returns [false, null] when there is no match
-matcher("/users", "/");
-
-// [true, { id: "101" }]
-matcher("/users/:id", "/users/101");
-```
-
-Most of the packages for parsing route patterns work with regular expressions (see
-[`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) or a super-tiny alternative
-[`regexparam`](https://github.com/lukeed/regexparam)), so to make it easier for you wouter provides
-[a factory function](https://github.com/molefrog/wouter/blob/master/matcher.js#L2) for transforming
-a regexp-based pattern builder into a matcher. It also makes sure that the expensive transform
-operation isn't called on each render by utilizing a simple cache.
-
-```js
-import { Router } from "wouter";
-
-import makeCachedMatcher from "wouter/matcher";
-
-/*
- * This function specifies how strings like /app/:users/:items* are
- * transformed into regular expressions.
- *
- * Note: it is just a wrapper around `pathToRegexp`, which uses a
- * slightly different convention of returning the array of keys.
- *
- * @param {string} path — a path like "/:foo/:bar"
- * @return {{ keys: [], regexp: RegExp }}
- */
-const convertPathToRegexp = (path) => {
-  let keys = [];
-
-  // we use original pathToRegexp package here with keys
-  const regexp = pathToRegexp(path, keys, { strict: true });
-  return { keys, regexp };
-};
-
-const customMatcher = makeCachedMatcher(convertPathToRegexp);
-
-function App() {
-  return (
-    <Router matcher={customMatcher}>
-      {/* at the moment wouter doesn't support inline regexps, but path-to-regexp does! */}
-      <Route path="/(resumes|cover-letters)/:id" component={Dashboard} />
-    </Router>
-  );
-}
-```
-
-**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-path-to-regexp-matcher-fhg2h)**
-
 ## FAQ and Code Recipes
 
 ### I deploy my app to the subfolder. Can I specify a base path?
@@ -713,18 +616,26 @@ return (
 
 ### Are strict routes supported?
 
-If a trailing slash is important for your app's routing, you could specify a custom parser.
+If a trailing slash is important for your app's routing, you could specify a custom parser. Parser is a method that takes a pattern string and returns a RegExp and an array of parsed key. It uses the signature of a [`parse`](https://github.com/lukeed/regexparam?tab=readme-ov-file#regexparamparseinput-regexp) function from `regexparam`.
+
+Let's write a custom parser based on a popular [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) package that does support strict routes option.
 
 ```js
-import { parse } from "regexparam";
+import { pathToRegexp } from "path-to-regexp";
 
-const strictParser = (path, opts) => {
-  const result = parse(path, opts);
+/**
+ * Custom parser based on `pathToRegexp` with strict route option
+ */
+const strictParser = (path, loose) => {
+  let keys = [];
+  const pattern = pathToRegexp(path, keys, { strict: true, end: !loose });
 
-  // modify the returned `result.pattern` regexp to
-  // require a trailing slash here
-
-  return result;
+  return {
+    pattern,
+    // `pathToRegexp` returns some metadata about the keys,
+    // we want to strip it to just an array of keys
+    keys: keys.map((k) => k.name),
+  };
 };
 
 const App = () => (
@@ -735,7 +646,7 @@ const App = () => (
 );
 ```
 
-**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-path-to-regexp-strict-rq72c)**
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-v3-strict-routes-w3xdtz)**
 
 ### Are relative routes and links supported?
 
