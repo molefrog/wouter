@@ -19,6 +19,8 @@
 
 ## Features
 
+> ⚠️ These docs are for wouter v3 only. Please find the documentation for [wouter@2.12.0 here](https://github.com/molefrog/wouter/tree/main)
+
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
 
 - Minimum dependencies, only **2.1 KB** gzipped vs 18.7KB
