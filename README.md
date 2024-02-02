@@ -62,14 +62,14 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [`useSearch`: query strings](#usesearch-query-strings)
   - [`useRouter`: accessing the router object](#userouter-accessing-the-router-object)
 - [Component API](#component-api)
+
   - [`<Route path={pattern} />`](#route-pathpattern-)
     - [Route nesting](#route-nesting)
   - [`<Link href={path} />`](#link-hrefpath-)
   - [`<Switch />`](#switch-)
   - [`<Redirect to={path} />`](#redirect-topath-)
   - [`<Router hook={hook} matcher={matchFn} base={basepath} />`](#router-hookhook-matchermatchfn-basebasepath-)
-    - [Matching Dynamic Segments](#matching-dynamic-segments)
-    - [Using a `path-to-regexp`-based matcher](#using-a-path-to-regexp-based-matcher)
+
 - [FAQ and Code Recipes](#faq-and-code-recipes)
   - [I deploy my app to the subfolder. Can I specify a base path?](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
   - [How do I make a default route?](#how-do-i-make-a-default-route)
