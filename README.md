@@ -514,9 +514,7 @@ available options:
 - **`hook: () => [location: string, setLocation: fn]`** — is a React Hook function that subscribes
   to location changes. It returns a pair of current `location` string e.g. `/app/users` and a
   `setLocation` function for navigation. You can use this hook from any component of your app by
-  calling [`useLocation()` hook](#uselocation-working-with-the-history).
-
-Read more → [Customizing the location hook](#customizing-the-location-hook).
+  calling [`useLocation()` hook](#uselocation-working-with-the-history). See [Customizing the location hook](#customizing-the-location-hook).
 
 - **`searchHook: () => [search: string, setSearch: fn]`** — similar to `hook`, but for obtaining the [current search string](#usesearch-query-strings).
 
