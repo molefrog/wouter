@@ -68,7 +68,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [`<Link href={path} />`](#link-hrefpath-)
   - [`<Switch />`](#switch-)
   - [`<Redirect to={path} />`](#redirect-topath-)
-  - [`<Router hook={hook} matcher={matchFn} base={basepath} />`](#router-hookhook-matchermatchfn-basebasepath-)
+  - [`<Router hook={hook} parser={fn} base={basepath} />`](#router-hookhook-parserfn-basebasepath-)
 
 - [FAQ and Code Recipes](#faq-and-code-recipes)
   - [I deploy my app to the subfolder. Can I specify a base path?](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
@@ -499,6 +499,14 @@ behaviour needs to be customized.
 
 These cases include hash-based routing, basepath support, custom matcher function etc.
 
+```jsx
+import { useHashLocation } from "wouter/use-hash-location";
+
+<Router hook={useHashLocation} base="/app">
+  {/* Your app goes here */}
+</Router>;
+```
+
 A router is a simple object that holds the routing configuration options. You can always obtain this
 object using a [`useRouter` hook](#userouter-accessing-the-router-object). The list of currently
 available options:
@@ -510,12 +518,16 @@ available options:
 
 Read more → [Customizing the location hook](#customizing-the-location-hook).
 
+- **`searchHook: () => [search: string, setSearch: fn]`** — similar to `hook`, but for obtaining the [current search string](#usesearch-query-strings).
+
 - **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All
   application routes will be relative to that path. To navigate out to an absolute path, prefix your path with an `~`. [See the FAQ](#are-relative-routes-and-links-supported).
 
 - **`parser: (path: string, loose?: boolean) => { pattern, keys }`** — a pattern parsing
   function. Produces a RegExp for matching the current location against the user-defined patterns like
   `/app/users/:id`. Has the same interface as the [`parse`](https://github.com/lukeed/regexparam?tab=readme-ov-file#regexparamparseinput-regexp) function from `regexparam`. See [this example](#are-strict-routes-supported) that demonstrates custom parser feature.
+
+- **`ssrPath: string`** and **`ssrSearch: string`** use these when [rendering your app on the server](#server-side-rendering-support-ssr).
 
 ## FAQ and Code Recipes
 
