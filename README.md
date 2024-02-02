@@ -490,7 +490,7 @@ fetchOrders().then((orders) => {
 });
 ```
 
-### `<Router hook={hook} matcher={matchFn} base={basepath} />`
+### `<Router hook={hook} parser={fn} base={basepath} />`
 
 Unlike _React Router_, routes in wouter **don't have to be wrapped in a top-level component**. An
 internal router object will be constructed on demand, so you can start writing your app without
