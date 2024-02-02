@@ -472,6 +472,18 @@ When no route in switch matches, the last empty `Route` will be used as a fallba
 When mounted performs a redirect to a `path` provided. Uses `useLocation` hook internally to trigger
 the navigation inside of a `useEffect` block.
 
+`Redirect` can also accept props for [customizing how navigation will be performed](#additional-navigation-parameters), for example for setting history state when navigating. These options are specific to the currently used location hook.
+
+```jsx
+<Redirect to="/" />
+
+// arbitrary state object
+<Redirect to="/" state={{ modal: true }} />
+
+// use `replaceState`
+<Redirect to="/" replace />
+```
+
 If you need more advanced logic for navigation, for example, to trigger the redirect inside of an
 event handler, consider using
 [`useLocation` hook instead](#uselocation-working-with-the-history):
