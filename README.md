@@ -403,44 +403,33 @@ If you call `useLocation()` inside the last route, it will return `/orders` and 
 
 ### `<Link href={path} />`
 
-Link component renders an `<a />` element that, when clicked, performs a navigation. You can
-customize the link appearance by providing your own component or a link element as `children`:
+Link component renders an `<a />` element that, when clicked, performs a navigation.
 
 ```js
 import { Link } from "wouter"
 
-// All of these will produce the same html:
-// <a href="/foo" class="active">Hello!</a>
+<Link href="/">Home</Link>
 
-// lazy form: `a` element is constructed around children
-<Link href="/foo" className="active">Hello!</Link>
+// `to` is an alias for `href`
+<Link to="/">Home</Link>
 
-// when using your own component or jsx the `href` prop
-// will be passed down to an element
-<Link href="/foo"><a className="active">Hello!</a></Link>
-<Link href="/foo"><A>Hello!</A></Link>
+// all standard `a` props are proxied
+<Link href="/" className="link" aria-label="Go to homepage">Home</Link>
+
+// all location hook options are supported
+<Link href="/" replace state={{ animate: true }} />
 ```
 
-If you wrap a custom component with `Link`, wouter won't install event listeners so make sure the
-component handles `onClick` and `href` props properly:
+Link will always wrap its children in an `<a />` tag, unless `asChild` prop is provided. Use this when you need to have a custom component that renders an `<a />` under the hood.
 
 ```jsx
-import { Link } from "wouter";
+// use this instead
+<Link to="/" asChild>
+  <UIKitLink />
+</Link>
 
-const MyButton = (props) => {
-  // it is recommended to use <a>'s when possible (they play nicely with SSR and are SEO-friendly),
-  // but wouter's Links should work with almost anything, as long as the `onClick` is handled.
-  return (
-    <div title={props.href}>
-      <button onClick={props.onClick}>Home</button>
-    </div>
-  );
-};
-
-// in your app
-<Link href="/home">
-  <MyButton />
-</Link>;
+// Remember, `UIKitLink` must implement an `onClick` handler
+// in order for navigation to work!
 ```
 
 ### `<Switch />`
