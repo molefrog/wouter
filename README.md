@@ -432,6 +432,8 @@ Link will always wrap its children in an `<a />` tag, unless `asChild` prop is p
 // in order for navigation to work!
 ```
 
+Active links are not yet shipped out-of-the-box, but you can easily [implement them](#how-do-i-make-a-link-active-for-the-current-route) using `useLocation`.
+
 ### `<Switch />`
 
 There are cases when you want to have an exclusive routing: to make sure that only one route is
@@ -508,14 +510,12 @@ available options:
 
 Read more → [Customizing the location hook](#customizing-the-location-hook).
 
-- **`matcher: (pattern: string, path: string) => [match: boolean, params: object]`** — a custom
-  function used for matching the current location against the user-defined patterns like
-  `/app/users/:id`. Should return a match result and an hash of extracted parameters. It should
-  return `[false, null]` when there is no match.
-
 - **`base: string`** — an optional setting that allows to specify a base path, such as `/app`. All
-  application routes will be relative to that path. Prefixing a route with `~` will make it
-  absolute, bypassing the base path.
+  application routes will be relative to that path. To navigate out to an absolute path, prefix your path with an `~`. [See the FAQ](#are-relative-routes-and-links-supported).
+
+- **`parser: (path: string, loose?: boolean) => { pattern, keys }`** — a pattern parsing
+  function. Produces a RegExp for matching the current location against the user-defined patterns like
+  `/app/users/:id`. Has the same interface as the [`parse`](https://github.com/lukeed/regexparam?tab=readme-ov-file#regexparamparseinput-regexp) function from `regexparam`. See [this example](#are-strict-routes-supported) that demonstrates custom parser feature.
 
 ## FAQ and Code Recipes
 
