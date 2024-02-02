@@ -77,14 +77,11 @@ export const useSearch = () => {
 };
 
 const matchRoute = (parser, route, path, loose) => {
-  // falsy patterns mean this route "always matches"
-  if (!route) return [true, {}];
-
   // when parser is in "loose" mode, `$base` is equal to the
   // first part of the route that matches the pattern
   // (e.g. for pattern `/a/:b` and path `/a/1/2/3` the `$base` is `a/1`)
   // we use this for route nesting
-  const { pattern, keys } = parser(route, loose);
+  const { pattern, keys } = parser(route || "*", loose);
   const [$base, ...matches] = pattern.exec(path) || [];
 
   return $base !== undefined

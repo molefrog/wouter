@@ -371,6 +371,15 @@ import { Route } from "wouter";
 <Route path="/orders/:status" component={Orders} />
 ```
 
+A route with no path is considered to always match, and it is the same as `<Route path="*" />`. When developing your app, use this trick to peek at the route's content without navigation.
+
+```diff
+-<Route path="/some/page">
++<Route>
+  {/* Strip out the `path` to make this visible */}
+</Route>
+```
+
 #### Route Nesting
 
 Nesting is a core feature of wouter and can be enabled on a route via the `nest` prop. When this prop is present, the route matches everything that starts with a given pattern and it creates a nested routing context. All child routes will receive location relative to that pattern.

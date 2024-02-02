@@ -9,6 +9,18 @@ it("returns empty object when used outside of <Route />", () => {
   expect(result.current).toEqual({});
 });
 
+it("contains a * parameter when used inside an empty <Route />", () => {
+  const { result } = renderHook(() => useParams(), {
+    wrapper: (props) => (
+      <Router hook={memoryLocation({ path: "/app-2/goods/tees" }).hook}>
+        <Route>{props.children}</Route>
+      </Router>
+    ),
+  });
+
+  expect(result.current).toEqual({ "*": "app-2/goods/tees" });
+});
+
 it("returns an empty object when there are no params", () => {
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => <Route path="/">{props.children}</Route>,
