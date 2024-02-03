@@ -140,20 +140,19 @@ These can be used separately from the main module and have an interface similar 
 
 - **[`import { useBrowserLocation } from "wouter/use-browser-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-browser-location.js)** —
   allows to manipulate current location in the browser's address bar, a tiny wrapper around the History API.
-
 - **[`import { useHashLocation } from "wouter/use-hash-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-hash-location.js)** — similarly, gets location from the hash part of the address, i.e. the string after a `#`.
-
 - **[`import { memoryLocation } from "wouter/memory-location"`](#uselocation-working-with-the-history)** — an in-memory location hook with history support, external navigation and immutable mode for testing. **Note** the module name because it is a high-order hook.
 
 **Routing Hooks**
 
 Import from `wouter` module.
 
-- **[`useLocation`](#uselocation-working-with-the-history)** — allows to manipulate current
-  router's location, by default subscribes to browser location. **Note:** this isn't the same as `useBrowserLocation`, read below.
 - **[`useRoute`](#useroute-the-power-of-hooks)** — shows whether or not current page matches the
   pattern provided.
-
+- **[`useLocation`](#uselocation-working-with-the-history)** — allows to manipulate current
+  router's location, by default subscribes to browser location. **Note:** this isn't the same as `useBrowserLocation`, read below.
+- **[`useParams`](#useparams-extracting-matched-parameters)** — returns an object with parameters matched from the closest route.
+- **[`useSearch`](#usesearch-query-strings)** — returns a search string – everything that goes after the `?`.
 - **[`useRouter`](#userouter-accessing-the-router-object)** — returns a global router object that
   holds the configuration. Only use it if you want to customize the routing.
 
@@ -264,7 +263,7 @@ navigate("/home", { replace: true }); // `replaceState` is used
 Additionally, you can provide a `state` option to update `history.state` while navigating:
 
 ```jsx
-navigate("/home", { modal: "promo" });
+navigate("/home", { state: { modal: "promo" } });
 
 history.state; // { modal: "promo" }
 ```
