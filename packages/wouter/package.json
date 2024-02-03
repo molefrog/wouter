@@ -61,7 +61,7 @@
     "type": "git",
     "url": "git+https://github.com/molefrog/wouter.git"
   },
-  "license": "ISC",
+  "license": "Unlicense",
   "peerDependencies": {
     "react": ">=16.8.0"
   },

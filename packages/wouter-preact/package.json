@@ -58,7 +58,7 @@
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": "molefrog/wouter",
-  "license": "ISC",
+  "license": "Unlicense",
   "peerDependencies": {
     "preact": "^10.0.0"
   },
