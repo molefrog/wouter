@@ -601,7 +601,7 @@ If you want to have access to the matched segment of the path you can use wildca
 </Switch>
 ```
 
-**[▶ Demo Sandbox](https://codesandbox.io/s/oqk302k2y)**
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-v3-ts-8q532r)**
 
 ### How do I make a link active for the current route?
 
@@ -621,7 +621,7 @@ return (
 );
 ```
 
-**[▶ Demo Sandbox](https://codesandbox.io/s/5zjpj19yz4)**
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-v3-ts-8q532r?file=/src/ActiveLink.tsx)**
 
 ### Are strict routes supported?
 
@@ -676,7 +676,7 @@ const App = () => (
 );
 ```
 
-**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-demo-nested-routes-ffd5h)**
+**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-v3-nested-routes-l8p23s)**
 
 ### Can I initiate navigation from outside a component?
 
@@ -749,6 +749,8 @@ const root = hydrateRoot(
   </Router>
 );
 ```
+
+**[▶ Demo](https://github.com/molefrog/wultra)**
 
 ### 1KB is too much, I can't afford it!
 
