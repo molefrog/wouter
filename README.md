@@ -33,7 +33,7 @@
   **[`Switch`](#switch-)** and **[`Redirect`](#redirect-topath-)** components.
 - Has hook-based API for more granular control over routing (like animations):
   **[`useLocation`](#uselocation-working-with-the-history)**,
-  **[`useRoute`](#useroute-the-power-of-hooks)** and
+  **[`useRoute`](#useroute-route-matching-and-parameters)** and
   **[`useRouter`](#userouter-accessing-the-router-object)**.
 
 ## developers :sparkling_heart: wouter
