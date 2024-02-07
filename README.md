@@ -82,6 +82,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [Can I use _wouter_ in my TypeScript project?](#can-i-use-wouter-in-my-typescript-project)
   - [Preact support?](#preact-support)
   - [Server-side Rendering support (SSR)?](#server-side-rendering-support-ssr)
+  - [How do I configure the router to render a specific route in tests?](#how-do-i-configure-the-router-to-render-a-specific-route-in-tests)
   - [1KB is too much, I can't afford it!](#1kb-is-too-much-i-cant-afford-it)
 - [Acknowledgements](#acknowledgements)
 
@@ -141,7 +142,7 @@ These can be used separately from the main module and have an interface similar 
 - **[`import { useBrowserLocation } from "wouter/use-browser-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-browser-location.js)** —
   allows to manipulate current location in the browser's address bar, a tiny wrapper around the History API.
 - **[`import { useHashLocation } from "wouter/use-hash-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-hash-location.js)** — similarly, gets location from the hash part of the address, i.e. the string after a `#`.
-- **[`import { memoryLocation } from "wouter/memory-location"`](#uselocation-working-with-the-history)** — an in-memory location hook with history support, external navigation and immutable mode for testing. **Note** the module name because it is a high-order hook.
+- **[`import { memoryLocation } from "wouter/memory-location"`](#uselocation-working-with-the-history)** — an in-memory location hook with history support, external navigation and immutable mode for testing. **Note** the module name because it is a high-order hook. See how memory location can be used in [testing](#how-do-i-configure-the-router-to-render-a-specific-route-in-tests).
 
 **Routing Hooks**
 
@@ -751,6 +752,61 @@ const root = hydrateRoot(
 ```
 
 **[▶ Demo](https://github.com/molefrog/wultra)**
+
+### How do I configure the router to render a specific route in tests?
+
+Testing with wouter is no different from testing regular React apps. You often need a way to provide a fixture for the current location to render a specific route. This can be easily done by swapping the normal location hook with `memoryLocation`. It is an initializer function that returns a hook that you can then specify in a top-level `Router`.
+
+```jsx
+import { render } from "@testing-library/react";
+import { memoryLocation } from "wouter/memory-location";
+
+it("renders a user page", () => {
+  // `static` option makes it immutable
+  // even if you call `navigate` somewhere in the app location won't change
+  const { hook } = memoryLocation({ path: "/user/2", static: true });
+
+  const { container } = render(
+    <Router hook={hook}>
+      <Route path="/user/:id">{(params) => <>User ID: {params.id}</>}</Route>
+    </Router>
+  );
+
+  expect(container.innerHTML).toBe("User ID: 2");
+});
+```
+
+The hook can be configured to record navigation history. Additionally, it comes with a `navigate` function for external navigation.
+
+```jsx
+it("performs a redirect", () => {
+  const { hook, history, navigate } = memoryLocation({
+    path: "/",
+    // will store navigation history in `history`
+    record: true,
+  });
+
+  const { container } = render(
+    <Router hook={hook}>
+      <Switch>
+        <Route path="/">Index</Route>
+        <Route path="/orders">Orders</Route>
+
+        <Route>
+          <Redirect to="/orders" />
+        </Route>
+      </Switch>
+    </Router>
+  );
+
+  expect(history).toStrictEqual(["/"]);
+
+  navigate("/unknown/route");
+
+  expect(container.innerHTML).toBe("Orders");
+  expect(history).toStrictEqual(["/", "/unknown/route", "/orders"]);
+});
+```
 
 ### 1KB is too much, I can't afford it!
 
