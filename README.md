@@ -637,7 +637,7 @@ import { pathToRegexp } from "path-to-regexp";
  * Custom parser based on `pathToRegexp` with strict route option
  */
 const strictParser = (path, loose) => {
-  let keys = [];
+  const keys = [];
   const pattern = pathToRegexp(path, keys, { strict: true, end: !loose });
 
   return {
