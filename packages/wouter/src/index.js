@@ -220,17 +220,12 @@ export const Link = forwardRef((props, ref) => {
     : h("a", { ...restProps, href, onClick, children, ref });
 });
 
-const flattenChildren = (children) => {
-  return Array.isArray(children)
-    ? [].concat(
-        ...children.map((c) =>
-          c && c.type === Fragment
-            ? flattenChildren(c.props.children)
-            : flattenChildren(c)
-        )
+const flattenChildren = (children) =>
+  Array.isArray(children)
+    ? children.flatMap((c) =>
+        flattenChildren(c && c.type === Fragment ? c.props.children : c)
       )
     : [children];
-};
 
 export const Switch = ({ children, location }) => {
   const router = useRouter();
