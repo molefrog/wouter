@@ -54,7 +54,8 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "prepublishOnly": "npm run build && cp ../../README.md ."
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": {

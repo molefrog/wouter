@@ -17,7 +17,10 @@
     "lint-types": "vitest typecheck"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
-  "repository": "molefrog/wouter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molefrog/wouter.git"
+  },
   "license": "ISC",
   "prettier": {
     "tabWidth": 2,
