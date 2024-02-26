@@ -88,6 +88,14 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
 
 ## Getting Started
 
+First, add wouter to your project.
+
+```bash
+npm i wouter
+```
+
+Or, if you're using Preact the use the following command [`npm i wouter-preact`](#preact-support).
+
 Check out this simple demo app below. It doesn't cover hooks and other features such as nested routing, but it's a good starting point for those who are migrating from React Router.
 
 ```js
