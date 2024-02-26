@@ -116,6 +116,10 @@ export const Router = ({ children, ...props }) => {
   // holds to the context value: the router object
   let value = parent;
 
+  // when `ssrPath` contains a `?` character, we split can extract the search
+  const [path, search] = props.ssrPath?.split("?") ?? [];
+  if (search) (props.ssrSearch = search), (props.ssrPath = path);
+
   // what is happening below: to avoid unnecessary rerenders in child components,
   // we ensure that the router object reference is stable, unless there are any
   // changes that require reload (e.g. `base` prop changes -> all components that

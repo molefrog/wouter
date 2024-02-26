@@ -51,6 +51,45 @@ it("alters the current router with `parser` and `hook` options", () => {
   expect(router.hook).toBe(hook);
 });
 
+it("accepts `ssrPath` and `ssrSearch` params", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => (
+      <Router ssrPath="/users" ssrSearch="a=b&c=d">
+        {props.children}
+      </Router>
+    ),
+  });
+
+  expect(result.current.ssrPath).toBe("/users");
+  expect(result.current.ssrSearch).toBe("a=b&c=d");
+});
+
+it("can extract `ssrSearch` from `ssrPath` after the '?' symbol", () => {
+  let ssrPath: string | undefined = "/no-search";
+  let ssrSearch: string | undefined = undefined;
+
+  const { result, rerender } = renderHook(() => useRouter(), {
+    wrapper: (props) => (
+      <Router ssrPath={ssrPath} ssrSearch={ssrSearch}>
+        {props.children}
+      </Router>
+    ),
+  });
+
+  expect(result.current.ssrPath).toBe("/no-search");
+  expect(result.current.ssrSearch).toBe(undefined);
+
+  ssrPath = "/with-search?a=b&c=d";
+  rerender();
+
+  expect(result.current.ssrPath).toBe("/with-search");
+  expect(result.current.ssrSearch).toBe("a=b&c=d");
+
+  ssrSearch = "x=y&z=w";
+  rerender();
+  expect(result.current.ssrSearch).toBe("a=b&c=d");
+});
+
 it("shares one router instance between components", () => {
   const RouterGetter = ({ el }: { el: ReactElement }) => {
     const router = useRouter();
