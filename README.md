@@ -80,6 +80,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [Are relative routes and links supported?](#are-relative-routes-and-links-supported)
   - [Can I initiate navigation from outside a component?](#can-i-initiate-navigation-from-outside-a-component)
   - [Can I use _wouter_ in my TypeScript project?](#can-i-use-wouter-in-my-typescript-project)
+  - [How can add animated route transitions?](#how-can-add-animated-route-transitions)
   - [Preact support?](#preact-support)
   - [Server-side Rendering support (SSR)?](#server-side-rendering-support-ssr)
   - [How do I configure the router to render a specific route in tests?](#how-do-i-configure-the-router-to-render-a-specific-route-in-tests)
@@ -703,6 +704,52 @@ It's the same function that is used internally.
 
 Yes! Although the project isn't written in TypeScript, the type definition files are bundled with
 the package.
+
+### How can add animated route transitions?
+
+Let's take look at how wouter routes can be animated with [`framer-motion`](framer.com/motion).
+Animating enter transitions is easy, but exit transitions require a bit more work. We'll use the `AnimatePresence` component that will keep the page in the DOM until the exit animation is complete.
+
+Unfortunately, `AnimatePresence` only animates its **direct children**, so this won't work:
+
+```jsx
+import { motion, AnimatePresence } from "framer-motion";
+
+export const MyComponent = () => (
+  <AnimatePresence>
+    {/* This will not work! `motion.div` is not a direct child */}
+    <Route path="/">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      />
+    </Route>
+  </AnimatePresence>
+);
+```
+
+The workaround is to match this route manually with `useRoute`:
+
+```jsx
+export const MyComponent = ({ isVisible }) => {
+  const [isMatch] = useRoute("/");
+
+  return (
+    <AnimatePresence>
+      {isMatch && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        />
+      )}
+    </AnimatePresence>
+  );
+};
+```
+
+More complex examples involve using `useRoutes` hook (similar to how React Router does it), but wouter does not ship it out-of-the-box. Please refer to [this issue](https://github.com/molefrog/wouter/issues/414#issuecomment-1954192679) for the workaround.
 
 ### Preact support?
 
