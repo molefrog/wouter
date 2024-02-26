@@ -103,11 +103,18 @@ type AsChildProps<ComponentProps, DefaultElementProps> =
   | ({ asChild?: false } & DefaultElementProps)
   | ({ asChild: true } & ComponentProps);
 
+type HTMLLinkAttributes = Omit<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  "className"
+> & {
+  className?: string | undefined | ((isActive: boolean) => string | undefined);
+};
+
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> &
     AsChildProps<
       { children: ReactElement; onClick?: MouseEventHandler },
-      AnchorHTMLAttributes<HTMLAnchorElement> & RefAttributes<HTMLAnchorElement>
+      HTMLLinkAttributes & RefAttributes<HTMLAnchorElement>
     >;
 
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
