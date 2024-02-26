@@ -1,8 +1,9 @@
 import { type MouseEventHandler } from "react";
 import { it, expect, afterEach, vi, describe } from "vitest";
-import { render, cleanup, fireEvent } from "@testing-library/react";
+import { render, cleanup, fireEvent, act } from "@testing-library/react";
 
 import { Router, Link } from "wouter";
+import { memoryLocation } from "wouter/memory-location";
 
 afterEach(cleanup);
 
@@ -163,6 +164,46 @@ describe("<Link />", () => {
     fireEvent.click(getByTestId("link"));
     expect(location.pathname).toBe("/goo-baz");
     expect(history.state).toBe(testState);
+  });
+});
+
+describe("active links", () => {
+  it("proxies `className` when it is a string", () => {
+    const { getByText } = render(
+      <Link href="/" className="link--active warning">
+        Click Me
+      </Link>
+    );
+
+    const element = getByText("Click Me");
+    expect(element).toHaveAttribute("class", "link--active warning");
+  });
+
+  it("calls the `className` function with active link flag", () => {
+    const { navigate, hook } = memoryLocation({ path: "/" });
+
+    const { getByText } = render(
+      <Router hook={hook}>
+        <Link
+          href="/"
+          className={(isActive) => {
+            return [isActive ? "active" : "", "link"].join(" ");
+          }}
+        >
+          Click Me
+        </Link>
+      </Router>
+    );
+
+    const element = getByText("Click Me");
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveClass("active");
+    expect(element).toHaveClass("link");
+
+    act(() => navigate("/about"));
+
+    expect(element).not.toHaveClass("active");
+    expect(element).toHaveClass("link");
   });
 });
 
