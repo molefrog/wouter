@@ -88,11 +88,15 @@ type AsChildProps<ComponentProps, DefaultElementProps> =
   | ({ asChild?: false } & DefaultElementProps)
   | ({ asChild: true } & ComponentProps);
 
+type HTMLLinkAttributes = Omit<JSX.HTMLAttributes, "className"> & {
+  className?: string | undefined | ((isActive: boolean) => string | undefined);
+};
+
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> &
     AsChildProps<
       { children: ComponentChildren; onClick?: JSX.MouseEventHandler<Element> },
-      JSX.HTMLAttributes
+      HTMLLinkAttributes
     >;
 
 export type RedirectProps<H extends BaseLocationHook = BrowserLocationHook> =

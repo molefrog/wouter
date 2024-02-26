@@ -39,6 +39,18 @@ describe("<Link /> types", () => {
     </Link>;
   });
 
+  it("can accept function as `className`", () => {
+    <Link
+      href="/"
+      className={(isActive) => (isActive ? "active" : "non-active")}
+    />;
+
+    <Link
+      href="/"
+      className={(isActive) => (isActive ? "active" : undefined)}
+    />;
+  });
+
   it("should support other navigation params", () => {
     <Link href="/" state={{ a: "foo" }}>
       test
