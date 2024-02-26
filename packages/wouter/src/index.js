@@ -178,7 +178,7 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
 
 export const Link = forwardRef((props, ref) => {
   const router = useRouter();
-  const [, navigate] = useLocationFromRouter(router);
+  const [path, navigate] = useLocationFromRouter(router);
 
   const {
     to,
@@ -186,10 +186,12 @@ export const Link = forwardRef((props, ref) => {
     onClick: _onClick,
     asChild,
     children,
+    className: cls,
     /* eslint-disable no-unused-vars */
     replace /* ignore nav props */,
     state /* ignore nav props */,
     /* eslint-enable no-unused-vars */
+
     ...restProps
   } = props;
 
@@ -205,7 +207,7 @@ export const Link = forwardRef((props, ref) => {
     )
       return;
 
-    _onClick && _onClick(event); // TODO: is it safe to use _onClick?.(event)
+    _onClick?.(event);
     if (!event.defaultPrevented) {
       event.preventDefault();
       navigate(_href, props);
@@ -216,8 +218,16 @@ export const Link = forwardRef((props, ref) => {
   const href = _href[0] === "~" ? _href.slice(1) : router.base + _href;
 
   return asChild && isValidElement(children)
-    ? cloneElement(children, { href, onClick })
-    : h("a", { ...restProps, href, onClick, children, ref });
+    ? cloneElement(children, { onClick, href })
+    : h("a", {
+        ...restProps,
+        onClick,
+        href,
+        // `className` can be a function to apply the class if this link is active
+        className: cls?.call ? cls(path === href) : cls,
+        children,
+        ref,
+      });
 });
 
 const flattenChildren = (children) => {
