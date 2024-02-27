@@ -35,6 +35,8 @@ const defaultRouter = {
   // this option is used to override the current location during SSR
   ssrPath: undefined,
   ssrSearch: undefined,
+  // customizes how `href` props are transformed for <Link />
+  hrefs: (x) => x,
 };
 
 const RouterCtx = createContext(defaultRouter);
@@ -119,6 +121,9 @@ export const Router = ({ children, ...props }) => {
   // when `ssrPath` contains a `?` character, we can extract the search from it
   const [path, search] = props.ssrPath?.split("?") ?? [];
   if (search) (props.ssrSearch = search), (props.ssrPath = path);
+
+  // hooks can define their own `href` formatter (e.g. for hash location)
+  props.hrefs = props.hrefs ?? props.hook?.hrefs;
 
   // what is happening below: to avoid unnecessary rerenders in child components,
   // we ensure that the router object reference is stable, unless there are any
@@ -219,7 +224,10 @@ export const Link = forwardRef((props, ref) => {
   });
 
   // handle nested routers and absolute paths
-  const href = _href[0] === "~" ? _href.slice(1) : router.base + _href;
+  const href = router.hrefs(
+    _href[0] === "~" ? _href.slice(1) : router.base + _href,
+    router // pass router as a second argument for convinience
+  );
 
   return asChild && isValidElement(children)
     ? cloneElement(children, { onClick, href })

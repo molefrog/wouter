@@ -163,6 +163,47 @@ describe("`hook` prop", () => {
   });
 });
 
+describe("`hrefs` prop", () => {
+  it("sets the router's `hrefs` property", () => {
+    const formatter = () => "noop";
+
+    const {
+      result: { current: router },
+    } = renderHook(() => useRouter(), {
+      wrapper: (props) => <Router hrefs={formatter}>{props.children}</Router>,
+    });
+
+    expect(router.hrefs).toBe(formatter);
+  });
+
+  it("can infer `hrefs` from the `hook`", () => {
+    const hookHrefs = () => "noop";
+    const hook = (): [string, (v: string) => void] => {
+      return ["/foo", () => {}];
+    };
+
+    hook.hrefs = hookHrefs;
+
+    let hrefsRouterOption: ((href: string) => string) | undefined;
+
+    const { rerender, result } = renderHook(() => useRouter(), {
+      wrapper: (props) => (
+        <Router hook={hook} hrefs={hrefsRouterOption}>
+          {props.children}
+        </Router>
+      ),
+    });
+
+    expect(result.current.hrefs).toBe(hookHrefs);
+
+    // `hrefs` passed directly to the router should take precedence
+    hrefsRouterOption = (href) => "custom formatter";
+    rerender();
+
+    expect(result.current.hrefs).toBe(hrefsRouterOption);
+  });
+});
+
 it("updates the context when settings are changed", () => {
   const state: { renders: number } & Partial<ComponentProps<typeof Router>> = {
     renders: 0,

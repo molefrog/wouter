@@ -165,6 +165,27 @@ describe("<Link />", () => {
     expect(location.pathname).toBe("/goo-baz");
     expect(history.state).toBe(testState);
   });
+
+  it("can be configured to use custom href formatting", () => {
+    const formatter = (href: string) => `#${href}`;
+
+    const { getByTestId } = render(
+      <>
+        <Router hrefs={formatter}>
+          <Link href="/" data-testid="root" />
+          <Link href="/home" data-testid="home" />
+        </Router>
+
+        <Router base="/app" hrefs={formatter}>
+          <Link href="~/home" data-testid="absolute" />
+        </Router>
+      </>
+    );
+
+    expect(getByTestId("root")).toHaveAttribute("href", "#/");
+    expect(getByTestId("home")).toHaveAttribute("href", "#/home");
+    expect(getByTestId("absolute")).toHaveAttribute("href", "#/home");
+  });
 });
 
 describe("active links", () => {
