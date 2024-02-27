@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { it, expectTypeOf, assertType } from "vitest";
+import { it, expectTypeOf } from "vitest";
 import { Router, Route, BaseLocationHook, useRouter } from "wouter";
 
 it("should have at least one child", () => {
@@ -45,6 +45,22 @@ it("can be customized with router properties passed as props", () => {
 
   <Router base="/users" ssrPath="/users/all" hook={useFakeLocation}>
     Custom
+  </Router>;
+});
+
+it("accepts `hrefs` function for transforming href strings", () => {
+  const router = useRouter();
+  expectTypeOf(router.hrefs).toBeFunction();
+
+  <Router hrefs={(href: string) => href + "1"}>0</Router>;
+
+  <Router
+    hrefs={(href, router) => {
+      expectTypeOf(router).toEqualTypeOf<typeof router>();
+      return href + router.base;
+    }}
+  >
+    routers as a second argument
   </Router>;
 });
 
