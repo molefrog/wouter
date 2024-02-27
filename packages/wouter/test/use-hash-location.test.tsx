@@ -2,7 +2,7 @@ import { it, expect, beforeEach } from "vitest";
 import { renderHook, render } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Router, Route, useLocation } from "wouter";
+import { Router, Route, useLocation, Link } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 
 import { waitForHashChangeEvent } from "./test-utils";
@@ -185,4 +185,14 @@ it("works even if `hashchange` listeners are called asynchronously ", async () =
   // does not match, so inner component should not be rendered
   expect(paths).toEqual(["/a"]);
   unmount();
+});
+
+it("defines a custom way of rendering link hrefs", () => {
+  const { getByTestId } = render(
+    <Router hook={useHashLocation}>
+      <Link href="/app" data-testid="link" />
+    </Router>
+  );
+
+  expect(getByTestId("link")).toHaveAttribute("href", "#/app");
 });

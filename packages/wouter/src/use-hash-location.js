@@ -45,3 +45,5 @@ export const useHashLocation = ({ ssrPath = "/" } = {}) => [
   ),
   navigate,
 ];
+
+useHashLocation.hrefs = (href) => "#" + href;
