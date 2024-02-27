@@ -7,6 +7,8 @@ import {
 
 export type Parser = (route: Path) => { pattern: RegExp; keys: string[] };
 
+export type HrefsFormatter = (href: string, router: RouterObject) => string;
+
 // the object returned from `useRouter`
 export interface RouterObject {
   readonly hook: BaseLocationHook;
@@ -16,6 +18,7 @@ export interface RouterObject {
   readonly parser: Parser;
   readonly ssrPath?: Path;
   readonly ssrSearch?: SearchString;
+  readonly hrefs: HrefsFormatter;
 }
 
 // basic options to construct a router
@@ -26,4 +29,5 @@ export type RouterOptions = {
   parser?: Parser;
   ssrPath?: Path;
   ssrSearch?: SearchString;
+  hrefs?: HrefsFormatter;
 };
