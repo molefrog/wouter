@@ -116,7 +116,7 @@ export const Router = ({ children, ...props }) => {
   // holds to the context value: the router object
   let value = parent;
 
-  // when `ssrPath` contains a `?` character, we split can extract the search
+  // when `ssrPath` contains a `?` character, we can extract the search from it
   const [path, search] = props.ssrPath?.split("?") ?? [];
   if (search) (props.ssrSearch = search), (props.ssrPath = path);
 
