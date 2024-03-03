@@ -788,6 +788,15 @@ const handleRequest = (req, res) => {
 };
 ```
 
+Tip: wouter can pre-fill `ssrSearch`, if `ssrPath` contains the `?` character. So these are equivalent:
+
+```jsx
+<Router ssrPath="/goods?sort=asc" />;
+
+// is the same as
+<Router ssrPath="/goods" ssrSearch="sort=asc" />;
+```
+
 On the client, the static markup must be hydrated in order for your app to become interactive. Note
 that to avoid having hydration warnings, the JSX rendered on the client must match the one used by
 the server, so the `Router` component must be present.
