@@ -17,6 +17,7 @@
     "types/**/*.d.ts",
     "types/*.d.ts"
   ],
+  "main": "esm/index.js",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
