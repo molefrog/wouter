@@ -452,7 +452,13 @@ Link will always wrap its children in an `<a />` tag, unless `asChild` prop is p
 // in order for navigation to work!
 ```
 
-Active links are not yet shipped out-of-the-box, but you can easily [implement them](#how-do-i-make-a-link-active-for-the-current-route) using `useLocation`.
+When you pass a function as a `className` prop, it will be called with a boolean value indicating whether the link is active for the current route. You can use this to style active links (e.g. for links in navigation menu)
+
+```jsx
+<Link className={(active) => (active ? "active" : "")}>Nav</Link>
+```
+
+Read more about [active links here](#how-do-i-make-a-link-active-for-the-current-route).
 
 ### `<Switch />`
 
@@ -615,18 +621,21 @@ If you want to have access to the matched segment of the path you can use wildca
 
 ### How do I make a link active for the current route?
 
-There are cases when you need to highlight an active link, for example, in the navigation bar. While
-this functionality isn't provided out-of-the-box, you can easily write your own `<Link />` wrapper
-and detect if the path is active by using the `useRoute` hook. The `useRoute(pattern)` hook returns
-a pair of `[match, params]`, where `match` is a boolean value that tells if the pattern matches
-current location:
+Instead of a regular `className` string, provide a function to use custom class when this link matches the current route. Note that it will always perform an exact match (i.e. `/users` will not be active for `/users/1`).
+
+```jsx
+<Link className={(active) => (active ? "active" : "")}>Nav link</Link>
+```
+
+If you need to control other props, such as `aria-current` or `style`, you can write your own `<Link />` wrapper
+and detect if the path is active by using the `useRoute` hook.
 
 ```js
 const [isActive] = useRoute(props.href);
 
 return (
-  <Link {...props}>
-    <a className={isActive ? "active" : ""}>{props.children}</a>
+  <Link {...props} asChild>
+    <a style={isActive ? { color: "red" } : {}}>{props.children}</a>
   </Link>
 );
 ```
