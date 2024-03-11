@@ -516,7 +516,7 @@ fetchOrders().then((orders) => {
 });
 ```
 
-### `<Router hook={hook} parser={fn} base={basepath} />`
+### `<Router hook={hook} parser={fn} base={basepath} hrefs={fn} />`
 
 Unlike _React Router_, routes in wouter **don't have to be wrapped in a top-level component**. An
 internal router object will be constructed on demand, so you can start writing your app without
@@ -552,6 +552,8 @@ available options:
   `/app/users/:id`. Has the same interface as the [`parse`](https://github.com/lukeed/regexparam?tab=readme-ov-file#regexparamparseinput-regexp) function from `regexparam`. See [this example](#are-strict-routes-supported) that demonstrates custom parser feature.
 
 - **`ssrPath: string`** and **`ssrSearch: string`** use these when [rendering your app on the server](#server-side-rendering-support-ssr).
+
+- `hrefs: (href: boolean) => string` — a function for transforming `href` attribute of an `<a />` element rendered by `Link`. It is used to support hash-based routing. By default, `href` attribute is the same as the `href` or `to` prop of a `Link`. A location hook can also define a `hook.hrefs` property, in this case the `href` will be inferred.
 
 ## FAQ and Code Recipes
 
