@@ -1,12 +1,14 @@
 import * as React from "react";
 
-// React.useInsertionEffect is not available in React <18
 const {
   useEffect,
   useLayoutEffect,
   useRef,
-  useInsertionEffect: useBuiltinInsertionEffect,
 } = React;
+
+// React.useInsertionEffect is not available in React <18
+// This hack fixes a transpilation issue on some apps
+const useBuiltinInsertionEffect = React['useInsertion' + 'Effect'];
 
 export {
   useRef,
