@@ -3,7 +3,6 @@ import * as React from "react";
 const {
   useEffect,
   useLayoutEffect,
-  useRef,
 } = React;
 
 // React.useInsertionEffect is not available in React <18
@@ -58,7 +57,7 @@ export const useInsertionEffect =
 // .current at the right timing."
 // So we will have to make do with this "close enough" approach for now.
 export const useEvent = (fn) => {
-  const ref = useRef([fn, (...args) => ref[0](...args)]).current;
+  const ref = React.useRef([fn, (...args) => ref[0](...args)]).current;
   // Per Dan Abramov: useInsertionEffect executes marginally closer to the
   // correct timing for ref synchronization than useLayoutEffect on React 18.
   // See: https://github.com/facebook/react/pull/25881#issuecomment-1356244360
