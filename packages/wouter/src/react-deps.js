@@ -11,7 +11,6 @@ const {
 const useBuiltinInsertionEffect = React['useInsertion' + 'Effect'];
 
 export {
-  useRef,
   useState,
   useContext,
   createContext,
