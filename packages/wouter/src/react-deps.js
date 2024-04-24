@@ -1,11 +1,5 @@
 import * as React from "react";
 
-const {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} = React;
-
 // React.useInsertionEffect is not available in React <18
 // This hack fixes a transpilation issue on some apps
 const useBuiltinInsertionEffect = React['useInsertion' + 'Effect'];
@@ -43,8 +37,8 @@ const canUseDOM = !!(
 // To get around it, we can conditionally useEffect on the server (no-op) and
 // useLayoutEffect in the browser."
 export const useIsomorphicLayoutEffect = canUseDOM
-  ? useLayoutEffect
-  : useEffect;
+  ? React.useLayoutEffect
+  : React.useEffect;
 
 // useInsertionEffect is already a noop on the server.
 // See: https://github.com/facebook/react/blob/main/packages/react-server/src/ReactFizzHooks.js
@@ -58,7 +52,7 @@ export const useInsertionEffect =
 // .current at the right timing."
 // So we will have to make do with this "close enough" approach for now.
 export const useEvent = (fn) => {
-  const ref = useRef([fn, (...args) => ref[0](...args)]).current;
+  const ref = React.useRef([fn, (...args) => ref[0](...args)]).current;
   // Per Dan Abramov: useInsertionEffect executes marginally closer to the
   // correct timing for ref synchronization than useLayoutEffect on React 18.
   // See: https://github.com/facebook/react/pull/25881#issuecomment-1356244360
