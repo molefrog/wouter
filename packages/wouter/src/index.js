@@ -187,11 +187,11 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
 
 export const Link = forwardRef((props, ref) => {
   const router = useRouter();
-  const [path, navigate] = useLocationFromRouter(router);
+  const [currentPath, navigate] = useLocationFromRouter(router);
 
   const {
     to,
-    href: _href = to,
+    href: targetPath = to,
     onClick: _onClick,
     asChild,
     children,
@@ -219,13 +219,13 @@ export const Link = forwardRef((props, ref) => {
     _onClick?.(event);
     if (!event.defaultPrevented) {
       event.preventDefault();
-      navigate(_href, props);
+      navigate(targetPath, props);
     }
   });
 
   // handle nested routers and absolute paths
   const href = router.hrefs(
-    _href[0] === "~" ? _href.slice(1) : router.base + _href,
+    targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath,
     router // pass router as a second argument for convinience
   );
 
@@ -236,7 +236,7 @@ export const Link = forwardRef((props, ref) => {
         onClick,
         href,
         // `className` can be a function to apply the class if this link is active
-        className: cls?.call ? cls(path === href) : cls,
+        className: cls?.call ? cls(currentPath === targetPath) : cls,
         children,
         ref,
       });
