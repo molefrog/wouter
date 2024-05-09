@@ -226,6 +226,34 @@ describe("active links", () => {
     expect(element).not.toHaveClass("active");
     expect(element).toHaveClass("link");
   });
+
+  it("correctly highlights active links when using custom href formatting", () => {
+    const formatter = (href: string) => `#${href}`;
+    const { navigate, hook } = memoryLocation({ path: "/" });
+
+    const { getByText } = render(
+      <Router hook={hook} hrefs={formatter}>
+        <Link
+          href="/"
+          className={(isActive) => {
+            return [isActive ? "active" : "", "link"].join(" ");
+          }}
+        >
+          Click Me
+        </Link>
+      </Router>
+    );
+
+    const element = getByText("Click Me");
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveClass("active");
+    expect(element).toHaveClass("link");
+
+    act(() => navigate("/about"));
+
+    expect(element).not.toHaveClass("active");
+    expect(element).toHaveClass("link");
+  });
 });
 
 describe("<Link /> with `asChild` prop", () => {
