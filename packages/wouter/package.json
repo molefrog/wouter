@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "description": "Minimalist-friendly ~1.5KB router for React",
   "type": "module",
   "keywords": [
