@@ -79,21 +79,39 @@ export const useSearch = () => {
 };
 
 const matchRoute = (parser, route, path, loose) => {
+  // if the route is a regex, `loose` is ignored and
+
   // when parser is in "loose" mode, `$base` is equal to the
   // first part of the route that matches the pattern
   // (e.g. for pattern `/a/:b` and path `/a/1/2/3` the `$base` is `a/1`)
   // we use this for route nesting
   const { pattern, keys } = parser(route || "*", loose);
-  const [$base, ...matches] = pattern.exec(path) || [];
+  // array destructuring loses keys, so this is done in two steps
+  const result = pattern.exec(path) || [];
+  const [$base, ...matches] = result;
 
   return $base !== undefined
     ? [
         true,
 
-        // an object with parameters matched, e.g. { foo: "bar" } for "/:foo"
-        // we "zip" two arrays here to construct the object
-        // ["foo"], ["bar"] → { foo: "bar" }
-        Object.fromEntries(keys.map((key, i) => [key, matches[i]])),
+        (() => {
+          /// for regex paths, `keys` will always be false
+          if (keys !== false) {
+            // an object with parameters matched, e.g. { foo: "bar" } for "/:foo"
+            // we "zip" two arrays here to construct the object
+            // ["foo"], ["bar"] → { foo: "bar" }
+            return Object.fromEntries(keys.map((key, i) => [key, matches[i]]));
+          }
+
+          // convert the array to an instance of object
+          // this makes it easier to integrate with the existing param implementation
+          let obj = { ...matches };
+
+          // merge named capture groups with matches array
+          result.groups && Object.assign(obj, result.groups);
+
+          return obj;
+        })(),
 
         // the third value if only present when parser is in "loose" mode,
         // so that we can extract the base path for nested routes

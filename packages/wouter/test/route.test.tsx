@@ -95,3 +95,47 @@ it("supports `base` routers with relative path", () => {
 
   unmount();
 });
+
+it("supports `path` prop with regex", () => {
+  const result = testRouteRender(
+    "/foo",
+    <Route path={/[/]foo/}>
+      <h1>Hello!</h1>
+    </Route>
+  );
+
+  expect(result.findByType("h1").props.children).toBe("Hello!");
+});
+
+it("supports regex path named params", () => {
+  const result = testRouteRender(
+    "/users/alex",
+    <Route path={/[/]users[/](?<name>[a-z]+)/}>
+      {(params) => <h1>{params.name}</h1>}
+    </Route>
+  );
+
+  expect(result.findByType("h1").props.children).toBe("alex");
+});
+
+it("supports regex path anonymous params", () => {
+  const result = testRouteRender(
+    "/users/alex",
+    <Route path={/[/]users[/]([a-z]+)/}>
+      {(params) => <h1>{params[0]}</h1>}
+    </Route>
+  );
+
+  expect(result.findByType("h1").props.children).toBe("alex");
+});
+
+it("rejects when a path does not match the regex", () => {
+  const result = testRouteRender(
+    "/users/1234",
+    <Route path={/[/]users[/](?<name>[a-z]+)/}>
+      {(params) => <h1>{params.name}</h1>}
+    </Route>
+  );
+
+  expect(() => result.findByType("h1")).toThrow();
+});
