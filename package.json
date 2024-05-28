@@ -8,7 +8,7 @@
     "packages/wouter-preact"
   ],
   "scripts": {
-    "fix:p": "prettier --write './**/*.(js|ts){x,}'",
+    "fix:p": "prettier --write \"./**/*.(js|ts){x,}\"",
     "test": "vitest",
     "size": "size-limit",
     "build": "npm run build -ws",

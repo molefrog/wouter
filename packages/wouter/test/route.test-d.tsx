@@ -8,9 +8,9 @@ describe("`path` prop", () => {
     assertType(<Route />);
   });
 
-  it("should be a string", () => {
+  it("should be a string or RegExp", () => {
     let a: ComponentProps<typeof Route>["path"];
-    expectTypeOf(a).toMatchTypeOf<string | undefined>();
+    expectTypeOf(a).toMatchTypeOf<string | RegExp | undefined>();
   });
 });
 

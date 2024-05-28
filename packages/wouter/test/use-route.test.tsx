@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useRoute, Match, Router } from "wouter";
+import { useRoute, Match, Router, RegexRouteParams } from "wouter";
 import { it, expect } from "vitest";
 import { memoryLocation } from "wouter/memory-location";
 
@@ -108,6 +108,14 @@ it("ignores escaped slashes", () => {
   });
 });
 
+it("supports regex patterns", () => {
+  assertRoute(/[/]foo/, "/foo", {});
+  assertRoute(/[/]([a-z]+)/, "/bar", { 0: "bar" });
+  assertRoute(/[/]([a-z]+)/, "/123", false);
+  assertRoute(/[/](?<param>[a-z]+)/, "/bar", { 0: "bar", param: "bar" });
+  assertRoute(/[/](?<param>[a-z]+)/, "/123", false);
+});
+
 it("reacts to pattern updates", () => {
   const { result, rerender } = renderHook(
     ({ pattern }: { pattern: string }) => useRoute(pattern),
@@ -170,7 +178,7 @@ it("reacts to location updates", () => {
  */
 
 const assertRoute = (
-  pattern: string,
+  pattern: string | RegExp,
   location: string,
   rhs: false | Match | Record<string, string | undefined>
 ) => {

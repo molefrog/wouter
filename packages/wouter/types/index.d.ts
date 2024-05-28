@@ -33,11 +33,13 @@ export * from "./router.js";
 
 import { RouteParams } from "regexparam";
 
+export type RegexRouteParams = { [key: string | number]: string | undefined };
+
 /**
  * Route patterns and parameters
  */
 export interface DefaultParams {
-  readonly [paramName: string]: string | undefined;
+  readonly [paramName: string | number]: string | undefined;
 }
 
 export type Params<T extends DefaultParams = DefaultParams> = T;
@@ -61,23 +63,33 @@ export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
 
 export interface RouteProps<
   T extends DefaultParams | undefined = undefined,
-  RoutePath extends Path = Path
+  RoutePath extends Path | RegExp = Path | RegExp
 > {
   children?:
     | ((
-        params: T extends DefaultParams ? T : RouteParams<RoutePath>
+        params: T extends DefaultParams
+          ? T
+          : RoutePath extends string
+          ? RouteParams<RoutePath>
+          : RegexRouteParams
       ) => ReactNode)
     | ReactNode;
   path?: RoutePath;
   component?: ComponentType<
-    RouteComponentProps<T extends DefaultParams ? T : RouteParams<RoutePath>>
+    RouteComponentProps<
+      T extends DefaultParams
+        ? T
+        : RoutePath extends string
+        ? RouteParams<RoutePath>
+        : RegexRouteParams
+    >
   >;
   nest?: boolean;
 }
 
 export function Route<
   T extends DefaultParams | undefined = undefined,
-  RoutePath extends Path = Path
+  RoutePath extends Path | RegExp = Path | RegExp
 >(props: RouteProps<T, RoutePath>): ReturnType<FunctionComponent>;
 
 /*
@@ -150,10 +162,16 @@ export function useRouter(): RouterObject;
 
 export function useRoute<
   T extends DefaultParams | undefined = undefined,
-  RoutePath extends Path = Path
+  RoutePath extends Path | RegExp = Path | RegExp
 >(
   pattern: RoutePath
-): Match<T extends DefaultParams ? T : RouteParams<RoutePath>>;
+): Match<
+  T extends DefaultParams
+    ? T
+    : RoutePath extends string
+    ? RouteParams<RoutePath>
+    : RegexRouteParams
+>;
 
 export function useLocation<
   H extends BaseLocationHook = BrowserLocationHook
