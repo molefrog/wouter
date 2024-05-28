@@ -218,6 +218,12 @@ useRoute("/app*");
 // optional wildcards, matches "/orders", "/orders/"
 // and "/orders/completed/list"
 useRoute("/orders/*?");
+
+// regex for matching complex patterns,
+// matches "/hello:123"
+useRoute(/[/]([a-z]+):([0-9]+)[/]?/);
+// and with named capture groups
+useRoute(/[/](?<word>[a-z]+):(?<num>[0-9]+)[/]?/);
 ```
 
 The second item in the pair `params` is an object with parameters or null if there was no match. For wildcard segments the parameter name is `"*"`:
@@ -315,6 +321,21 @@ const User = () => {
 };
 
 <Route path="/user/:id" component={User}> />
+```
+
+For regex paths, parameters are accessible as indices or through their group name.
+
+```js
+import { Route, useParams } from "wouter";
+
+const User = () => {
+  const params = useParams();
+
+  params.id; // "1"
+  params[0]; // "1"
+};
+
+<Route path={/[/]user[/](?<id>[0-9]+)[/]?/} component={User}> />
 ```
 
 ### `useSearch`: query strings
@@ -420,6 +441,10 @@ If you call `useLocation()` inside the last route, it will return `/orders` and 
   </Route>
 </Route>
 ```
+
+**Note:** The `nest` prop has no effect on regexes passed in.
+It will only determine if nested routes will match the rest of path or match against the same path.
+To make a strict path regex, use regex techniques like `[/]?$` (this matches an optional end slash and the end of the string).
 
 ### `<Link href={path} />`
 
