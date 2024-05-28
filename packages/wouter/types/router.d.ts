@@ -5,7 +5,10 @@ import {
   BaseSearchHook,
 } from "./location-hook.js";
 
-export type Parser = (route: Path | RegExp, loose?: boolean) => { pattern: RegExp; keys: string[] };
+export type Parser = (
+  route: Path | RegExp,
+  loose?: boolean
+) => { pattern: RegExp; keys: string[] };
 
 export type HrefsFormatter = (href: string, router: RouterObject) => string;
 

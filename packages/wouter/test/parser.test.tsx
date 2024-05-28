@@ -7,7 +7,7 @@ import { Router, useRouter, useRoute, Parser } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 
 // Custom parser that uses `path-to-regexp` instead of `regexparam`
-const pathToRegexpParser: Parser = (route: string) => {
+const pathToRegexpParser: Parser = (route: string | RegExp) => {
   const keys: Key[] = [];
   const pattern = pathToRegexp(route, keys);
 
