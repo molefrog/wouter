@@ -6,7 +6,7 @@ import {
 } from "./location-hook.js";
 
 export type Parser = (
-  route: Path | RegExp,
+  route: Path,
   loose?: boolean
 ) => { pattern: RegExp; keys: string[] };
 

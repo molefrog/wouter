@@ -79,15 +79,21 @@ export const useSearch = () => {
 };
 
 const matchRoute = (parser, route, path, loose) => {
-  // if the route is a regex, `loose` is ignored and
+  // if the input is a regexp, skip parsing
+  const { pattern, keys } = (() => {
+    if (route instanceof RegExp) {
+      return { keys: false, pattern: route };
+    }
+    return parser(route || "*", loose);
+  })();
+
+  // array destructuring loses keys, so this is done in two steps
+  const result = pattern.exec(path) || [];
 
   // when parser is in "loose" mode, `$base` is equal to the
   // first part of the route that matches the pattern
   // (e.g. for pattern `/a/:b` and path `/a/1/2/3` the `$base` is `a/1`)
   // we use this for route nesting
-  const { pattern, keys } = parser(route || "*", loose);
-  // array destructuring loses keys, so this is done in two steps
-  const result = pattern.exec(path) || [];
   const [$base, ...matches] = result;
 
   return $base !== undefined
