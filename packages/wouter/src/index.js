@@ -80,12 +80,10 @@ export const useSearch = () => {
 
 const matchRoute = (parser, route, path, loose) => {
   // if the input is a regexp, skip parsing
-  const { pattern, keys } = (() => {
-    if (route instanceof RegExp) {
-      return { keys: false, pattern: route };
-    }
-    return parser(route || "*", loose);
-  })();
+  const { pattern, keys } =
+    route instanceof RegExp
+      ? { keys: false, pattern: route }
+      : parser(route || "*", loose);
 
   // array destructuring loses keys, so this is done in two steps
   const result = pattern.exec(path) || [];
