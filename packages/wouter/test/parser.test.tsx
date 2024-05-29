@@ -7,7 +7,7 @@ import { Router, useRouter, useRoute, Parser } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 
 // Custom parser that uses `path-to-regexp` instead of `regexparam`
-const pathToRegexpParser: Parser = (route: string | RegExp) => {
+const pathToRegexpParser: Parser = (route: string) => {
   const keys: Key[] = [];
   const pattern = pathToRegexp(route, keys);
 
@@ -42,6 +42,6 @@ it("allows to change the behaviour of route matching", () => {
 
   expect(result.current).toStrictEqual([
     true,
-    { pages: undefined, rest: "10/bio", 0: "home" },
+    { 0: "home", 1: undefined, 2: "10/bio", pages: undefined, rest: "10/bio" },
   ]);
 });

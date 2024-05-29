@@ -34,6 +34,9 @@ export * from "./router.js";
 
 import { RouteParams } from "regexparam";
 
+export type StringRouteParams<T extends string> = RouteParams<T> & {
+  [param: number]: string | undefined;
+};
 export type RegexRouteParams = { [key: string | number]: string | undefined };
 
 /**
@@ -71,7 +74,7 @@ export interface RouteProps<
         params: T extends DefaultParams
           ? T
           : RoutePath extends string
-          ? RouteParams<RoutePath>
+          ? StringRouteParams<RoutePath>
           : RegexRouteParams
       ) => ReactNode)
     | ReactNode;
@@ -81,7 +84,7 @@ export interface RouteProps<
       T extends DefaultParams
         ? T
         : RoutePath extends string
-        ? RouteParams<RoutePath>
+        ? StringRouteParams<RoutePath>
         : RegexRouteParams
     >
   >;
@@ -170,7 +173,7 @@ export function useRoute<
   T extends DefaultParams
     ? T
     : RoutePath extends string
-    ? RouteParams<RoutePath>
+    ? StringRouteParams<RoutePath>
     : RegexRouteParams
 >;
 
@@ -183,7 +186,7 @@ export function useSearch<
 >(): ReturnType<H>;
 
 export function useParams<T = undefined>(): T extends string
-  ? RouteParams<T>
+  ? StringRouteParams<T>
   : T extends undefined
   ? DefaultParams
   : T;

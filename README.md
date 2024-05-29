@@ -318,12 +318,15 @@ const User = () => {
   const params = useParams();
 
   params.id; // "1"
+
+  // alternatively, use the index to access the prop
+  params[0]; // "1"
 };
 
 <Route path="/user/:id" component={User}> />
 ```
 
-For regex paths, parameters are accessible as indices or through their group name.
+It is the same for regex paths. Capture groups can be accessed by their index, or if there is a named capture group, that can be used instead.
 
 ```js
 import { Route, useParams } from "wouter";

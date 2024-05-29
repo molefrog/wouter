@@ -40,6 +40,9 @@ it("infers parameters from the route path", () => {
 
   if (inferedParams) {
     expectTypeOf(inferedParams).toMatchTypeOf<{
+      0?: string;
+      1?: string;
+      2?: string;
       name?: string;
       id: string;
       wildcard?: string;
