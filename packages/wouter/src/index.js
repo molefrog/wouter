@@ -99,20 +99,22 @@ const matchRoute = (parser, route, path, loose) => {
         true,
 
         (() => {
-          /// for regex paths, `keys` will always be false
-          if (keys !== false) {
-            // an object with parameters matched, e.g. { foo: "bar" } for "/:foo"
-            // we "zip" two arrays here to construct the object
-            // ["foo"], ["bar"] → { foo: "bar" }
-            return Object.fromEntries(keys.map((key, i) => [key, matches[i]]));
-          }
+          // for regex paths, `keys` will always be false
+
+          // an object with parameters matched, e.g. { foo: "bar" } for "/:foo"
+          // we "zip" two arrays here to construct the object
+          // ["foo"], ["bar"] → { foo: "bar" }
+          const groups =
+            keys !== false
+              ? Object.fromEntries(keys.map((key, i) => [key, matches[i]]))
+              : result.groups;
 
           // convert the array to an instance of object
           // this makes it easier to integrate with the existing param implementation
           let obj = { ...matches };
 
           // merge named capture groups with matches array
-          result.groups && Object.assign(obj, result.groups);
+          groups && Object.assign(obj, groups);
 
           return obj;
         })(),

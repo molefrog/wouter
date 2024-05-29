@@ -18,7 +18,10 @@ it("contains a * parameter when used inside an empty <Route />", () => {
     ),
   });
 
-  expect(result.current).toEqual({ "*": "app-2/goods/tees" });
+  expect(result.current).toEqual({
+    0: "app-2/goods/tees",
+    "*": "app-2/goods/tees",
+  });
 });
 
 it("returns an empty object when there are no params", () => {
@@ -40,7 +43,12 @@ it("returns parameters from the closest parent <Route /> match", () => {
     ),
   });
 
-  expect(result.current).toEqual({ id: "1", name: "maria" });
+  expect(result.current).toEqual({
+    0: "1",
+    1: "maria",
+    id: "1",
+    name: "maria",
+  });
 });
 
 it("rerenders with parameters change", () => {
@@ -57,10 +65,20 @@ it("rerenders with parameters change", () => {
   expect(result.current).toBeNull();
 
   act(() => navigate("/posts/all"));
-  expect(result.current).toEqual({ a: "posts", b: "all" });
+  expect(result.current).toEqual({
+    0: "posts",
+    1: "all",
+    a: "posts",
+    b: "all",
+  });
 
   act(() => navigate("/posts/latest"));
-  expect(result.current).toEqual({ a: "posts", b: "latest" });
+  expect(result.current).toEqual({
+    0: "posts",
+    1: "latest",
+    a: "posts",
+    b: "latest",
+  });
 });
 
 it("extracts parameters of the nested route", () => {
@@ -79,5 +97,10 @@ it("extracts parameters of the nested route", () => {
     ),
   });
 
-  expect(result.current).toEqual({ version: "v2", chain: "eth" });
+  expect(result.current).toEqual({
+    0: "v2",
+    1: "eth",
+    version: "v2",
+    chain: "eth",
+  });
 });

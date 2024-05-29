@@ -10,12 +10,18 @@ it("returns an object with arbitrary parameters", () => {
 
   expectTypeOf(params).toBeObject();
   expectTypeOf(params.any).toEqualTypeOf<string | undefined>();
+  expectTypeOf(params[0]).toEqualTypeOf<string | undefined>();
 });
 
 it("can infer the type of parameters from the route path", () => {
   const params = useParams<"/app/users/:name?/:id">();
 
-  expectTypeOf(params).toMatchTypeOf<{ id: string; name?: string }>();
+  expectTypeOf(params).toMatchTypeOf<{
+    0?: string;
+    1?: string;
+    id: string;
+    name?: string;
+  }>();
 });
 
 it("can accept the custom type of parameters as a generic argument", () => {

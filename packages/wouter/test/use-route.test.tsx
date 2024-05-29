@@ -6,21 +6,24 @@ import { memoryLocation } from "wouter/memory-location";
 it("is case insensitive", () => {
   assertRoute("/Users", "/users", {});
   assertRoute("/HomePage", "/Homepage", {});
-  assertRoute("/Users/:Name", "/users/alex", { Name: "alex" });
+  assertRoute("/Users/:Name", "/users/alex", { 0: "alex", Name: "alex" });
 });
 
 it("supports required segments", () => {
-  assertRoute("/:page", "/users", { page: "users" });
+  assertRoute("/:page", "/users", { 0: "users", page: "users" });
   assertRoute("/:page", "/users/all", false);
-  assertRoute("/:page", "/1", { page: "1" });
+  assertRoute("/:page", "/1", { 0: "1", page: "1" });
 
-  assertRoute("/home/:page/etc", "/home/users/etc", { page: "users" });
+  assertRoute("/home/:page/etc", "/home/users/etc", {
+    0: "users",
+    page: "users",
+  });
   assertRoute("/home/:page/etc", "/home/etc", false);
 
   assertRoute(
     "/root/payments/:id/refunds/:refId",
     "/root/payments/1/refunds/2",
-    [true, { id: "1", refId: "2" }]
+    [true, { 0: "1", 1: "2", id: "1", refId: "2" }]
   );
 });
 
@@ -31,22 +34,41 @@ it("ignores the trailing slash", () => {
   assertRoute("/home/", "/home/", {});
   assertRoute("/home/", "/home", {});
 
-  assertRoute("/:page", "/users/", [true, { page: "users" }]);
-  assertRoute("/catalog/:section?", "/catalog/", { section: undefined });
+  assertRoute("/:page", "/users/", [true, { 0: "users", page: "users" }]);
+  assertRoute("/catalog/:section?", "/catalog/", {
+    0: undefined,
+    section: undefined,
+  });
 });
 
 it("supports trailing wildcards", () => {
-  assertRoute("/app/*", "/app/", { "*": "" });
-  assertRoute("/app/*", "/app/dashboard/intro", { "*": "dashboard/intro" });
-  assertRoute("/app/*", "/app/charges/1", { "*": "charges/1" });
+  assertRoute("/app/*", "/app/", { 0: "", "*": "" });
+  assertRoute("/app/*", "/app/dashboard/intro", {
+    0: "dashboard/intro",
+    "*": "dashboard/intro",
+  });
+  assertRoute("/app/*", "/app/charges/1", { 0: "charges/1", "*": "charges/1" });
 });
 
 it("supports wildcards in the middle of the pattern", () => {
-  assertRoute("/app/*/settings", "/app/users/settings", { "*": "users" });
-  assertRoute("/app/*/settings", "/app/users/1/settings", { "*": "users/1" });
+  assertRoute("/app/*/settings", "/app/users/settings", {
+    0: "users",
+    "*": "users",
+  });
+  assertRoute("/app/*/settings", "/app/users/1/settings", {
+    0: "users/1",
+    "*": "users/1",
+  });
 
-  assertRoute("/*/payments/:id", "/home/payments/1", { "*": "home", id: "1" });
+  assertRoute("/*/payments/:id", "/home/payments/1", {
+    0: "home",
+    1: "1",
+    "*": "home",
+    id: "1",
+  });
   assertRoute("/*/payments/:id?", "/home/payments", {
+    0: "home",
+    1: undefined,
     "*": "home",
     id: undefined,
   });
@@ -54,56 +76,78 @@ it("supports wildcards in the middle of the pattern", () => {
 
 it("uses a question mark to define optional segments", () => {
   assertRoute("/books/:genre/:title?", "/books/scifi", {
+    0: "scifi",
+    1: undefined,
     genre: "scifi",
     title: undefined,
   });
   assertRoute("/books/:genre/:title?", "/books/scifi/dune", {
+    0: "scifi",
+    1: "dune",
     genre: "scifi",
     title: "dune",
   });
   assertRoute("/books/:genre/:title?", "/books/scifi/dune/all", false);
 
   assertRoute("/app/:company?/blog/:post", "/app/apple/blog/mac", {
+    0: "apple",
+    1: "mac",
     company: "apple",
     post: "mac",
   });
 
   assertRoute("/app/:company?/blog/:post", "/app/blog/mac", {
+    0: undefined,
+    1: "mac",
     company: undefined,
     post: "mac",
   });
 });
 
 it("supports optional wildcards", () => {
-  assertRoute("/app/*?", "/app/blog/mac", { "*": "blog/mac" });
-  assertRoute("/app/*?", "/app", { "*": undefined });
-  assertRoute("/app/*?/dashboard", "/app/v1/dashboard", { "*": "v1" });
-  assertRoute("/app/*?/dashboard", "/app/dashboard", { "*": undefined });
+  assertRoute("/app/*?", "/app/blog/mac", { 0: "blog/mac", "*": "blog/mac" });
+  assertRoute("/app/*?", "/app", { 0: undefined, "*": undefined });
+  assertRoute("/app/*?/dashboard", "/app/v1/dashboard", { 0: "v1", "*": "v1" });
+  assertRoute("/app/*?/dashboard", "/app/dashboard", {
+    0: undefined,
+    "*": undefined,
+  });
   assertRoute("/app/*?/users/:name", "/app/users/karen", {
+    0: undefined,
+    1: "karen",
     "*": undefined,
     name: "karen",
   });
 });
 
 it("supports other characters in segments", () => {
-  assertRoute("/users/:name", "/users/1-alex", { name: "1-alex" });
+  assertRoute("/users/:name", "/users/1-alex", { 0: "1-alex", name: "1-alex" });
   assertRoute("/staff/:name/:bio?", "/staff/John Doe 3", {
+    0: "John Doe 3",
+    1: undefined,
     name: "John Doe 3",
     bio: undefined,
   });
   assertRoute("/staff/:name/:bio?", "/staff/John Doe 3/bio", {
+    0: "John Doe 3",
+    1: "bio",
     name: "John Doe 3",
     bio: "bio",
   });
 
   assertRoute("/users/:name/bio", "/users/$102_Kathrine&/bio", {
+    0: "$102_Kathrine&",
     name: "$102_Kathrine&",
   });
 });
 
 it("ignores escaped slashes", () => {
-  assertRoute("/:param/bar", "/foo%2Fbar/bar", { param: "foo%2Fbar" });
+  assertRoute("/:param/bar", "/foo%2Fbar/bar", {
+    0: "foo%2Fbar",
+    param: "foo%2Fbar",
+  });
   assertRoute("/:param", "/foo%2Fbar%D1%81%D0%B0%D0%BD%D1%8F", {
+    0: "foo%2Fbarсаня",
     param: "foo%2Fbarсаня",
   });
 });
@@ -138,17 +182,27 @@ it("reacts to pattern updates", () => {
   rerender({ pattern: "/blog/:category/:post/:action" });
   expect(result.current).toStrictEqual([
     true,
-    { category: "products", post: "40", action: "read-all" },
+    {
+      0: "products",
+      1: "40",
+      2: "read-all",
+      category: "products",
+      post: "40",
+      action: "read-all",
+    },
   ]);
 
   rerender({ pattern: "/blog/products/:id?/read-all" });
-  expect(result.current).toStrictEqual([true, { id: "40" }]);
+  expect(result.current).toStrictEqual([true, { 0: "40", id: "40" }]);
 
   rerender({ pattern: "/blog/products/:name" });
   expect(result.current).toStrictEqual([false, null]);
 
   rerender({ pattern: "/blog/*" });
-  expect(result.current).toStrictEqual([true, { "*": "products/40/read-all" }]);
+  expect(result.current).toStrictEqual([
+    true,
+    { 0: "products/40/read-all", "*": "products/40/read-all" },
+  ]);
 });
 
 it("reacts to location updates", () => {
@@ -161,16 +215,19 @@ it("reacts to location updates", () => {
   expect(result.current).toStrictEqual([false, null]);
 
   act(() => navigate("/cities/berlin"));
-  expect(result.current).toStrictEqual([true, { city: "berlin" }]);
+  expect(result.current).toStrictEqual([true, { 0: "berlin", city: "berlin" }]);
 
   act(() => navigate("/cities/Tokyo"));
-  expect(result.current).toStrictEqual([true, { city: "Tokyo" }]);
+  expect(result.current).toStrictEqual([true, { 0: "Tokyo", city: "Tokyo" }]);
 
   act(() => navigate("/about"));
   expect(result.current).toStrictEqual([false, null]);
 
   act(() => navigate("/cities"));
-  expect(result.current).toStrictEqual([true, { city: undefined }]);
+  expect(result.current).toStrictEqual([
+    true,
+    { 0: undefined, city: undefined },
+  ]);
 });
 
 /**
