@@ -14,6 +14,7 @@ import {
 
 import {
   Path,
+  PathPattern,
   BaseLocationHook,
   HookReturnValue,
   HookNavigationOptions,
@@ -63,7 +64,7 @@ export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
 
 export interface RouteProps<
   T extends DefaultParams | undefined = undefined,
-  RoutePath extends Path | RegExp = Path | RegExp
+  RoutePath extends PathPattern = PathPattern
 > {
   children?:
     | ((
@@ -89,7 +90,7 @@ export interface RouteProps<
 
 export function Route<
   T extends DefaultParams | undefined = undefined,
-  RoutePath extends Path | RegExp = Path | RegExp
+  RoutePath extends PathPattern = PathPattern
 >(props: RouteProps<T, RoutePath>): ReturnType<FunctionComponent>;
 
 /*
@@ -162,7 +163,7 @@ export function useRouter(): RouterObject;
 
 export function useRoute<
   T extends DefaultParams | undefined = undefined,
-  RoutePath extends Path | RegExp = Path | RegExp
+  RoutePath extends PathPattern = PathPattern
 >(
   pattern: RoutePath
 ): Match<

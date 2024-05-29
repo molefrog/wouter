@@ -1,6 +1,13 @@
 import { ComponentProps } from "react";
 import { it, expectTypeOf } from "vitest";
-import { Router, Route, BaseLocationHook, useRouter } from "wouter";
+import {
+  Router,
+  Route,
+  BaseLocationHook,
+  useRouter,
+  Parser,
+  Path,
+} from "wouter";
 
 it("should have at least one child", () => {
   // @ts-expect-error
@@ -62,6 +69,17 @@ it("accepts `hrefs` function for transforming href strings", () => {
   >
     routers as a second argument
   </Router>;
+});
+
+it("accepts `parser` function for generating regular expressions", () => {
+  const parser: Parser = (path: Path, loose?: boolean) => {
+    return {
+      pattern: new RegExp(`^${path}${loose === true ? "(?=$|[/])" : "[/]$"}`),
+      keys: [],
+    };
+  };
+
+  <Router parser={parser}>this is a valid router</Router>;
 });
 
 it("does not accept other props", () => {

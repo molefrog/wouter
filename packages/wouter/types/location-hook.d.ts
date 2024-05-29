@@ -4,6 +4,8 @@
 
 export type Path = string;
 
+export type PathPattern = string | RegExp;
+
 export type SearchString = string;
 
 // the base useLocation hook type. Any custom hook (including the
