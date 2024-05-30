@@ -1,6 +1,6 @@
 {
   "name": "wouter-preact",
-  "version": "3.1.3",
+  "version": "3.2.0",
   "description": "Minimalist-friendly ~1.5KB router for Preact",
   "type": "module",
   "keywords": [
