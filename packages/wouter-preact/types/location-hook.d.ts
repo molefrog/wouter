@@ -8,6 +8,10 @@ export type PathPattern = string | RegExp;
 
 export type SearchString = string;
 
+export type URLSearchParamsInit = ConstructorParameters<
+  typeof URLSearchParams
+>[0];
+
 // the base useLocation hook type. Any custom hook (including the
 // default one) should inherit from it.
 export type BaseLocationHook = (
@@ -15,6 +19,23 @@ export type BaseLocationHook = (
 ) => [Path, (path: Path, ...args: any[]) => any];
 
 export type BaseSearchHook = (...args: any[]) => SearchString;
+
+export type BaseSearchParamsHook = (
+  ...args: Parameters<BaseSearchHook>
+) => [
+  URLSearchParams,
+  (
+    nextInit:
+      | URLSearchParamsInit
+      | ((prev: URLSearchParams) => URLSearchParamsInit),
+    ...args: Parameters<ReturnType<BaseLocationHook>[1]> extends [
+      infer _,
+      ...infer Args
+    ]
+      ? Args
+      : never
+  ) => void
+];
 
 /*
  * Utility types that operate on hook

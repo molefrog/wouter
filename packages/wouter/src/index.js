@@ -78,6 +78,23 @@ export const useSearch = () => {
   return unescape(stripQm(router.searchHook(router)));
 };
 
+export const useSearchParams = () => {
+  const router = useRouter();
+  const [, navigate] = useLocationFromRouter(router);
+
+  const search = unescape(stripQm(router.searchHook(router)));
+  const searchParams = new URLSearchParams(search);
+
+  const setSearchParams = useEvent((nextInit, navOpts) => {
+    const newSearchParams = new URLSearchParams(
+      typeof nextInit === "function" ? nextInit(searchParams) : nextInit
+    );
+    navigate("?" + newSearchParams, navOpts);
+  });
+
+  return [searchParams, setSearchParams];
+};
+
 const matchRoute = (parser, route, path, loose) => {
   // if the input is a regexp, skip parsing
   const { pattern, keys } =
