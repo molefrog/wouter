@@ -128,7 +128,7 @@ const App = () => (
 
 ### Browser Support
 
-This library is designed for **ES2019+** compatibility. If you need to support older browsers, make sure that you transpile `node_modules`. Additionally, the minimum supported TypeScript version is 4.1 in order to support route parameter inference.
+This library is designed for **ES2020+** compatibility. If you need to support older browsers, make sure that you transpile `node_modules`. Additionally, the minimum supported TypeScript version is 4.1 in order to support route parameter inference.
 
 ## Wouter API
 
