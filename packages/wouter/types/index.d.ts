@@ -25,7 +25,7 @@ import {
   BrowserSearchHook,
 } from "./use-browser-location.js";
 
-import { RouterObject, RouterOptions } from "./router.js";
+import { Parser, RouterObject, RouterOptions } from "./router.js";
 
 // these files only export types, so we can re-export them as-is
 // in TS 5.0 we'll be able to use `export type * from ...`
@@ -190,5 +190,25 @@ export function useParams<T = undefined>(): T extends string
   : T extends undefined
   ? DefaultParams
   : T;
+
+/*
+ * Helpers
+ */
+
+export function matchRoute<
+  T extends DefaultParams | undefined = undefined,
+  RoutePath extends PathPattern = PathPattern
+>(
+  parser: Parser,
+  pattern: RoutePath,
+  path: string,
+  loose?: boolean
+): Match<
+  T extends DefaultParams
+    ? T
+    : RoutePath extends string
+    ? StringRouteParams<RoutePath>
+    : RegexRouteParams
+>;
 
 // tslint:enable:no-unnecessary-generics

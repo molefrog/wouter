@@ -78,7 +78,7 @@ export const useSearch = () => {
   return unescape(stripQm(router.searchHook(router)));
 };
 
-const matchRoute = (parser, route, path, loose) => {
+export const matchRoute = (parser, route, path, loose) => {
   // if the input is a regexp, skip parsing
   const { pattern, keys } =
     route instanceof RegExp
