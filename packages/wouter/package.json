@@ -1,6 +1,6 @@
 {
   "name": "wouter",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Minimalist-friendly ~1.5KB router for React",
   "type": "module",
   "keywords": [
@@ -12,11 +12,7 @@
     "hooks",
     "useLocation"
   ],
-  "files": [
-    "esm",
-    "types/**/*.d.ts",
-    "types/*.d.ts"
-  ],
+  "files": ["esm", "types/**/*.d.ts", "types/*.d.ts"],
   "main": "esm/index.js",
   "exports": {
     ".": {
@@ -39,18 +35,10 @@
   "types": "types/index.d.ts",
   "typesVersions": {
     ">=4.1": {
-      "types/index.d.ts": [
-        "types/index.d.ts"
-      ],
-      "use-browser-location": [
-        "types/use-browser-location.d.ts"
-      ],
-      "use-hash-location": [
-        "types/use-hash-location.d.ts"
-      ],
-      "memory-location": [
-        "types/memory-location.d.ts"
-      ]
+      "types/index.d.ts": ["types/index.d.ts"],
+      "use-browser-location": ["types/use-browser-location.d.ts"],
+      "use-hash-location": ["types/use-hash-location.d.ts"],
+      "memory-location": ["types/memory-location.d.ts"]
     }
   },
   "scripts": {
