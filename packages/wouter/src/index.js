@@ -192,10 +192,13 @@ const h_route = ({ children, component }, params) => {
   return typeof children === "function" ? children(params) : children;
 };
 
-const useCachedParams = (value, comp = JSON.stringify) => {
-  const prev = useRef(Params0);
-  return (prev.current =
-    comp(value) === comp(prev.current) ? prev.current : value);
+// a hook to cache the params object between renders (if they are shallow equal)
+const useCachedParams = (value) => {
+  let prev = useRef(Params0),
+    curr = prev.current;
+
+  for (const k in value) if (value[k] !== curr[k]) curr = value;
+  return (prev.current = curr);
 };
 
 export const Route = ({ path, nest, match, ...renderProps }) => {
@@ -208,6 +211,7 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
     match ?? matchRoute(router.parser, path, location, nest);
 
   const params = useCachedParams({ ...useParams(), ...routeParams });
+
   if (!matches) return null;
 
   const children = base
