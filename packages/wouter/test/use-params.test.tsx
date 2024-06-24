@@ -94,7 +94,7 @@ it("rerenders with parameters change", () => {
   expect(result.current).toBeNull();
 
   act(() => navigate("/posts/all"));
-  expect(result.current).toEqual({
+  expect(result.current).toMatchObject({
     0: "posts",
     1: "all",
     a: "posts",
@@ -102,7 +102,7 @@ it("rerenders with parameters change", () => {
   });
 
   act(() => navigate("/posts/latest"));
-  expect(result.current).toEqual({
+  expect(result.current).toMatchObject({
     0: "posts",
     1: "latest",
     a: "posts",
@@ -132,4 +132,20 @@ it("extracts parameters of the nested route", () => {
     version: "v2",
     chain: "eth",
   });
+});
+
+it("keeps the object ref the same if params haven't changed", () => {
+  const { hook } = memoryLocation({ path: "/foo/bar" });
+
+  const { result, rerender } = renderHook(() => useParams(), {
+    wrapper: (props) => (
+      <Router hook={hook}>
+        <Route path="/:a/:b/*?">{props.children}</Route>
+      </Router>
+    ),
+  });
+
+  const firstRenderedParams = result.current;
+  rerender();
+  expect(result.current).toBe(firstRenderedParams);
 });
