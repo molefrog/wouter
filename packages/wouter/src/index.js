@@ -194,13 +194,27 @@ const h_route = ({ children, component }, params) => {
 export const Route = ({ path, nest, match, ...renderProps }) => {
   const router = useRouter();
   const [location] = useLocationFromRouter(router);
+  const parentParams = useParams();
 
-  const [matches, params, base] =
+  const [matches, routeParams, base] =
     // `match` is a special prop to give up control to the parent,
     // it is used by the `Switch` to avoid double matching
     match ?? matchRoute(router.parser, path, location, nest);
 
   if (!matches) return null;
+
+  // Implement param inheritance and overriding
+  const params = Object.entries(parentParams).reduce((acc, [key, value]) => {
+    if (typeof value === "string") {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+
+  // Override with route params
+  Object.entries(routeParams).forEach(([key, value]) => {
+    params[key] = value;
+  });
 
   const children = base
     ? h(Router, { base }, h_route(renderProps, params))
