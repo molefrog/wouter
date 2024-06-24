@@ -32,7 +32,7 @@ it("returns an empty object when there are no params", () => {
   expect(result.current).toEqual({});
 });
 
-it("returns parameters from the closest parent <Route /> match", () => {
+it("contains parameters from the closest parent <Route />", () => {
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => (
       <Router hook={memoryLocation({ path: "/app/users/1/maria" }).hook}>
@@ -43,11 +43,40 @@ it("returns parameters from the closest parent <Route /> match", () => {
     ),
   });
 
-  expect(result.current).toEqual({
+  expect(result.current).toMatchObject({
     0: "1",
     1: "maria",
     id: "1",
     name: "maria",
+  });
+});
+
+it("inherits parameters from parent nested routes", () => {
+  const { result } = renderHook(() => useParams(), {
+    wrapper: (props) => (
+      <Router
+        hook={
+          memoryLocation({ path: "/dash/users/10/alex/bio/john/summary-1" })
+            .hook
+        }
+      >
+        <Route path="/:page" nest>
+          <Route path="/users/:id/:name" nest>
+            <Route path="/bio/:name/*">{props.children}</Route>
+          </Route>
+        </Route>
+      </Router>
+    ),
+  });
+
+  expect(result.current).toMatchObject({
+    name: "john", // name gets overriden
+    "*": "summary-1",
+    page: "dash",
+    id: "10",
+    // number params are overriden
+    0: "john",
+    1: "summary-1",
   });
 });
 
