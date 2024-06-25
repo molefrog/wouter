@@ -149,3 +149,18 @@ it("keeps the object ref the same if params haven't changed", () => {
   rerender();
   expect(result.current).toBe(firstRenderedParams);
 });
+
+it("works when the route becomes matching", () => {
+  const { hook, navigate } = memoryLocation({ path: "/" });
+
+  const { result } = renderHook(() => useParams(), {
+    wrapper: (props) => (
+      <Router hook={hook}>
+        <Route path="/:id">{props.children}</Route>
+      </Router>
+    ),
+  });
+
+  act(() => navigate("/123"));
+  expect(result.current).toMatchObject({ id: "123" });
+});

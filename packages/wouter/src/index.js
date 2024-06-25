@@ -210,6 +210,9 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
     // it is used by the `Switch` to avoid double matching
     match ?? matchRoute(router.parser, path, location, nest);
 
+  // when `routeParams` is `null` (there was no match), the argument
+  // below becomes {...null} = {}, see the Object Spread specs
+  // https://tc39.es/proposal-object-rest-spread/#AbstractOperations-CopyDataProperties
   const params = useCachedParams({ ...useParams(), ...routeParams });
 
   if (!matches) return null;
