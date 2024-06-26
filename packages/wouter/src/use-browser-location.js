@@ -28,22 +28,23 @@ const subscribeToLocationUpdates = (callback) => {
 export const useLocationProperty = (fn, ssrFn) =>
   useSyncExternalStore(subscribeToLocationUpdates, fn, ssrFn);
 
-const currentSearch = () => location.search;
-
 export const useSearch = ({ ssrSearch = "" } = {}) =>
-  useLocationProperty(currentSearch, () => ssrSearch);
-
-const currentPathname = () => location.pathname;
+  useLocationProperty(
+    () => location.search,
+    () => ssrSearch
+  );
 
 export const usePathname = ({ ssrPath } = {}) =>
   useLocationProperty(
-    currentPathname,
-    ssrPath ? () => ssrPath : currentPathname
+    () => location.pathname,
+    ssrPath ? () => ssrPath : () => location.pathname
   );
 
-const currentHistoryState = () => history.state;
 export const useHistoryState = () =>
-  useLocationProperty(currentHistoryState, () => null);
+  useLocationProperty(
+    () => history.state,
+    () => null
+  );
 
 export const navigate = (to, { replace = false, state = null } = {}) =>
   history[replace ? eventReplaceState : eventPushState](state, "", to);
