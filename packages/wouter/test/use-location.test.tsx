@@ -129,6 +129,34 @@ describe.each([
       expect(result.current[0]).toBe("/шеллы");
       unmount();
     });
+
+    it("can accept unescaped basepaths", async () => {
+      const { result, unmount } = renderHook(() => useLocation(), {
+        wrapper: createContainer({
+          base: "/hello мир", // basepath is not escaped
+          hook: stub.hook,
+        }),
+      });
+
+      await stub.act(() => stub.navigate("/hello%20%D0%BC%D0%B8%D1%80/rel"));
+      expect(result.current[0]).toBe("/rel");
+
+      unmount();
+    });
+
+    it("can accept unescaped basepaths", async () => {
+      const { result, unmount } = renderHook(() => useLocation(), {
+        wrapper: createContainer({
+          base: "/hello%20%D0%BC%D0%B8%D1%80", // basepath is already escaped
+          hook: stub.hook,
+        }),
+      });
+
+      await stub.act(() => stub.navigate("/hello мир/rel"));
+      expect(result.current[0]).toBe("/rel");
+
+      unmount();
+    });
   });
 
   describe("`update` second parameter", () => {
@@ -168,6 +196,21 @@ describe.each([
 
       await stub.act(() => update("/dashboard"));
       expect(stub.location()).toBe("/app/dashboard");
+      unmount();
+    });
+
+    it("ignores the '/' basepath", async () => {
+      const { result, unmount } = renderHook(() => useLocation(), {
+        wrapper: createContainer({
+          base: "/",
+          hook: stub.hook,
+        }),
+      });
+
+      const update = result.current[1];
+
+      await stub.act(() => update("/dashboard"));
+      expect(stub.location()).toBe("/dashboard");
       unmount();
     });
   });
