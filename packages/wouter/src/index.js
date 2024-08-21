@@ -17,7 +17,7 @@ import {
   useIsomorphicLayoutEffect,
   useEvent,
 } from "./react-deps.js";
-import { absolutePath, relativePath, unescape, stripQm } from "./paths.js";
+import { absolutePath, relativePath, sanitizeSearch } from "./paths.js";
 
 /*
  * Router and router context. Router is a lightweight object that represents the current
@@ -67,7 +67,7 @@ const useLocationFromRouter = (router) => {
   // it can be passed down as an element prop without any performance concerns.
   // (This is achieved via `useEvent`.)
   return [
-    unescape(relativePath(router.base, location)),
+    relativePath(router.base, location),
     useEvent((to, navOpts) => navigate(absolutePath(to, router.base), navOpts)),
   ];
 };
@@ -76,7 +76,7 @@ export const useLocation = () => useLocationFromRouter(useRouter());
 
 export const useSearch = () => {
   const router = useRouter();
-  return unescape(stripQm(router.searchHook(router)));
+  return sanitizeSearch(router.searchHook(router));
 };
 
 export const matchRoute = (parser, route, path, loose) => {

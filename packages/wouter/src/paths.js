@@ -2,23 +2,31 @@
  * Transforms `path` into its relative `base` version
  * If base isn't part of the path provided returns absolute path e.g. `~/app`
  */
-export const relativePath = (base = "", path) =>
+const _relativePath = (base, path) =>
   !path.toLowerCase().indexOf(base.toLowerCase())
     ? path.slice(base.length) || "/"
     : "~" + path;
 
-export const absolutePath = (to, base = "") =>
-  to[0] === "~" ? to.slice(1) : base + to;
+/**
+ * When basepath is `undefined` or '/' it is ignored (we assume it's empty string)
+ */
+const baseDefaults = (base = "") => (base === "/" ? "" : base);
+
+export const absolutePath = (to, base) =>
+  to[0] === "~" ? to.slice(1) : baseDefaults(base) + to;
+
+export const relativePath = (base = "", path) =>
+  _relativePath(unescape(baseDefaults(base)), unescape(path));
 
 /*
  * Removes leading question mark
  */
-export const stripQm = (str) => (str[0] === "?" ? str.slice(1) : str);
+const stripQm = (str) => (str[0] === "?" ? str.slice(1) : str);
 
 /*
  * decodes escape sequences such as %20
  */
-export const unescape = (str) => {
+const unescape = (str) => {
   try {
     return decodeURI(str);
   } catch (_e) {
@@ -26,3 +34,5 @@ export const unescape = (str) => {
     return str;
   }
 };
+
+export const sanitizeSearch = (search) => unescape(stripQm(search));
