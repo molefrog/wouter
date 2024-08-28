@@ -230,7 +230,7 @@ export const Link = forwardRef((props, ref) => {
   const [currentPath, navigate] = useLocationFromRouter(router);
 
   const {
-    to,
+    to = "",
     href: targetPath = to,
     onClick: _onClick,
     asChild,
@@ -265,9 +265,7 @@ export const Link = forwardRef((props, ref) => {
 
   // handle nested routers and absolute paths
   const href = router.hrefs(
-    (targetPath ?? "")[0] === "~"
-      ? targetPath.slice(1)
-      : router.base + targetPath,
+    targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath,
     router // pass router as a second argument for convinience
   );
 
