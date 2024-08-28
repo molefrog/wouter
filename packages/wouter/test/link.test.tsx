@@ -322,4 +322,17 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link).toHaveAttribute("href", "/about");
     expect(link).toHaveTextContent("Click Me");
   });
+
+  it("missing href or to won't crash", () => {
+    const { getByText } = render(
+      /* @ts-expect-error */
+      <Link>Click Me</Link>
+    );
+
+    const link = getByText("Click Me");
+
+    expect(link.tagName).toBe("A");
+    expect(link).toHaveAttribute("href", undefined);
+    expect(link).toHaveTextContent("Click Me");
+  });
 });
