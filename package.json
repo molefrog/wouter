@@ -159,7 +159,7 @@
     "react-dom": "^18.2.0",
     "react-test-renderer": "^18.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^3.7.4",
+    "rollup": "^3.29.5",
     "size-limit": "^10.0.1",
     "typescript": "5.2.2",
     "vitest": "^0.34.6"
