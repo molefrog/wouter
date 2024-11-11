@@ -78,7 +78,7 @@ export const useSearch = () => {
   return unescape(stripQm(router.searchHook(router)));
 };
 
-const matchRoute = (parser, route, path, loose) => {
+export const matchRoute = (parser, route, path, loose) => {
   // when parser is in "loose" mode, `$base` is equal to the
   // first part of the route that matches the pattern
   // (e.g. for pattern `/a/:b` and path `/a/1/2/3` the `$base` is `a/1`)
