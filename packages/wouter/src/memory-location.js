@@ -7,10 +7,12 @@ import { useSyncExternalStore } from "./react-deps.js";
 
 export const memoryLocation = ({
   path = "/",
+  searchPath = "",
   static: staticLocation,
   record,
 } = {}) => {
-  let currentPath = path;
+  let currentPath = path + (searchPath && (path.split("?")[1] ? "&" : "?")) + searchPath;
+  let currentSearch = currentPath.split("?")[1] || "";
   const history = [currentPath];
   const emitter = mitt();
 
@@ -24,6 +26,7 @@ export const memoryLocation = ({
     }
 
     currentPath = path;
+    currentSearch = path.split("?")[1] || "";
     emitter.emit("navigate", path);
   };
 
@@ -39,15 +42,20 @@ export const memoryLocation = ({
     navigate,
   ];
 
+  const useMemoryQuery = () => [
+    useSyncExternalStore(subscribe, () => currentSearch)
+  ];
+
   function reset() {
     // clean history array with mutation to preserve link
     history.splice(0, history.length);
 
-    navigateImplementation(path);
+    navigateImplementation(path + (searchPath && (path.split("?")[1] ? "&" : "?")) + searchPath);
   }
 
   return {
     hook: useMemoryLocation,
+    searchHook: useMemoryQuery,
     navigate,
     history: record ? history : undefined,
     reset: record ? reset : undefined,
