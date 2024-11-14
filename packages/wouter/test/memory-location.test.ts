@@ -23,6 +23,17 @@ it("should support initial path", () => {
   unmount();
 });
 
+it("should support initial path with query", () => {
+  const { searchHook } = memoryLocation({ path: "/test-case?foo=bar" });
+  // const { searchHook } = memoryLocation({ path: "/test-case", searchPath: "foo=bar" });
+
+  const { result, unmount } = renderHook(() => searchHook());
+  const [value] = result.current;
+
+  expect(value).toBe("foo=bar");
+  unmount();
+});
+
 it('should return location hook that has initial path "/" by default', () => {
   const { hook } = memoryLocation();
 
@@ -30,6 +41,16 @@ it('should return location hook that has initial path "/" by default', () => {
   const [value] = result.current;
 
   expect(value).toBe("/");
+  unmount();
+});
+
+it('should return search hook that has initial query "" by default', () => {
+  const { searchHook } = memoryLocation();
+
+  const { result, unmount } = renderHook(() => searchHook());
+  const [value] = result.current;
+
+  expect(value).toBe("");
   unmount();
 });
 

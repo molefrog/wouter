@@ -1,6 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { useSearch, Router } from "wouter";
 import { navigate } from "wouter/use-browser-location";
+import { memoryLocation } from "wouter/memory-location";
 import { it, expect, beforeEach } from "vitest";
 
 beforeEach(() => history.replaceState(null, "", "/"));
@@ -22,6 +23,18 @@ it("can be customized in the Router", () => {
   });
 
   expect(result.current).toEqual("none");
+});
+
+it("can be customized with memoryLocation", () => {
+  const { searchHook } = memoryLocation({ path: "/foo?key=value" });
+
+  const { result } = renderHook(() => useSearch(), {
+    wrapper: (props) => {
+      return <Router searchHook={searchHook}>{props.children}</Router>;
+    },
+  });
+
+  expect(result.current).toEqual("key=value");
 });
 
 it("unescapes search string", () => {
