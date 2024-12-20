@@ -248,12 +248,12 @@ By default, it uses `useBrowserLocation` under the hood, though you can configur
 import { useLocation } from "wouter";
 
 const CurrentLocation = () => {
-  const [location, setLocation] = useLocation();
+  const [location, navigate] = useLocation();
 
   return (
     <div>
       {`The current page is: ${location}`}
-      <a onClick={() => setLocation("/somewhere")}>Click to update</a>
+      <a onClick={() => navigate("/somewhere")}>Click to update</a>
     </div>
   );
 };
