@@ -171,7 +171,7 @@ Import from `wouter` module.
 Import from `wouter` module.
 
 - **[`<Route />`](#route-pathpattern-)** — conditionally renders a component based on a pattern.
-- **[`<Link />`](#link-hrefpath-)** — wraps `<a>`, allows to perfom a navigation.
+- **[`<Link />`](#link-hrefpath-)** — wraps `<a>`, allows to perform a navigation.
 - **[`<Switch />`](#switch-)** — exclusive routing, only renders the first matched route.
 - **[`<Redirect />`](#redirect-topath-)** — when rendered, performs an immediate navigation.
 - **[`<Router />`](#router-hookhook-matchermatchfn-basebasepath-)** — an optional top-level
