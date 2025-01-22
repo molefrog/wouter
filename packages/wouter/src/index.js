@@ -16,6 +16,7 @@ import {
   forwardRef,
   useIsomorphicLayoutEffect,
   useEvent,
+  useMemo,
 } from "./react-deps.js";
 import { absolutePath, relativePath, sanitizeSearch } from "./paths.js";
 
@@ -201,6 +202,25 @@ const useCachedParams = (value) => {
   if (Object.keys(value).length === 0) curr = value;
   return (prev.current = curr);
 };
+
+export function useSearchParams() {
+  const [location, navigate] = useLocation();
+
+  const search = useSearch();
+  const searchParams = useMemo(() => new URLSearchParams(search), [search]);
+
+  // cached value before next render, so you can call setSearchParams multiple times
+  let tempSearchParams = searchParams;
+
+  const setSearchParams = useEvent((nextInit, options) => {
+    tempSearchParams = new URLSearchParams(
+      typeof nextInit === 'function' ? nextInit(tempSearchParams) : nextInit,
+    );
+    navigate(location + '?' + tempSearchParams, options);
+  })
+
+  return [searchParams, setSearchParams];
+}
 
 export const Route = ({ path, nest, match, ...renderProps }) => {
   const router = useRouter();

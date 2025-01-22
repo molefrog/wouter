@@ -5,6 +5,7 @@ import * as React from "react";
 const useBuiltinInsertionEffect = React["useInsertion" + "Effect"];
 
 export {
+  useMemo,
   useRef,
   useState,
   useContext,
