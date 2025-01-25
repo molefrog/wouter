@@ -62,6 +62,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
     - [Customizing the location hook](#customizing-the-location-hook)
   - [`useParams`: extracting matched parameters](#useparams-extracting-matched-parameters)
   - [`useSearch`: query strings](#usesearch-query-strings)
+  - [`useSearchParams`: search parameters](#usesearchparams-search-parameters)
   - [`useRouter`: accessing the router object](#userouter-accessing-the-router-object)
 - [Component API](#component-api)
 
@@ -349,7 +350,6 @@ Use this hook to get the current search (query) string value. It will cause your
 import { useSearch } from "wouter";
 
 // returns "tab=settings&id=1"
-// the hook for extracting search parameters is coming soon!
 const searchString = useSearch();
 ```
 
@@ -360,6 +360,51 @@ For the SSR, use `ssrSearch` prop passed to the router.
 ```
 
 Refer to [Server-Side Rendering](#server-side-rendering-support-ssr) for more info on rendering and hydration.
+
+### `useSearchParams`: search parameters
+
+Allow you to get and set any search parameters. The first returned value is a `URLSearchParams` object and the second returned value is a setter that accepts a `URLSearchParams` object with options.
+
+```jsx
+import { useSearchParams } from 'wouter-search';
+
+const [searchParams, setSearchParams] = useSearchParams();
+
+// extract a specific search parameter
+const id = searchParams.get('id');
+
+// modify a specific search parameter
+setSearchParams((prev) => {
+  prev.set('tab', 'settings');
+});
+
+// override all search parameters
+setSearchParams({
+  id: 1234,
+  tab: 'settings',
+});
+
+// by default, setSearchParams() will push a new history entry
+// to avoid this, set `replace` option to `true`
+setSearchParams(
+  (prev) => {
+    prev.set('order', 'desc');
+  },
+  {
+    replace: true,
+  },
+);
+
+// you can also pass a history state in options
+setSearchParams(
+  (prev) => {
+    prev.set('foo', 'bar');
+  },
+  {
+    state: 'hello',
+  },
+);
+```
 
 ### `useRouter`: accessing the router object
 
