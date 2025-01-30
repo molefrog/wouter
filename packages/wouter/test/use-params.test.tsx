@@ -183,3 +183,41 @@ it("makes the params an empty object, when there are no path params", () => {
   act(() => navigate("/posts"));
   expect(Object.keys(result.current).length).toBe(0);
 });
+
+it("removes route parameters when no longer present in the path", () => {
+  // Start at a route that has both 'category' and 'page' in its params
+  const { hook, navigate } = memoryLocation({
+    path: "/products/categories/apple/page/1",
+  });
+
+  // Render useParams within two routes: one with /page/:page, one without
+  const { result } = renderHook(() => useParams(), {
+    wrapper: (props) => (
+      <Router hook={hook}>
+        <Switch>
+          <Route path="/products/categories/:category">{props.children}</Route>
+          <Route path="/products/categories/:category/page/:page">
+            {props.children}
+          </Route>
+        </Switch>
+      </Router>
+    ),
+  });
+
+  // Initial params should include 'category' and 'page'
+  expect(result.current).toMatchObject({
+    0: "apple",
+    1: "1",
+    category: "apple",
+    page: "1",
+  });
+
+  // Navigate to a path that no longer contains the page param
+  act(() => navigate("/products/categories/apple"));
+
+  // The 'page' param should now be removed
+  expect(result.current).toEqual({
+    0: "apple",
+    category: "apple",
+  });
+});

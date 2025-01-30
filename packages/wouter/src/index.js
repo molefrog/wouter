@@ -195,14 +195,16 @@ const h_route = ({ children, component }, params) => {
   return typeof children === "function" ? children(params) : children;
 };
 
-// a hook to cache the params object between renders (if they are shallow equal)
+// Cache params object between renders if values are shallow equal
 const useCachedParams = (value) => {
-  let prev = useRef(Params0),
-    curr = prev.current;
-
-  for (const k in value) if (value[k] !== curr[k]) curr = value;
-  if (Object.keys(value).length === 0) curr = value;
-  return (prev.current = curr);
+  let prev = useRef(Params0);
+  const curr = prev.current;
+  return (prev.current =
+    // Update cache if number of params changed or any value changed
+    Object.keys(value).length !== Object.keys(curr).length ||
+    Object.entries(value).some(([k, v]) => v !== curr[k])
+      ? value // Return new value if there are changes
+      : curr); // Return cached value if nothing changed
 };
 
 export function useSearchParams() {
