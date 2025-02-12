@@ -37,6 +37,21 @@ it("can be customized with memoryLocation", () => {
   expect(result.current).toEqual("key=value");
 });
 
+it("can be customized with memoryLocation using search path parameter", () => {
+  const { searchHook } = memoryLocation({
+    path: "/foo?key=value",
+    searchPath: "foo=bar",
+  });
+
+  const { result } = renderHook(() => useSearch(), {
+    wrapper: (props) => {
+      return <Router searchHook={searchHook}>{props.children}</Router>;
+    },
+  });
+
+  expect(result.current).toEqual("key=value&foo=bar");
+});
+
 it("unescapes search string", () => {
   const { result: searchResult } = renderHook(() => useSearch());
 
