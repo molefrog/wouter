@@ -11,7 +11,14 @@ export const memoryLocation = ({
   static: staticLocation,
   record,
 } = {}) => {
-  let currentPath = path + (searchPath && (path.split("?")[1] ? "&" : "?")) + searchPath;
+  let initialPath = path;
+  if (searchPath) {
+    // join with & if path contains search query, and ? otherwise
+    initialPath += path.split("?")[1] ? "&" : "?";
+    initialPath += searchPath;
+  }
+
+  let currentPath = initialPath;
   let currentSearch = currentPath.split("?")[1] || "";
   const history = [currentPath];
   const emitter = mitt();
@@ -43,14 +50,14 @@ export const memoryLocation = ({
   ];
 
   const useMemoryQuery = () => [
-    useSyncExternalStore(subscribe, () => currentSearch)
+    useSyncExternalStore(subscribe, () => currentSearch),
   ];
 
   function reset() {
     // clean history array with mutation to preserve link
     history.splice(0, history.length);
 
-    navigateImplementation(path + (searchPath && (path.split("?")[1] ? "&" : "?")) + searchPath);
+    navigateImplementation(initialPath);
   }
 
   return {

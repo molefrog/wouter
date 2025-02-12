@@ -1,11 +1,20 @@
-import { BaseLocationHook, BaseSearchHook, Path, SearchString } from "./location-hook.js";
+import {
+  BaseLocationHook,
+  BaseSearchHook,
+  Path,
+  SearchString,
+} from "./location-hook.js";
 
 type Navigate<S = any> = (
   to: Path,
   options?: { replace?: boolean; state?: S }
 ) => void;
 
-type HookReturnValue = { hook: BaseLocationHook; searchHook: BaseSearchHook, navigate: Navigate };
+type HookReturnValue = {
+  hook: BaseLocationHook;
+  searchHook: BaseSearchHook;
+  navigate: Navigate;
+};
 type StubHistory = { history: Path[]; reset: () => void };
 
 export function memoryLocation(options?: {
