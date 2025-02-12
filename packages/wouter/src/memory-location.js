@@ -18,8 +18,7 @@ export const memoryLocation = ({
     initialPath += searchPath;
   }
 
-  let currentPath = initialPath;
-  let currentSearch = currentPath.split("?")[1] || "";
+  let [currentPath, currentSearch = ""] = initialPath.split("?");
   const history = [currentPath];
   const emitter = mitt();
 
@@ -32,8 +31,7 @@ export const memoryLocation = ({
       }
     }
 
-    currentPath = path;
-    currentSearch = path.split("?")[1] || "";
+    [currentPath, currentSearch = ""] = path.split("?");
     emitter.emit("navigate", path);
   };
 
