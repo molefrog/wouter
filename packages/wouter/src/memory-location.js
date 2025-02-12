@@ -19,7 +19,7 @@ export const memoryLocation = ({
   }
 
   let [currentPath, currentSearch = ""] = initialPath.split("?");
-  const history = [currentPath];
+  const history = [initialPath];
   const emitter = mitt();
 
   const navigateImplementation = (path, { replace = false } = {}) => {
