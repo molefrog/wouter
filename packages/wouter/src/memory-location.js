@@ -47,9 +47,8 @@ export const memoryLocation = ({
     navigate,
   ];
 
-  const useMemoryQuery = () => [
-    useSyncExternalStore(subscribe, () => currentSearch),
-  ];
+  const useMemoryQuery = () =>
+    useSyncExternalStore(subscribe, () => currentSearch);
 
   function reset() {
     // clean history array with mutation to preserve link
