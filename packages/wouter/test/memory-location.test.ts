@@ -25,12 +25,24 @@ it("should support initial path", () => {
 
 it("should support initial path with query", () => {
   const { searchHook } = memoryLocation({ path: "/test-case?foo=bar" });
-  // const { searchHook } = memoryLocation({ path: "/test-case", searchPath: "foo=bar" });
 
   const { result, unmount } = renderHook(() => searchHook());
   const [value] = result.current;
 
   expect(value).toBe("foo=bar");
+  unmount();
+});
+
+it("should support search path as parameter", () => {
+  const { searchHook } = memoryLocation({
+    path: "/test-case?foo=bar",
+    searchPath: "key=value",
+  });
+
+  const { result, unmount } = renderHook(() => searchHook());
+  const [value] = result.current;
+
+  expect(value).toBe("foo=bar&key=value");
   unmount();
 });
 
