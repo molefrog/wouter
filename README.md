@@ -45,7 +45,7 @@
 Wouter provides a simple API that many developers and library authors appreciate. Some notable
 projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
 **[React-three-fiber](https://github.com/react-spring/react-three-fiber)**,
-**[Sunmao UI](https://sunmao-ui.com/)**, **[Million](https://millionjs.org/)** and many more.
+**[Sunmao UI](https://sunmao-ui.com/)**, **[Million](https://million.dev/)** and many more.
 
 ## Table of Contents
 
