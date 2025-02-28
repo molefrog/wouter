@@ -364,7 +364,7 @@ Refer to [Server-Side Rendering](#server-side-rendering-support-ssr) for more in
 Allow you to get and set any search parameters. The first returned value is a `URLSearchParams` object and the second returned value is a setter that accepts a `URLSearchParams` object with options.
 
 ```jsx
-import { useSearchParams } from 'wouter-search';
+import { useSearchParams } from 'wouter';
 
 const [searchParams, setSearchParams] = useSearchParams();
 
