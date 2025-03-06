@@ -178,6 +178,19 @@ export function useSearch<
   H extends BaseSearchHook = BrowserSearchHook
 >(): ReturnType<H>;
 
+export type URLSearchParamsInit = ConstructorParameters<
+  typeof URLSearchParams
+>[0];
+
+export type SetSearchParams = (
+  nextInit:
+    | URLSearchParamsInit
+    | ((prev: URLSearchParams) => URLSearchParamsInit),
+  options?: { replace?: boolean; state?: any }
+) => void;
+
+export function useSearchParams(): [URLSearchParams, SetSearchParams];
+
 export function useParams<T = undefined>(): T extends string
   ? StringRouteParams<T>
   : T extends undefined
