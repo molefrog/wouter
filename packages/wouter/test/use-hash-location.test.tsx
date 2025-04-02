@@ -1,4 +1,4 @@
-import { it, expect, beforeEach } from "vitest";
+import { it, expect, beforeEach, vi } from "vitest";
 import { renderHook, render } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -207,4 +207,46 @@ it("defines a custom way of rendering link hrefs", () => {
   );
 
   expect(getByTestId("link")).toHaveAttribute("href", "#/app");
+});
+
+it("interacts properly with the history stack", () => {
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+
+  // case: replace, expect no history stack changes
+  const historyStackCountBeforeReplace = history.length;
+  navigate("/app/users", { replace: true });
+  expect(location.hash).toBe("#/app/users");
+  expect(history.length).toBe(historyStackCountBeforeReplace);
+
+  // case: push, expect history stack increase by 1
+  const historyStackCountBeforePush = history.length;
+  navigate("/app/users/2");
+  expect(location.hash).toBe("#/app/users/2");
+  expect(history.length).toBe(historyStackCountBeforePush + 1);
+});
+
+it("dispatches hashchange event when options.replace is true", () => {
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+
+  const hashChangeFn = vi.fn();
+  addEventListener("hashchange", hashChangeFn);
+
+  navigate("/foo/bar", { replace: true });
+  expect(hashChangeFn).toBeCalled();
+
+  removeEventListener("hashchange", hashChangeFn);
+});
+
+it("detects history change when navigate with options.replace is called", async () => {
+  const nextTick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+
+  const newPath = "/foo/bar/baz";
+  navigate(newPath, { replace: true });
+  await nextTick();
+  expect(result.current[0]).toBe(newPath);
 });

@@ -22,10 +22,30 @@ const subscribeToHashUpdates = (callback) => {
 // leading '#' is ignored, leading '/' is optional
 const currentHashLocation = () => "/" + location.hash.replace(/^#?\/?/, "");
 
-export const navigate = (to, { state = null } = {}) => {
+export const navigate = (to, { state = null, replace = false } = {}) => {
   // calling `replaceState` allows us to set the history
   // state without creating an extra entry
   const [hash, search] = to.replace(/^#?\/?/, "").split("?");
+
+  if (replace) {
+    history.replaceState(
+      state,
+      "",
+      // keep the current pathname, but replace query string and hash
+      location.pathname +
+        (search ? `?${search}` : location.search) +
+        `#/${hash}`
+    );
+
+    const event =
+      typeof HashChangeEvent !== "undefined"
+        ? new HashChangeEvent("hashchange")
+        : new Event("hashchange");
+
+    dispatchEvent(event);
+
+    return;
+  }
 
   history.replaceState(
     state,
