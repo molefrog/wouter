@@ -23,40 +23,25 @@ const subscribeToHashUpdates = (callback) => {
 const currentHashLocation = () => "/" + location.hash.replace(/^#?\/?/, "");
 
 export const navigate = (to, { state = null, replace = false } = {}) => {
-  // calling `replaceState` allows us to set the history
-  // state without creating an extra entry
   const [hash, search] = to.replace(/^#?\/?/, "").split("?");
 
+  const newRelativePath =
+    location.pathname + (search ? `?${search}` : location.search) + `#/${hash}`;
+  const oldURL = new URL(window.location.href);
+  const newURL = new URL(newRelativePath, window.location.origin);
+
   if (replace) {
-    history.replaceState(
-      state,
-      "",
-      // keep the current pathname, but replace query string and hash
-      location.pathname +
-        (search ? `?${search}` : location.search) +
-        `#/${hash}`
-    );
-
-    const event =
-      typeof HashChangeEvent !== "undefined"
-        ? new HashChangeEvent("hashchange")
-        : new Event("hashchange");
-
-    dispatchEvent(event);
-
-    return;
+    history.replaceState(state, "", newRelativePath);
+  } else {
+    history.pushState(state, "", newRelativePath);
   }
 
-  history.replaceState(
-    state,
-    "",
-    // keep the current pathname, but replace query string and hash
-    location.pathname +
-      (search ? `?${search}` : location.search) +
-      // update location hash, this will cause `hashchange` event to fire
-      // normalise the value before updating, so it's always preceeded with "#/"
-      (location.hash = `#/${hash}`)
-  );
+  const event =
+    typeof HashChangeEvent !== "undefined"
+      ? new HashChangeEvent("hashchange", { oldURL, newURL })
+      : new Event("hashchange", { detail: { oldURL, newURL } });
+
+  dispatchEvent(event);
 };
 
 export const useHashLocation = ({ ssrPath = "/" } = {}) => [
