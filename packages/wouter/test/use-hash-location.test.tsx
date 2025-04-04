@@ -251,7 +251,7 @@ it("detects history change when navigate with options.replace is called", async 
   expect(result.current[0]).toBe(newPath);
 });
 
-it("dispatches hashchange event when options.replace is true", () => {
+it("uses string URLs as hashchange event payload", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
