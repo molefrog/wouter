@@ -250,3 +250,27 @@ it("detects history change when navigate with options.replace is called", async 
   await nextTick();
   expect(result.current[0]).toBe(newPath);
 });
+
+it("dispatches hashchange event when options.replace is true", () => {
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+
+  const relativeOldPath = "/foo";
+  const relativeNewPath = "/foo/bar/#hash";
+  const baseURL = "http://localhost:3000/#";
+
+  navigate(relativeOldPath);
+
+  let changeEvent = new HashChangeEvent("hashchange");
+  const hashChangeFn = (event: HashChangeEvent) => {
+    changeEvent = event;
+  };
+
+  addEventListener("hashchange", hashChangeFn);
+
+  navigate(relativeNewPath);
+  expect(changeEvent?.newURL).toBe(`${baseURL}${relativeNewPath}`);
+  expect(changeEvent?.oldURL).toBe(`${baseURL}${relativeOldPath}`);
+
+  removeEventListener("hashchange", hashChangeFn);
+});

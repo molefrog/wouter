@@ -27,8 +27,8 @@ export const navigate = (to, { state = null, replace = false } = {}) => {
 
   const newRelativePath =
     location.pathname + (search ? `?${search}` : location.search) + `#/${hash}`;
-  const oldURL = new URL(window.location.href);
-  const newURL = new URL(newRelativePath, window.location.origin);
+  const oldURL = window.location.href;
+  const newURL = new URL(newRelativePath, window.location.origin).href;
 
   if (replace) {
     history.replaceState(state, "", newRelativePath);
