@@ -5,6 +5,6 @@ export default defineProject({
   plugins: [preact()],
   test: {
     name: "wouter-preact",
-    environment: "jsdom",
+    environment: "happy-dom",
   },
 });

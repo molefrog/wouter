@@ -66,7 +66,7 @@ it("supports history state", () => {
   const { unmount } = render(<Redirect to="/users" state={testState} />);
 
   expect(location.pathname).toBe("/users");
-  expect(history.state).toBe(testState);
+  expect(history.state).toStrictEqual(testState);
   unmount();
 });
 

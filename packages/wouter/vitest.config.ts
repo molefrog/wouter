@@ -6,6 +6,6 @@ export default defineProject({
   test: {
     name: "wouter-react",
     setupFiles: "./setup-vitest.ts",
-    environment: "jsdom",
+    environment: "happy-dom",
   },
 });

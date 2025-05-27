@@ -163,7 +163,7 @@ describe("<Link />", () => {
 
     fireEvent.click(getByTestId("link"));
     expect(location.pathname).toBe("/goo-baz");
-    expect(history.state).toBe(testState);
+    expect(history.state).toStrictEqual(testState);
   });
 
   it("can be configured to use custom href formatting", () => {

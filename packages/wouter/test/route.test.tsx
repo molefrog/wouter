@@ -1,79 +1,89 @@
-import { it, expect } from "vitest";
-import { render, act } from "@testing-library/react";
-import * as TestRenderer from "react-test-renderer";
+import { it, expect, afterEach } from "vitest";
+import { render, act, cleanup } from "@testing-library/react";
 
 import { Router, Route } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 import { ReactElement } from "react";
 
-const testRouteRender = (initialPath: string, jsx: ReactElement) => {
-  const instance = TestRenderer.create(
-    <Router hook={memoryLocation({ path: initialPath }).hook}>{jsx}</Router>
-  ).root;
+// Clean up after each test to avoid DOM pollution
+afterEach(cleanup);
 
-  return instance;
+const testRouteRender = (initialPath: string, jsx: ReactElement) => {
+  return render(
+    <Router hook={memoryLocation({ path: initialPath }).hook}>{jsx}</Router>
+  );
 };
 
 it("always renders its content when `path` is empty", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/nothing",
     <Route>
       <h1>Hello!</h1>
     </Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("Hello!");
+  const heading = container.querySelector("h1");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("Hello!");
 });
 
 it("accepts plain children", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/foo",
     <Route path="/foo">
       <h1>Hello!</h1>
     </Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("Hello!");
+  const heading = container.querySelector("h1");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("Hello!");
 });
 
 it("works with render props", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/foo",
     <Route path="/foo">{() => <h1>Hello!</h1>}</Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("Hello!");
+  const heading = container.querySelector("h1");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("Hello!");
 });
 
 it("passes a match param object to the render function", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/users/alex",
     <Route path="/users/:name">{(params) => <h1>{params.name}</h1>}</Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("alex");
+  const heading = container.querySelector("h1");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("alex");
 });
 
 it("renders nothing when there is not match", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/bar",
     <Route path="/foo">
       <div>Hi!</div>
     </Route>
   );
 
-  expect(() => result.findByType("div")).toThrow();
+  expect(container.querySelector("div")).not.toBeInTheDocument();
 });
 
 it("supports `component` prop similar to React-Router", () => {
   const Users = () => <h2>All users</h2>;
 
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/foo",
     <Route path="/foo" component={Users} />
   );
 
-  expect(result.findByType("h2").props.children).toBe("All users");
+  const heading = container.querySelector("h2");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("All users");
 });
 
 it("supports `base` routers with relative path", () => {
@@ -90,52 +100,58 @@ it("supports `base` routers with relative path", () => {
 
   act(() => history.replaceState(null, "", "/app/nested"));
 
-  expect(container.childNodes.length).toBe(1);
-  expect((container.firstChild as HTMLElement).tagName).toBe("H1");
+  expect(container.children).toHaveLength(1);
+  expect(container.firstChild).toHaveProperty("tagName", "H1");
 
   unmount();
 });
 
 it("supports `path` prop with regex", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/foo",
     <Route path={/[/]foo/}>
       <h1>Hello!</h1>
     </Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("Hello!");
+  const heading = container.querySelector("h1");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("Hello!");
 });
 
 it("supports regex path named params", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/users/alex",
     <Route path={/[/]users[/](?<name>[a-z]+)/}>
       {(params) => <h1>{params.name}</h1>}
     </Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("alex");
+  const heading = container.querySelector("h1");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("alex");
 });
 
 it("supports regex path anonymous params", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/users/alex",
     <Route path={/[/]users[/]([a-z]+)/}>
       {(params) => <h1>{params[0]}</h1>}
     </Route>
   );
 
-  expect(result.findByType("h1").props.children).toBe("alex");
+  const heading = container.querySelector("h1");
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("alex");
 });
 
 it("rejects when a path does not match the regex", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/users/1234",
     <Route path={/[/]users[/](?<name>[a-z]+)/}>
       {(params) => <h1>{params.name}</h1>}
     </Route>
   );
 
-  expect(() => result.findByType("h1")).toThrow();
+  expect(container.querySelector("h1")).not.toBeInTheDocument();
 });

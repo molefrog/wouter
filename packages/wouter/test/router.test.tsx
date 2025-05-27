@@ -1,6 +1,5 @@
 import { memo, ReactElement, cloneElement, ComponentProps } from "react";
 import { renderHook, render } from "@testing-library/react";
-import * as TestRenderer from "react-test-renderer";
 import { it, expect, describe } from "vitest";
 import {
   Router,
@@ -91,25 +90,24 @@ it("can extract `ssrSearch` from `ssrPath` after the '?' symbol", () => {
 });
 
 it("shares one router instance between components", () => {
-  const RouterGetter = ({ el }: { el: ReactElement }) => {
+  const routers: any[] = [];
+
+  const RouterGetter = ({ index }: { index: number }) => {
     const router = useRouter();
-    return cloneElement(el, { router: router });
+    routers[index] = router;
+    return <div data-testid={`router-${index}`} />;
   };
 
-  const { root } = TestRenderer.create(
+  render(
     <>
-      <RouterGetter el={<div />} />
-      <RouterGetter el={<div />} />
-      <RouterGetter el={<div />} />
-      <RouterGetter el={<div />} />
+      <RouterGetter index={0} />
+      <RouterGetter index={1} />
+      <RouterGetter index={2} />
+      <RouterGetter index={3} />
     </>
   );
 
-  const uniqRouters = [
-    ...new Set<DefaultParams>(
-      root.findAllByType("div").map((x) => x.props.router)
-    ),
-  ];
+  const uniqRouters = [...new Set<DefaultParams>(routers)];
   expect(uniqRouters.length).toBe(1);
 });
 

@@ -1,31 +1,30 @@
-import * as TestRenderer from "react-test-renderer";
-import { it, expect } from "vitest";
+import { it, expect, afterEach } from "vitest";
 
 import { Router, Route, Switch } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 
-import { render, act } from "@testing-library/react";
+import { render, act, cleanup } from "@testing-library/react";
 import { PropsWithChildren, ReactElement } from "react";
+
+// Clean up after each test to avoid DOM pollution
+afterEach(cleanup);
 
 const raf = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
 const testRouteRender = (initialPath: string, jsx: ReactElement) => {
-  const instance = TestRenderer.create(
+  return render(
     <Router hook={memoryLocation({ path: initialPath }).hook}>{jsx}</Router>
-  ).root;
-
-  return instance;
+  );
 };
 
 it("works well when nothing is provided", () => {
-  // @ts-expect-error
-  const result = testRouteRender("/users/12", <Switch />);
-  // @ts-expect-error
-  expect(result.children[0].children.length).toBe(0);
+  const { container } = testRouteRender("/users/12", <Switch>{null}</Switch>);
+  // When Switch has no matching children, it renders null, so container should be empty
+  expect(container).toBeEmptyDOMElement();
 });
 
 it("always renders no more than 1 matched children", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/users/12",
     <Switch>
       <Route path="/users/home">
@@ -40,15 +39,15 @@ it("always renders no more than 1 matched children", () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(result.findByType("h2")).toBeTruthy();
+  // Should only render the h2 that matches /users/:id
+  expect(container.querySelectorAll("h1, h2, h3")).toHaveLength(1);
+  expect(container.querySelector("h2")).toBeInTheDocument();
+  expect(container.querySelector("h1")).not.toBeInTheDocument();
+  expect(container.querySelector("h3")).not.toBeInTheDocument();
 });
 
 it("ignores mixed children", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/users",
     <Switch>
       Here is a<Route path="/users">route</Route>
@@ -56,15 +55,14 @@ it("ignores mixed children", () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(rendered[0].type).toBe(Route);
+  // Should only render the route content, ignoring text nodes
+  expect(container).toHaveTextContent("route");
+  // The text "Here is a" and "route" outside the Route should be ignored
+  expect(container.textContent).toBe("route");
 });
 
 it("ignores falsy children", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/users",
     <Switch>
       {""}
@@ -75,11 +73,9 @@ it("ignores falsy children", () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(rendered[0].type).toBe(Route);
+  // Should only render the route content
+  expect(container).toHaveTextContent("route");
+  expect(container.textContent).toBe("route");
 });
 
 it("matches regular components as well", () => {
@@ -87,7 +83,7 @@ it("matches regular components as well", () => {
     <>{props.children}</>
   );
 
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/",
     <Switch>
       <Dummy path="/">Component</Dummy>
@@ -95,26 +91,21 @@ it("matches regular components as well", () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(rendered[0].type).toBe(Dummy);
+  // Should render the Dummy component content
+  expect(container).toHaveTextContent("Component");
+  expect(container.querySelector("b")).not.toBeInTheDocument();
 });
 
 it("allows to specify which routes to render via `location` prop", () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/something-different",
     <Switch location="/users">
       <Route path="/users">route</Route>
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(rendered[0].type).toBe(Route);
+  // Should render based on the location prop, not the actual path
+  expect(container).toHaveTextContent("route");
 });
 
 it("always ensures the consistency of inner routes rendering", async () => {
@@ -141,7 +132,7 @@ it("always ensures the consistency of inner routes rendering", async () => {
 });
 
 it("supports catch-all routes with wildcard segments", async () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/something-different",
     <Switch>
       <Route path="/users">
@@ -153,15 +144,14 @@ it("supports catch-all routes with wildcard segments", async () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(result.findByType("h2")).toBeTruthy();
+  // Should match the catch-all route
+  expect(container.querySelectorAll("h1, h2")).toHaveLength(1);
+  expect(container.querySelector("h2")).toBeInTheDocument();
+  expect(container.querySelector("h1")).not.toBeInTheDocument();
 });
 
 it("uses a route without a path prop as a fallback", async () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/something-different",
     <Switch>
       <Route path="/users">
@@ -173,19 +163,18 @@ it("uses a route without a path prop as a fallback", async () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(result.findByType("h2")).toBeTruthy();
+  // Should match the fallback route (no path)
+  expect(container.querySelectorAll("h1, h2")).toHaveLength(1);
+  expect(container.querySelector("h2")).toBeInTheDocument();
+  expect(container.querySelector("h1")).not.toBeInTheDocument();
 });
 
 it("correctly handles arrays as children", async () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/in-array-3",
     <Switch>
       {[1, 2, 3].map((i) => {
-        const H = "h" + i;
+        const H = `h${i}` as keyof JSX.IntrinsicElements;
         return (
           <Route key={i} path={"/in-array-" + i}>
             <H />
@@ -198,20 +187,21 @@ it("correctly handles arrays as children", async () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(result.findByType("h3")).toBeTruthy();
+  // Should match the third route (/in-array-3)
+  expect(container.querySelectorAll("h1, h2, h3, h4")).toHaveLength(1);
+  expect(container.querySelector("h3")).toBeInTheDocument();
+  expect(container.querySelector("h1")).not.toBeInTheDocument();
+  expect(container.querySelector("h2")).not.toBeInTheDocument();
+  expect(container.querySelector("h4")).not.toBeInTheDocument();
 });
 
 it("correctly handles fragments as children", async () => {
-  const result = testRouteRender(
+  const { container } = testRouteRender(
     "/in-fragment-2",
     <Switch>
       <>
         {[1, 2, 3].map((i) => {
-          const H = "h" + i;
+          const H = `h${i}` as keyof JSX.IntrinsicElements;
           return (
             <Route key={i} path={"/in-fragment-" + i}>
               <H />
@@ -225,9 +215,10 @@ it("correctly handles fragments as children", async () => {
     </Switch>
   );
 
-  // @ts-expect-error
-  const rendered = result.children[0].children;
-
-  expect(rendered.length).toBe(1);
-  expect(result.findByType("h2")).toBeTruthy();
+  // Should match the second route (/in-fragment-2)
+  expect(container.querySelectorAll("h1, h2, h3, h4")).toHaveLength(1);
+  expect(container.querySelector("h2")).toBeInTheDocument();
+  expect(container.querySelector("h1")).not.toBeInTheDocument();
+  expect(container.querySelector("h3")).not.toBeInTheDocument();
+  expect(container.querySelector("h4")).not.toBeInTheDocument();
 });

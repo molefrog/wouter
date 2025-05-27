@@ -47,7 +47,16 @@ describe("`value` first argument", () => {
       history.back();
     });
 
-    await waitFor(() => expect(result.current[0]).toBe("/"));
+    // Workaround for happy-dom: manually dispatch popstate event
+    // happy-dom doesn't fully implement history.back() popstate events
+    act(() => {
+      const popstateEvent = new PopStateEvent("popstate", {
+        state: history.state,
+      });
+      window.dispatchEvent(popstateEvent);
+    });
+
+    await waitFor(() => expect(result.current[0]).toBe("/"), { timeout: 1000 });
     unmount();
   });
 
