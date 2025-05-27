@@ -180,7 +180,7 @@ export const Router = ({ children, ...props }) => {
 
     next[k] = option;
 
-    // the new router is no different from the parent, use parent
+    // the new router is no different from the parent or from the memoized value, use parent
     if (option !== parent[k] || option !== value[k]) value = next;
   }
 

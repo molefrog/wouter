@@ -243,4 +243,22 @@ it("updates the context when settings are changed", () => {
   expect(state.renders).toEqual(2);
   expect(state.base).toEqual("/app");
   expect(state.hook).toEqual(newHook);
+
+  // should update the context when the base changes as well
+  rerender(
+    <Router hook={newHook} base="">
+      <Memoized />
+    </Router>
+  );
+  expect(state.renders).toEqual(3);
+  expect(state.base).toEqual("");
+  expect(state.hook).toEqual(newHook);
+
+  // the last check that the router context is stable during re-renders
+  rerender(
+    <Router hook={newHook} base="">
+      <Memoized />
+    </Router>
+  );
+  expect(state.renders).toEqual(3); // nothing changed
 });
