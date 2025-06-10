@@ -209,6 +209,33 @@ it("defines a custom way of rendering link hrefs", () => {
   expect(getByTestId("link")).toHaveAttribute("href", "#/app");
 });
 
+it("handles navigation with data: protocol", async () => {
+  const originalHref = location.href;
+  location.href = "data:text/html,content";
+
+  expect(location.protocol).toBe("data:");
+
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+  const initialHistoryLength = history.length;
+
+  await waitForHashChangeEvent(() => {
+    navigate("/new-path");
+  });
+
+  expect(location.hash).toBe("#/new-path");
+  expect(history.length).toBe(initialHistoryLength + 1);
+
+  await waitForHashChangeEvent(() => {
+    navigate("/another-path", { replace: true });
+  });
+
+  expect(location.hash).toBe("#/another-path");
+  expect(history.length).toBe(initialHistoryLength + 1);
+
+  location.href = originalHref;
+});
+
 it("interacts properly with the history stack", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;

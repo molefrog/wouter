@@ -23,17 +23,26 @@ const subscribeToHashUpdates = (callback) => {
 const currentHashLocation = () => "/" + location.hash.replace(/^#?\/?/, "");
 
 export const navigate = (to, { state = null, replace = false } = {}) => {
-  const [hash, search] = to.replace(/^#?\/?/, "").split("?");
-
-  const newRelativePath =
-    location.pathname + (search ? `?${search}` : location.search) + `#/${hash}`;
   const oldURL = location.href;
-  const newURL = new URL(newRelativePath, location.origin).href;
+  let newURL, newHistoryStatePath;
+
+  if (location.protocol === "data:") {
+    const newHash = "#/" + to.replace(/^#?\/?/, "");
+    newHistoryStatePath = newHash;
+    newURL = oldURL.split("#")[0] + newHash;
+  } else {
+    const [hash, search] = to.replace(/^#?\/?/, "").split("?");
+    newHistoryStatePath =
+      location.pathname +
+      (search ? `?${search}` : location.search) +
+      `#/${hash}`;
+    newURL = new URL(newHistoryStatePath, location.origin).href;
+  }
 
   if (replace) {
-    history.replaceState(state, "", newRelativePath);
+    history.replaceState(state, "", newHistoryStatePath);
   } else {
-    history.pushState(state, "", newRelativePath);
+    history.pushState(state, "", newHistoryStatePath);
   }
 
   const event =
