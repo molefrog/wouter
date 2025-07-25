@@ -918,10 +918,10 @@ import { memoryLocation } from "wouter/memory-location";
 it("renders a user page", () => {
   // `static` option makes it immutable
   // even if you call `navigate` somewhere in the app location won't change
-  const { hook } = memoryLocation({ path: "/user/2", static: true });
+  const { hook, searchHook } = memoryLocation({ path: "/user/2", static: true });
 
   const { container } = render(
-    <Router hook={hook}>
+    <Router hook={hook} searchHook={searchHook}>
       <Route path="/user/:id">{(params) => <>User ID: {params.id}</>}</Route>
     </Router>
   );
