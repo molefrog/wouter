@@ -28,10 +28,11 @@ import { absolutePath, relativePath, sanitizeSearch } from "./paths.js";
  * via the <Router /> component.
  */
 
-const defaultRouter = {
+export const defaultParser = parsePattern;
+export const defaultRouter = {
   hook: useBrowserLocation,
   searchHook: useBrowserSearch,
-  parser: parsePattern,
+  parser: defaultParser,
   base: "",
   // this option is used to override the current location during SSR
   ssrPath: undefined,

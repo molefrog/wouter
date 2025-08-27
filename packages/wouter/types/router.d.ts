@@ -41,3 +41,6 @@ export type RouterOptions = {
   ssrContext?: SsrContext;
   hrefs?: HrefsFormatter;
 };
+
+export const defaultParser: Parser;
+export const defaultRouter: RouterObject;
