@@ -42,6 +42,12 @@ test("allows to change the behaviour of route matching", () => {
 
   expect(result.current).toStrictEqual([
     true,
-    { 0: "home", 1: undefined, 2: "10/bio", pages: undefined, "rest*": "10/bio" },
+    {
+      0: "home",
+      1: undefined,
+      2: "10/bio",
+      pages: undefined,
+      rest: "10/bio",
+    } as any,
   ]);
 });
