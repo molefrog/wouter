@@ -1,7 +1,3 @@
-/**
- * @vitest-environment node
- */
-
 import { test, expect, describe } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import {

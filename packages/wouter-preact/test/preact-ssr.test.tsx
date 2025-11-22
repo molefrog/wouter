@@ -1,13 +1,9 @@
-/**
- * @vitest-environment node
- */
-
 import renderToString from "preact-render-to-string";
-import { it, expect, describe } from "vitest";
-import { Router, useLocation } from "wouter-preact";
+import { test, expect, describe } from "bun:test";
+import { Router, useLocation } from "../src/index.js";
 
 describe("Preact SSR", () => {
-  it("supports SSR", () => {
+  test("supports SSR", () => {
     const LocationPrinter = () => <>location = {useLocation()[0]}</>;
 
     const rendered = renderToString(

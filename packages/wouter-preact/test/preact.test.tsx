@@ -1,8 +1,8 @@
-import { it, expect, describe, beforeEach, afterEach, vi } from "vitest";
+import { test, expect, describe, beforeEach, afterEach, mock } from "bun:test";
 import { render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
 
-import { Route, Link, Switch } from "wouter-preact";
+import { Route, Link, Switch } from "../src/index.js";
 
 describe("Preact support", () => {
   beforeEach(() => {
@@ -14,12 +14,12 @@ describe("Preact support", () => {
     teardown();
   });
 
-  it("renders properly and reacts on navigation", () => {
+  test("renders properly and reacts on navigation", () => {
     const container = document.body.appendChild(document.createElement("div"));
-    const fn = vi.fn();
+    const fn = mock();
 
     const App = () => {
-      const handleAsChildClick = vi.fn();
+      const handleAsChildClick = mock();
 
       return (
         <>

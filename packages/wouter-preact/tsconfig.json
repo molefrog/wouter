@@ -12,9 +12,12 @@
       "wouter-preact/use-browser-location": ["./types/use-browser-location.d.ts"],
       "wouter-preact/use-hash-location": ["./types/use-hash-location.d.ts"],
       "wouter-preact/memory-location": ["./types/memory-location.d.ts"],
-      "wouter": ["../wouter/types/index.d.ts"]
+      "wouter": ["../wouter/src/index.js"],
+      "wouter/use-browser-location": ["../wouter/src/use-browser-location.js"],
+      "wouter/use-hash-location": ["../wouter/src/use-hash-location.js"],
+      "wouter/memory-location": ["../wouter/src/memory-location.js"]
     },
-    "types": ["vitest/globals", "@testing-library/jest-dom", "preact"],
+    "types": ["bun", "@testing-library/jest-dom", "preact"],
     "skipLibCheck": true
   },
   "include": ["src/**/*", "test/**/*"]

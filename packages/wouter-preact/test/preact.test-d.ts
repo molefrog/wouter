@@ -1,7 +1,9 @@
-import { it, assertType } from "vitest";
-import { useRoute } from "wouter-preact";
+import { test } from "bun:test";
+import { useRoute } from "../src/index.js";
 
-it("should only accept strings", () => {
+const assertType = <T,>(_value: T): void => {};
+
+test("should only accept strings", () => {
   // @ts-expect-error
   assertType(useRoute(Symbol()));
   // @ts-expect-error
