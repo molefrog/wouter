@@ -2,9 +2,20 @@
   "compilerOptions": {
     "target": "ES2022",
     "moduleResolution": "node",
+    "module": "es2020",
     "strict": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "types": ["preact"]
-  }
+    "baseUrl": ".",
+    "paths": {
+      "wouter-preact": ["./types/index.d.ts"],
+      "wouter-preact/use-browser-location": ["./types/use-browser-location.d.ts"],
+      "wouter-preact/use-hash-location": ["./types/use-hash-location.d.ts"],
+      "wouter-preact/memory-location": ["./types/memory-location.d.ts"],
+      "wouter": ["../wouter/types/index.d.ts"]
+    },
+    "types": ["vitest/globals", "@testing-library/jest-dom", "preact"],
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "test/**/*"]
 }

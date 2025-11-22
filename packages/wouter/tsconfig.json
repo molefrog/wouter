@@ -4,6 +4,17 @@
     "moduleResolution": "node",
     "module": "es2020",
     "jsx": "react-jsx",
-    "strict": true
-  }
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "wouter": ["./types/index.d.ts"],
+      "wouter/use-browser-location": ["./types/use-browser-location.d.ts"],
+      "wouter/use-hash-location": ["./types/use-hash-location.d.ts"],
+      "wouter/memory-location": ["./types/memory-location.d.ts"],
+      "wouter-preact": ["./types/index.d.ts"]
+    },
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "test/**/*"]
 }

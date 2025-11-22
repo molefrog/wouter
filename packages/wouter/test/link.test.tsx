@@ -23,7 +23,7 @@ describe("<Link />", () => {
   });
 
   it("passes ref to <a />", () => {
-    const refCallback = vi.fn<[HTMLAnchorElement], void>();
+    const refCallback = vi.fn<(element: HTMLAnchorElement) => void>();
     const { getByText } = render(
       <Link href="/" ref={refCallback}>
         Testing
