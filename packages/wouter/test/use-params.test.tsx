@@ -1,8 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
-import { it, expect } from "vitest";
-import { useParams, Router, Route, Switch } from "wouter";
+import { it, expect } from "bun:test";
+import { useParams, Router, Route, Switch } from "../src/index.js";
 
-import { memoryLocation } from "wouter/memory-location";
+import { memoryLocation } from "../src/memory-location.js";
 
 it("returns empty object when used outside of <Route />", () => {
   const { result } = renderHook(() => useParams());

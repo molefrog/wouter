@@ -1,16 +1,16 @@
-import { it, expect, describe } from "vitest";
+import { test, expect, describe } from "bun:test";
 import { act, render, renderHook } from "@testing-library/react";
 
-import { Route, Router, Switch, useRouter } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
+import { Route, Router, Switch, useRouter } from "../src/index.js";
+import { memoryLocation } from "../src/memory-location.js";
 
 describe("when `nest` prop is given", () => {
-  it("renders by default", () => {
+  test("renders by default", () => {
     const { container } = render(<Route nest>matched!</Route>);
     expect(container.innerHTML).toBe("matched!");
   });
 
-  it("matches the pattern loosely", () => {
+  test("matches the pattern loosely", () => {
     const { hook, navigate } = memoryLocation();
 
     const { container } = render(
@@ -33,7 +33,7 @@ describe("when `nest` prop is given", () => {
     expect(container.innerHTML).toBe("matched!");
   });
 
-  it("can be used inside a Switch", () => {
+  test("can be used inside a Switch", () => {
     const { container } = render(
       <Router
         hook={
@@ -53,7 +53,7 @@ describe("when `nest` prop is given", () => {
     expect(container.innerHTML).toBe("nested");
   });
 
-  it("sets the base to the matched segment", () => {
+  test("sets the base to the matched segment", () => {
     const { result } = renderHook(() => useRouter().base, {
       wrapper: (props) => (
         <Router
@@ -69,7 +69,7 @@ describe("when `nest` prop is given", () => {
     expect(result.current).toBe("/2012/04");
   });
 
-  it("can be nested in another nested `Route` or `Router`", () => {
+  test("can be nested in another nested `Route` or `Router`", () => {
     const { container } = render(
       <Router
         base="/app"
@@ -93,7 +93,7 @@ describe("when `nest` prop is given", () => {
     expect(container.innerHTML).toBe("All settings");
   });
 
-  it("reacts to `nest` updates", () => {
+  test("reacts to `nest` updates", () => {
     const { hook } = memoryLocation({
       path: "/app/apple/products",
       static: true,
@@ -116,7 +116,7 @@ describe("when `nest` prop is given", () => {
     expect(container.innerHTML).toBe("");
   });
 
-  it("works with one optional segment", () => {
+  test("works with one optional segment", () => {
     const { hook, navigate } = memoryLocation({
       path: "/",
     });

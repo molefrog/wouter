@@ -1,8 +1,8 @@
-import { it, expect } from "vitest";
+import { test, expect } from "bun:test";
 import { renderHook, act } from "@testing-library/react";
-import { memoryLocation } from "wouter/memory-location";
+import { memoryLocation } from "../src/memory-location.js";
 
-it("returns a hook that is compatible with location spec", () => {
+test("returns a hook that is compatible with location spec", () => {
   const { hook } = memoryLocation();
 
   const { result, unmount } = renderHook(() => hook());
@@ -13,7 +13,7 @@ it("returns a hook that is compatible with location spec", () => {
   unmount();
 });
 
-it("should support initial path", () => {
+test("should support initial path", () => {
   const { hook } = memoryLocation({ path: "/test-case" });
 
   const { result, unmount } = renderHook(() => hook());
@@ -23,7 +23,7 @@ it("should support initial path", () => {
   unmount();
 });
 
-it("should support initial path with query", () => {
+test("should support initial path with query", () => {
   const { searchHook } = memoryLocation({ path: "/test-case?foo=bar" });
 
   const { result, unmount } = renderHook(() => searchHook());
@@ -33,7 +33,7 @@ it("should support initial path with query", () => {
   unmount();
 });
 
-it("should support search path as parameter", () => {
+test("should support search path as parameter", () => {
   const { searchHook } = memoryLocation({
     path: "/test-case?foo=bar",
     searchPath: "key=value",
@@ -46,7 +46,7 @@ it("should support search path as parameter", () => {
   unmount();
 });
 
-it('should return location hook that has initial path "/" by default', () => {
+test('should return location hook that has initial path "/" by default', () => {
   const { hook } = memoryLocation();
 
   const { result, unmount } = renderHook(() => hook());
@@ -56,7 +56,7 @@ it('should return location hook that has initial path "/" by default', () => {
   unmount();
 });
 
-it('should return search hook that has initial query "" by default', () => {
+test('should return search hook that has initial query "" by default', () => {
   const { searchHook } = memoryLocation();
 
   const { result, unmount } = renderHook(() => searchHook());
@@ -66,7 +66,7 @@ it('should return search hook that has initial query "" by default', () => {
   unmount();
 });
 
-it("should return standalone `navigate` method", () => {
+test("should return standalone `navigate` method", () => {
   const { hook, navigate } = memoryLocation();
 
   const { result, unmount } = renderHook(() => hook());
@@ -78,7 +78,7 @@ it("should return standalone `navigate` method", () => {
   unmount();
 });
 
-it("should return location hook that supports navigation", () => {
+test("should return location hook that supports navigation", () => {
   const { hook } = memoryLocation();
 
   const { result, unmount } = renderHook(() => hook());
@@ -90,7 +90,7 @@ it("should return location hook that supports navigation", () => {
   unmount();
 });
 
-it("should record all history when `record` option is provided", () => {
+test("should record all history when `record` option is provided", () => {
   const {
     hook,
     history,
@@ -117,14 +117,14 @@ it("should record all history when `record` option is provided", () => {
   unmount();
 });
 
-it("should not have history when `record` option is falsy", () => {
+test("should not have history when `record` option is falsy", () => {
   // @ts-expect-error
   const { history, reset } = memoryLocation();
   expect(history).not.toBeDefined();
   expect(reset).not.toBeDefined();
 });
 
-it("should have reset method when `record` option is provided", () => {
+test("should have reset method when `record` option is provided", () => {
   const { history, reset, navigate } = memoryLocation({
     path: "/initial",
     record: true,
@@ -140,7 +140,7 @@ it("should have reset method when `record` option is provided", () => {
   expect(history).toStrictEqual(["/initial"]);
 });
 
-it("should have reset method that reset hook location", () => {
+test("should have reset method that reset hook location", () => {
   const { hook, history, navigate, reset } = memoryLocation({
     record: true,
     path: "/test",

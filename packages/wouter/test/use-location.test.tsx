@@ -1,19 +1,19 @@
 import { ComponentProps, ReactNode } from "react";
-import { it, expect, describe, beforeEach } from "vitest";
+import { it, expect, describe, beforeEach } from "bun:test";
 import { renderHook, act } from "@testing-library/react";
-import { Router, useLocation } from "wouter";
+import { Router, useLocation } from "../src/index.js";
 import {
   useBrowserLocation,
   navigate as browserNavigation,
-} from "wouter/use-browser-location";
+} from "../src/use-browser-location.js";
 
 import {
   useHashLocation,
   navigate as hashNavigation,
-} from "wouter/use-hash-location";
+} from "../src/use-hash-location.js";
 import { waitForHashChangeEvent } from "./test-utils";
 
-import { memoryLocation } from "wouter/memory-location";
+import { memoryLocation } from "../src/memory-location.js";
 
 function createContainer(
   options: Omit<ComponentProps<typeof Router>, "children"> = {}

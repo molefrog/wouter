@@ -1,8 +1,8 @@
-import { it, expect } from "vitest";
+import { test, expect } from "bun:test";
 import { render } from "@testing-library/react";
 import { useState } from "react";
 
-import { Redirect, Router } from "wouter";
+import { Redirect, Router } from "../src/index.js";
 
 export const customHookWithReturn =
   (initialPath = "/") =>
@@ -16,20 +16,20 @@ export const customHookWithReturn =
     return [path, navigate];
   };
 
-it("renders nothing", () => {
+test("renders nothing", () => {
   const { container, unmount } = render(<Redirect to="/users" />);
   expect(container.childNodes.length).toBe(0);
   unmount();
 });
 
-it("results in change of current location", () => {
+test("results in change of current location", () => {
   const { unmount } = render(<Redirect to="/users" />);
 
   expect(location.pathname).toBe("/users");
   unmount();
 });
 
-it("supports `base` routers with relative path", () => {
+test("supports `base` routers with relative path", () => {
   const { unmount } = render(
     <Router base="/app">
       <Redirect to="/nested" />
@@ -40,7 +40,7 @@ it("supports `base` routers with relative path", () => {
   unmount();
 });
 
-it("supports `base` routers with absolute path", () => {
+test("supports `base` routers with absolute path", () => {
   const { unmount } = render(
     <Router base="/app">
       <Redirect to="~/absolute" />
@@ -51,7 +51,7 @@ it("supports `base` routers with absolute path", () => {
   unmount();
 });
 
-it("supports replace navigation", () => {
+test("supports replace navigation", () => {
   const histBefore = history.length;
 
   const { unmount } = render(<Redirect to="/users" replace />);
@@ -61,7 +61,7 @@ it("supports replace navigation", () => {
   unmount();
 });
 
-it("supports history state", () => {
+test("supports history state", () => {
   const testState = { hello: "world" };
   const { unmount } = render(<Redirect to="/users" state={testState} />);
 
@@ -70,7 +70,7 @@ it("supports history state", () => {
   unmount();
 });
 
-it("useLayoutEffect should return nothing", () => {
+test("useLayoutEffect should return nothing", () => {
   const { unmount } = render(
     // @ts-expect-error
     <Router hook={customHookWithReturn()}>

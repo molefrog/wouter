@@ -1,9 +1,9 @@
-import { it, expect, beforeEach, vi } from "vitest";
+import { test, expect, beforeEach, mock } from "bun:test";
 import { renderHook, render, act } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Router, Route, useLocation, Link } from "wouter";
-import { useHashLocation } from "wouter/use-hash-location";
+import { Router, Route, useLocation, Link } from "../src/index.js";
+import { useHashLocation } from "../src/use-hash-location.js";
 
 import { waitForHashChangeEvent } from "./test-utils";
 import { ReactNode, useSyncExternalStore } from "react";
@@ -13,7 +13,7 @@ beforeEach(() => {
   location.hash = "";
 });
 
-it("gets current location from `location.hash`", () => {
+test("gets current location from `location.hash`", () => {
   location.hash = "/app/users";
   const { result } = renderHook(() => useHashLocation());
   const [path] = result.current;
@@ -21,7 +21,7 @@ it("gets current location from `location.hash`", () => {
   expect(path).toBe("/app/users");
 });
 
-it("isn't sensitive to leading slash", () => {
+test("isn't sensitive to leading slash", () => {
   location.hash = "app/users";
   const { result } = renderHook(() => useHashLocation());
   const [path] = result.current;
@@ -29,7 +29,7 @@ it("isn't sensitive to leading slash", () => {
   expect(path).toBe("/app/users");
 });
 
-it("rerenders when hash changes", async () => {
+test("rerenders when hash changes", async () => {
   const { result } = renderHook(() => useHashLocation());
 
   expect(result.current[0]).toBe("/");
@@ -43,7 +43,7 @@ it("rerenders when hash changes", async () => {
   expect(result.current[0]).toBe("/app/users");
 });
 
-it("changes current hash when navigation is performed", () => {
+test("changes current hash when navigation is performed", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
@@ -53,7 +53,7 @@ it("changes current hash when navigation is performed", () => {
   expect(location.hash).toBe("#/app/users");
 });
 
-it("should not rerender when pathname changes", () => {
+test("should not rerender when pathname changes", () => {
   let renderCount = 0;
   location.hash = "/app";
 
@@ -68,7 +68,7 @@ it("should not rerender when pathname changes", () => {
   expect(result.current).toBe(1);
 });
 
-it("does not change anything besides the hash when doesn't contain ? symbol", () => {
+test("does not change anything besides the hash when doesn't contain ? symbol", () => {
   history.replaceState(null, "", "/foo?bar#/app");
 
   const { result } = renderHook(() => useHashLocation());
@@ -81,7 +81,7 @@ it("does not change anything besides the hash when doesn't contain ? symbol", ()
   expect(location.search).toBe("?bar");
 });
 
-it("changes search and hash when contains ? symbol", () => {
+test("changes search and hash when contains ? symbol", () => {
   history.replaceState(null, "", "/foo?bar#/app");
 
   const { result } = renderHook(() => useHashLocation());
@@ -95,7 +95,7 @@ it("changes search and hash when contains ? symbol", () => {
   expect(location.hash).toBe("#/abc");
 });
 
-it("creates a new history entry when navigating", () => {
+test("creates a new history entry when navigating", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
@@ -106,7 +106,7 @@ it("creates a new history entry when navigating", () => {
   expect(history.length).toBe(initialLength + 1);
 });
 
-it("supports `state` option when navigating", () => {
+test("supports `state` option when navigating", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
@@ -116,7 +116,7 @@ it("supports `state` option when navigating", () => {
   expect(history.state).toStrictEqual({ hello: "world" });
 });
 
-it("never changes reference to `navigate` between rerenders", () => {
+test("never changes reference to `navigate` between rerenders", () => {
   const { result, rerender } = renderHook(() => useHashLocation());
 
   const updateWas = result.current[1];
@@ -125,7 +125,7 @@ it("never changes reference to `navigate` between rerenders", () => {
   expect(result.current[1]).toBe(updateWas);
 });
 
-it("uses `ssrPath` when rendered on the server", () => {
+test("uses `ssrPath` when rendered on the server", () => {
   const App = () => {
     const [path] = useHashLocation({ ssrPath: "/hello-from-server" });
     return <>{path}</>;
@@ -135,7 +135,7 @@ it("uses `ssrPath` when rendered on the server", () => {
   expect(rendered).toBe("/hello-from-server");
 });
 
-it("is not sensitive to leading / or # when navigating", async () => {
+test("is not sensitive to leading / or # when navigating", async () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
@@ -152,7 +152,7 @@ it("is not sensitive to leading / or # when navigating", async () => {
   expect(result.current[0]).toBe("/look-ma-no-hashes");
 });
 
-it("works even if `hashchange` listeners are called asynchronously ", async () => {
+test("works even if `hashchange` listeners are called asynchronously ", async () => {
   const nextTick = () => new Promise((resolve) => setTimeout(resolve, 0));
 
   // we want `hashchange` to stop invoking listeners before it reaches the
@@ -218,7 +218,7 @@ it("works even if `hashchange` listeners are called asynchronously ", async () =
   unmount();
 });
 
-it("defines a custom way of rendering link hrefs", () => {
+test("defines a custom way of rendering link hrefs", () => {
   const { getByTestId } = render(
     <Router hook={useHashLocation}>
       <Link href="/app" data-testid="link" />
@@ -228,7 +228,7 @@ it("defines a custom way of rendering link hrefs", () => {
   expect(getByTestId("link")).toHaveAttribute("href", "#/app");
 });
 
-it("interacts properly with the history stack", () => {
+test("interacts properly with the history stack", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
@@ -249,11 +249,11 @@ it("interacts properly with the history stack", () => {
   expect(history.length).toBe(historyStackCountBeforePush + 1);
 });
 
-it("dispatches hashchange event when options.replace is true", () => {
+test("dispatches hashchange event when options.replace is true", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
-  const hashChangeFn = vi.fn();
+  const hashChangeFn = mock();
   addEventListener("hashchange", hashChangeFn);
 
   act(() => {
@@ -264,7 +264,7 @@ it("dispatches hashchange event when options.replace is true", () => {
   removeEventListener("hashchange", hashChangeFn);
 });
 
-it("detects history change when navigate with options.replace is called", async () => {
+test("detects history change when navigate with options.replace is called", async () => {
   const nextTick = () => new Promise((resolve) => setTimeout(resolve, 0));
 
   const { result } = renderHook(() => useHashLocation());
@@ -278,13 +278,13 @@ it("detects history change when navigate with options.replace is called", async 
   expect(result.current[0]).toBe(newPath);
 });
 
-it("uses string URLs as hashchange event payload", () => {
+test("uses string URLs as hashchange event payload", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
 
   const relativeOldPath = "/foo";
   const relativeNewPath = "/foo/bar/#hash";
-  const baseURL = "http://localhost:3000/#";
+  const baseURL = "https://wouter.dev/#";
 
   act(() => {
     navigate(relativeOldPath);

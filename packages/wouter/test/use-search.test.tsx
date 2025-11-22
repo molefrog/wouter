@@ -1,8 +1,8 @@
 import { renderHook, act } from "@testing-library/react";
-import { useSearch, Router } from "wouter";
-import { navigate } from "wouter/use-browser-location";
-import { memoryLocation } from "wouter/memory-location";
-import { it, expect, beforeEach } from "vitest";
+import { useSearch, Router } from "../src/index.js";
+import { navigate } from "../src/use-browser-location.js";
+import { memoryLocation } from "../src/memory-location.js";
+import { it, expect, beforeEach } from "bun:test";
 
 beforeEach(() => history.replaceState(null, "", "/"));
 

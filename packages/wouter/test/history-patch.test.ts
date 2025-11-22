@@ -1,17 +1,17 @@
-import { useLocation as reactHook } from "wouter";
-import { useLocation as preactHook } from "wouter-preact";
+import { useLocation as reactHook } from "../src/index.js";
+import { useLocation as preactHook } from "../src/index.js";
 import { renderHook, act } from "@testing-library/react";
 
-import { vi, it, expect, describe } from "vitest";
+import { mock, test, expect, describe } from "bun:test";
 
 describe("history patch", () => {
-  it("exports should exists", () => {
+  test("exports should exists", () => {
     expect(reactHook).toBeDefined();
     expect(preactHook).toBeDefined();
   });
 
-  it("history should be patched once", () => {
-    const fn = vi.fn();
+  test("history should be patched once", () => {
+    const fn = mock();
     const { result, unmount } = renderHook(() => reactHook());
 
     addEventListener("pushState", (e) => {
@@ -19,13 +19,13 @@ describe("history patch", () => {
     });
 
     expect(result.current[0]).toBe("/");
-    expect(fn).toBeCalledTimes(0);
+    expect(fn).toHaveBeenCalledTimes(0);
 
     act(() => result.current[1]("/hello"));
     act(() => result.current[1]("/world"));
 
     expect(result.current[0]).toBe("/world");
-    expect(fn).toBeCalledTimes(2);
+    expect(fn).toHaveBeenCalledTimes(2);
 
     unmount();
   });

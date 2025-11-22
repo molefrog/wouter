@@ -1,7 +1,7 @@
-import { it, expect, afterEach } from "vitest";
+import { it, expect, afterEach } from "bun:test";
 
-import { Router, Route, Switch } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
+import { Router, Route, Switch } from "../src/index.js";
+import { memoryLocation } from "../src/memory-location.js";
 
 import { render, act, cleanup } from "@testing-library/react";
 import { PropsWithChildren, ReactElement } from "react";

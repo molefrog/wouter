@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
-import { useRoute, Match, Router, RegexRouteParams } from "wouter";
-import { it, expect } from "vitest";
-import { memoryLocation } from "wouter/memory-location";
+import { useRoute, Match, Router, RegexRouteParams } from "../src/index.js";
+import { it, expect } from "bun:test";
+import { memoryLocation } from "../src/memory-location.js";
 
 it("is case insensitive", () => {
   assertRoute("/Users", "/users", {});

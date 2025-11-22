@@ -1,8 +1,8 @@
-import { it, expect, afterEach } from "vitest";
+import { it, expect, afterEach } from "bun:test";
 import { render, act, cleanup } from "@testing-library/react";
 
-import { Router, Route } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
+import { Router, Route } from "../src/index.js";
+import { memoryLocation } from "../src/memory-location.js";
 import { ReactElement } from "react";
 
 // Clean up after each test to avoid DOM pollution

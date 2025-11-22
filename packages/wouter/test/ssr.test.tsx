@@ -2,7 +2,7 @@
  * @vitest-environment node
  */
 
-import { it, expect, describe } from "vitest";
+import { it, expect, describe } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   Route,
@@ -13,7 +13,7 @@ import {
   useSearch,
   useLocation,
   SsrContext,
-} from "wouter";
+} from "../src/index.js";
 
 describe("server-side rendering", () => {
   it("works via `ssrPath` prop", () => {
