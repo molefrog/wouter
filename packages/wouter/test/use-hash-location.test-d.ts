@@ -1,13 +1,15 @@
-import { it, assertType, describe, expectTypeOf } from "vitest";
-import { useHashLocation, navigate } from "wouter/use-hash-location";
-import { BaseLocationHook } from "wouter";
+import { test, describe, expectTypeOf } from "bun:test";
+import { useHashLocation, navigate } from "../src/use-hash-location.js";
+import { BaseLocationHook } from "../src/index.js";
 
-it("is a location hook", () => {
+const assertType = <T,>(_value: T): void => {};
+
+test("is a location hook", () => {
   expectTypeOf(useHashLocation).toMatchTypeOf<BaseLocationHook>();
   expectTypeOf(useHashLocation()).toMatchTypeOf<[string, Function]>();
 });
 
-it("accepts a `ssrPath` path option", () => {
+test("accepts a `ssrPath` path option", () => {
   useHashLocation({ ssrPath: "/foo" });
   useHashLocation({ ssrPath: "" });
 
@@ -18,14 +20,14 @@ it("accepts a `ssrPath` path option", () => {
 });
 
 describe("`navigate` function", () => {
-  it("accepts an arbitrary `state` option", () => {
+  test("accepts an arbitrary `state` option", () => {
     navigate("/object", { state: { foo: "bar" } });
     navigate("/symbol", { state: Symbol("foo") });
     navigate("/string", { state: "foo" });
     navigate("/undef", { state: undefined });
   });
 
-  it("returns nothing", () => {
+  test("returns nothing", () => {
     assertType<void>(navigate("/foo"));
   });
 });

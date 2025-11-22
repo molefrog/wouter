@@ -1,11 +1,11 @@
-import { it, expectTypeOf } from "vitest";
-import { useParams } from "wouter";
+import { test, expectTypeOf } from "bun:test";
+import { useParams } from "../src/index.js";
 
-it("does not accept any arguments", () => {
+test("does not accept any arguments", () => {
   expectTypeOf<typeof useParams>().parameters.toEqualTypeOf<[]>();
 });
 
-it("returns an object with arbitrary parameters", () => {
+test("returns an object with arbitrary parameters", () => {
   const params = useParams();
 
   expectTypeOf(params).toBeObject();
@@ -13,7 +13,7 @@ it("returns an object with arbitrary parameters", () => {
   expectTypeOf(params[0]).toEqualTypeOf<string | undefined>();
 });
 
-it("can infer the type of parameters from the route path", () => {
+test("can infer the type of parameters from the route path", () => {
   const params = useParams<"/app/users/:name?/:id">();
 
   expectTypeOf(params).toMatchTypeOf<{
@@ -24,7 +24,7 @@ it("can infer the type of parameters from the route path", () => {
   }>();
 });
 
-it("can accept the custom type of parameters as a generic argument", () => {
+test("can accept the custom type of parameters as a generic argument", () => {
   const params = useParams<{ foo: number; bar?: string }>();
 
   expectTypeOf(params).toMatchTypeOf<{

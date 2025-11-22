@@ -1,7 +1,9 @@
-import { it, expectTypeOf, assertType } from "vitest";
-import { useRoute } from "wouter";
+import { test, expectTypeOf } from "bun:test";
+import { useRoute } from "../src/index.js";
 
-it("should only accept strings", () => {
+const assertType = <T,>(_value: T): void => {};
+
+test("should only accept strings", () => {
   // @ts-expect-error
   assertType(useRoute(Symbol()));
   // @ts-expect-error
@@ -9,12 +11,12 @@ it("should only accept strings", () => {
   assertType(useRoute("/"));
 });
 
-it('has a boolean "match" result as a first returned value', () => {
+test('has a boolean "match" result as a first returned value', () => {
   const [match] = useRoute("/");
   expectTypeOf(match).toEqualTypeOf<boolean>();
 });
 
-it("returns null as parameters when there was no match", () => {
+test("returns null as parameters when there was no match", () => {
   const [match, params] = useRoute("/foo");
 
   if (!match) {
@@ -22,7 +24,7 @@ it("returns null as parameters when there was no match", () => {
   }
 });
 
-it("accepts the type of parameters as a generic argument", () => {
+test("accepts the type of parameters as a generic argument", () => {
   const [match, params] = useRoute<{ id: string; name: string | undefined }>(
     "/app/users/:name?/:id"
   );
@@ -35,7 +37,7 @@ it("accepts the type of parameters as a generic argument", () => {
   }
 });
 
-it("infers parameters from the route path", () => {
+test("infers parameters from the route path", () => {
   const [, inferedParams] = useRoute("/app/users/:name?/:id/*?");
 
   if (inferedParams) {

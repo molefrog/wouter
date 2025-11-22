@@ -1,20 +1,22 @@
-import { it, describe, expectTypeOf, assertType } from "vitest";
-import { Route } from "wouter";
+import { test, describe, expectTypeOf } from "bun:test";
+import { Route } from "../src/index.js";
 import { ComponentProps } from "react";
 import * as React from "react";
 
+const assertType = <T,>(_value: T): void => {};
+
 describe("`path` prop", () => {
-  it("is optional", () => {
+  test("is optional", () => {
     assertType(<Route />);
   });
 
-  it("should be a string or RegExp", () => {
+  test("should be a string or RegExp", () => {
     let a: ComponentProps<typeof Route>["path"];
     expectTypeOf(a).toMatchTypeOf<string | RegExp | undefined>();
   });
 });
 
-it("accepts the optional boolean `nest` prop", () => {
+test("accepts the optional boolean `nest` prop", () => {
   assertType(<Route nest />);
   assertType(<Route nest={false} />);
 
@@ -22,7 +24,7 @@ it("accepts the optional boolean `nest` prop", () => {
   assertType(<Route nest={"true"} />);
 });
 
-it("renders a component provided in the `component` prop", () => {
+test("renders a component provided in the `component` prop", () => {
   const Header = () => <div />;
   const Profile = () => null;
 
@@ -33,7 +35,7 @@ it("renders a component provided in the `component` prop", () => {
   <Route path="/header" component={<a />} />;
 });
 
-it("accepts class components in the `component` prop", () => {
+test("accepts class components in the `component` prop", () => {
   class A extends React.Component<{ params: {} }> {
     render() {
       return <div />;
@@ -43,7 +45,7 @@ it("accepts class components in the `component` prop", () => {
   <Route path="/app" component={A} />;
 });
 
-it("accepts ForwardRefExoticComponent in the `component` prop", () => {
+test("accepts ForwardRefExoticComponent in the `component` prop", () => {
   // Simulates components wrapped with HOCs like withErrorBoundary
   const MyComponent = React.forwardRef<HTMLDivElement, { params: {} }>(
     ({ params }) => <div />
@@ -52,7 +54,7 @@ it("accepts ForwardRefExoticComponent in the `component` prop", () => {
   <Route path="/app" component={MyComponent} />;
 });
 
-it("accepts children", () => {
+test("accepts children", () => {
   <Route path="/app">
     <div />
   </Route>;
@@ -68,7 +70,7 @@ it("accepts children", () => {
   </Route>;
 });
 
-it("supports functions as children", () => {
+test("supports functions as children", () => {
   <Route path="/users/:id">
     {(params) => {
       expectTypeOf(params).toMatchTypeOf<{}>();
@@ -91,7 +93,7 @@ it("supports functions as children", () => {
 });
 
 describe("parameter inference", () => {
-  it("can infer type of params from the path given", () => {
+  test("can infer type of params from the path given", () => {
     <Route path="/path/:first/:second/another/:third">
       {({ first, second, third }) => {
         expectTypeOf(first).toEqualTypeOf<string>();
@@ -107,7 +109,7 @@ describe("parameter inference", () => {
     </Route>;
   });
 
-  it("extract wildcard params into `wild` property", () => {
+  test("extract wildcard params into `wild` property", () => {
     <Route path="/users/*/settings">
       {({ wild }) => {
         expectTypeOf(wild).toEqualTypeOf<string>();
@@ -116,7 +118,7 @@ describe("parameter inference", () => {
     </Route>;
   });
 
-  it("allows to customize type of params via generic parameter", () => {
+  test("allows to customize type of params via generic parameter", () => {
     <Route<{ name: string; lastName: string }> path="/users/:name/:age">
       {(params) => {
         expectTypeOf(params.lastName).toEqualTypeOf<string>();
@@ -125,7 +127,7 @@ describe("parameter inference", () => {
     </Route>;
   });
 
-  it("can't infer the type when the path isn't known at compile time", () => {
+  test("can't infer the type when the path isn't known at compile time", () => {
     <Route path={JSON.parse('"/home/:section"')}>
       {(params) => {
         // @ts-expect-error
