@@ -4,6 +4,7 @@
     "": {
       "name": "monorepo",
       "devDependencies": {
+        "@happy-dom/global-registrator": "^20.0.10",
         "@preact/preset-vite": "^2.9.0",
         "@size-limit/preset-small-lib": "^11.2.0",
         "@testing-library/dom": "^10.4.0",
@@ -182,6 +183,8 @@
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.25.4", "", { "os": "win32", "cpu": "x64" }, "sha512-nOT2vZNw6hJ+z43oP1SPea/G/6AbN6X+bGNhNuq8NtRHy4wsMhw765IKLNmnjek7GvjWBYQ8Q5VBoYTFg9y1UQ=="],
 
     "@eslint/eslintrc": ["@eslint/eslintrc@0.4.3", "", { "dependencies": { "ajv": "^6.12.4", "debug": "^4.1.1", "espree": "^7.3.0", "globals": "^13.9.0", "ignore": "^4.0.6", "import-fresh": "^3.2.1", "js-yaml": "^3.13.1", "minimatch": "^3.0.4", "strip-json-comments": "^3.1.1" } }, "sha512-J6KFFz5QCYUJq3pf0mjEcCJVERbzv71PUIDczuh9JkwGEzced6CO5ADLHB1rbf/+oPBtoPfMYNOpGDzCANlbXw=="],
+
+    "@happy-dom/global-registrator": ["@happy-dom/global-registrator@20.0.10", "", { "dependencies": { "@types/node": "^20.0.0", "happy-dom": "^20.0.10" } }, "sha512-GU0UBt9lJKhZlY/U0Bivj9ZVepDIQoAUupAAl/90THG4/urkzXNglkVYETsnt2pGBDgQ+4vBjMAbLu6XzcKcQA=="],
 
     "@humanwhocodes/config-array": ["@humanwhocodes/config-array@0.5.0", "", { "dependencies": { "@humanwhocodes/object-schema": "^1.2.0", "debug": "^4.1.1", "minimatch": "^3.0.4" } }, "sha512-FagtKFz74XrTl7y6HCzQpwDfXP0yhxe9lHLD1UZxjvZIcbyRz8zTFF/yYNfSfzU414eDwZ1SrO0Qvtyf+wFMQg=="],
 

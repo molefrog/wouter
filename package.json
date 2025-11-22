@@ -131,6 +131,7 @@
     ]
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^20.0.10",
     "@preact/preset-vite": "^2.9.0",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@testing-library/dom": "^10.4.0",
