@@ -43,6 +43,24 @@ No other tsconfig changes are needed - the existing paths configuration pointing
 
 ## Test Setup and Environment
 
+### Jest-DOM Matchers Type Declarations
+
+The setup file extends Bun's `expect` with jest-dom matchers at runtime, but TypeScript needs a type declaration file to recognize these matchers:
+
+**`test/jest-dom.d.ts`:**
+```typescript
+import type { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
+
+declare module "bun:test" {
+  interface Matchers<T = unknown>
+    extends TestingLibraryMatchers<typeof expect.stringContaining, T> {}
+}
+```
+
+This file must be included in the tsconfig to avoid type errors like "Property 'toBeInTheDocument' does not exist".
+
+**Note:** Currently using jest-dom matchers for compatibility during migration. Consider revisiting in the future to use more native happy-dom assertions or Bun-specific matchers for better performance and integration.
+
 ### Running from the Correct Directory
 
 Tests must be run from the **root directory**, not from `packages/wouter/`. This is because `bunfig.toml` uses paths relative to the root:
