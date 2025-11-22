@@ -15,7 +15,7 @@
     "watch": "concurrently -n wouter,wouter-preact \"npm run -w packages/wouter watch\" \"npm run -w packages/wouter-preact watch\"",
     "watch-bun": "concurrently -n wouter,wouter-preact \"bun run --filter wouter watch\" \"bun run --filter wouter-preact watch\"",
     "lint": "eslint packages/**/*.js",
-    "lint-types": "vitest --typecheck"
+    "lint-types": "vitest --typecheck.only"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": {
@@ -147,13 +147,14 @@
     "@types/react": "^18.2.0",
     "@types/react-test-renderer": "^18.0.0",
     "@vitejs/plugin-react": "^4.0.4",
-    "@vitest/coverage-v8": "^3.0.8",
+    "@vitest/coverage-v8": "^4.0.0",
     "concurrently": "^8.2.2",
     "copyfiles": "^2.4.1",
     "eslint": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "happy-dom": "^17.4.7",
+    "happy-dom": "^20.0.10",
     "husky": "^4.3.0",
+    "jsdom": "^27.2.0",
     "path-to-regexp": "^6.2.1",
     "preact": "^10.23.2",
     "preact-render-to-string": "^6.5.9",
@@ -164,6 +165,6 @@
     "rollup": "^3.29.5",
     "size-limit": "^10.0.1",
     "typescript": "5.2.2",
-    "vitest": "^3.0.8"
+    "vitest": "^4.0.0"
   }
 }
