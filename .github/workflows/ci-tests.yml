@@ -24,8 +24,8 @@ jobs:
       - name: Install Dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build packages
-        run: npm run build
+      - name: Prepare wouter-preact (copy source files)
+        run: cd packages/wouter-preact && npm run prepublishOnly
 
       - name: Run test
         run: bun run test -- --run --coverage
