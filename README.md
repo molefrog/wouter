@@ -1008,7 +1008,7 @@ Wouter's motto is **"Minimalist-friendly"**.
 - `wouter-preact` reuses the same source except for `react-deps.js` (Preact-specific hooks)
 - Type definitions are duplicated between packages (not ideal, but works for now)
 
-**Development:** Launch the build watcher in a separate terminal with `npm run watch`, then run tests with `npm run test` for interactive mode or `npm run test -- --run` for a single run.
+**Development:** Tests run directly from source files (no build required). Run `npm run test` for interactive mode or `npm run test -- --run` for a single run. Use `npm run build` to build the distributable package before publishing.
 
 ## Acknowledgements
 

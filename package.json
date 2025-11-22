@@ -12,8 +12,6 @@
     "test": "vitest",
     "size": "size-limit",
     "build": "npm run build -ws",
-    "watch": "concurrently -n wouter,wouter-preact \"npm run -w packages/wouter watch\" \"npm run -w packages/wouter-preact watch\"",
-    "watch-bun": "concurrently -n wouter,wouter-preact \"bun run --filter wouter watch\" \"bun run --filter wouter-preact watch\"",
     "lint": "eslint packages/**/*.js",
     "lint-types": "vitest --typecheck.only"
   },
