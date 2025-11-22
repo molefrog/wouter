@@ -11,7 +11,6 @@
     "fix:p": "prettier --write \"./**/*.(js|ts){x,}\"",
     "test": "vitest",
     "size": "size-limit",
-    "build": "npm run build -ws",
     "lint": "eslint packages/**/*.js",
     "lint-types": "vitest --typecheck.only"
   },
@@ -29,7 +28,7 @@
   },
   "size-limit": [
     {
-      "path": "packages/wouter/esm/index.js",
+      "path": "packages/wouter/src/index.js",
       "limit": "2500 B",
       "ignore": [
         "react",
@@ -37,7 +36,7 @@
       ]
     },
     {
-      "path": "packages/wouter/esm/use-browser-location.js",
+      "path": "packages/wouter/src/use-browser-location.js",
       "limit": "1000 B",
       "import": "{ useBrowserLocation }",
       "ignore": [
@@ -46,7 +45,7 @@
       ]
     },
     {
-      "path": "packages/wouter/esm/memory-location.js",
+      "path": "packages/wouter/src/memory-location.js",
       "limit": "1000 B",
       "ignore": [
         "react",
@@ -54,7 +53,7 @@
       ]
     },
     {
-      "path": "packages/wouter/esm/use-hash-location.js",
+      "path": "packages/wouter/src/use-hash-location.js",
       "limit": "1000 B",
       "ignore": [
         "react",
@@ -62,7 +61,7 @@
       ]
     },
     {
-      "path": "packages/wouter-preact/esm/index.js",
+      "path": "packages/wouter-preact/src/index.js",
       "limit": "2500 B",
       "ignore": [
         "preact",
@@ -70,7 +69,7 @@
       ]
     },
     {
-      "path": "packages/wouter-preact/esm/use-browser-location.js",
+      "path": "packages/wouter-preact/src/use-browser-location.js",
       "limit": "1000 B",
       "import": "{ useBrowserLocation }",
       "ignore": [
@@ -79,7 +78,7 @@
       ]
     },
     {
-      "path": "packages/wouter-preact/esm/use-hash-location.js",
+      "path": "packages/wouter-preact/src/use-hash-location.js",
       "limit": "1000 B",
       "ignore": [
         "preact",
@@ -87,7 +86,7 @@
       ]
     },
     {
-      "path": "packages/wouter-preact/esm/memory-location.js",
+      "path": "packages/wouter-preact/src/memory-location.js",
       "limit": "1000 B",
       "ignore": [
         "preact",
@@ -133,9 +132,6 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.0",
-    "@rollup/plugin-alias": "^5.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.2",
-    "@rollup/plugin-replace": "^5.0.7",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.1.4",
@@ -160,7 +156,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^3.29.5",
     "size-limit": "^10.0.1",
     "typescript": "5.2.2",
     "vitest": "^4.0.0"

@@ -13,27 +13,27 @@
     "useLocation"
   ],
   "files": [
-    "esm",
+    "src",
     "types/**/*.d.ts",
     "types/*.d.ts"
   ],
-  "main": "esm/index.js",
+  "main": "src/index.js",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "default": "./esm/index.js"
+      "default": "./src/index.js"
     },
     "./use-browser-location": {
       "types": "./types/use-browser-location.d.ts",
-      "default": "./esm/use-browser-location.js"
+      "default": "./src/use-browser-location.js"
     },
     "./use-hash-location": {
       "types": "./types/use-hash-location.d.ts",
-      "default": "./esm/use-hash-location.js"
+      "default": "./src/use-hash-location.js"
     },
     "./memory-location": {
       "types": "./types/memory-location.d.ts",
-      "default": "./esm/memory-location.js"
+      "default": "./src/memory-location.js"
     }
   },
   "types": "types/index.d.ts",
@@ -54,9 +54,7 @@
     }
   },
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
-    "prepublishOnly": "npm run build && cp ../../README.md ."
+    "prepublishOnly": "copyfiles -f ../wouter/src/index.js ../wouter/src/memory-location.js ../wouter/src/paths.js ../wouter/src/use-browser-location.js ../wouter/src/use-hash-location.js ../wouter/src/use-sync-external-store.js ../wouter/src/use-sync-external-store.native.js src && cp ../../README.md ."
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": {
