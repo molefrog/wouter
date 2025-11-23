@@ -1,9 +1,10 @@
 import { act, renderHook, cleanup } from "@testing-library/react";
-import { test, expect, afterEach } from "bun:test";
+import { test, expect, beforeEach, afterEach } from "bun:test";
 import { useParams, Router, Route, Switch } from "../src/index.js";
 
 import { memoryLocation } from "../src/memory-location.js";
 
+beforeEach(() => history.replaceState(null, "", "/"));
 afterEach(cleanup);
 
 test("returns empty object when used outside of <Route />", () => {
