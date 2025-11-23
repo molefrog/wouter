@@ -28,10 +28,10 @@ jobs:
         run: cd packages/wouter-preact && npm run prepublishOnly
 
       - name: Run test
-        run: bun run test -- --run --coverage
+        run: bun test --coverage
 
       - name: Run type check
-        run: bun run lint-types
+        run: bun run test-types
 
       - name: Lint Sources with ESLint
         run: bun run lint
