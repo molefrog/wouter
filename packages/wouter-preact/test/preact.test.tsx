@@ -1,6 +1,7 @@
-// @jsx h
-// @jsxImportSource preact
-// @jsxFrag Fragment
+/** @jsx h */
+/** @jsxFrag Fragment */
+/** @jsxImportSource preact */
+
 import {
   test,
   expect,
@@ -11,7 +12,7 @@ import {
   afterAll,
   mock,
 } from "bun:test";
-import { h, Fragment, render } from "preact";
+import { render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
 import renderToString from "preact-render-to-string";
 import { copyFile, rm } from "fs/promises";
@@ -33,8 +34,10 @@ const filesToCopy = [
 
 async function loadPreact(): Promise<typeof WouterPreact> {
   // Import from the copied files in src/ directory
-  const module = await import(join(import.meta.dir, "../src/index.js"));
-  return module as typeof WouterPreact;
+  const module = (await import(
+    join(import.meta.dir, "../src/index.js")
+  )) as typeof WouterPreact;
+  return module;
 }
 
 beforeAll(async () => {
