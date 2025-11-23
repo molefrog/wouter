@@ -6,13 +6,6 @@
     "jsx": "react-jsx",
     "strict": true,
     "baseUrl": ".",
-    "paths": {
-      "wouter": ["./src/index.js"],
-      "wouter/use-browser-location": ["./src/use-browser-location.js"],
-      "wouter/use-hash-location": ["./src/use-hash-location.js"],
-      "wouter/memory-location": ["./src/memory-location.js"],
-      "wouter-preact": ["./src/index.js"]
-    },
     "types": ["bun", "@testing-library/jest-dom"],
     "skipLibCheck": true
   },

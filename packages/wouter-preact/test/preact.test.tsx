@@ -1,12 +1,61 @@
-import { test, expect, describe, beforeEach, afterEach, mock } from "bun:test";
-import { render } from "preact";
+// @jsx h
+// @jsxImportSource preact
+// @jsxFrag Fragment
+import {
+  test,
+  expect,
+  describe,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+  mock,
+} from "bun:test";
+import { h, Fragment, render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
+import renderToString from "preact-render-to-string";
+import { copyFile, rm } from "fs/promises";
+import { join } from "path";
+import type * as WouterPreact from "../types/index.js";
 
-import { Route, Link, Switch } from "../src/index.js";
+const assertType = <T,>(_value: T): void => {};
+
+// Files to copy from wouter/src to wouter-preact/src
+const filesToCopy = [
+  "memory-location.js",
+  "paths.js",
+  "use-browser-location.js",
+  "use-hash-location.js",
+  "use-sync-external-store.js",
+  "use-sync-external-store.native.js",
+  "index.js",
+];
+
+async function loadPreact(): Promise<typeof WouterPreact> {
+  // Import from the copied files in src/ directory
+  const module = await import(join(import.meta.dir, "../src/index.js"));
+  return module as typeof WouterPreact;
+}
+
+beforeAll(async () => {
+  const wouterSrc = join(import.meta.dir, "../../wouter/src");
+  const preactSrc = join(import.meta.dir, "../src");
+
+  for (const file of filesToCopy) {
+    await copyFile(join(wouterSrc, file), join(preactSrc, file));
+  }
+});
+
+afterAll(async () => {
+  const preactSrc = join(import.meta.dir, "../src");
+
+  for (const file of filesToCopy) {
+    await rm(join(preactSrc, file), { force: true });
+  }
+});
 
 describe("Preact support", () => {
   beforeEach(() => {
-    history.replaceState(null, "", "/non-existing/route");
     setupRerender();
   });
 
@@ -14,7 +63,26 @@ describe("Preact support", () => {
     teardown();
   });
 
-  test("renders properly and reacts on navigation", () => {
+  describe("useRoute", () => {
+    test("should only accept strings", async () => {
+      const { useRoute } = await loadPreact();
+
+      const Component = () => {
+        // @ts-expect-error
+        assertType(useRoute(Symbol()));
+        // @ts-expect-error
+        assertType(useRoute());
+        assertType(useRoute("/"));
+        return <div>Hello</div>;
+      };
+
+      expect(typeof Component).toBe("function"); // dummy, we only care about the types
+    });
+  });
+
+  test("renders properly and reacts on navigation", async () => {
+    const { Route, Link, Switch } = await loadPreact();
+
     const container = document.body.appendChild(document.createElement("div"));
     const fn = mock();
 
@@ -83,5 +151,24 @@ describe("Preact support", () => {
 
     // Link accepts an `onClick` prop, fired after the navigation
     expect(fn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("Preact SSR", () => {
+  test.skip("supports SSR (fix: useSyncExternalStore polyfill in Bun)", async () => {
+    const { Router, useLocation } = await loadPreact();
+
+    const LocationPrinter = () => {
+      const [location] = useLocation();
+      return <>location = {location}</>;
+    };
+
+    const rendered = renderToString(
+      <Router ssrPath="/ssr/preact">
+        <LocationPrinter />
+      </Router>
+    );
+
+    expect(rendered).toContain("/ssr/preact");
   });
 });

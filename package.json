@@ -10,7 +10,7 @@
   "scripts": {
     "fix:p": "prettier --write \"./**/*.(js|ts){x,}\"",
     "test": "bun test",
-    "test-types": "cd packages/wouter && tsc --noEmit",
+    "test-types": "cd packages/wouter && tsc --noEmit && cd ../wouter-preact && tsc --noEmit",
     "size": "size-limit",
     "lint": "eslint packages/**/*.js"
   },
