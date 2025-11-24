@@ -1,0 +1,8 @@
+# Copied from wouter during prepublish (react-deps.js stays as the Preact version)
+src/index.js
+src/memory-location.js
+src/paths.js
+src/use-browser-location.js
+src/use-hash-location.js
+src/use-sync-external-store.js
+src/use-sync-external-store.native.js

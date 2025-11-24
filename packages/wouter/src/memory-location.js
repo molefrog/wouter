@@ -50,6 +50,9 @@ export const memoryLocation = ({
   const useMemoryQuery = () =>
     useSyncExternalStore(subscribe, () => currentSearch);
 
+  // Attach searchHook to the location hook for auto-inheritance in Router
+  useMemoryLocation.searchHook = useMemoryQuery;
+
   function reset() {
     // clean history array with mutation to preserve link
     history.splice(0, history.length);

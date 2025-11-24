@@ -1,14 +1,16 @@
 import { useEffect } from "react";
-import { it, expect, describe, beforeEach } from "vitest";
-import { renderHook, act, waitFor } from "@testing-library/react";
+import { test, expect, describe, beforeEach, afterEach } from "bun:test";
+import { renderHook, act, waitFor, cleanup } from "@testing-library/react";
 import {
   useBrowserLocation,
   navigate,
   useSearch,
   useHistoryState,
-} from "wouter/use-browser-location";
+} from "../src/use-browser-location.js";
 
-it("returns a pair [value, update]", () => {
+afterEach(cleanup);
+
+test("returns a pair [value, update]", () => {
   const { result, unmount } = renderHook(() => useBrowserLocation());
   const [value, update] = result.current;
 
@@ -20,13 +22,13 @@ it("returns a pair [value, update]", () => {
 describe("`value` first argument", () => {
   beforeEach(() => history.replaceState(null, "", "/"));
 
-  it("reflects the current pathname", () => {
+  test("reflects the current pathname", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
     expect(result.current[0]).toBe("/");
     unmount();
   });
 
-  it("reacts to `pushState` / `replaceState`", () => {
+  test("reacts to `pushState` / `replaceState`", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
 
     act(() => history.pushState(null, "", "/foo"));
@@ -37,7 +39,7 @@ describe("`value` first argument", () => {
     unmount();
   });
 
-  it("supports history.back() navigation", async () => {
+  test("supports history.back() navigation", async () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
 
     act(() => history.pushState(null, "", "/foo"));
@@ -60,7 +62,7 @@ describe("`value` first argument", () => {
     unmount();
   });
 
-  it("supports history state", () => {
+  test("supports history state", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
     const { result: state, unmount: unmountState } = renderHook(() =>
       useHistoryState()
@@ -76,7 +78,7 @@ describe("`value` first argument", () => {
     unmountState();
   });
 
-  it("uses fail-safe escaping", () => {
+  test("uses fail-safe escaping", () => {
     const { result } = renderHook(() => useBrowserLocation());
     const navigate = result.current[1];
 
@@ -91,14 +93,14 @@ describe("`value` first argument", () => {
 describe("`useSearch` hook", () => {
   beforeEach(() => history.replaceState(null, "", "/"));
 
-  it("allows to get current search string", () => {
+  test("allows to get current search string", () => {
     const { result: searchResult } = renderHook(() => useSearch());
     act(() => navigate("/foo?hello=world&whats=up"));
 
     expect(searchResult.current).toBe("?hello=world&whats=up");
   });
 
-  it("returns empty string when there is no search string", () => {
+  test("returns empty string when there is no search string", () => {
     const { result: searchResult } = renderHook(() => useSearch());
 
     expect(searchResult.current).toBe("");
@@ -110,7 +112,7 @@ describe("`useSearch` hook", () => {
     expect(searchResult.current).toBe("");
   });
 
-  it("does not re-render when only pathname is changed", () => {
+  test("does not re-render when only pathname is changed", () => {
     // count how many times each hook is rendered
     const locationRenders = { current: 0 };
     const searchRenders = { current: 0 };
@@ -149,7 +151,7 @@ describe("`useSearch` hook", () => {
 });
 
 describe("`update` second parameter", () => {
-  it("rerenders the component", () => {
+  test("rerenders the component", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
@@ -158,7 +160,7 @@ describe("`update` second parameter", () => {
     unmount();
   });
 
-  it("changes the current location", () => {
+  test("changes the current location", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
@@ -167,7 +169,7 @@ describe("`update` second parameter", () => {
     unmount();
   });
 
-  it("saves a new entry in the History object", () => {
+  test("saves a new entry in the History object", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
@@ -178,7 +180,7 @@ describe("`update` second parameter", () => {
     unmount();
   });
 
-  it("replaces last entry with a new entry in the History object", () => {
+  test("replaces last entry with a new entry in the History object", () => {
     const { result, unmount } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
@@ -190,7 +192,7 @@ describe("`update` second parameter", () => {
     unmount();
   });
 
-  it("stays the same reference between re-renders (function ref)", () => {
+  test("stays the same reference between re-renders (function ref)", () => {
     const { result, rerender, unmount } = renderHook(() =>
       useBrowserLocation()
     );

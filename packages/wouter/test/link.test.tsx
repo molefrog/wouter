@@ -1,14 +1,14 @@
 import { type MouseEventHandler } from "react";
-import { it, expect, afterEach, vi, describe } from "vitest";
+import { test, expect, afterEach, mock, describe } from "bun:test";
 import { render, cleanup, fireEvent, act } from "@testing-library/react";
 
-import { Router, Link } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
+import { Router, Link } from "../src/index.js";
+import { memoryLocation } from "../src/memory-location.js";
 
 afterEach(cleanup);
 
 describe("<Link />", () => {
-  it("renders a link with proper attributes", () => {
+  test("renders a link with proper attributes", () => {
     const { getByText } = render(
       <Link href="/about" className="link--active">
         Click Me
@@ -22,8 +22,8 @@ describe("<Link />", () => {
     expect(element).toHaveClass("link--active");
   });
 
-  it("passes ref to <a />", () => {
-    const refCallback = vi.fn<[HTMLAnchorElement], void>();
+  test("passes ref to <a />", () => {
+    const refCallback = mock<(element: HTMLAnchorElement) => void>();
     const { getByText } = render(
       <Link href="/" ref={refCallback}>
         Testing
@@ -35,11 +35,11 @@ describe("<Link />", () => {
     expect(element).toBeInTheDocument();
     expect(element).toHaveAttribute("href", "/");
 
-    expect(refCallback).toBeCalledTimes(1);
-    expect(refCallback).toBeCalledWith(element);
+    expect(refCallback).toHaveBeenCalledTimes(1);
+    expect(refCallback).toHaveBeenCalledWith(element);
   });
 
-  it("still creates a plain link when nothing is passed", () => {
+  test("still creates a plain link when nothing is passed", () => {
     const { getByTestId } = render(<Link href="/about" data-testid="link" />);
 
     const element = getByTestId("link");
@@ -49,7 +49,7 @@ describe("<Link />", () => {
     expect(element).toBeEmptyDOMElement();
   });
 
-  it("supports `to` prop as an alias to `href`", () => {
+  test("supports `to` prop as an alias to `href`", () => {
     const { getByText } = render(<Link to="/about">Hello</Link>);
     const element = getByText("Hello");
 
@@ -57,7 +57,7 @@ describe("<Link />", () => {
     expect(element).toHaveAttribute("href", "/about");
   });
 
-  it("performs a navigation when the link is clicked", () => {
+  test("performs a navigation when the link is clicked", () => {
     const { getByTestId } = render(
       <Link href="/goo-baz" data-testid="link">
         link
@@ -69,7 +69,7 @@ describe("<Link />", () => {
     expect(location.pathname).toBe("/goo-baz");
   });
 
-  it("supports replace navigation", () => {
+  test("supports replace navigation", () => {
     const { getByTestId } = render(
       <Link href="/goo-baz" replace data-testid="link">
         link
@@ -84,7 +84,7 @@ describe("<Link />", () => {
     expect(history.length).toBe(histBefore);
   });
 
-  it("ignores the navigation when clicked with modifiers", () => {
+  test("ignores the navigation when clicked with modifiers", () => {
     const { getByTestId } = render(
       <Link href="/users" data-testid="link">
         click
@@ -105,7 +105,7 @@ describe("<Link />", () => {
     expect(location.pathname).not.toBe("/users");
   });
 
-  it("ignores the navigation when event is cancelled", () => {
+  test("ignores the navigation when event is cancelled", () => {
     const clickHandler: MouseEventHandler = (e) => {
       e.preventDefault();
     };
@@ -120,8 +120,8 @@ describe("<Link />", () => {
     expect(location.pathname).not.toBe("/users");
   });
 
-  it("accepts an `onClick` prop, fired before the navigation", () => {
-    const clickHandler = vi.fn();
+  test("accepts an `onClick` prop, fired before the navigation", () => {
+    const clickHandler = mock();
 
     const { getByTestId } = render(
       <Link href="/" onClick={clickHandler} data-testid="link" />
@@ -131,7 +131,7 @@ describe("<Link />", () => {
     expect(clickHandler).toHaveBeenCalledTimes(1);
   });
 
-  it("renders `href` with basepath", () => {
+  test("renders `href` with basepath", () => {
     const { getByTestId } = render(
       <Router base="/app">
         <Link href="/dashboard" data-testid="link" />
@@ -142,7 +142,7 @@ describe("<Link />", () => {
     expect(link.getAttribute("href")).toBe("/app/dashboard");
   });
 
-  it("renders `href` with absolute links", () => {
+  test("renders `href` with absolute links", () => {
     const { getByTestId } = render(
       <Router base="/app">
         <Link href="~/home" data-testid="link" />
@@ -153,7 +153,7 @@ describe("<Link />", () => {
     expect(element).toHaveAttribute("href", "/home");
   });
 
-  it("supports history state", () => {
+  test("supports history state", () => {
     const testState = { hello: "world" };
     const { getByTestId } = render(
       <Link href="/goo-baz" state={testState} data-testid="link">
@@ -166,7 +166,7 @@ describe("<Link />", () => {
     expect(history.state).toStrictEqual(testState);
   });
 
-  it("can be configured to use custom href formatting", () => {
+  test("can be configured to use custom href formatting", () => {
     const formatter = (href: string) => `#${href}`;
 
     const { getByTestId } = render(
@@ -189,7 +189,7 @@ describe("<Link />", () => {
 });
 
 describe("active links", () => {
-  it("proxies `className` when it is a string", () => {
+  test("proxies `className` when it is a string", () => {
     const { getByText } = render(
       <Link href="/" className="link--active warning">
         Click Me
@@ -200,7 +200,7 @@ describe("active links", () => {
     expect(element).toHaveAttribute("class", "link--active warning");
   });
 
-  it("calls the `className` function with active link flag", () => {
+  test("calls the `className` function with active link flag", () => {
     const { navigate, hook } = memoryLocation({ path: "/" });
 
     const { getByText } = render(
@@ -227,7 +227,7 @@ describe("active links", () => {
     expect(element).toHaveClass("link");
   });
 
-  it("correctly highlights active links when using custom href formatting", () => {
+  test("correctly highlights active links when using custom href formatting", () => {
     const formatter = (href: string) => `#${href}`;
     const { navigate, hook } = memoryLocation({ path: "/" });
 
@@ -257,7 +257,7 @@ describe("active links", () => {
 });
 
 describe("<Link /> with `asChild` prop", () => {
-  it("when `asChild` is not specified, wraps the children in an <a />", () => {
+  test("when `asChild` is not specified, wraps the children in an <a />", () => {
     const { getByText } = render(
       <Link href="/about">
         <div className="link--wannabe">Click Me</div>
@@ -275,7 +275,7 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link.parentElement).toHaveAttribute("href", "/about");
   });
 
-  it("when invalid element is provided, wraps the children in an <a />", () => {
+  test("when invalid element is provided, wraps the children in an <a />", () => {
     const { getByText } = render(
       /* @ts-expect-error */
       <Link href="/about" asChild>
@@ -290,7 +290,7 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link).toHaveTextContent("Click Me");
   });
 
-  it("when more than one element is provided, wraps the children in an <a />", async () => {
+  test("when more than one element is provided, wraps the children in an <a />", async () => {
     const { getByText } = render(
       /* @ts-expect-error */
       <Link href="/about" asChild>
@@ -308,7 +308,7 @@ describe("<Link /> with `asChild` prop", () => {
     expect(span.parentElement).toHaveTextContent("123");
   });
 
-  it("injects href prop when rendered with `asChild`", () => {
+  test("injects href prop when rendered with `asChild`", () => {
     const { getByText } = render(
       <Link href="/about" asChild>
         <div className="link--wannabe">Click Me</div>
@@ -323,7 +323,7 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link).toHaveTextContent("Click Me");
   });
 
-  it("missing href or to won't crash", () => {
+  test("missing href or to won't crash", () => {
     const { getByText } = render(
       /* @ts-expect-error */
       <Link>Click Me</Link>

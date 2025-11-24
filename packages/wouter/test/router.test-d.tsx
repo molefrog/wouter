@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { it, expectTypeOf } from "vitest";
+import { test, expectTypeOf } from "bun:test";
 import {
   Router,
   Route,
@@ -7,14 +7,14 @@ import {
   useRouter,
   Parser,
   Path,
-} from "wouter";
+} from "../src/index.js";
 
-it("should have at least one child", () => {
+test("should have at least one child", () => {
   // @ts-expect-error
   <Router />;
 });
 
-it("accepts valid elements as children", () => {
+test("accepts valid elements as children", () => {
   const Header = ({ title }: { title: string }) => <h1>{title}</h1>;
 
   <Router>
@@ -36,7 +36,7 @@ it("accepts valid elements as children", () => {
   </Router>;
 });
 
-it("can be customized with router properties passed as props", () => {
+test("can be customized with router properties passed as props", () => {
   // @ts-expect-error
   <Router hook="wat?" />;
 
@@ -55,7 +55,7 @@ it("can be customized with router properties passed as props", () => {
   </Router>;
 });
 
-it("accepts `hrefs` function for transforming href strings", () => {
+test("accepts `hrefs` function for transforming href strings", () => {
   const router = useRouter();
   expectTypeOf(router.hrefs).toBeFunction();
 
@@ -71,7 +71,7 @@ it("accepts `hrefs` function for transforming href strings", () => {
   </Router>;
 });
 
-it("accepts `parser` function for generating regular expressions", () => {
+test("accepts `parser` function for generating regular expressions", () => {
   const parser: Parser = (path: Path, loose?: boolean) => {
     return {
       pattern: new RegExp(`^${path}${loose === true ? "(?=$|[/])" : "[/]$"}`),
@@ -82,7 +82,7 @@ it("accepts `parser` function for generating regular expressions", () => {
   <Router parser={parser}>this is a valid router</Router>;
 });
 
-it("does not accept other props", () => {
+test("does not accept other props", () => {
   const router = useRouter();
 
   // @ts-expect-error `parent` prop isn't defined

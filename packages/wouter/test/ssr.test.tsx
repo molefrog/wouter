@@ -1,8 +1,4 @@
-/**
- * @vitest-environment node
- */
-
-import { it, expect, describe } from "vitest";
+import { test, expect, describe } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   Route,
@@ -13,10 +9,10 @@ import {
   useSearch,
   useLocation,
   SsrContext,
-} from "wouter";
+} from "../src/index.js";
 
 describe("server-side rendering", () => {
-  it("works via `ssrPath` prop", () => {
+  test("works via `ssrPath` prop", () => {
     const App = () => (
       <Router ssrPath="/users/baz">
         <Route path="/users/baz">foo</Route>
@@ -30,7 +26,7 @@ describe("server-side rendering", () => {
     expect(rendered).toBe("foobarbaz");
   });
 
-  it("supports hook-based routes", () => {
+  test("supports hook-based routes", () => {
     const HookRoute = () => {
       const [match, params] = useRoute("/pages/:name");
       return <>{match ? `Welcome to ${params.name}!` : "Not Found!"}</>;
@@ -46,7 +42,7 @@ describe("server-side rendering", () => {
     expect(rendered).toBe("Welcome to intro!");
   });
 
-  it("renders valid and accessible link elements", () => {
+  test("renders valid and accessible link elements", () => {
     const App = () => (
       <Router ssrPath="/">
         <Link href="/users/1" title="Profile">
@@ -59,7 +55,7 @@ describe("server-side rendering", () => {
     expect(rendered).toBe(`<a title="Profile" href="/users/1">Mark</a>`);
   });
 
-  it("renders redirects however they have effect only on a client-side", () => {
+  test("renders redirects however they have effect only on a client-side", () => {
     const App = () => (
       <Router ssrPath="/">
         <Route path="/">
@@ -74,7 +70,7 @@ describe("server-side rendering", () => {
     expect(rendered).toBe("");
   });
 
-  it("update ssr context", () => {
+  test("update ssr context", () => {
     const context: SsrContext = {};
     const App = () => (
       <Router ssrPath="/" ssrContext={context}>
@@ -86,10 +82,13 @@ describe("server-side rendering", () => {
 
     renderToStaticMarkup(<App />);
     expect(context.redirectTo).toBe("/foo");
+
+    // Clean up - reset context to prevent state leakage
+    delete context.redirectTo;
   });
 
   describe("rendering with given search string", () => {
-    it("is empty when not specified", () => {
+    test("is empty when not specified", () => {
       const PrintSearch = () => <>{useSearch()}</>;
 
       const rendered = renderToStaticMarkup(
@@ -101,7 +100,7 @@ describe("server-side rendering", () => {
       expect(rendered).toBe("");
     });
 
-    it("allows to override search string", () => {
+    test("allows to override search string", () => {
       const App = () => {
         const search = useSearch();
         const [location] = useLocation();

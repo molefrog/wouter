@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
-import { useRoute, Match, Router, RegexRouteParams } from "wouter";
-import { it, expect } from "vitest";
-import { memoryLocation } from "wouter/memory-location";
+import { useRoute, Match, Router, RegexRouteParams } from "../src/index.js";
+import { it, expect } from "bun:test";
+import { memoryLocation } from "../src/memory-location.js";
 
 it("is case insensitive", () => {
   assertRoute("/Users", "/users", {});
@@ -189,11 +189,11 @@ it("reacts to pattern updates", () => {
       category: "products",
       post: "40",
       action: "read-all",
-    },
+    } as any,
   ]);
 
   rerender({ pattern: "/blog/products/:id?/read-all" });
-  expect(result.current).toStrictEqual([true, { 0: "40", id: "40" }]);
+  expect(result.current).toStrictEqual([true, { 0: "40", id: "40" } as any]);
 
   rerender({ pattern: "/blog/products/:name" });
   expect(result.current).toStrictEqual([false, null]);
@@ -201,7 +201,7 @@ it("reacts to pattern updates", () => {
   rerender({ pattern: "/blog/*" });
   expect(result.current).toStrictEqual([
     true,
-    { 0: "products/40/read-all", "*": "products/40/read-all" },
+    { 0: "products/40/read-all", "*": "products/40/read-all" } as any,
   ]);
 });
 

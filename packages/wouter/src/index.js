@@ -153,6 +153,9 @@ export const Router = ({ children, ...props }) => {
   // hooks can define their own `href` formatter (e.g. for hash location)
   props.hrefs = props.hrefs ?? props.hook?.hrefs;
 
+  // hooks can define their own search hook (e.g. for memory location)
+  props.searchHook = props.searchHook ?? props.hook?.searchHook;
+
   // what is happening below: to avoid unnecessary rerenders in child components,
   // we ensure that the router object reference is stable, unless there are any
   // changes that require reload (e.g. `base` prop changes -> all components that

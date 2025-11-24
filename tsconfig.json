@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "bundler",
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "strict": true,
+    "baseUrl": ".",
+    "types": ["bun", "@testing-library/jest-dom"],
+    "skipLibCheck": true
+  },
+  "include": ["packages/wouter/**/*", "packages/wouter-preact/**/*"]
+}

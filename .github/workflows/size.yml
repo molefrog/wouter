@@ -7,6 +7,14 @@ jobs:
       CI_JOB_NUMBER: 1
     steps:
       - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+      - name: Prepare wouter-preact (copy source files)
+        run: cd packages/wouter-preact && npm run prepublishOnly
       - uses: andresz1/size-limit-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_step: build

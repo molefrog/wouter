@@ -1,0 +1,242 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+# Wouter - Minimalist React Router
+
+## Project Overview
+
+Wouter is a **minimalist-friendly ~2.1KB React router** that focuses on performance, small bundle size, and simplicity. It provides hook-based routing for React and Preact applications.
+
+### Key Features
+
+- Tiny bundle size (2.1KB gzipped vs 18.7KB React Router)
+- Hook-based API (`useLocation`, `useRoute`, `useParams`, etc.)
+- Zero dependencies
+- Supports React and Preact
+- Optional top-level `<Router />` component
+- Nested routing support
+- SSR support
+- Memory location for testing
+
+## Project Structure
+
+```
+wouter/
+├── packages/
+│   ├── wouter/                 # Main React package
+│   │   ├── src/
+│   │   │   ├── index.js        # Main router implementation
+│   │   │   ├── use-browser-location.js
+│   │   │   ├── use-hash-location.js
+│   │   │   ├── memory-location.js
+│   │   │   ├── react-deps.js   # React imports
+│   │   │   └── paths.js        # Path utilities
+│   │   ├── test/               # Test files
+│   │   ├── types/              # TypeScript definitions
+│   │   └── esm/                # Built ES modules
+│   └── wouter-preact/          # Preact package
+├── assets/                     # Documentation assets
+└── .github/                    # GitHub workflows
+```
+
+## Development Workflow
+
+### Prerequisites
+
+- Node.js v20.17.0+ or v22.9.0+
+- npm
+
+### Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Run tests (watch mode)
+npm test
+
+# Run tests (single run)
+npm test -- --run
+
+# Run specific test file
+npm test -- packages/wouter/test/router.test.tsx --run
+
+# Run tests with coverage
+npm test -- --coverage
+
+# Build packages
+npm run build
+
+# Type checking
+npm run typecheck
+
+# Lint code
+npm run lint
+```
+
+### Test Files Organization
+
+- `test/router.test.tsx` - Router component and memoization tests
+- `test/use-location.test.tsx` - Location hook tests
+- `test/use-route.test.tsx` - Route matching tests
+- `test/link.test.tsx` - Link component tests
+- `test/memory-location.test.ts` - Memory location for testing
+- `test/nested-route.test.tsx` - Nested routing tests
+- `test/ssr.test.tsx` - Server-side rendering tests
+
+## Key Development Principles
+
+### Performance First
+
+- **Bundle size matters**: Every byte counts. Use size-limit CI checks
+- **Stable object references**: Prevent unnecessary re-renders with proper memoization
+- **Minimize dependencies**: Zero external dependencies policy
+
+### Code Style
+
+- **Functional programming**: Prefer hooks over class components
+- **Compact code**: Optimize for bundle size (may sacrifice readability)
+- **React patterns**: Use `React.memo`, `useCallback`, `useMemo` appropriately
+
+### Testing Guidelines
+
+- **Comprehensive coverage**: Test all public APIs
+- **Real-world scenarios**: Include complex use cases (like language switching)
+- **Memory location**: Use for isolated testing
+- **Memoization tests**: Verify stable object references
+
+## Core APIs
+
+### Hooks
+
+- `useLocation()` - Get/set current location
+- `useRoute(pattern)` - Match current location against pattern
+- `useParams()` - Extract route parameters
+- `useSearch()` - Get search/query string
+- `useSearchParams()` - Get/set URLSearchParams
+- `useRouter()` - Access router configuration
+
+### Components
+
+- `<Router />` - Optional configuration wrapper
+- `<Route />` - Conditional rendering based on path
+- `<Link />` - Navigation component
+- `<Switch />` - Exclusive routing
+- `<Redirect />` - Programmatic navigation
+
+### Location Hooks
+
+- `useBrowserLocation` - Browser history API
+- `useHashLocation` - Hash-based routing
+- `memoryLocation` - In-memory for testing
+
+## Performance Considerations
+
+### Router Memoization
+
+The Router component uses sophisticated memoization to prevent unnecessary re-renders:
+
+- Only creates new router objects when props actually change
+- Preserves stable references for `React.memo` components
+- Critical for performance in complex applications
+
+### Bundle Optimization
+
+- Use `// ... existing code ...` pattern in edits to minimize diffs
+- Prefer shorter variable names in production builds
+- Optimize for gzip/brotli compression
+
+## Common Patterns
+
+### Testing Router Components
+
+```javascript
+import { memoryLocation } from "wouter/memory-location";
+
+const { hook } = memoryLocation({ path: "/test/path" });
+render(
+  <Router hook={hook}>
+    <YourComponent />
+  </Router>
+);
+```
+
+### Custom Location Hooks
+
+```javascript
+const useCustomLocation = () => {
+  const [location, setLocation] = useBrowserLocation();
+  // Add custom logic here
+  return [location, setLocation];
+};
+```
+
+### Nested Routing
+
+```javascript
+<Route path="/app" nest>
+  <Route path="/users/:id">
+    <UserProfile />
+  </Route>
+</Route>
+```
+
+## Debugging Tips
+
+### Common Issues
+
+1. **Router memoization**: Check if unnecessary re-renders occur
+2. **Base path conflicts**: Verify base path inheritance in nested routers
+3. **Pattern matching**: Use regexparam syntax for route patterns
+4. **SSR hydration**: Ensure client/server router configs match
+
+### Debugging Tools
+
+- React DevTools Profiler for render tracking
+- Network tab for bundle size verification
+- Console warnings for deprecated patterns
+
+## Contributing Guidelines
+
+### Before Making Changes
+
+1. Run full test suite: `npm test -- --run`
+2. Check bundle size impact
+3. Verify TypeScript definitions
+4. Test with both React and Preact
+
+### Adding New Features
+
+1. Consider bundle size impact
+2. Add comprehensive tests
+3. Update TypeScript definitions
+4. Document in README if public API
+5. Maintain backward compatibility
+
+### Performance Changes
+
+1. Add before/after performance tests
+2. Verify memoization behavior
+3. Test with complex nested scenarios
+4. Check for memory leaks in long-running apps
+
+## Architecture Notes
+
+### Router Context System
+
+- Default router created on-demand
+- Context inheritance with override capabilities
+- Memoization prevents cascade re-renders
+- Base path accumulation in nested routers
+
+### Pattern Matching
+
+- Uses regexparam library internally
+- Supports named parameters, wildcards, optional segments
+- Regex patterns supported for complex matching
+- Loose mode for nested routing
+
+This project prioritizes performance and minimalism while maintaining full feature parity with larger routing solutions.

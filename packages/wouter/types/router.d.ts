@@ -3,14 +3,13 @@ import {
   SearchString,
   BaseLocationHook,
   BaseSearchHook,
+  HrefsFormatter,
 } from "./location-hook.js";
 
 export type Parser = (
   route: Path,
   loose?: boolean
 ) => { pattern: RegExp; keys: string[] };
-
-export type HrefsFormatter = (href: string, router: RouterObject) => string;
 
 // the object returned from `useRouter`
 export interface RouterObject {

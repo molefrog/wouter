@@ -8,11 +8,15 @@ export type PathPattern = string | RegExp;
 
 export type SearchString = string;
 
+export type HrefsFormatter = (href: string, router?: any) => string;
+
 // the base useLocation hook type. Any custom hook (including the
 // default one) should inherit from it.
-export type BaseLocationHook = (
-  ...args: any[]
-) => [Path, (path: Path, ...args: any[]) => any];
+export type BaseLocationHook = {
+  (...args: any[]): [Path, (path: Path, ...args: any[]) => any];
+  searchHook?: BaseSearchHook;
+  hrefs?: HrefsFormatter;
+};
 
 export type BaseSearchHook = (...args: any[]) => SearchString;
 

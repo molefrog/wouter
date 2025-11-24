@@ -1,15 +1,18 @@
-import { act, renderHook } from "@testing-library/react";
-import { it, expect } from "vitest";
-import { useParams, Router, Route, Switch } from "wouter";
+import { act, renderHook, cleanup } from "@testing-library/react";
+import { test, expect, beforeEach, afterEach } from "bun:test";
+import { useParams, Router, Route, Switch } from "../src/index.js";
 
-import { memoryLocation } from "wouter/memory-location";
+import { memoryLocation } from "../src/memory-location.js";
 
-it("returns empty object when used outside of <Route />", () => {
+beforeEach(() => history.replaceState(null, "", "/"));
+afterEach(cleanup);
+
+test("returns empty object when used outside of <Route />", () => {
   const { result } = renderHook(() => useParams());
   expect(result.current).toEqual({});
 });
 
-it("contains a * parameter when used inside an empty <Route />", () => {
+test("contains a * parameter when used inside an empty <Route />", () => {
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => (
       <Router hook={memoryLocation({ path: "/app-2/goods/tees" }).hook}>
@@ -24,7 +27,7 @@ it("contains a * parameter when used inside an empty <Route />", () => {
   });
 });
 
-it("returns an empty object when there are no params", () => {
+test("returns an empty object when there are no params", () => {
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => <Route path="/">{props.children}</Route>,
   });
@@ -32,7 +35,7 @@ it("returns an empty object when there are no params", () => {
   expect(result.current).toEqual({});
 });
 
-it("contains parameters from the closest parent <Route />", () => {
+test("contains parameters from the closest parent <Route />", () => {
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => (
       <Router hook={memoryLocation({ path: "/app/users/1/maria" }).hook}>
@@ -51,7 +54,7 @@ it("contains parameters from the closest parent <Route />", () => {
   });
 });
 
-it("inherits parameters from parent nested routes", () => {
+test("inherits parameters from parent nested routes", () => {
   const { result } = renderHook(() => useParams(), {
     wrapper: (props) => (
       <Router
@@ -80,7 +83,7 @@ it("inherits parameters from parent nested routes", () => {
   });
 });
 
-it("rerenders with parameters change", () => {
+test("rerenders with parameters change", () => {
   const { hook, navigate } = memoryLocation({ path: "/" });
 
   const { result } = renderHook(() => useParams(), {
@@ -110,7 +113,7 @@ it("rerenders with parameters change", () => {
   });
 });
 
-it("extracts parameters of the nested route", () => {
+test("extracts parameters of the nested route", () => {
   const { hook } = memoryLocation({
     path: "/v2/eth/txns",
     static: true,
@@ -134,7 +137,7 @@ it("extracts parameters of the nested route", () => {
   });
 });
 
-it("keeps the object ref the same if params haven't changed", () => {
+test("keeps the object ref the same if params haven't changed", () => {
   const { hook } = memoryLocation({ path: "/foo/bar" });
 
   const { result, rerender } = renderHook(() => useParams(), {
@@ -150,7 +153,7 @@ it("keeps the object ref the same if params haven't changed", () => {
   expect(result.current).toBe(firstRenderedParams);
 });
 
-it("works when the route becomes matching", () => {
+test("works when the route becomes matching", () => {
   const { hook, navigate } = memoryLocation({ path: "/" });
 
   const { result } = renderHook(() => useParams(), {
@@ -165,7 +168,7 @@ it("works when the route becomes matching", () => {
   expect(result.current).toMatchObject({ id: "123" });
 });
 
-it("makes the params an empty object, when there are no path params", () => {
+test("makes the params an empty object, when there are no path params", () => {
   const { hook, navigate } = memoryLocation({ path: "/" });
 
   const { result } = renderHook(() => useParams(), {
@@ -184,7 +187,7 @@ it("makes the params an empty object, when there are no path params", () => {
   expect(Object.keys(result.current).length).toBe(0);
 });
 
-it("removes route parameters when no longer present in the path", () => {
+test("removes route parameters when no longer present in the path", () => {
   // Start at a route that has both 'category' and 'page' in its params
   const { hook, navigate } = memoryLocation({
     path: "/products/categories/apple/page/1",

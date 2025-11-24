@@ -1,0 +1,109 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Publishing Wouter Packages
+
+This document outlines the process for publishing new versions of the wouter packages to npm.
+
+## Prerequisites
+
+- Ensure you have npm publish permissions for both `wouter` and `wouter-preact` packages
+- Have npm authentication set up (you'll need OTP access)
+- All tests should be passing
+- All changes should be committed to the repository
+
+## Publishing Process
+
+### 1. Version Bump
+
+Update the version in both package.json files:
+- `packages/wouter/package.json`
+- `packages/wouter-preact/package.json`
+
+For semantic versioning:
+- **Patch** (x.x.X): Bug fixes, small improvements
+- **Minor** (x.X.x): New features, backward compatible
+- **Major** (X.x.x): Breaking changes
+
+### 2. Dry Run Validation
+
+Run dry publish commands to validate the packages before actual publishing:
+
+```bash
+npm publish --dry-run -w wouter
+npm publish --dry-run -w wouter-preact
+```
+
+This will show you:
+- Package contents and file list
+- Bundle size information
+- Version confirmation
+- Any potential issues
+
+### 3. Build Verification (Optional)
+
+Check the build artifacts in the `/esm/` folders to ensure the latest updates are properly built:
+- `packages/wouter/esm/`
+- `packages/wouter-preact/esm/`
+
+The `prepublishOnly` script automatically builds the packages, but it's good to verify.
+
+## ⚠️ Confirmation Required
+
+**ALWAYS ask for user confirmation before proceeding with the following steps:**
+
+### 4. Publish to npm
+
+Publish both packages to the npm registry:
+
+```bash
+npm publish -w wouter
+npm publish -w wouter-preact
+```
+
+**Note:** npm might fail with "EOTP" (Error One-Time Password) even when the OTP was entered correctly in the browser. This is a known npm issue - the packages are usually still published successfully despite the error message.
+
+### 5. Git Commit and Tag
+
+After successful publishing:
+
+1. **Commit the version changes:**
+   ```bash
+   git add packages/wouter/package.json packages/wouter-preact/package.json
+   git commit -m "Bump version to X.X.X"
+   ```
+
+2. **Create a version tag:**
+   ```bash
+   git tag vX.X.X
+   ```
+
+3. **Push to remote (optional):**
+   ```bash
+   git push origin main
+   git push origin vX.X.X
+   ```
+
+## Troubleshooting
+
+### Common Issues
+
+- **Authentication errors**: Run `npm login` or use the browser authentication flow
+- **OTP timeout**: Generate a fresh OTP code from your authenticator app
+- **Permission denied**: Ensure you have publish permissions for both packages
+- **Version conflicts**: Check if the version already exists on npm
+
+### Verification
+
+After publishing, verify the packages are available:
+- Check [wouter on npm](mdc:https:/www.npmjs.com/package/wouter)
+- Check [wouter-preact on npm](mdc:https:/www.npmjs.com/package/wouter-preact)
+- Test installation: `npm install wouter@latest`
+
+## Package Information
+
+- **wouter**: Main React package (~22KB package size)
+- **wouter-preact**: Preact-specific package (~22KB package size)
+- Both packages maintain version parity and should be published together

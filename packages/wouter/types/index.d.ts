@@ -10,6 +10,7 @@ import {
   ReactNode,
   ReactElement,
   MouseEventHandler,
+  JSXElementConstructor,
 } from "react";
 
 import {
@@ -79,7 +80,7 @@ export interface RouteProps<
       ) => ReactNode)
     | ReactNode;
   path?: RoutePath;
-  component?: ComponentType<
+  component?: JSXElementConstructor<
     RouteComponentProps<
       T extends DefaultParams
         ? T

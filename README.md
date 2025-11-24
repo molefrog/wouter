@@ -145,7 +145,7 @@ links, default routes, server-side rendering etc.
 
 **Location Hooks**
 
-These can be used separately from the main module and have an interface similar to `useState`. These hooks don't support nesting, base path, route matching.
+These can be used separately from the main module and have an interface similar to `useState`. These hooks are standalone and don't include built-in support for nesting, base path, or route matching. However, when passed to `<Router>`, they work seamlessly with all Router features including nesting and base paths.
 
 - **[`import { useBrowserLocation } from "wouter/use-browser-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-browser-location.js)** —
   allows to manipulate current location in the browser's address bar, a tiny wrapper around the History API.
@@ -361,7 +361,7 @@ Refer to [Server-Side Rendering](#server-side-rendering-support-ssr) for more in
 
 ### `useSearchParams`: search parameters
 
-Allow you to get and set any search parameters. The first returned value is a `URLSearchParams` object and the second returned value is a setter that accepts a `URLSearchParams` object with options.
+Returns a `URLSearchParams` object and a setter function to update search parameters. The setter accepts either a value (object, URLSearchParams, string[][], etc.) or a **callback function** that receives the current params and must return the new params.
 
 ```jsx
 import { useSearchParams } from 'wouter';
@@ -374,6 +374,7 @@ const id = searchParams.get('id');
 // modify a specific search parameter
 setSearchParams((prev) => {
   prev.set('tab', 'settings');
+  return prev;
 });
 
 // override all search parameters
@@ -387,6 +388,7 @@ setSearchParams({
 setSearchParams(
   (prev) => {
     prev.set('order', 'desc');
+    return prev;
   },
   {
     replace: true,
@@ -397,6 +399,7 @@ setSearchParams(
 setSearchParams(
   (prev) => {
     prev.set('foo', 'bar');
+    return prev;
   },
   {
     state: 'hello',
@@ -748,7 +751,7 @@ const App = () => (
 );
 ```
 
-**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-v3-strict-routes-w3xdtz)**
+**[▶ Demo Sandbox](https://codesandbox.io/p/sandbox/wouter-v3-strict-routes-w3xdtz)**
 
 ### Are relative routes and links supported?
 
@@ -769,7 +772,7 @@ const App = () => (
 );
 ```
 
-**[▶ Demo Sandbox](https://codesandbox.io/s/wouter-v3-nested-routes-l8p23s)**
+**[▶ Demo Sandbox](https://codesandbox.io/p/sandbox/wouter-v3-nested-routes-l8p23s)**
 
 ### Can I initiate navigation from outside a component?
 
@@ -918,15 +921,29 @@ import { memoryLocation } from "wouter/memory-location";
 it("renders a user page", () => {
   // `static` option makes it immutable
   // even if you call `navigate` somewhere in the app location won't change
-  const { hook } = memoryLocation({ path: "/user/2", static: true });
+  const { hook, searchHook } = memoryLocation({ path: "/user/2", static: true });
 
   const { container } = render(
-    <Router hook={hook}>
+    <Router hook={hook} searchHook={searchHook}>
       <Route path="/user/:id">{(params) => <>User ID: {params.id}</>}</Route>
     </Router>
   );
 
   expect(container.innerHTML).toBe("User ID: 2");
+});
+```
+
+**Note:** When you pass a `hook` prop to `Router`, it will automatically inherit the `searchHook` from the hook if available (via `hook.searchHook`). This means you don't need to explicitly pass both `hook` and `searchHook` when using `memoryLocation` - just passing `hook` is enough for `useSearch()` to work correctly with query parameters.
+
+```jsx
+it("works with query parameters", () => {
+  const { hook } = memoryLocation({ path: "/products?sort=price&order=asc" });
+
+  const { result } = renderHook(() => useSearch(), {
+    wrapper: ({ children }) => <Router hook={hook}>{children}</Router>,
+  });
+
+  expect(result.current).toBe("sort=price&order=asc");
 });
 ```
 
@@ -981,6 +998,17 @@ const UsersRoute = () => {
 ```
 
 Wouter's motto is **"Minimalist-friendly"**.
+
+## Contributing
+
+**Architecture principles:**
+
+- All code is written in JavaScript for full control over size optimization
+- TypeScript definitions are maintained separately in `types/` directories
+- `wouter-preact` reuses the same source except for `react-deps.js` (Preact-specific hooks)
+- Type definitions are duplicated between packages (not ideal, but works for now)
+
+**Development:** Tests run directly from source files (no build required). Run `npm run test` for interactive mode or `npm run test -- --run` for a single run. Use `npm run build` to build the distributable package before publishing.
 
 ## Acknowledgements
 

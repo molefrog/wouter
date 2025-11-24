@@ -1,13 +1,13 @@
 import { memo, ReactElement, cloneElement, ComponentProps } from "react";
 import { renderHook, render } from "@testing-library/react";
-import { it, expect, describe } from "vitest";
+import { it, expect, describe } from "bun:test";
 import {
   Router,
   DefaultParams,
   useRouter,
   Parser,
   BaseLocationHook,
-} from "wouter";
+} from "../src/index.js";
 
 it("creates a router object on demand", () => {
   const { result } = renderHook(() => useRouter());

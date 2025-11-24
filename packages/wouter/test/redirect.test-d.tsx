@@ -1,21 +1,23 @@
-import { describe, it, assertType } from "vitest";
-import { Redirect } from "wouter";
+import { describe, test } from "bun:test";
+import { Redirect } from "../src/index.js";
+
+const assertType = <T,>(_value: T): void => {};
 
 describe("Redirect types", () => {
-  it("should have required prop href", () => {
+  test("should have required prop href", () => {
     // @ts-expect-error
     assertType(<Redirect />);
     assertType(<Redirect href="/" />);
   });
 
-  it("should support state prop", () => {
+  test("should support state prop", () => {
     assertType(<Redirect href="/" state={{ a: "foo" }} />);
     assertType(<Redirect href="/" state={null} />);
     assertType(<Redirect href="/" state={undefined} />);
     assertType(<Redirect href="/" state="string" />);
   });
 
-  it("always renders nothing", () => {
+  test("always renders nothing", () => {
     // can be used in JSX
     <div>
       <Redirect href="/" />
@@ -24,7 +26,7 @@ describe("Redirect types", () => {
     assertType<null>(Redirect({ href: "/" }));
   });
 
-  it("can not accept children", () => {
+  test("can not accept children", () => {
     // @ts-expect-error
     <Redirect href="/">hi!</Redirect>;
 

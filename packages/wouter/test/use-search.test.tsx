@@ -1,19 +1,20 @@
-import { renderHook, act } from "@testing-library/react";
-import { useSearch, Router } from "wouter";
-import { navigate } from "wouter/use-browser-location";
-import { memoryLocation } from "wouter/memory-location";
-import { it, expect, beforeEach } from "vitest";
+import { renderHook, act, cleanup } from "@testing-library/react";
+import { useSearch, Router } from "../src/index.js";
+import { navigate } from "../src/use-browser-location.js";
+import { memoryLocation } from "../src/memory-location.js";
+import { test, expect, beforeEach, afterEach } from "bun:test";
 
 beforeEach(() => history.replaceState(null, "", "/"));
+afterEach(cleanup);
 
-it("returns browser search string", () => {
+test("returns browser search string", () => {
   history.replaceState(null, "", "/users?active=true");
   const { result } = renderHook(() => useSearch());
 
   expect(result.current).toEqual("active=true");
 });
 
-it("can be customized in the Router", () => {
+test("can be customized in the Router", () => {
   const customSearchHook = ({ customOption = "unused" }) => "none";
 
   const { result } = renderHook(() => useSearch(), {
@@ -25,7 +26,7 @@ it("can be customized in the Router", () => {
   expect(result.current).toEqual("none");
 });
 
-it("can be customized with memoryLocation", () => {
+test("can be customized with memoryLocation", () => {
   const { searchHook } = memoryLocation({ path: "/foo?key=value" });
 
   const { result } = renderHook(() => useSearch(), {
@@ -37,7 +38,7 @@ it("can be customized with memoryLocation", () => {
   expect(result.current).toEqual("key=value");
 });
 
-it("can be customized with memoryLocation using search path parameter", () => {
+test("can be customized with memoryLocation using search path parameter", () => {
   const { searchHook } = memoryLocation({
     path: "/foo?key=value",
     searchPath: "foo=bar",
@@ -52,7 +53,20 @@ it("can be customized with memoryLocation using search path parameter", () => {
   expect(result.current).toEqual("key=value&foo=bar");
 });
 
-it("unescapes search string", () => {
+test("auto-inherits searchHook from hook when not explicitly provided", () => {
+  const { hook } = memoryLocation({ path: "/foo?key=value" });
+
+  const { result } = renderHook(() => useSearch(), {
+    wrapper: (props) => {
+      // Only pass hook, not searchHook - it should auto-inherit!
+      return <Router hook={hook}>{props.children}</Router>;
+    },
+  });
+
+  expect(result.current).toEqual("key=value");
+});
+
+test("unescapes search string", () => {
   const { result: searchResult } = renderHook(() => useSearch());
 
   expect(searchResult.current).toBe("");
@@ -65,7 +79,7 @@ it("unescapes search string", () => {
   expect(searchResult.current).toBe("вопрос=как дела?");
 });
 
-it("is safe against parameter injection", () => {
+test("is safe against parameter injection", () => {
   history.replaceState(null, "", "/?search=foo%26parameter_injection%3Dbar");
   const { result } = renderHook(() => useSearch());
 

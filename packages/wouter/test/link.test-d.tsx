@@ -1,5 +1,5 @@
-import { describe, expectTypeOf, it } from "vitest";
-import { Link, LinkProps, type Path } from "wouter";
+import { describe, expectTypeOf, test } from "bun:test";
+import { Link, LinkProps, type Path } from "../src/index.js";
 import * as React from "react";
 
 type NetworkLocationHook = () => [
@@ -8,20 +8,20 @@ type NetworkLocationHook = () => [
 ];
 
 describe("<Link /> types", () => {
-  it("should have required prop href", () => {
+  test("should have required prop href", () => {
     // @ts-expect-error
     <Link>test</Link>;
     <Link href="/">test</Link>;
   });
 
-  it("does not allow `to` and `href` props to be used at the same time", () => {
+  test("does not allow `to` and `href` props to be used at the same time", () => {
     // @ts-expect-error
     <Link to="/hello" href="/world">
       Hello
     </Link>;
   });
 
-  it("should inherit props from `HTMLAnchorElement`", () => {
+  test("should inherit props from `HTMLAnchorElement`", () => {
     <Link to="/hello" className="hello">
       Hello
     </Link>;
@@ -39,7 +39,7 @@ describe("<Link /> types", () => {
     </Link>;
   });
 
-  it("can accept function as `className`", () => {
+  test("can accept function as `className`", () => {
     <Link
       href="/"
       className={(isActive) => (isActive ? "active" : "non-active")}
@@ -51,7 +51,7 @@ describe("<Link /> types", () => {
     />;
   });
 
-  it("should support other navigation params", () => {
+  test("should support other navigation params", () => {
     <Link href="/" state={{ a: "foo" }}>
       test
     </Link>;
@@ -70,7 +70,7 @@ describe("<Link /> types", () => {
     </Link>;
   });
 
-  it("should work with generic type", () => {
+  test("should work with generic type", () => {
     <Link<NetworkLocationHook> href="/" host="wouter.com">
       test
     </Link>;
@@ -85,7 +85,7 @@ describe("<Link /> types", () => {
 });
 
 describe("<Link /> with ref", () => {
-  it("should work", () => {
+  test("should work", () => {
     const ref = React.useRef<HTMLAnchorElement>(null);
 
     <Link to="/" ref={ref}>
@@ -93,7 +93,7 @@ describe("<Link /> with ref", () => {
     </Link>;
   });
 
-  it("should have error when type is `unknown`", () => {
+  test("should have error when type is `unknown`", () => {
     const ref = React.useRef();
 
     // @ts-expect-error
@@ -102,7 +102,7 @@ describe("<Link /> with ref", () => {
     </Link>;
   });
 
-  it("should have error when type is miss matched", () => {
+  test("should have error when type is miss matched", () => {
     const ref = React.useRef<HTMLAreaElement>(null);
 
     // @ts-expect-error
@@ -113,20 +113,20 @@ describe("<Link /> with ref", () => {
 });
 
 describe("<Link /> with `asChild` prop", () => {
-  it("should work", () => {
+  test("should work", () => {
     <Link to="/" asChild>
       <a>Hello</a>
     </Link>;
   });
 
-  it("does not allow `to` and `href` props to be used at the same time", () => {
+  test("does not allow `to` and `href` props to be used at the same time", () => {
     // @ts-expect-error
     <Link to="/hello" href="/world" asChild>
       <a>Hello</a>
     </Link>;
   });
 
-  it("can only have valid element as a child", () => {
+  test("can only have valid element as a child", () => {
     // @ts-expect-error strings are not valid children
     <Link to="/" asChild>
       {true ? "Hello" : "World"}
@@ -139,7 +139,7 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  it("does not allow other props", () => {
+  test("does not allow other props", () => {
     // @ts-expect-error
     <Link to="/" asChild className="">
       <a>Hello</a>
@@ -161,7 +161,7 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  it("should support other navigation params", () => {
+  test("should support other navigation params", () => {
     <Link to="/" asChild replace>
       <a>Hello</a>
     </Link>;
@@ -176,7 +176,7 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  it("should work with generic type", () => {
+  test("should work with generic type", () => {
     <Link<NetworkLocationHook> asChild to="/" host="wouter.com">
       <div>test</div>
     </Link>;
@@ -191,7 +191,7 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  it("accepts `onClick` prop that overwrites child's handler", () => {
+  test("accepts `onClick` prop that overwrites child's handler", () => {
     <Link
       to="/"
       asChild
@@ -203,7 +203,7 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  it("should work with `ComponentProps`", () => {
+  test("should work with `ComponentProps`", () => {
     type LinkComponentProps = React.ComponentProps<typeof Link>;
 
     // Because Link is a generic component, the props

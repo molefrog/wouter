@@ -1,8 +1,8 @@
-import { it, expectTypeOf, describe } from "vitest";
-import { BaseLocationHook, HookNavigationOptions } from "wouter";
+import { test, expectTypeOf, describe } from "bun:test";
+import { BaseLocationHook, HookNavigationOptions } from "../src/index.js";
 
 describe("`HookNavigationOptions` utility type", () => {
-  it("should return empty interface for hooks with no nav options", () => {
+  test("should return empty interface for hooks with no nav options", () => {
     const hook = (): [string, (path: string) => void] => {
       return ["stub", (path: string) => {}];
     };
@@ -14,7 +14,7 @@ describe("`HookNavigationOptions` utility type", () => {
     const optionsExt: Options | { a: 1 } = { a: 1, b: 2 };
   });
 
-  it("should return object with required navigation params", () => {
+  test("should return object with required navigation params", () => {
     const hook = (): [
       string,
       (path: string, options: { replace: boolean; optional?: number }) => void
@@ -36,7 +36,7 @@ describe("`HookNavigationOptions` utility type", () => {
     }>();
   });
 
-  it("should not contain never when options are optional", () => {
+  test("should not contain never when options are optional", () => {
     const hook = (
       param: string
     ): [string, (path: string, options?: { replace: boolean }) => void] => {
@@ -50,7 +50,7 @@ describe("`HookNavigationOptions` utility type", () => {
     }>();
   });
 
-  it("should only support valid hooks", () => {
+  test("should only support valid hooks", () => {
     // @ts-expect-error
     type A = HookNavigationOptions<string>;
     // @ts-expect-error
@@ -59,7 +59,7 @@ describe("`HookNavigationOptions` utility type", () => {
     type C = HookNavigationOptions<() => []>;
   });
 
-  it("should return empty object when `BaseLocationHook` is given", () => {
+  test("should return empty object when `BaseLocationHook` is given", () => {
     type Options = HookNavigationOptions<BaseLocationHook>;
     expectTypeOf<Options>().toEqualTypeOf<{}>();
   });

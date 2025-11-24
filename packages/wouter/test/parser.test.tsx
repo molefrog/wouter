@@ -1,10 +1,10 @@
-import { it, expect } from "vitest";
+import { test, expect } from "bun:test";
 
 import { pathToRegexp, Key } from "path-to-regexp";
 import { renderHook } from "@testing-library/react";
 
-import { Router, useRouter, useRoute, Parser } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
+import { Router, useRouter, useRoute, Parser } from "../src/index.js";
+import { memoryLocation } from "../src/memory-location.js";
 
 // Custom parser that uses `path-to-regexp` instead of `regexparam`
 const pathToRegexpParser: Parser = (route: string) => {
@@ -14,7 +14,7 @@ const pathToRegexpParser: Parser = (route: string) => {
   return { pattern, keys: keys.map((k) => String(k.name)) };
 };
 
-it("overrides the `parser` prop on the current router", () => {
+test("overrides the `parser` prop on the current router", () => {
   const { result } = renderHook(() => useRouter(), {
     wrapper: ({ children }) => (
       <Router parser={pathToRegexpParser}>{children}</Router>
@@ -25,7 +25,7 @@ it("overrides the `parser` prop on the current router", () => {
   expect(router.parser).toBe(pathToRegexpParser);
 });
 
-it("allows to change the behaviour of route matching", () => {
+test("allows to change the behaviour of route matching", () => {
   const { result } = renderHook(
     () => useRoute("/(home|dashboard)/:pages?/users/:rest*"),
     {
@@ -42,6 +42,12 @@ it("allows to change the behaviour of route matching", () => {
 
   expect(result.current).toStrictEqual([
     true,
-    { 0: "home", 1: undefined, 2: "10/bio", pages: undefined, rest: "10/bio" },
+    {
+      0: "home",
+      1: undefined,
+      2: "10/bio",
+      pages: undefined,
+      rest: "10/bio",
+    } as any,
   ]);
 });

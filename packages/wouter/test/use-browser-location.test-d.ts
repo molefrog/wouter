@@ -1,19 +1,21 @@
-import { it, assertType, describe, expectTypeOf } from "vitest";
+import { test, describe, expectTypeOf } from "bun:test";
 import {
   useBrowserLocation,
   useSearch,
   useHistoryState,
-} from "wouter/use-browser-location";
+} from "../src/use-browser-location.js";
+
+const assertType = <T,>(_value: T): void => {};
 
 describe("useBrowserLocation", () => {
-  it("should return string, function tuple", () => {
+  test("should return string, function tuple", () => {
     const [loc, navigate] = useBrowserLocation();
 
     assertType<string>(loc);
     assertType<Function>(navigate);
   });
 
-  it("should return `navigate` function with `path` and `options` parameters", () => {
+  test("should return `navigate` function with `path` and `options` parameters", () => {
     const [, navigate] = useBrowserLocation();
 
     assertType(navigate("/path"));
@@ -29,7 +31,7 @@ describe("useBrowserLocation", () => {
     assertType(navigate("/path", { unknownOption: true }));
   });
 
-  it("should support `ssrPath` option", () => {
+  test("should support `ssrPath` option", () => {
     assertType(useBrowserLocation({ ssrPath: "/something" }));
     // @ts-expect-error
     assertType(useBrowserLocation({ foo: "bar" }));
@@ -37,7 +39,7 @@ describe("useBrowserLocation", () => {
 });
 
 describe("useSearch", () => {
-  it("should return string", () => {
+  test("should return string", () => {
     type Search = ReturnType<typeof useSearch>;
     const search = useSearch();
 
@@ -47,14 +49,14 @@ describe("useSearch", () => {
 });
 
 describe("useHistoryState", () => {
-  it("should support generics", () => {
+  test("should support generics", () => {
     type TestCase = { hello: string };
     const state = useHistoryState<TestCase>();
 
     expectTypeOf(state).toEqualTypeOf<TestCase>();
   });
 
-  it("should fallback to any when type doesn't provided", () => {
+  test("should fallback to any when type doesn't provided", () => {
     const state = useHistoryState();
 
     expectTypeOf(state).toEqualTypeOf<any>();
