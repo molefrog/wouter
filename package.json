@@ -23,6 +23,7 @@
     "url": "git+https://github.com/molefrog/wouter.git"
   },
   "license": "ISC",
+  "sideEffects": false,
   "prettier": {
     "tabWidth": 2,
     "semi": true,
