@@ -21,7 +21,9 @@ Bun.serve({
     if (isAsset) {
       // If files array exists (production build), serve from there
       if (indexHtml.files) {
-        const file = indexHtml.files.find(f => url.pathname === f.path || url.pathname.endsWith(f.path));
+        const file = indexHtml.files.find(
+          (f) => url.pathname === f.path || url.pathname.endsWith(f.path)
+        );
         if (file) {
           return new Response(Bun.file(file.path), {
             headers: file.headers,
