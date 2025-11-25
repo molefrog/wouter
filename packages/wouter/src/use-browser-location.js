@@ -30,15 +30,18 @@ export const useLocationProperty = (fn, ssrFn) =>
 
 const currentSearch = () => location.search;
 
-export const useSearch = ({ ssrSearch = "" } = {}) =>
-  useLocationProperty(currentSearch, () => ssrSearch);
+export const useSearch = ({ ssrSearch } = {}) =>
+  useLocationProperty(
+    currentSearch,
+    ssrSearch != null ? () => ssrSearch : currentSearch
+  );
 
 const currentPathname = () => location.pathname;
 
 export const usePathname = ({ ssrPath } = {}) =>
   useLocationProperty(
     currentPathname,
-    ssrPath ? () => ssrPath : currentPathname
+    ssrPath != null ? () => ssrPath : currentPathname
   );
 
 const currentHistoryState = () => history.state;
