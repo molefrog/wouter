@@ -89,6 +89,15 @@ it("can extract `ssrSearch` from `ssrPath` after the '?' symbol", () => {
   expect(result.current.ssrSearch).toBe("a=b&c=d");
 });
 
+it("keeps the ssrSearch undefined if not in SSR mode", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => <Router>{props.children}</Router>,
+  });
+
+  expect(result.current.ssrPath).toBe(undefined);
+  expect(result.current.ssrSearch).toBe(undefined);
+});
+
 it("shares one router instance between components", () => {
   const routers: any[] = [];
 
