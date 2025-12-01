@@ -174,8 +174,8 @@ export const Router = ({ children, ...props }) => {
     const option =
       k === "base"
         ? /* base is special case, it is appended to the parent's base */
-          parent[k] + (props[k] || "")
-        : props[k] || parent[k];
+          parent[k] + (props[k] ?? "")
+        : props[k] ?? parent[k];
 
     if (prev === next && option !== next[k]) {
       ref.current = next = { ...next };
