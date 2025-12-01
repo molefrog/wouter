@@ -76,7 +76,7 @@ it("can extract `ssrSearch` from `ssrPath` after the '?' symbol", () => {
   });
 
   expect(result.current.ssrPath).toBe("/no-search");
-  expect(result.current.ssrSearch).toBe(undefined);
+  expect(result.current.ssrSearch).toBe("");
 
   ssrPath = "/with-search?a=b&c=d";
   rerender();
