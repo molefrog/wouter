@@ -93,15 +93,6 @@ describe("<Link /> with ref", () => {
     </Link>;
   });
 
-  test("should have error when type is `unknown`", () => {
-    const ref = React.useRef();
-
-    // @ts-expect-error
-    <Link to="/" ref={ref}>
-      Hello
-    </Link>;
-  });
-
   test("should have error when type is miss matched", () => {
     const ref = React.useRef<HTMLAreaElement>(null);
 

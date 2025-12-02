@@ -14,8 +14,6 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "react": "19",
-    "react-dom": "19",
-    "wouter": "3.8.1"
+    "wouter": "workspace:*"
   }
 }
