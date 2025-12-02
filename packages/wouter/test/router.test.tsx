@@ -76,7 +76,7 @@ it("can extract `ssrSearch` from `ssrPath` after the '?' symbol", () => {
   });
 
   expect(result.current.ssrPath).toBe("/no-search");
-  expect(result.current.ssrSearch).toBe(undefined);
+  expect(result.current.ssrSearch).toBe("");
 
   ssrPath = "/with-search?a=b&c=d";
   rerender();
@@ -87,6 +87,15 @@ it("can extract `ssrSearch` from `ssrPath` after the '?' symbol", () => {
   ssrSearch = "x=y&z=w";
   rerender();
   expect(result.current.ssrSearch).toBe("a=b&c=d");
+});
+
+it("keeps the ssrSearch undefined if not in SSR mode", () => {
+  const { result } = renderHook(() => useRouter(), {
+    wrapper: (props) => <Router>{props.children}</Router>,
+  });
+
+  expect(result.current.ssrPath).toBe(undefined);
+  expect(result.current.ssrSearch).toBe(undefined);
 });
 
 it("shares one router instance between components", () => {

@@ -110,8 +110,7 @@ describe("server-side rendering", () => {
       expect(rendered).toBe("/catalog filter by sort=created_at");
     });
 
-    // issue #550: useSearch should work in pure Node.js without `location` global
-    test("works without location global (issue #550)", () => {
+    test("doesn't break useSearch hook if not specified", () => {
       const PrintSearch = () => <>{useSearch()}</>;
 
       const rendered = withoutLocation(() =>
@@ -125,8 +124,7 @@ describe("server-side rendering", () => {
       expect(rendered).toBe("");
     });
 
-    // issue #550: passing ssrSearch="" explicitly should work
-    test("empty ssrSearch is respected (issue #550)", () => {
+    test("works with empty ssrSearch", () => {
       const PrintSearch = () => <>{useSearch()}</>;
 
       const rendered = withoutLocation(() =>

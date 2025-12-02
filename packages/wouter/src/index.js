@@ -146,9 +146,12 @@ export const Router = ({ children, ...props }) => {
   // holds to the context value: the router object
   let value = parent;
 
-  // when `ssrPath` contains a `?` character, we can extract the search from it
-  const [path, search] = props.ssrPath?.split("?") ?? [];
-  if (search) (props.ssrSearch = search), (props.ssrPath = path);
+  // when `ssrPath` contains a `?` character, we can extract the search from it.
+  // also, ensure ssrSearch is always defined when ssrPath is provided, so that
+  // useSearch behavior matches usePathname (proper SSR hydration when client
+  // renders <Router> without props after server rendered with ssrPath/ssrSearch)
+  const [path, search = props.ssrSearch ?? ""] = props.ssrPath?.split("?") ?? [];
+  if (path) props.ssrSearch = search, props.ssrPath = path;
 
   // hooks can define their own `href` formatter (e.g. for hash location)
   props.hrefs = props.hrefs ?? props.hook?.hrefs;
