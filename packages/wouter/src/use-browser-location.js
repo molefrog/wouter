@@ -33,7 +33,7 @@ const currentSearch = () => location.search;
 export const useSearch = ({ ssrSearch } = {}) =>
   useLocationProperty(
     currentSearch,
-    ssrSearch != null ? () => ssrSearch : currentSearch
+    ssrSearch != null ? () => ssrSearch : () => ""
   );
 
 const currentPathname = () => location.pathname;

@@ -10,6 +10,7 @@ import {
   useLocation,
   SsrContext,
 } from "../src/index.js";
+import { withoutLocation } from "./setup.js";
 
 describe("server-side rendering", () => {
   test("works via `ssrPath` prop", () => {
@@ -88,18 +89,6 @@ describe("server-side rendering", () => {
   });
 
   describe("rendering with given search string", () => {
-    test("is empty when not specified", () => {
-      const PrintSearch = () => <>{useSearch()}</>;
-
-      const rendered = renderToStaticMarkup(
-        <Router ssrPath="/">
-          <PrintSearch />
-        </Router>
-      );
-
-      expect(rendered).toBe("");
-    });
-
     test("allows to override search string", () => {
       const App = () => {
         const search = useSearch();
@@ -119,6 +108,36 @@ describe("server-side rendering", () => {
       );
 
       expect(rendered).toBe("/catalog filter by sort=created_at");
+    });
+
+    // issue #550: useSearch should work in pure Node.js without `location` global
+    test("works without location global (issue #550)", () => {
+      const PrintSearch = () => <>{useSearch()}</>;
+
+      const rendered = withoutLocation(() =>
+        renderToStaticMarkup(
+          <Router ssrPath="/">
+            <PrintSearch />
+          </Router>
+        )
+      );
+
+      expect(rendered).toBe("");
+    });
+
+    // issue #550: passing ssrSearch="" explicitly should work
+    test("empty ssrSearch is respected (issue #550)", () => {
+      const PrintSearch = () => <>{useSearch()}</>;
+
+      const rendered = withoutLocation(() =>
+        renderToStaticMarkup(
+          <Router ssrPath="/" ssrSearch="">
+            <PrintSearch />
+          </Router>
+        )
+      );
+
+      expect(rendered).toBe("");
     });
   });
 });
