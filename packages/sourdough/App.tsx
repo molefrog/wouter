@@ -5,14 +5,22 @@ function Logo() {
   return <i className="iconoir-home-simple-door text-2xl" />;
 }
 
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+function NavLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   const [location] = useLocation();
   const isActive = href === "/" ? location === "/" : location.startsWith(href);
 
   return (
     <Link
       href={href}
-      className={`text-sm font-medium ${isActive ? "text-gray-900" : "text-gray-500 hover:text-gray-900"}`}
+      className={`text-sm font-medium ${
+        isActive ? "text-gray-900" : "text-gray-500 hover:text-gray-900"
+      }`}
     >
       {children}
     </Link>
