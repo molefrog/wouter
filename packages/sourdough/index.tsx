@@ -5,8 +5,9 @@ import { App } from "./App.tsx";
 // Build the HTML and all its assets before starting the server
 const build = await Bun.build({
   entrypoints: ["./index.html"],
-  outdir: "./dist",
+  // No outdir = files are kept in memory, not written to disk
   minify: false,
+  publicPath: "/",
 });
 
 if (!build.success) {
@@ -46,8 +47,9 @@ Bun.serve({
     }
 
     // Otherwise, it's a page request - render with SSR
+    // ssrPath accepts full path with search, e.g. "/foo?bar=1"
     const stream = await renderToReadableStream(
-      <Router ssrPath={url.pathname} ssrSearch={url.search}>
+      <Router ssrPath={url.pathname + url.search}>
         <App />
       </Router>
     );

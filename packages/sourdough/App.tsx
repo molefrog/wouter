@@ -24,7 +24,9 @@ function HomePage() {
       <p>Welcome to the Wouter SSR demo!</p>
       <p>This page is server-side rendered with Bun + React + Wouter.</p>
 
-      <div style={{ marginTop: "1rem", padding: "1rem", background: "#f5f5f5" }}>
+      <div
+        style={{ marginTop: "1rem", padding: "1rem", background: "#f5f5f5" }}
+      >
         <h3>Filters (using useSearch)</h3>
         <div style={{ display: "flex", gap: "1rem" }}>
           <label>
