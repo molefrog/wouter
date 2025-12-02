@@ -1,6 +1,7 @@
 import { renderToReadableStream } from "react-dom/server";
 import { Router } from "wouter";
 import { App } from "./App.tsx";
+import tailwind from "bun-plugin-tailwind";
 
 // Build the HTML and all its assets before starting the server
 const build = await Bun.build({
@@ -8,6 +9,7 @@ const build = await Bun.build({
   // No outdir = files are kept in memory, not written to disk
   minify: false,
   publicPath: "/",
+  plugins: [tailwind],
 });
 
 if (!build.success) {
