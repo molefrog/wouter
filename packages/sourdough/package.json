@@ -3,6 +3,10 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "bun --watch index.tsx",
+    "start": "bun index.tsx"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -12,6 +16,6 @@
   "dependencies": {
     "react": "19",
     "react-dom": "19",
-    "wouter": "3.8.0"
+    "wouter": "3.8.1"
   }
 }

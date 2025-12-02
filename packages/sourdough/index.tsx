@@ -46,6 +46,12 @@ Bun.serve({
       return new Response(asset);
     }
 
+    // Check if this is a request for a static file from public/
+    const publicFile = Bun.file(`./public${url.pathname}`);
+    if (await publicFile.exists()) {
+      return new Response(publicFile);
+    }
+
     // Otherwise, it's a page request - render with SSR
     // ssrPath accepts full path with search, e.g. "/foo?bar=1"
     const stream = await renderToReadableStream(
