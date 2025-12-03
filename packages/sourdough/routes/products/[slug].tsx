@@ -29,9 +29,13 @@ export function ProductPage({ slug }: { slug: string }) {
             <span className="text-sm">$199.99</span>
           </div>
           <div className="mt-8">
-            <button className="bg-black text-white px-3 text-sm font-medium py-2 rounded-xl hover:bg-neutral-800 transition-colors shadow-sm cursor-pointer w-full">
+            <Link
+              href="/cart"
+              state={{ addedItem: name }}
+              className="bg-black text-white px-3 text-sm font-medium py-2 rounded-xl hover:bg-neutral-800 transition-colors shadow-sm cursor-pointer w-full inline-block text-center"
+            >
               Add to Cart
-            </button>
+            </Link>
           </div>
         </div>
       </div>

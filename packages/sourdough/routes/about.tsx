@@ -51,6 +51,11 @@ export function AboutPage() {
           </Link>
         </Feature>
         <Feature>
+          <Link href="/cart" state={{ addedItem: "Demo Product" }} className="hover:underline">
+            Navigation with state
+          </Link>
+        </Feature>
+        <Feature>
           <span className="text-neutral-400">View transitions (soon)</span>
         </Feature>
       </ul>
