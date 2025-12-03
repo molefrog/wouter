@@ -56,11 +56,22 @@ Bun.serve({
 
     // Otherwise, it's a page request - render with SSR
     // ssrPath accepts full path with search, e.g. "/foo?bar=1"
+    // ssrContext is used to handle redirects on the server
+    const ssrContext: { redirectTo?: string } = {};
+
     const stream = await renderToReadableStream(
-      <Router ssrPath={url.pathname + url.search}>
+      <Router ssrPath={url.pathname + url.search} ssrContext={ssrContext}>
         <App />
       </Router>
     );
+
+    // Check if a redirect occurred during SSR
+    if (ssrContext.redirectTo) {
+      return Response.redirect(
+        new URL(ssrContext.redirectTo, url.origin).toString(),
+        302
+      );
+    }
 
     // Convert stream to string
     const appHtml = await new Response(stream).text();
