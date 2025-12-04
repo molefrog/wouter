@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import { products } from "@/db/products";
 
 const cartItems = [
-  { id: 1, name: "Studio Display", price: "$1,599", quantity: 2 },
-  { id: 2, name: "Magic Keyboard", price: "$199", quantity: 1 },
-  { id: 3, name: "Magic Mouse", price: "$99", quantity: 3 },
-  { id: 4, name: "USB-C Cable", price: "$29", quantity: 2 },
+  { product: products[4], quantity: 1 }, // Wouter Glasses
+  { product: products[5], quantity: 1 }, // Route Breaker Windbreaker
+  { product: products[0], quantity: 2 }, // Hook Keyring
+  { product: products[7], quantity: 3 }, // Keep Routing Poster
 ];
 
 function NotificationBanner({
@@ -61,28 +62,36 @@ export function CartPage() {
       </h1>
 
       <div className="space-y-3">
-        {cartItems.map((item) => (
+        {cartItems.map((item, index) => (
           <div
-            key={item.id}
+            key={index}
             className="flex items-start justify-between border-b border-gray-100 pb-4"
           >
             <div className="flex gap-4">
-              <div className="w-12 h-12 bg-stone-100 rounded-md shrink-0" />
+              <div className="w-12 h-12 bg-stone-100 rounded-md shrink-0 p-2">
+                <img
+                  src={item.product.image}
+                  alt={item.product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div className="flex flex-col">
-                <span className="text-neutral-900">{item.name}</span>
+                <span className="text-neutral-900">{item.product.name}</span>
                 <span className="text-sm text-gray-500 mt-1">
-                  {item.quantity} × {item.price}
+                  {item.quantity} × ${item.product.price}
                 </span>
               </div>
             </div>
-            <span className="text-neutral-900 text-sm">{item.price}</span>
+            <span className="text-neutral-900 text-sm">
+              ${item.product.price}
+            </span>
           </div>
         ))}
       </div>
 
       <div className="text-right mt-4">
         <div className="text-sm text-right text-neutral-500">Total</div>
-        <div className="text-base font-semibold text-neutral-900">$1,926</div>
+        <div className="text-base font-semibold text-neutral-900">$643</div>
       </div>
 
       <NotificationBanner show={showNotification} message={addedItem} />

@@ -1,21 +1,23 @@
 import { useSearch, Link } from "wouter";
 import { navigate } from "wouter/use-browser-location";
+import { products, type Product } from "@/db/products";
 
-type ProductProps = {
-  slug: string;
-  brand: string;
-  category: string;
-  name: string;
-  price: number;
-};
-
-function Product({ slug, brand, category, name, price }: ProductProps) {
+function ProductCard({
+  slug,
+  brand,
+  category,
+  name,
+  price,
+  image,
+}: Product) {
   return (
     <Link
       href={`/products/${slug}`}
       className="rounded-lg bg-stone-100/75 overflow-hidden hover:bg-stone-200/75 transition-colors"
     >
-      <div className="aspect-square" />
+      <div className="aspect-square p-12">
+        <img src={image} alt={name} className="object-cover w-full h-full" />
+      </div>
       <div className="p-4">
         <div className="text-sm text-neutral-400/75">
           {brand} · {category}
@@ -29,62 +31,19 @@ function Product({ slug, brand, category, name, price }: ProductProps) {
   );
 }
 
-const products: ProductProps[] = [
-  {
-    slug: "studio-display",
-    brand: "Apple",
-    category: "Tech",
-    name: "Studio Display",
-    price: 1599,
-  },
-  {
-    slug: "wh-1000xm5",
-    brand: "Sony",
-    category: "Audio",
-    name: "WH-1000XM5",
-    price: 349,
-  },
-  {
-    slug: "v15-detect",
-    brand: "Dyson",
-    category: "Home",
-    name: "V15 Detect",
-    price: 749,
-  },
-  {
-    slug: "macbook-pro",
-    brand: "Apple",
-    category: "Tech",
-    name: "MacBook Pro",
-    price: 2499,
-  },
-  {
-    slug: "aeron-chair",
-    brand: "Herman Miller",
-    category: "Furniture",
-    name: "Aeron Chair",
-    price: 1395,
-  },
-  {
-    slug: "quietcomfort-ultra",
-    brand: "Bose",
-    category: "Audio",
-    name: "QuietComfort Ultra",
-    price: 429,
-  },
-];
-
 const categories = [
   { value: "all", label: "All" },
-  { value: "electronics", label: "Electronics" },
+  { value: "accessories", label: "Accessories" },
   { value: "clothing", label: "Clothing" },
-  { value: "books", label: "Books" },
+  { value: "jewelry", label: "Jewelry" },
+  { value: "art", label: "Art" },
 ];
 
 const sortOptions = [
   { value: "newest", label: "Newest" },
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },
+  { value: "name", label: "Name" },
 ];
 
 function CategoryFilter({
@@ -155,6 +114,29 @@ export function HomePage() {
     navigate(queryString ? `/?${queryString}` : "/");
   };
 
+  // Filter products by category
+  let filteredProducts = products;
+  if (category !== "all") {
+    filteredProducts = products.filter(
+      (p) => p.category.toLowerCase() === category.toLowerCase()
+    );
+  }
+
+  // Sort products
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sort) {
+      case "price-asc":
+        return a.price - b.price;
+      case "price-desc":
+        return b.price - a.price;
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "newest":
+      default:
+        return 0; // Keep original order
+    }
+  });
+
   return (
     <>
       <div className="mb-20">
@@ -192,10 +174,16 @@ export function HomePage() {
       </div>
 
       <div className="grid grid-cols-3 auto-rows-fr gap-2.5">
-        {products.map((product, i) => (
-          <Product key={i} {...product} />
+        {sortedProducts.map((product) => (
+          <ProductCard key={product.slug} {...product} />
         ))}
       </div>
+
+      {sortedProducts.length === 0 && (
+        <div className="text-center py-12 text-neutral-500">
+          No products found in this category.
+        </div>
+      )}
     </>
   );
 }

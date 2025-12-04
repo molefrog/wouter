@@ -23,7 +23,7 @@ export function AboutPage() {
       <div className="text-sm text-neutral-400 mb-2">Features</div>
       <ul className="mt-4 list-inside list-nonespace-y-1 grid grid-cols-2 gap-3.5">
         <Feature>
-          <Link href="/products/studio-display" className="hover:underline">
+          <Link href="/products/hook-keyring-rvst" className="hover:underline">
             Dynamic segments
           </Link>
         </Feature>

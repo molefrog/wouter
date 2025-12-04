@@ -84,7 +84,7 @@ export function App() {
           </Route>
 
           <Route path="/featured">
-            <Redirect to="/products/studio-display" />
+            <Redirect to="/products/hook-keyring-rvst" />
           </Route>
 
           <Route>
