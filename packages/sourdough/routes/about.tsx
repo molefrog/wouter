@@ -56,6 +56,11 @@ export function AboutPage() {
           </Link>
         </Feature>
         <Feature>
+          <Link href="/this-page-does-not-exist" className="hover:underline">
+            Custom status codes (404)
+          </Link>
+        </Feature>
+        <Feature>
           <span className="text-neutral-400">View transitions (soon)</span>
         </Feature>
       </ul>

@@ -4,6 +4,7 @@ import { AboutPage } from "@/routes/about.tsx";
 import { NotFoundPage } from "@/routes/404.tsx";
 import { ProductPage } from "@/routes/products/[slug].tsx";
 import { CartPage } from "@/routes/cart.tsx";
+import { WithStatusCode } from "@/components/with-status-code.tsx";
 
 function Logo() {
   return <i className="iconoir-spark-solid text-2xl text-indigo-500" />;
@@ -88,7 +89,9 @@ export function App() {
           </Route>
 
           <Route>
-            <NotFoundPage />
+            <WithStatusCode code={404}>
+              <NotFoundPage />
+            </WithStatusCode>
           </Route>
         </Switch>
       </main>

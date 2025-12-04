@@ -56,8 +56,8 @@ Bun.serve({
 
     // Otherwise, it's a page request - render with SSR
     // ssrPath accepts full path with search, e.g. "/foo?bar=1"
-    // ssrContext is used to handle redirects on the server
-    const ssrContext: { redirectTo?: string } = {};
+    // ssrContext is used to handle redirects and status codes on the server
+    const ssrContext: { redirectTo?: string; statusCode?: number } = {};
 
     const stream = await renderToReadableStream(
       <Router ssrPath={url.pathname + url.search} ssrContext={ssrContext}>
@@ -73,6 +73,9 @@ Bun.serve({
       );
     }
 
+    // Get status code from context, default to 200
+    const statusCode = ssrContext.statusCode || 200;
+
     // Convert stream to string
     const appHtml = await new Response(stream).text();
 
@@ -86,6 +89,7 @@ Bun.serve({
     const transformedResponse = rewriter.transform(new Response(htmlTemplate));
 
     return new Response(transformedResponse.body, {
+      status: statusCode,
       headers: { "Content-Type": "text/html" },
     });
   },
