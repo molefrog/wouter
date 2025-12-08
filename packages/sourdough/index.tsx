@@ -37,8 +37,10 @@ if (!htmlTemplate) {
   process.exit(1);
 }
 
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3002;
+
 Bun.serve({
-  port: 3002,
+  port,
   async fetch(req) {
     const url = new URL(req.url);
 
@@ -95,4 +97,4 @@ Bun.serve({
   },
 });
 
-console.log("Server running at http://localhost:3002");
+console.log(`Server running at http://localhost:${port}`);
