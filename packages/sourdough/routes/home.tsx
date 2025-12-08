@@ -1,5 +1,4 @@
-import { useSearch, Link } from "wouter";
-import { navigate } from "wouter/use-browser-location";
+import { useSearchParams, Link } from "wouter";
 import { products, type Product } from "@/db/products";
 
 function ProductCard({
@@ -15,7 +14,10 @@ function ProductCard({
       href={`/products/${slug}`}
       className="rounded-lg bg-stone-100/75 overflow-hidden hover:bg-stone-200/75 transition-colors"
     >
-      <div className="aspect-square p-12">
+      <div
+        className="aspect-square p-12"
+        style={{ viewTransitionName: `product-image-${slug}` }}
+      >
         <img src={image} alt={name} className="object-cover w-full h-full" />
       </div>
       <div className="p-4">
@@ -98,20 +100,20 @@ function SortSelect({
 }
 
 export function HomePage() {
-  const search = useSearch();
-  const params = new URLSearchParams(search);
-  const category = params.get("category") || "all";
-  const sort = params.get("sort") || "newest";
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get("category") || "all";
+  const sort = searchParams.get("sort") || "newest";
 
   const handleFilterChange = (key: string, value: string) => {
-    const newParams = new URLSearchParams(search);
-    if (value === "all" || value === "newest") {
-      newParams.delete(key);
-    } else {
-      newParams.set(key, value);
-    }
-    const queryString = newParams.toString();
-    navigate(queryString ? `/?${queryString}` : "/");
+    setSearchParams((params) => {
+      const newParams = new URLSearchParams(params);
+      if (value === "all" || value === "newest") {
+        newParams.delete(key);
+      } else {
+        newParams.set(key, value);
+      }
+      return newParams;
+    });
   };
 
   // Filter products by category
