@@ -88,9 +88,6 @@ Bun.serve({
     // Convert stream to string
     const appHtml = await new Response(stream).text();
 
-    // Log helmet context for debugging
-    console.log("Helmet context:", helmetContext.helmet);
-
     const helmet = helmetContext.helmet;
 
     // Use HTMLRewriter to inject the SSR content into body and title
