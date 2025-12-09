@@ -1,4 +1,5 @@
 import { useSearchParams, Link } from "wouter";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import { products, type Product } from "@/db/products";
 
 function ProductCard({
@@ -141,6 +142,10 @@ export function HomePage() {
 
   return (
     <>
+      <Helmet>
+        <title>Magazin by wouter</title>
+      </Helmet>
+
       <div className="mb-20">
         <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 mb-2">
           Welcome to our shop

@@ -1,4 +1,5 @@
 import { Route, Switch, Redirect } from "wouter";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import { HomePage } from "@/routes/home.tsx";
 import { AboutPage } from "@/routes/about.tsx";
 import { NotFoundPage } from "@/routes/404.tsx";
@@ -10,6 +11,8 @@ import { Navbar } from "@/components/navbar.tsx";
 export function App() {
   return (
     <div className="min-h-screen bg-white pt-12">
+      <Helmet titleTemplate="%s · Magazin by wouter" />
+
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-6 py-28">

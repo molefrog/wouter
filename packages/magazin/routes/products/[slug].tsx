@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import { getProductBySlug } from "@/db/products";
 
 export function ProductPage({ slug }: { slug: string }) {
@@ -7,6 +8,9 @@ export function ProductPage({ slug }: { slug: string }) {
   if (!product) {
     return (
       <div className="text-center py-12">
+        <Helmet>
+          <title>Product Not Found</title>
+        </Helmet>
         <h1 className="text-2xl font-semibold text-neutral-900 mb-2">
           Product not found
         </h1>
@@ -19,6 +23,9 @@ export function ProductPage({ slug }: { slug: string }) {
 
   return (
     <>
+      <Helmet>
+        <title>{product.name}</title>
+      </Helmet>
       <Link
         href="/"
         className=" inline-flex items-center gap-2  hover:bg-neutral-100/75 rounded-md p-1.5 hover:text-neutral-900 mb-2"

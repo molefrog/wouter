@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { Helmet } from "@dr.pogodin/react-helmet";
 
 function Feature({ children }: { children: React.ReactNode }) {
   return (
@@ -12,6 +13,10 @@ function Feature({ children }: { children: React.ReactNode }) {
 export function AboutPage() {
   return (
     <>
+      <Helmet>
+        <title>About</title>
+      </Helmet>
+
       <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 mb-2">
         What is this?
       </h1>

@@ -1,8 +1,12 @@
 import { Link } from "wouter";
+import { Helmet } from "@dr.pogodin/react-helmet";
 
 export function NotFoundPage() {
   return (
     <div className="pt-12">
+      <Helmet>
+        <title>Page Not Found</title>
+      </Helmet>
       <div className="flex flex-col items-center justify-center  border border-neutral-300/75 rounded-lg p-4 w-9 h-9 font-medium text-neutral-400 mx-auto text-xs mb-6">
         404
       </div>

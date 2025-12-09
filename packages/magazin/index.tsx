@@ -1,5 +1,9 @@
 import { renderToReadableStream } from "react-dom/server";
 import { Router } from "wouter";
+import {
+  HelmetProvider,
+  type HelmetDataContext,
+} from "@dr.pogodin/react-helmet";
 import { App } from "./App.tsx";
 import tailwind from "bun-plugin-tailwind";
 
@@ -60,11 +64,14 @@ Bun.serve({
     // ssrPath accepts full path with search, e.g. "/foo?bar=1"
     // ssrContext is used to handle redirects and status codes on the server
     const ssrContext: { redirectTo?: string; statusCode?: number } = {};
+    const helmetContext: HelmetDataContext = {};
 
     const stream = await renderToReadableStream(
-      <Router ssrPath={url.pathname + url.search} ssrContext={ssrContext}>
-        <App />
-      </Router>
+      <HelmetProvider context={helmetContext}>
+        <Router ssrPath={url.pathname + url.search} ssrContext={ssrContext}>
+          <App />
+        </Router>
+      </HelmetProvider>
     );
 
     // Check if a redirect occurred during SSR
@@ -81,12 +88,44 @@ Bun.serve({
     // Convert stream to string
     const appHtml = await new Response(stream).text();
 
-    // Use HTMLRewriter to inject the SSR content into body
-    const rewriter = new HTMLRewriter().on("body", {
-      element(element) {
-        element.setInnerContent(appHtml, { html: true });
-      },
-    });
+    // Log helmet context for debugging
+    console.log("Helmet context:", helmetContext.helmet);
+
+    const helmet = helmetContext.helmet;
+
+    // Use HTMLRewriter to inject the SSR content into body and title
+    const rewriter = new HTMLRewriter()
+      .on("body", {
+        element(element) {
+          element.setInnerContent(appHtml, { html: true });
+        },
+      })
+      .on("title", {
+        element(element) {
+          if (!helmet) return;
+          // Remove the existing title tag and let helmet's title be appended to head
+          element.remove();
+        },
+      })
+      .on("head", {
+        element(element) {
+          if (!helmet) return;
+
+          const headContent = [
+            helmet.title?.toString(),
+            helmet.priority?.toString(),
+            helmet.meta?.toString(),
+            helmet.link?.toString(),
+            helmet.script?.toString(),
+          ]
+            .filter(Boolean)
+            .join("\n");
+
+          if (headContent) {
+            element.append(headContent, { html: true });
+          }
+        },
+      });
 
     const transformedResponse = rewriter.transform(new Response(htmlTemplate));
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import { products } from "@/db/products";
 
 const cartItems = [
@@ -57,6 +58,10 @@ export function CartPage() {
 
   return (
     <>
+      <Helmet>
+        <title>Cart</title>
+      </Helmet>
+
       <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 mb-6">
         Shopping Cart
       </h1>
