@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Helmet } from "@dr.pogodin/react-helmet";
-import { products } from "@/db/products";
+import { products, type Product } from "@/db/products";
 
-const cartItems = [
-  { product: products[4], quantity: 1 }, // Wouter Glasses
-  { product: products[5], quantity: 1 }, // Route Breaker Windbreaker
-  { product: products[0], quantity: 2 }, // Hook Keyring
-  { product: products[7], quantity: 3 }, // Keep Routing Poster
+const cartItems: Array<{ product: Product; quantity: number }> = [
+  { product: products[4]!, quantity: 1 }, // Wouter Glasses
+  { product: products[5]!, quantity: 1 }, // Route Breaker Windbreaker
+  { product: products[0]!, quantity: 2 }, // Hook Keyring
+  { product: products[7]!, quantity: 3 }, // Keep Routing Poster
 ];
 
 function NotificationBanner({
