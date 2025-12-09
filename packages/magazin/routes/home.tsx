@@ -2,14 +2,7 @@ import { useSearchParams, Link } from "wouter";
 import { Helmet } from "@dr.pogodin/react-helmet";
 import { products, type Product } from "@/db/products";
 
-function ProductCard({
-  slug,
-  brand,
-  category,
-  name,
-  price,
-  image,
-}: Product) {
+function ProductCard({ slug, brand, category, name, price, image }: Product) {
   return (
     <Link
       href={`/products/${slug}`}
@@ -150,9 +143,10 @@ export function HomePage() {
         <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 mb-2">
           Welcome to our shop
         </h1>
-        <p className="text-lg text-neutral-500 mb-4 max-w-xl text-pretty">
-          Discover our carefully curated collection of premium products, crafted
-          with attention to detail and designed to enhance your everyday life
+        <p className="text-lg text-neutral-500 mb-4 max-w-2xl text-pretty">
+          Exclusive merch for hardcore wouter fans. You can't buy these yet, so
+          go star the repo to increase our chances of becoming a billion dollar
+          company.
         </p>
         <button
           onClick={() =>
