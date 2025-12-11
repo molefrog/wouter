@@ -211,6 +211,49 @@ describe("`hrefs` prop", () => {
   });
 });
 
+describe("`aroundNav` prop", () => {
+  it("sets the router's `aroundNav` property", () => {
+    const aroundNav = () => {};
+
+    const { result } = renderHook(() => useRouter(), {
+      wrapper: (props) => (
+        <Router aroundNav={aroundNav}>{props.children}</Router>
+      ),
+    });
+
+    expect(result.current.aroundNav).toBe(aroundNav);
+  });
+
+  it("is inherited from parent router", () => {
+    const aroundNav = () => {};
+
+    const { result } = renderHook(() => useRouter(), {
+      wrapper: (props) => (
+        <Router aroundNav={aroundNav}>
+          <Router base="/nested">{props.children}</Router>
+        </Router>
+      ),
+    });
+
+    expect(result.current.aroundNav).toBe(aroundNav);
+  });
+
+  it("can be overridden in nested router", () => {
+    const parentAroundNav = () => {};
+    const childAroundNav = () => {};
+
+    const { result } = renderHook(() => useRouter(), {
+      wrapper: (props) => (
+        <Router aroundNav={parentAroundNav}>
+          <Router aroundNav={childAroundNav}>{props.children}</Router>
+        </Router>
+      ),
+    });
+
+    expect(result.current.aroundNav).toBe(childAroundNav);
+  });
+});
+
 it("updates the context when settings are changed", () => {
   const state: { renders: number } & Partial<ComponentProps<typeof Router>> = {
     renders: 0,

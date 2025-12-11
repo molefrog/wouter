@@ -7,7 +7,7 @@ import {
 
 type Navigate<S = any> = (
   to: Path,
-  options?: { replace?: boolean; state?: S }
+  options?: { replace?: boolean; state?: S; transition?: boolean }
 ) => void;
 
 type HookReturnValue = {

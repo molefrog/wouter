@@ -40,6 +40,8 @@ const defaultRouter = {
   ssrContext: undefined,
   // customizes how `href` props are transformed for <Link />
   hrefs: (x) => x,
+  // wraps navigate calls, useful for view transitions
+  aroundNav: (n, t, o) => n(t, o),
 };
 
 const RouterCtx = createContext(defaultRouter);
@@ -71,7 +73,9 @@ const useLocationFromRouter = (router) => {
   // (This is achieved via `useEvent`.)
   return [
     relativePath(router.base, location),
-    useEvent((to, navOpts) => navigate(absolutePath(to, router.base), navOpts)),
+    useEvent((to, opts) =>
+      router.aroundNav(navigate, absolutePath(to, router.base), opts)
+    ),
   ];
 };
 
@@ -270,6 +274,7 @@ export const Link = forwardRef((props, ref) => {
     /* eslint-disable no-unused-vars */
     replace /* ignore nav props */,
     state /* ignore nav props */,
+    transition /* ignore nav props */,
     /* eslint-enable no-unused-vars */
 
     ...restProps

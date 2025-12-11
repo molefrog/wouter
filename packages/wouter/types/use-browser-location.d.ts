@@ -18,7 +18,7 @@ export const useHistoryState: <T = any>() => T;
 
 export const navigate: <S = any>(
   to: string | URL,
-  options?: { replace?: boolean; state?: S }
+  options?: { replace?: boolean; state?: S; transition?: boolean }
 ) => void;
 
 /*
