@@ -73,7 +73,7 @@ const [location, navigate] = useLocation();
 navigate("/", { transition: true });
 ```
 
-**Note:** The `transition` prop doesn't need to be explicitly handled in wouter's source code. When `<Link>` calls `navigate(targetPath, props)` (see `packages/wouter/src/index.js:301`), all props are automatically passed as navigation options. This means any prop you add to `<Link>` becomes available in `aroundNav` options—`transition` is just a convention.
+**Note:** The `transition` prop is now part of wouter's type definitions (`NavigateOptions`) and is available on all location hooks (`useBrowserLocation`, `useHashLocation`, `memoryLocation`). When `<Link>` calls `navigate(targetPath, props)`, all props are automatically passed as navigation options, making them available in `aroundNav`.
 
 ```js
 import { flushSync } from "react-dom";
@@ -85,10 +85,8 @@ function aroundNav(navigate, to, options) {
     return;
   }
 
-  // TODO: Skip transitions for back/forward navigation (popstate events)
-  // This prevents jarring transitions when users use browser back/forward buttons
-
-  if (options.transition) {
+  // Only use transitions when explicitly requested
+  if (options?.transition) {
     document.startViewTransition(() => {
       flushSync(() => {
         navigate(to, options);
@@ -102,17 +100,25 @@ function aroundNav(navigate, to, options) {
 
 ### TypeScript types
 
+Wouter provides built-in types for view transitions:
+
 ```typescript
-import type { NavigateOptions } from "wouter";
+import type { NavigateOptions, AroundNavHandler } from "wouter";
 
-// Extend NavigateOptions to include transition flag
-interface TransitionNavigateOptions extends NavigateOptions {
-  transition?: boolean;
-}
+// NavigateOptions already includes transition
+const navigate = (to: string, options?: NavigateOptions) => {
+  // options.transition is available
+  // options.replace is available
+  // options.state is available
+};
 
-type AroundNavFunction = (
-  navigate: (to: string, options?: NavigateOptions) => void,
-  to: string,
-  options: TransitionNavigateOptions
-) => void;
+// AroundNavHandler type for the aroundNav callback
+const aroundNav: AroundNavHandler = (navigate, to, options) => {
+  if (options?.transition) {
+    // handle transition
+  }
+  navigate(to, options);
+};
 ```
+
+The `transition` option is included in `NavigateOptions` along with `replace` and `state`, and is available on all built-in location hooks.

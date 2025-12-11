@@ -80,6 +80,7 @@ projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
   - [Can I initiate navigation from outside a component?](#can-i-initiate-navigation-from-outside-a-component)
   - [Can I use _wouter_ in my TypeScript project?](#can-i-use-wouter-in-my-typescript-project)
   - [How can add animated route transitions?](#how-can-add-animated-route-transitions)
+  - [How do I add view transitions to my app?](#how-do-i-add-view-transitions-to-my-app)
   - [Preact support?](#preact-support)
   - [Server-side Rendering support (SSR)?](#server-side-rendering-support-ssr)
   - [How do I configure the router to render a specific route in tests?](#how-do-i-configure-the-router-to-render-a-specific-route-in-tests)
@@ -630,6 +631,16 @@ available options:
 
 - `hrefs: (href: boolean) => string` — a function for transforming `href` attribute of an `<a />` element rendered by `Link`. It is used to support hash-based routing. By default, `href` attribute is the same as the `href` or `to` prop of a `Link`. A location hook can also define a `hook.hrefs` property, in this case the `href` will be inferred.
 
+- **`aroundNav: (navigate, to, options) => void`** — a handler that wraps all navigation calls. Use this to intercept navigation and perform custom logic before and after the navigation occurs. You can modify navigation parameters, add side effects, or prevent navigation entirely. This is particularly useful for implementing [view transitions](#how-do-i-add-view-transitions-to-my-app). By default, it simply calls `navigate(to, options)`.
+
+  ```js
+  const aroundNav = (navigate, to, options) => {
+    // do something before navigation
+    navigate(to, options); // perform navigation
+    // do something after navigation
+  };
+  ```
+
 ## FAQ and Code Recipes
 
 ### I deploy my app to the subfolder. Can I specify a base path?
@@ -836,6 +847,64 @@ export const MyComponent = ({ isVisible }) => {
 ```
 
 More complex examples involve using `useRoutes` hook (similar to how React Router does it), but wouter does not ship it out-of-the-box. Please refer to [this issue](https://github.com/molefrog/wouter/issues/414#issuecomment-1954192679) for the workaround.
+
+### How do I use wouter with View Transitions API?
+
+Wouter works seamlessly with the [View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API), but you'll need to manually activate it. This is because view transitions require synchronous DOM rendering and must be wrapped in `flushSync` from `react-dom`. Following wouter's philosophy of staying lightweight and avoiding unnecessary dependencies, view transitions aren't built-in. However, there's a simple escape hatch to enable them: the `aroundNav` prop.
+
+```jsx
+import { flushSync } from "react-dom";
+import { Router, type AroundNavHandler } from "wouter";
+
+const aroundNav: AroundNavHandler = (navigate, to, options) => {
+  // Check if View Transitions API is supported
+  if (!document.startViewTransition) {
+    navigate(to, options);
+    return;
+  }
+
+  document.startViewTransition(() => {
+    flushSync(() => {
+      navigate(to, options);
+    });
+  });
+};
+
+const App = () => (
+  <Router aroundNav={aroundNav}>
+    {/* Your routes here */}
+  </Router>
+);
+```
+
+You can also enable transitions selectively using the `transition` prop, which will be available in the `options` parameter:
+
+```jsx
+// Enable transition for a specific link
+<Link to="/about" transition>About</Link>
+
+// Or programmatically
+const [location, navigate] = useLocation();
+navigate("/about", { transition: true });
+
+// Then check for it in your handler
+const aroundNav: AroundNavHandler = (navigate, to, options) => {
+  if (!document.startViewTransition) {
+    navigate(to, options);
+    return;
+  }
+
+  if (options?.transition) {
+    document.startViewTransition(() => {
+      flushSync(() => {
+        navigate(to, options);
+      });
+    });
+  } else {
+    navigate(to, options);
+  }
+};
+```
 
 ### Preact support?
 
