@@ -14,6 +14,7 @@ function NavLink({
   return (
     <Link
       href={href}
+      transition
       className={(active) =>
         `text-sm font-medium ${
           active ? "text-gray-900" : "text-gray-500 hover:text-gray-900"
@@ -31,6 +32,7 @@ export function Navbar() {
       <div className="max-w-4xl mx-auto flex items-center justify-between px-6">
         <Link
           href="/"
+          transition
           className="flex items-center gap-2 hover:bg-neutral-200/50 rounded-md p-1"
         >
           <Logo />
@@ -43,6 +45,7 @@ export function Navbar() {
 
         <Link
           href="/cart"
+          transition
           className="relative flex items-center hover:bg-neutral-200/50 rounded-md p-1"
         >
           <i className="iconoir-cart text-xl" />

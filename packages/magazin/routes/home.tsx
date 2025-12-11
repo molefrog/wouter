@@ -6,6 +6,7 @@ function ProductCard({ slug, brand, category, name, price, image }: Product) {
   return (
     <Link
       href={`/products/${slug}`}
+      transition
       className="rounded-lg bg-stone-100/75 overflow-hidden hover:bg-stone-200/75 transition-colors"
     >
       <div

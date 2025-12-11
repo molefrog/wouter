@@ -28,6 +28,7 @@ export function ProductPage({ slug }: { slug: string }) {
       </Helmet>
       <Link
         href="/"
+        transition
         className=" inline-flex items-center gap-2  hover:bg-neutral-100/75 rounded-md p-1.5 hover:text-neutral-900 mb-2"
       >
         <i className="iconoir-reply text-base" />
@@ -55,6 +56,7 @@ export function ProductPage({ slug }: { slug: string }) {
           <div className="mt-8">
             <Link
               href="/cart"
+              transition
               state={{ addedItem: product.name }}
               className="bg-black text-white px-3 text-sm font-medium py-2 rounded-xl hover:bg-neutral-800 transition-colors shadow-sm cursor-pointer w-full inline-block text-center"
             >
