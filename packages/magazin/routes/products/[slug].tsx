@@ -34,7 +34,10 @@ export function ProductPage({ slug }: { slug: string }) {
         <i className="iconoir-reply text-base" />
       </Link>
       <div className="grid grid-cols-3 gap-12">
-        <div className="bg-stone-100/75 rounded-lg aspect-square col-span-2 p-12">
+        <div
+          className="bg-stone-100/75 rounded-lg aspect-square col-span-2 p-12"
+          style={{ viewTransitionName: `product-image-${product.slug}` }}
+        >
           <img
             src={product.image}
             alt={product.name}
@@ -56,7 +59,6 @@ export function ProductPage({ slug }: { slug: string }) {
           <div className="mt-8">
             <Link
               href="/cart"
-              transition
               state={{ addedItem: product.name }}
               className="bg-black text-white px-3 text-sm font-medium py-2 rounded-xl hover:bg-neutral-800 transition-colors shadow-sm cursor-pointer w-full inline-block text-center"
             >

@@ -7,15 +7,15 @@ function ProductCard({ slug, brand, category, name, price, image }: Product) {
     <Link
       href={`/products/${slug}`}
       transition
-      className="rounded-lg bg-stone-100/75 overflow-hidden hover:bg-stone-200/75 transition-colors"
+      className="overflow-hidden group"
     >
       <div
-        className="aspect-square p-12"
+        className="aspect-square p-12 bg-stone-100/75 group-hover:bg-stone-200/75 transition-colors rounded-t-lg"
         style={{ viewTransitionName: `product-image-${slug}` }}
       >
         <img src={image} alt={name} className="object-cover w-full h-full" />
       </div>
-      <div className="p-4">
+      <div className="p-4 bg-stone-100/75 rounded-b-lg group-hover:bg-stone-200/75 transition-colors">
         <div className="text-sm text-neutral-400/75">
           {brand} · {category}
         </div>
