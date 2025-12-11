@@ -35,6 +35,7 @@ export interface RouterObject {
   readonly parser: Parser;
   readonly ssrPath?: Path;
   readonly ssrSearch?: SearchString;
+  readonly ssrContext?: SsrContext;
   readonly hrefs: HrefsFormatter;
   readonly aroundNav: AroundNavHandler;
 }
