@@ -10,9 +10,8 @@ export function WithStatusCode({
   const router = useRouter();
 
   // Set status code on SSR context if available
-  // Cast to any because statusCode is not yet in the official types
   if (router.ssrContext) {
-    (router.ssrContext as any).statusCode = code;
+    router.ssrContext.statusCode = code;
   }
 
   return <>{children}</>;

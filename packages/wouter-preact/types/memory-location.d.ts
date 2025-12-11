@@ -2,7 +2,7 @@ import { BaseLocationHook, Path } from "./location-hook.js";
 
 type Navigate<S = any> = (
   to: Path,
-  options?: { replace?: boolean; state?: S }
+  options?: { replace?: boolean; state?: S; transition?: boolean }
 ) => void;
 
 type HookReturnValue = { hook: BaseLocationHook; navigate: Navigate };

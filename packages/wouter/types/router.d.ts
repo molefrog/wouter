@@ -44,6 +44,8 @@ export interface RouterObject {
 export type SsrContext = {
   // if a redirect was encountered, this will be populated with the path
   redirectTo?: Path;
+  // HTTP status code to set for SSR response
+  statusCode?: number;
 };
 
 // basic options to construct a router
