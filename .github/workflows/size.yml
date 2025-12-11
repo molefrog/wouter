@@ -14,6 +14,10 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Prepare wouter-preact (copy source files)
         run: cd packages/wouter-preact && npm run prepublishOnly
+      - name: Symlink npm to bun
+        run: |
+          sudo ln -sf $(which bun) /usr/local/bin/npm
+          sudo ln -sf $(which bunx) /usr/local/bin/npx
       - uses: andresz1/size-limit-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
