@@ -299,9 +299,12 @@ export const Link = forwardRef((props, ref) => {
     }
   });
 
+  const targetPathAbsolute =
+    targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath;
+
   // handle nested routers and absolute paths
   const href = router.hrefs(
-    targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath,
+    targetPathAbsolute,
     router // pass router as a second argument for convinience
   );
 
@@ -312,7 +315,9 @@ export const Link = forwardRef((props, ref) => {
         onClick,
         href,
         // `className` can be a function to apply the class if this link is active
-        className: cls?.call ? cls(currentPath === targetPath) : cls,
+        className: cls?.call
+          ? cls(router.base + currentPath === targetPathAbsolute)
+          : cls,
         children,
         ref,
       });
