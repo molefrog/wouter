@@ -289,15 +289,20 @@ export const Link = forwardRef((props, ref) => {
     }
   });
 
+  const targetPathAbsolute =
+    targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath;
+
   // handle nested routers and absolute paths
   linkProps.href = router.hrefs(
-    targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath,
+    targetPathAbsolute,
     router // pass router as a second argument for convinience
   );
 
   // Omitted props should preserve the child's own className and ref.
   if (cls !== undefined)
-    linkProps.className = cls?.call ? cls(currentPath === targetPath) : cls;
+    linkProps.className = cls?.call
+      ? cls(router.base + currentPath === targetPathAbsolute)
+      : cls;
   if (ref) linkProps.ref = ref;
 
   return asChild && isValidElement(children)
