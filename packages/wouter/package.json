@@ -34,6 +34,10 @@
     "./memory-location": {
       "types": "./types/memory-location.d.ts",
       "default": "./src/memory-location.js"
+    },
+    "./use-scroll-restoration": {
+      "types": "./types/use-scroll-restoration.d.ts",
+      "default": "./src/use-scroll-restoration.js"
     }
   },
   "types": "types/index.d.ts",
@@ -50,6 +54,9 @@
       ],
       "memory-location": [
         "types/memory-location.d.ts"
+      ],
+      "use-scroll-restoration": [
+        "types/use-scroll-restoration.d.ts"
       ]
     }
   },
