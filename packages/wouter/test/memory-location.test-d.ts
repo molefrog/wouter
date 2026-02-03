@@ -46,3 +46,25 @@ test("should support `static` option", () => {
 
   expectTypeOf(hook).toMatchTypeOf<BaseLocationHook>();
 });
+
+test("should support `state` option", () => {
+  const { state, navigate, stateHook } = memoryLocation({
+    state: { foo: "bar", count: 0 },
+  });
+
+  assertType<any>(state.current);
+  assertType<Function>(navigate);
+  assertType<Function>(stateHook);
+});
+
+test("should return state getter", () => {
+  const { state } = memoryLocation({ state: { test: true } });
+
+  assertType<{ readonly current: any }>(state);
+});
+
+test("should return stateHook", () => {
+  const { stateHook } = memoryLocation();
+
+  assertType<Function>(stateHook);
+});

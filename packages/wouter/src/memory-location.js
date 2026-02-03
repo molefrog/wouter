@@ -10,6 +10,7 @@ export const memoryLocation = ({
   searchPath = "",
   static: staticLocation,
   record,
+  state: initialState = null,
 } = {}) => {
   let initialPath = path;
   if (searchPath) {
@@ -19,10 +20,11 @@ export const memoryLocation = ({
   }
 
   let [currentPath, currentSearch = ""] = initialPath.split("?");
+  let currentState = initialState;
   const history = [initialPath];
   const emitter = mitt();
 
-  const navigateImplementation = (path, { replace = false } = {}) => {
+  const navigateImplementation = (path, { replace = false, state } = {}) => {
     if (record) {
       if (replace) {
         history.splice(history.length - 1, 1, path);
@@ -32,6 +34,13 @@ export const memoryLocation = ({
     }
 
     [currentPath, currentSearch = ""] = path.split("?");
+
+    // Update state if provided, otherwise keep current state
+    // This matches browser behavior where state persists unless explicitly changed
+    if (state !== undefined) {
+      currentState = state;
+    }
+
     emitter.emit("navigate", path);
   };
 
@@ -50,6 +59,9 @@ export const memoryLocation = ({
   const useMemoryQuery = () =>
     useSyncExternalStore(subscribe, () => currentSearch);
 
+  const useMemoryState = () =>
+    useSyncExternalStore(subscribe, () => currentState);
+
   // Attach searchHook to the location hook for auto-inheritance in Router
   useMemoryLocation.searchHook = useMemoryQuery;
 
@@ -57,14 +69,26 @@ export const memoryLocation = ({
     // clean history array with mutation to preserve link
     history.splice(0, history.length);
 
+    // Reset state to initial state
+    currentState = initialState;
+
     navigateImplementation(initialPath);
   }
+
+  // Create a getter for state that always returns current value
+  const stateGetter = {
+    get current() {
+      return currentState;
+    },
+  };
 
   return {
     hook: useMemoryLocation,
     searchHook: useMemoryQuery,
+    stateHook: useMemoryState,
     navigate,
     history: record ? history : undefined,
     reset: record ? reset : undefined,
+    state: stateGetter,
   };
 };

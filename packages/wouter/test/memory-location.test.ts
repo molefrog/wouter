@@ -161,3 +161,87 @@ test("should have reset method that reset hook location", () => {
 
   unmount();
 });
+
+test("should support initial state", () => {
+  const { state } = memoryLocation({ state: { foo: "bar" } });
+
+  expect(state.current).toStrictEqual({ foo: "bar" });
+});
+
+test("should have state as null by default", () => {
+  const { state } = memoryLocation();
+
+  expect(state.current).toBe(null);
+});
+
+test("should update state when navigating with state option", () => {
+  const { state, navigate } = memoryLocation();
+
+  expect(state.current).toBe(null);
+
+  navigate("/new-path", { state: { modal: "promo" } });
+
+  expect(state.current).toStrictEqual({ modal: "promo" });
+});
+
+test("should preserve state when navigating without state option", () => {
+  const { state, navigate } = memoryLocation({ state: { initial: true } });
+
+  expect(state.current).toStrictEqual({ initial: true });
+
+  navigate("/new-path");
+
+  // State should be preserved when not explicitly changed
+  expect(state.current).toStrictEqual({ initial: true });
+});
+
+test("should allow setting state to null explicitly", () => {
+  const { state, navigate } = memoryLocation({ state: { foo: "bar" } });
+
+  expect(state.current).toStrictEqual({ foo: "bar" });
+
+  navigate("/new-path", { state: null });
+
+  expect(state.current).toBe(null);
+});
+
+test("should return stateHook that subscribes to state changes", () => {
+  const { stateHook, navigate } = memoryLocation({ state: { count: 0 } });
+
+  const { result, unmount } = renderHook(() => stateHook());
+
+  expect(result.current).toStrictEqual({ count: 0 });
+
+  act(() => navigate("/somewhere", { state: { count: 1 } }));
+
+  expect(result.current).toStrictEqual({ count: 1 });
+
+  unmount();
+});
+
+test("should reset state to initial state when reset is called", () => {
+  const { state, navigate, reset } = memoryLocation({
+    record: true,
+    state: { initial: true },
+  });
+
+  navigate("/somewhere", { state: { modified: true } });
+
+  expect(state.current).toStrictEqual({ modified: true });
+
+  reset();
+
+  expect(state.current).toStrictEqual({ initial: true });
+});
+
+test("should work with navigate from hook return value", () => {
+  const { hook, state } = memoryLocation();
+
+  const { result, unmount } = renderHook(() => hook());
+
+  act(() => result.current[1]("/new-path", { state: { from: "hook" } }));
+
+  expect(state.current).toStrictEqual({ from: "hook" });
+
+  unmount();
+});
