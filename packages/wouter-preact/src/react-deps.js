@@ -1,4 +1,5 @@
 import { useState, useLayoutEffect, useEffect, useRef } from "preact/hooks";
+import * as compat from "preact/compat";
 export {
   isValidElement,
   createContext,
@@ -15,6 +16,8 @@ export {
   useContext,
 } from "preact/hooks";
 
+// Use native useSyncExternalStore from preact/compat when available (>= 10.11.3),
+// fall back to polyfill for older versions
 // Copied from:
 // https://github.com/facebook/react/blob/main/packages/shared/ExecutionEnvironment.js
 const canUseDOM = !!(
@@ -23,11 +26,10 @@ const canUseDOM = !!(
   typeof window.document.createElement !== "undefined"
 );
 
-// TODO: switch to `export { useSyncExternalStore } from "preact/compat"` once we update Preact to >= 10.11.3
 function is(x, y) {
   return (x === y && (x !== 0 || 1 / x === 1 / y)) || (x !== x && y !== y);
 }
-export function useSyncExternalStore(subscribe, getSnapshot, getSSRSnapshot) {
+function useSyncExternalStorePolyfill(subscribe, getSnapshot, getSSRSnapshot) {
   if (getSSRSnapshot && !canUseDOM) getSnapshot = getSSRSnapshot;
   const value = getSnapshot();
 
@@ -58,6 +60,11 @@ export function useSyncExternalStore(subscribe, getSnapshot, getSSRSnapshot) {
 
   return value;
 }
+
+export const useSyncExternalStore =
+  typeof compat.useSyncExternalStore === "function"
+    ? compat.useSyncExternalStore
+    : useSyncExternalStorePolyfill;
 
 // provide forwardRef stub for preact
 export function forwardRef(component) {
