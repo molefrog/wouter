@@ -231,7 +231,10 @@ export function useSearchParams() {
     tempSearchParams = new URLSearchParams(
       typeof nextInit === "function" ? nextInit(tempSearchParams) : nextInit
     );
-    navigate(location + "?" + tempSearchParams, options);
+    navigate(
+      location + (tempSearchParams.size ? "?" + tempSearchParams : ""),
+      options
+    );
   });
 
   return [searchParams, setSearchParams];

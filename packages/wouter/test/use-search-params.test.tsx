@@ -60,3 +60,10 @@ it("is safe against parameter injection", () => {
 
   expect(result.current[0].get("search")).toBe("foo&parameter_injection=bar");
 });
+
+it("does not add question mark when search string is empty", () => {
+  const { result } = renderHook(() => useSearchParams());
+
+  act(() => result.current[1]({}));
+  expect(location.href).toBe("https://wouter.dev/");
+});
