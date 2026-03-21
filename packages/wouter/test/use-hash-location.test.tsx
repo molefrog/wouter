@@ -233,14 +233,14 @@ test("handles navigation with data: protocol", async () => {
   const initialHistoryLength = history.length;
 
   await waitForHashChangeEvent(() => {
-    navigate("/new-path");
+    act(() => navigate("/new-path"));
   });
 
   expect(location.hash).toBe("#/new-path");
   expect(history.length).toBe(initialHistoryLength + 1);
 
   await waitForHashChangeEvent(() => {
-    navigate("/another-path", { replace: true });
+    act(() => navigate("/another-path", { replace: true }));
   });
 
   expect(location.hash).toBe("#/another-path");
