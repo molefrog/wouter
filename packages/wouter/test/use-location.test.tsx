@@ -43,7 +43,6 @@ describe.each([
     navigate: hashNavigation,
     act: (cb: () => void) => waitForHashChangeEvent(() => act(cb)),
     clear: () => {
-      location.hash = "";
       history.replaceState(null, "", "/");
     },
   },
