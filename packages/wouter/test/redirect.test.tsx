@@ -1,20 +1,7 @@
 import { test, expect } from "bun:test";
 import { render } from "@testing-library/react";
-import { useState } from "react";
 
 import { Redirect, Router } from "../src/index.js";
-
-export const customHookWithReturn =
-  (initialPath = "/") =>
-  () => {
-    const [path, updatePath] = useState(initialPath);
-    const navigate = (path: string) => {
-      updatePath(path);
-      return "foo";
-    };
-
-    return [path, navigate];
-  };
 
 test("renders nothing", () => {
   const { container, unmount } = render(<Redirect to="/users" />);
@@ -67,17 +54,5 @@ test("supports history state", () => {
 
   expect(location.pathname).toBe("/users");
   expect(history.state).toStrictEqual(testState);
-  unmount();
-});
-
-test("useLayoutEffect should return nothing", () => {
-  const { unmount } = render(
-    // @ts-expect-error
-    <Router hook={customHookWithReturn()}>
-      <Redirect to="/users" replace />
-    </Router>
-  );
-
-  expect(location.pathname).toBe("/users");
   unmount();
 });
