@@ -1,4 +1,4 @@
-import { test, expect, beforeEach, mock } from "bun:test";
+import { test, expect, mock } from "bun:test";
 import { renderHook, render, act } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -7,11 +7,6 @@ import { useHashLocation } from "../src/use-hash-location.js";
 
 import { waitForHashChangeEvent } from "./test-utils";
 import { ReactNode, useSyncExternalStore } from "react";
-
-beforeEach(() => {
-  history.replaceState(null, "", "/");
-  location.hash = "";
-});
 
 test("gets current location from `location.hash`", () => {
   location.hash = "/app/users";

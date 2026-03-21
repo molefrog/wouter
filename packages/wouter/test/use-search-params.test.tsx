@@ -1,9 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { useSearchParams, Router } from "../src/index.js";
 import { navigate } from "../src/use-browser-location.js";
-import { it, expect, beforeEach } from "bun:test";
-
-beforeEach(() => history.replaceState(null, "", "/"));
+import { it, expect } from "bun:test";
 
 it("can return browser search params", () => {
   history.replaceState(null, "", "/users?active=true");

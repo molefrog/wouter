@@ -1,10 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
-import { test, expect, beforeEach } from "bun:test";
+import { test, expect } from "bun:test";
 import { useParams, Router, Route, Switch } from "../src/index.js";
 
 import { memoryLocation } from "../src/memory-location.js";
-
-beforeEach(() => history.replaceState(null, "", "/"));
 
 test("returns empty object when used outside of <Route />", () => {
   const { result } = renderHook(() => useParams());

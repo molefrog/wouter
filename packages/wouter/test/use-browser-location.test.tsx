@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { test, expect, describe, beforeEach } from "bun:test";
+import { test, expect, describe } from "bun:test";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import {
   useBrowserLocation,
@@ -17,8 +17,6 @@ test("returns a pair [value, update]", () => {
 });
 
 describe("`value` first argument", () => {
-  beforeEach(() => history.replaceState(null, "", "/"));
-
   test("reflects the current pathname", () => {
     const { result } = renderHook(() => useBrowserLocation());
     expect(result.current[0]).toBe("/");
@@ -80,8 +78,6 @@ describe("`value` first argument", () => {
 });
 
 describe("`useSearch` hook", () => {
-  beforeEach(() => history.replaceState(null, "", "/"));
-
   test("allows to get current search string", () => {
     const { result: searchResult } = renderHook(() => useSearch());
     act(() => navigate("/foo?hello=world&whats=up"));

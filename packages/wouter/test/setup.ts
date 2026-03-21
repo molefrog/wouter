@@ -1,5 +1,5 @@
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
-import { expect, afterEach } from "bun:test";
+import { expect, beforeEach, afterEach } from "bun:test";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { cleanup } from "@testing-library/react";
 
@@ -27,5 +27,10 @@ export const withoutLocation = <T>(fn: () => T): T => {
     globalThis.location = original;
   }
 };
+
+beforeEach(() => {
+  history.go(-history.length + 1);
+  history.replaceState(null, "", "/");
+});
 
 afterEach(cleanup);
