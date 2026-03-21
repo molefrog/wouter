@@ -1,5 +1,5 @@
-import { test, expect, describe, mock, afterEach } from "bun:test";
-import { render, cleanup, fireEvent } from "@testing-library/react";
+import { test, expect, describe, mock } from "bun:test";
+import { render, fireEvent } from "@testing-library/react";
 import {
   Router,
   Link,
@@ -7,8 +7,6 @@ import {
   type AroundNavHandler,
 } from "../src/index.js";
 import { memoryLocation } from "../src/memory-location.js";
-
-afterEach(cleanup);
 
 describe("view transitions", () => {
   test("Link with transition prop triggers aroundNav with transition in options", () => {

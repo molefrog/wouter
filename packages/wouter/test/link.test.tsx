@@ -1,11 +1,9 @@
 import { type MouseEventHandler } from "react";
-import { test, expect, afterEach, mock, describe } from "bun:test";
-import { render, cleanup, fireEvent, act } from "@testing-library/react";
+import { test, expect, mock, describe } from "bun:test";
+import { render, fireEvent, act } from "@testing-library/react";
 
 import { Router, Link } from "../src/index.js";
 import { memoryLocation } from "../src/memory-location.js";
-
-afterEach(cleanup);
 
 describe("<Link />", () => {
   test("renders a link with proper attributes", () => {

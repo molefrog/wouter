@@ -12,7 +12,7 @@ describe("history patch", () => {
 
   test("history should be patched once", () => {
     const fn = mock();
-    const { result, unmount } = renderHook(() => reactHook());
+    const { result } = renderHook(() => reactHook());
 
     addEventListener("pushState", (e) => {
       fn();
@@ -26,7 +26,5 @@ describe("history patch", () => {
 
     expect(result.current[0]).toBe("/world");
     expect(fn).toHaveBeenCalledTimes(2);
-
-    unmount();
   });
 });

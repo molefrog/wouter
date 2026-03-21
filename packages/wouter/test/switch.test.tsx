@@ -1,13 +1,10 @@
-import { it, expect, afterEach } from "bun:test";
+import { it, expect } from "bun:test";
 
 import { Router, Route, Switch } from "../src/index.js";
 import { memoryLocation } from "../src/memory-location.js";
 
-import { render, act, cleanup } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import { PropsWithChildren, ReactElement, JSX } from "react";
-
-// Clean up after each test to avoid DOM pollution
-afterEach(cleanup);
 
 const raf = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
@@ -111,7 +108,7 @@ it("allows to specify which routes to render via `location` prop", () => {
 it("always ensures the consistency of inner routes rendering", async () => {
   history.replaceState(null, "", "/foo/bar");
 
-  const { unmount } = render(
+  render(
     <Switch>
       <Route path="/foo/:id">
         {(params) => {
@@ -127,8 +124,6 @@ it("always ensures the consistency of inner routes rendering", async () => {
     await raf();
     history.pushState(null, "", "/");
   });
-
-  unmount();
 });
 
 it("supports catch-all routes with wildcard segments", async () => {

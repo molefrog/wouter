@@ -195,7 +195,7 @@ test("works even if `hashchange` listeners are called asynchronously ", async ()
     location.hash = "#/a";
   });
 
-  const { unmount } = render(
+  render(
     <Router hook={useHashLocation}>
       <Route path="/a">
         <InterceptAndStopHashchange>
@@ -215,7 +215,6 @@ test("works even if `hashchange` listeners are called asynchronously ", async ()
   // paths should not contain "b", because the outer route
   // does not match, so inner component should not be rendered
   expect(paths).toEqual(["/a"]);
-  unmount();
 });
 
 test("defines a custom way of rendering link hrefs", () => {

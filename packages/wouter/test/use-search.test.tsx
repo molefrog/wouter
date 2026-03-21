@@ -1,11 +1,10 @@
-import { renderHook, act, cleanup } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import { useSearch, Router } from "../src/index.js";
 import { navigate } from "../src/use-browser-location.js";
 import { memoryLocation } from "../src/memory-location.js";
-import { test, expect, beforeEach, afterEach } from "bun:test";
+import { test, expect, beforeEach } from "bun:test";
 
 beforeEach(() => history.replaceState(null, "", "/"));
-afterEach(cleanup);
 
 test("returns browser search string", () => {
   history.replaceState(null, "", "/users?active=true");

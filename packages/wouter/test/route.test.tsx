@@ -1,12 +1,9 @@
-import { it, expect, afterEach } from "bun:test";
-import { render, act, cleanup } from "@testing-library/react";
+import { it, expect } from "bun:test";
+import { render, act } from "@testing-library/react";
 
 import { Router, Route } from "../src/index.js";
 import { memoryLocation } from "../src/memory-location.js";
 import { ReactElement } from "react";
-
-// Clean up after each test to avoid DOM pollution
-afterEach(cleanup);
 
 const testRouteRender = (initialPath: string, jsx: ReactElement) => {
   return render(
@@ -87,7 +84,7 @@ it("supports `component` prop similar to React-Router", () => {
 });
 
 it("supports `base` routers with relative path", () => {
-  const { container, unmount } = render(
+  const { container } = render(
     <Router base="/app">
       <Route path="/nested">
         <h1>Nested</h1>
@@ -102,8 +99,6 @@ it("supports `base` routers with relative path", () => {
 
   expect(container.children).toHaveLength(1);
   expect(container.firstChild).toHaveProperty("tagName", "H1");
-
-  unmount();
 });
 
 it("supports `path` prop with regex", () => {

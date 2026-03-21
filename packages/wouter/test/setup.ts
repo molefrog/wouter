@@ -1,6 +1,7 @@
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
-import { expect } from "bun:test";
+import { expect, afterEach } from "bun:test";
 import * as matchers from "@testing-library/jest-dom/matchers";
+import { cleanup } from "@testing-library/react";
 
 // Register happy-dom globals (document, window, etc.)
 GlobalRegistrator.register({
@@ -26,3 +27,5 @@ export const withoutLocation = <T>(fn: () => T): T => {
     globalThis.location = original;
   }
 };
+
+afterEach(cleanup);
