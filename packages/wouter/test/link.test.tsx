@@ -100,22 +100,22 @@ describe("<Link />", () => {
     clickEvt.preventDefault();
 
     fireEvent(getByTestId("link"), clickEvt);
-    expect(location.pathname).not.toBe("/users");
+    expect(location.pathname).toBe("/");
   });
 
   test("ignores the navigation when event is cancelled", () => {
-    const clickHandler: MouseEventHandler = (e) => {
-      e.preventDefault();
-    };
-
     const { getByTestId } = render(
-      <Link href="/users" data-testid="link" onClick={clickHandler}>
+      <Link
+        href="/users"
+        data-testid="link"
+        onClick={(e) => e.preventDefault()}
+      >
         click
       </Link>
     );
 
     fireEvent.click(getByTestId("link"));
-    expect(location.pathname).not.toBe("/users");
+    expect(location.pathname).toBe("/");
   });
 
   test("accepts an `onClick` prop, fired before the navigation", () => {
