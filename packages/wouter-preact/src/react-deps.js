@@ -42,7 +42,7 @@ export function useSyncExternalStore(subscribe, getSnapshot, getSSRSnapshot) {
     if (!is(_instance._value, getSnapshot())) {
       forceUpdate({ _instance });
     }
-  }, [subscribe, value, getSnapshot]);
+  }, [subscribe, value, getSnapshot]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!is(_instance._value, _instance._getSnapshot())) {
@@ -54,7 +54,7 @@ export function useSyncExternalStore(subscribe, getSnapshot, getSSRSnapshot) {
         forceUpdate({ _instance });
       }
     });
-  }, [subscribe]);
+  }, [subscribe]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return value;
 }
