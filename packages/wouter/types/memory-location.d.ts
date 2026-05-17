@@ -10,22 +10,25 @@ type Navigate<S = any> = (
   options?: { replace?: boolean; state?: S; transition?: boolean }
 ) => void;
 
-type HookReturnValue = {
+type HookReturnValue<S = unknown> = {
   hook: BaseLocationHook;
   searchHook: BaseSearchHook;
-  navigate: Navigate;
+  navigate: Navigate<S>;
+  readonly state: S | null;
 };
 type StubHistory = { history: Path[]; reset: () => void };
 
-export function memoryLocation(options?: {
+export function memoryLocation<S = unknown>(options?: {
   path?: Path;
   searchPath?: SearchString;
+  state?: S;
   static?: boolean;
   record?: false;
-}): HookReturnValue;
-export function memoryLocation(options?: {
+}): HookReturnValue<S>;
+export function memoryLocation<S = unknown>(options?: {
   path?: Path;
   searchPath?: SearchString;
+  state?: S;
   static?: boolean;
   record: true;
-}): HookReturnValue & StubHistory;
+}): HookReturnValue<S> & StubHistory;

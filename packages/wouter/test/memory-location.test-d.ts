@@ -41,6 +41,15 @@ test("should support initial path", () => {
   expectTypeOf(hook).toMatchTypeOf<BaseLocationHook>();
 });
 
+test("should support state", () => {
+  const memory = memoryLocation({
+    path: "/initial-path",
+    state: { from: "test" },
+  });
+
+  expectTypeOf(memory.state).toEqualTypeOf<{ from: string } | null>();
+});
+
 test("should support `static` option", () => {
   const { hook } = memoryLocation({ static: true });
 
