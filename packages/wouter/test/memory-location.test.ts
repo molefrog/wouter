@@ -23,6 +23,15 @@ test("should support initial path", () => {
   unmount();
 });
 
+test("should support initial state", () => {
+  const memory = memoryLocation({
+    path: "/test-case",
+    state: { from: "test" },
+  });
+
+  expect(memory.state).toStrictEqual({ from: "test" });
+});
+
 test("should support initial path with query", () => {
   const { searchHook } = memoryLocation({ path: "/test-case?foo=bar" });
 
@@ -78,6 +87,28 @@ test("should return standalone `navigate` method", () => {
   unmount();
 });
 
+test("should update state through standalone `navigate`", () => {
+  const memory = memoryLocation({
+    path: "/test-case",
+    state: { from: "test" },
+  });
+
+  memory.navigate("/standalone", { state: { from: "navigate" } });
+
+  expect(memory.state).toStrictEqual({ from: "navigate" });
+});
+
+test("should preserve state when navigating without `state` option", () => {
+  const memory = memoryLocation({
+    path: "/test-case",
+    state: { from: "test" },
+  });
+
+  memory.navigate("/standalone");
+
+  expect(memory.state).toStrictEqual({ from: "test" });
+});
+
 test("should return location hook that supports navigation", () => {
   const { hook } = memoryLocation();
 
@@ -87,6 +118,20 @@ test("should return location hook that supports navigation", () => {
 
   const [value] = result.current;
   expect(value).toBe("/location");
+  unmount();
+});
+
+test("should update state through hook navigation", () => {
+  const memory = memoryLocation({
+    path: "/test-case",
+    state: { from: "test" },
+  });
+
+  const { result, unmount } = renderHook(() => memory.hook());
+
+  act(() => result.current[1]("/location", { state: { from: "hook" } }));
+
+  expect(memory.state).toStrictEqual({ from: "hook" });
   unmount();
 });
 
@@ -160,4 +205,19 @@ test("should have reset method that reset hook location", () => {
   expect(result.current[0]).toBe("/test");
 
   unmount();
+});
+
+test("should reset state to its initial value", () => {
+  const memory = memoryLocation({
+    record: true,
+    path: "/test",
+    state: { from: "initial" },
+  });
+
+  memory.navigate("/location", { state: { from: "navigate" } });
+  expect(memory.state).toStrictEqual({ from: "navigate" });
+
+  memory.reset();
+
+  expect(memory.state).toStrictEqual({ from: "initial" });
 });
