@@ -1,4 +1,4 @@
-import { test, expect, beforeEach, mock } from "bun:test";
+import { test, expect, mock } from "bun:test";
 import { renderHook, render, act } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -7,11 +7,6 @@ import { useHashLocation } from "../src/use-hash-location.js";
 
 import { waitForHashChangeEvent } from "./test-utils";
 import { ReactNode, useSyncExternalStore } from "react";
-
-beforeEach(() => {
-  history.replaceState(null, "", "/");
-  location.hash = "";
-});
 
 test("gets current location from `location.hash`", () => {
   location.hash = "/app/users";
@@ -195,7 +190,7 @@ test("works even if `hashchange` listeners are called asynchronously ", async ()
     location.hash = "#/a";
   });
 
-  const { unmount } = render(
+  render(
     <Router hook={useHashLocation}>
       <Route path="/a">
         <InterceptAndStopHashchange>
@@ -215,7 +210,6 @@ test("works even if `hashchange` listeners are called asynchronously ", async ()
   // paths should not contain "b", because the outer route
   // does not match, so inner component should not be rendered
   expect(paths).toEqual(["/a"]);
-  unmount();
 });
 
 test("defines a custom way of rendering link hrefs", () => {
@@ -239,14 +233,14 @@ test("handles navigation with data: protocol", async () => {
   const initialHistoryLength = history.length;
 
   await waitForHashChangeEvent(() => {
-    navigate("/new-path");
+    act(() => navigate("/new-path"));
   });
 
   expect(location.hash).toBe("#/new-path");
   expect(history.length).toBe(initialHistoryLength + 1);
 
   await waitForHashChangeEvent(() => {
-    navigate("/another-path", { replace: true });
+    act(() => navigate("/another-path", { replace: true }));
   });
 
   expect(location.hash).toBe("#/another-path");

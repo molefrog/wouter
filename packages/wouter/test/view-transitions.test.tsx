@@ -1,9 +1,12 @@
-import { test, expect, describe, mock, afterEach } from "bun:test";
-import { render, cleanup, fireEvent } from "@testing-library/react";
-import { Router, Link, useLocation, type AroundNavHandler } from "../src/index.js";
+import { test, expect, describe, mock } from "bun:test";
+import { render, fireEvent } from "@testing-library/react";
+import {
+  Router,
+  Link,
+  useLocation,
+  type AroundNavHandler,
+} from "../src/index.js";
 import { memoryLocation } from "../src/memory-location.js";
-
-afterEach(cleanup);
 
 describe("view transitions", () => {
   test("Link with transition prop triggers aroundNav with transition in options", () => {
@@ -66,7 +69,8 @@ describe("view transitions", () => {
 
     expect(aroundNav).toHaveBeenCalledTimes(1);
 
-    const [, to, options] = (aroundNav as ReturnType<typeof mock>).mock.calls[0];
+    const [, to, options] = (aroundNav as ReturnType<typeof mock>).mock
+      .calls[0];
     expect(to).toBe("/about");
     expect(options.transition).toBe(true);
   });

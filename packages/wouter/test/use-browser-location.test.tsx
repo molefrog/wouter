@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { test, expect, describe, beforeEach, afterEach } from "bun:test";
-import { renderHook, act, waitFor, cleanup } from "@testing-library/react";
+import { test, expect, describe } from "bun:test";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import {
   useBrowserLocation,
   navigate,
@@ -8,39 +8,32 @@ import {
   useHistoryState,
 } from "../src/use-browser-location.js";
 
-afterEach(cleanup);
-
 test("returns a pair [value, update]", () => {
-  const { result, unmount } = renderHook(() => useBrowserLocation());
+  const { result } = renderHook(() => useBrowserLocation());
   const [value, update] = result.current;
 
   expect(typeof value).toBe("string");
   expect(typeof update).toBe("function");
-  unmount();
 });
 
 describe("`value` first argument", () => {
-  beforeEach(() => history.replaceState(null, "", "/"));
-
   test("reflects the current pathname", () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result } = renderHook(() => useBrowserLocation());
     expect(result.current[0]).toBe("/");
-    unmount();
   });
 
   test("reacts to `pushState` / `replaceState`", () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result } = renderHook(() => useBrowserLocation());
 
     act(() => history.pushState(null, "", "/foo"));
     expect(result.current[0]).toBe("/foo");
 
     act(() => history.replaceState(null, "", "/bar"));
     expect(result.current[0]).toBe("/bar");
-    unmount();
   });
 
   test("supports history.back() navigation", async () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result } = renderHook(() => useBrowserLocation());
 
     act(() => history.pushState(null, "", "/foo"));
     await waitFor(() => expect(result.current[0]).toBe("/foo"));
@@ -59,23 +52,17 @@ describe("`value` first argument", () => {
     });
 
     await waitFor(() => expect(result.current[0]).toBe("/"), { timeout: 1000 });
-    unmount();
   });
 
   test("supports history state", () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
-    const { result: state, unmount: unmountState } = renderHook(() =>
-      useHistoryState()
-    );
+    const { result } = renderHook(() => useBrowserLocation());
+    const { result: state } = renderHook(() => useHistoryState());
 
     const navigate = result.current[1];
 
     act(() => navigate("/path", { state: { hello: "world" } }));
 
     expect(state.current).toStrictEqual({ hello: "world" });
-
-    unmount();
-    unmountState();
   });
 
   test("uses fail-safe escaping", () => {
@@ -91,8 +78,6 @@ describe("`value` first argument", () => {
 });
 
 describe("`useSearch` hook", () => {
-  beforeEach(() => history.replaceState(null, "", "/"));
-
   test("allows to get current search string", () => {
     const { result: searchResult } = renderHook(() => useSearch());
     act(() => navigate("/foo?hello=world&whats=up"));
@@ -152,36 +137,33 @@ describe("`useSearch` hook", () => {
 
 describe("`update` second parameter", () => {
   test("rerenders the component", () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     act(() => update("/about"));
     expect(result.current[0]).toBe("/about");
-    unmount();
   });
 
   test("changes the current location", () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     act(() => update("/about"));
     expect(location.pathname).toBe("/about");
-    unmount();
   });
 
   test("saves a new entry in the History object", () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     const histBefore = history.length;
     act(() => update("/about"));
 
     expect(history.length).toBe(histBefore + 1);
-    unmount();
   });
 
   test("replaces last entry with a new entry in the History object", () => {
-    const { result, unmount } = renderHook(() => useBrowserLocation());
+    const { result } = renderHook(() => useBrowserLocation());
     const update = result.current[1];
 
     const histBefore = history.length;
@@ -189,19 +171,15 @@ describe("`update` second parameter", () => {
 
     expect(history.length).toBe(histBefore);
     expect(location.pathname).toBe("/foo");
-    unmount();
   });
 
   test("stays the same reference between re-renders (function ref)", () => {
-    const { result, rerender, unmount } = renderHook(() =>
-      useBrowserLocation()
-    );
+    const { result, rerender } = renderHook(() => useBrowserLocation());
 
     const updateWas = result.current[1];
     rerender();
     const updateNow = result.current[1];
 
     expect(updateWas).toBe(updateNow);
-    unmount();
   });
 });

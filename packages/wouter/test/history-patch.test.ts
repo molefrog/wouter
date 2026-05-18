@@ -11,22 +11,20 @@ describe("history patch", () => {
   });
 
   test("history should be patched once", () => {
-    const fn = mock();
-    const { result, unmount } = renderHook(() => reactHook());
+    const pushStateFn = mock();
+    const { result } = renderHook(() => reactHook());
 
-    addEventListener("pushState", (e) => {
-      fn();
-    });
+    addEventListener("pushState", pushStateFn);
 
     expect(result.current[0]).toBe("/");
-    expect(fn).toHaveBeenCalledTimes(0);
+    expect(pushStateFn).toHaveBeenCalledTimes(0);
 
     act(() => result.current[1]("/hello"));
     act(() => result.current[1]("/world"));
 
     expect(result.current[0]).toBe("/world");
-    expect(fn).toHaveBeenCalledTimes(2);
+    expect(pushStateFn).toHaveBeenCalledTimes(2);
 
-    unmount();
+    removeEventListener("pushstate", pushStateFn);
   });
 });
