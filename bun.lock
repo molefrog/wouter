@@ -45,7 +45,7 @@
     },
     "packages/wouter": {
       "name": "wouter",
-      "version": "3.9.0",
+      "version": "3.10.0",
       "dependencies": {
         "mitt": "^3.0.1",
         "regexparam": "^3.0.0",
@@ -57,7 +57,7 @@
     },
     "packages/wouter-preact": {
       "name": "wouter-preact",
-      "version": "3.9.0",
+      "version": "3.10.0",
       "dependencies": {
         "mitt": "^3.0.1",
         "regexparam": "^3.0.0",
