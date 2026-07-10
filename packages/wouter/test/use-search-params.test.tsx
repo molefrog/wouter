@@ -65,3 +65,29 @@ it("does not add question mark when search string is empty", () => {
   act(() => result.current[1]({}));
   expect(location.href).toBe("https://wouter.dev/");
 });
+
+it("can clear search params when used with the hash location", async () => {
+  const { useHashLocation } = await import("../src/use-hash-location.js");
+
+  history.replaceState(null, "", "/app?active=true#/users");
+
+  const { result } = renderHook(() => useSearchParams(), {
+    wrapper: (props) => (
+      <Router hook={useHashLocation}>{props.children}</Router>
+    ),
+  });
+
+  expect(result.current[0].get("active")).toBe("true");
+
+  // removing the last param must clear the search string (see #528)
+  act(() =>
+    result.current[1]((prev) => {
+      prev.delete("active");
+      return prev;
+    })
+  );
+
+  expect(result.current[0].size).toBe(0);
+  expect(location.search).toBe("");
+  expect(location.hash).toBe("#/users");
+});

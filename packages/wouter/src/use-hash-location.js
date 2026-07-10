@@ -30,7 +30,9 @@ export const navigate = (to, { state = null, replace = false } = {}) => {
   // Works for ALL protocols including data:
   const url = new URL(location.href);
   url.hash = `/${hash}`;
-  if (search) url.search = search;
+  // when `to` contains no search, the old one is cleared,
+  // matching the behavior of `useBrowserLocation` (see #528)
+  url.search = search || "";
   const newURL = url.href;
 
   if (replace) {

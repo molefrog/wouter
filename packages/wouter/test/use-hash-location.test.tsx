@@ -63,7 +63,7 @@ test("should not rerender when pathname changes", () => {
   expect(result.current).toBe(1);
 });
 
-test("does not change anything besides the hash when doesn't contain ? symbol", () => {
+test("clears search but keeps pathname when `to` doesn't contain ? symbol", () => {
   history.replaceState(null, "", "/foo?bar#/app");
 
   const { result } = renderHook(() => useHashLocation());
@@ -72,8 +72,12 @@ test("does not change anything besides the hash when doesn't contain ? symbol", 
   act(() => {
     navigate("/settings/general");
   });
+
   expect(location.pathname).toBe("/foo");
-  expect(location.search).toBe("?bar");
+  // search params don't survive navigation, matching the behavior
+  // of `useBrowserLocation` (see #528)
+  expect(location.search).toBe("");
+  expect(location.hash).toBe("#/settings/general");
 });
 
 test("changes search and hash when contains ? symbol", () => {
