@@ -130,17 +130,25 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  test("does not allow other props", () => {
-    // @ts-expect-error
+  test("allows anchor props, they are forwarded to the child", () => {
     <Link to="/" asChild className="">
       <a>Hello</a>
     </Link>;
 
-    // @ts-expect-error
+    <Link to="/" asChild className={(isActive) => (isActive ? "active" : "")}>
+      <a>Hello</a>
+    </Link>;
+
     <Link to="/" asChild style={{}}>
       <a>Hello</a>
     </Link>;
 
+    <Link to="/" asChild target="_blank">
+      <a>Hello</a>
+    </Link>;
+  });
+
+  test("does not allow unknown props or refs", () => {
     // @ts-expect-error
     <Link to="/" asChild unknown={10}>
       <a>Hello</a>

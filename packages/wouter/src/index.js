@@ -313,14 +313,22 @@ export const Link = forwardRef((props, ref) => {
     router // pass router as a second argument for convinience
   );
 
+  // `className` can be a function to apply the class if this link is active
+  const className = cls?.call ? cls(currentPath === targetPath) : cls;
+
   return asChild && isValidElement(children)
-    ? cloneElement(children, { onClick, href })
+    ? cloneElement(children, {
+        ...restProps,
+        // the child's own `className` is kept when the prop isn't provided
+        ...(cls != null && { className }),
+        onClick,
+        href,
+      })
     : h("a", {
         ...restProps,
         onClick,
         href,
-        // `className` can be a function to apply the class if this link is active
-        className: cls?.call ? cls(currentPath === targetPath) : cls,
+        className,
         children,
         ref,
       });

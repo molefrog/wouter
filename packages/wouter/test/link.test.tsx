@@ -321,6 +321,46 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link).toHaveTextContent("Click Me");
   });
 
+  test("forwards props to the child element (#536)", () => {
+    const { getByText } = render(
+      <Link href="/about" asChild className="nav-link" target="_blank">
+        <div>Click Me</div>
+      </Link>
+    );
+
+    const link = getByText("Click Me");
+
+    expect(link.tagName).toBe("DIV");
+    expect(link).toHaveClass("nav-link");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("href", "/about");
+  });
+
+  test("supports function className with `asChild`", () => {
+    history.replaceState(null, "", "/about");
+    const { getByText } = render(
+      <Link
+        href="/about"
+        asChild
+        className={(isActive) => (isActive ? "active" : "inactive")}
+      >
+        <div>Click Me</div>
+      </Link>
+    );
+
+    expect(getByText("Click Me")).toHaveClass("active");
+  });
+
+  test("keeps the child's className when the prop isn't provided", () => {
+    const { getByText } = render(
+      <Link href="/about" asChild>
+        <div className="original">Click Me</div>
+      </Link>
+    );
+
+    expect(getByText("Click Me")).toHaveClass("original");
+  });
+
   test("missing href or to won't crash", () => {
     const { getByText } = render(
       /* @ts-expect-error */

@@ -528,6 +528,8 @@ Link will always wrap its children in an `<a />` tag, unless `asChild` prop is p
 // in order for navigation to work!
 ```
 
+When `asChild` is used, all other props (e.g. `className`, `target`) are forwarded to the child element, so `Link` can be wrapped in custom components that proxy their props down.
+
 When you pass a function as a `className` prop, it will be called with a boolean value indicating whether the link is active for the current route. You can use this to style active links (e.g. for links in navigation menu)
 
 ```jsx
