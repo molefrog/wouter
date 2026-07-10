@@ -4,7 +4,7 @@ import { Router, Route, Switch } from "../src/index.js";
 import { memoryLocation } from "../src/memory-location.js";
 
 import { render, act } from "@testing-library/react";
-import { PropsWithChildren, ReactElement, JSX } from "react";
+import { PropsWithChildren, ReactElement, JSX, useEffect } from "react";
 
 const raf = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
@@ -124,6 +124,124 @@ it("always ensures the consistency of inner routes rendering", async () => {
     await raf();
     history.pushState(null, "", "/");
   });
+});
+
+it("ignores a stale `match` prop when the location has changed (#556, #464)", () => {
+  // when the location store updates, subscriptions fire bottom-up: a route
+  // can re-render with a `match` prop computed by its Switch for the previous
+  // location. this simulates that intermediate render: the `match`/`matchLoc`
+  // props say "/2" while the actual location is already "/1"
+  const { hook } = memoryLocation({ path: "/1" });
+
+  const staleProps = { match: [true, {}], matchLoc: "/2" } as object;
+
+  const { container } = render(
+    <Router hook={hook}>
+      <Route path="/2" {...staleProps}>
+        <h2>stale</h2>
+      </Route>
+    </Router>
+  );
+
+  // the stale match must be ignored and re-computed against "/1" → no match
+  expect(container).toBeEmptyDOMElement();
+});
+
+it("re-computes stale `match` params against the fresh location", () => {
+  const { hook } = memoryLocation({ path: "/users/5" });
+
+  const staleProps = {
+    match: [true, { id: "1" }],
+    matchLoc: "/users/1",
+  } as object;
+
+  const { container } = render(
+    <Router hook={hook}>
+      <Route path="/users/:id" {...staleProps}>
+        {(params) => <h2>{params.id}</h2>}
+      </Route>
+    </Router>
+  );
+
+  // the same route still matches, but params must come from the fresh location
+  expect(container.querySelector("h2")).toHaveTextContent("5");
+});
+
+it("trusts the `match` prop when `matchLoc` is absent (location override)", () => {
+  const { hook } = memoryLocation({ path: "/somewhere-else" });
+
+  const props = { match: [true, { id: "42" }] } as object;
+
+  const { container } = render(
+    <Router hook={hook}>
+      <Route path="/users/:id" {...props}>
+        {(params) => <h2>{params.id}</h2>}
+      </Route>
+    </Router>
+  );
+
+  // without `matchLoc` the match is unconditional, e.g. <Switch location="...">
+  expect(container.querySelector("h2")).toHaveTextContent("42");
+});
+
+it("keeps rendering `location`-prop overridden routes after navigation", () => {
+  const { hook, navigate } = memoryLocation({ path: "/a" });
+
+  const { container } = render(
+    <Router hook={hook}>
+      <Switch location="/users">
+        <Route path="/users">route</Route>
+      </Switch>
+    </Router>
+  );
+
+  expect(container).toHaveTextContent("route");
+
+  // navigating must not invalidate matches pinned via the `location` prop
+  act(() => navigate("/b"));
+  expect(container).toHaveTextContent("route");
+});
+
+it("does not re-run effects of the previous route on back navigation", async () => {
+  history.replaceState(null, "", "/effects-1");
+
+  const effectLog: string[] = [];
+
+  const Comp = ({ id }: { id: string }) => {
+    // note: no dependency array, the effect runs on every render (see #556)
+    useEffect(() => {
+      effectLog.push(id);
+    });
+    return <>page {id}</>;
+  };
+
+  render(
+    <Switch>
+      <Route path="/effects-1">
+        <Comp id="1" />
+      </Route>
+      <Route path="/effects-2">
+        <Comp id="2" />
+      </Route>
+    </Switch>
+  );
+
+  await act(async () => {
+    await raf();
+    history.pushState(null, "", "/effects-2");
+  });
+
+  expect(effectLog).toEqual(["1", "2"]);
+
+  // going back must not re-render (and re-run effects of) the route
+  // that no longer matches
+  await act(async () => {
+    history.back();
+    // happy-dom doesn't always fire popstate on history.back()
+    history.replaceState(null, "", "/effects-1");
+  });
+
+  expect(effectLog).toEqual(["1", "2", "1"]);
 });
 
 it("supports catch-all routes with wildcard segments", async () => {

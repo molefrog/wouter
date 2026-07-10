@@ -240,14 +240,19 @@ export function useSearchParams() {
   return [searchParams, setSearchParams];
 }
 
-export const Route = ({ path, nest, match, ...renderProps }) => {
+export const Route = ({ path, nest, match, matchLoc, ...renderProps }) => {
   const router = useRouter();
   const [location] = useLocationFromRouter(router);
 
   const [matches, routeParams, base] =
     // `match` is a special prop to give up control to the parent,
-    // it is used by the `Switch` to avoid double matching
-    match ?? matchRoute(router.parser, path, location, nest);
+    // it is used by the `Switch` to avoid double matching.
+    // `matchLoc` is the location the parent matched against: when it differs
+    // from the current location, the route is re-rendering before its `Switch`
+    // (this happens on `popstate`, as location subscriptions fire bottom-up),
+    // so `match` is stale and matching is re-done against the fresh location
+    (!matchLoc || matchLoc === location ? match : null) ??
+    matchRoute(router.parser, path, location, nest);
 
   // when `routeParams` is `null` (there was no match), the argument
   // below becomes {...null} = {}, see the Object Spread specs
@@ -348,7 +353,13 @@ export const Switch = ({ children, location }) => {
         element.props.nest
       ))[0]
     )
-      return cloneElement(element, { match });
+      return cloneElement(element, {
+        match,
+        // when matching against the reactive location, let the route know
+        // which location the match is valid for, so it can detect stale
+        // matches. `location` prop matches never go stale
+        matchLoc: location ? undefined : originalLocation,
+      });
   }
 
   return null;
