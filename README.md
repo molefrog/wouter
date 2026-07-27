@@ -1089,7 +1089,7 @@ helping with the development.
 ---
 
 <div align="center">
-  <a href="https://moi.computer"><img src="assets/moi.svg" width="200" alt="moi computer" /></a>
+  <a href="https://moi.computer"><img src="assets/moi.png" width="200" alt="moi computer" /></a>
   <br /><br />
   <sub>
     A local workspace where AI agents build their own UI.<br />
