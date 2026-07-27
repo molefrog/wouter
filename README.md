@@ -1085,3 +1085,14 @@ Wouter illustrations and logos were made by [Katya Simacheva](https://simachevak
 [Katya Vakulenko](https://katyavakulenko.com/). Thank you to **[@jeetiss](https://github.com/jeetiss)**
 and all the amazing [contributors](https://github.com/molefrog/wouter/graphs/contributors) for
 helping with the development.
+
+---
+
+<div align="center">
+  <a href="https://moi.computer"><img src="assets/moi.png" width="200" alt="moi computer" /></a>
+  <br /><br />
+  <sub>
+    Try <a href="https://github.com/molefrog/moi">moi</a> - a generative UI workspace where your agents build their own UI<br />
+    From the author of wouter
+  </sub>
+</div>
