@@ -1092,7 +1092,7 @@ helping with the development.
   <a href="https://moi.computer"><img src="assets/moi.png" width="200" alt="moi computer" /></a>
   <br /><br />
   <sub>
-    Try <a href="https://github.com/molefrog/moi">moi.computer</a> - a generative UI workspace for your agents build their own UI.<br />
+    Try <a href="https://github.com/molefrog/moi">moi</a> - a generative UI workspace where your agents build their own UI<br />
     From the author of wouter
   </sub>
 </div>
