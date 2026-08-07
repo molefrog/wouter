@@ -1,0 +1,46 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /packages/wouter-preact
+    schedule:
+      interval: weekly
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /packages/magazin
+    schedule:
+      interval: weekly
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /packages/wouter
+    schedule:
+      interval: weekly
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
