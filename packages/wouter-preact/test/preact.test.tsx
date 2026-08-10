@@ -157,6 +157,56 @@ describe("Preact support", () => {
   });
 });
 
+describe("useSyncExternalStore shim", () => {
+  test("re-renders when the store mutates between render and layout effect", async () => {
+    // the internal shim is untyped, it mirrors the React useSyncExternalStore signature
+    const { useSyncExternalStore } = (await import(
+      // @ts-expect-error
+      "../src/react-deps.js"
+    )) as {
+      useSyncExternalStore: <T>(
+        subscribe: (cb: () => void) => () => void,
+        getSnapshot: () => T,
+        getSSRSnapshot?: () => T
+      ) => T;
+    };
+    const { useLayoutEffect } = await import("preact/hooks");
+
+    let value = "initial";
+    const listeners = new Set<() => void>();
+    const subscribe = (cb: () => void) => {
+      listeners.add(cb);
+      return () => listeners.delete(cb);
+    };
+
+    // child layout effects run before the parent's, so this mutation happens
+    // after the parent has rendered but before its layout effect compares snapshots
+    const Child = () => {
+      useLayoutEffect(() => {
+        value = "mutated";
+      }, []);
+      return null;
+    };
+
+    const Parent = () => {
+      const snapshot = useSyncExternalStore(subscribe, () => value);
+      return (
+        <div data-testid="snapshot">
+          {snapshot}
+          <Child />
+        </div>
+      );
+    };
+
+    const container = document.body.appendChild(document.createElement("div"));
+    act(() => {
+      render(<Parent />, container);
+    });
+
+    expect(container.textContent).toBe("mutated");
+  });
+});
+
 describe("Preact SSR", () => {
   test.skip("supports SSR (fix: useSyncExternalStore polyfill in Bun)", async () => {
     const { Router, useLocation } = await loadPreact();

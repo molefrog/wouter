@@ -11,6 +11,14 @@ test("returns browser search string", () => {
   expect(result.current).toEqual("active=true");
 });
 
+test("returns search string as-is when it contains malformed escapes", () => {
+  history.replaceState(null, "", "/users?q=100%");
+  const { result } = renderHook(() => useSearch());
+
+  // decodeURI throws on "%", sanitizeSearch falls back to the raw string
+  expect(result.current).toEqual("q=100%");
+});
+
 test("can be customized in the Router", () => {
   const customSearchHook = ({ customOption = "unused" }) => "none";
 
