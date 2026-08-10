@@ -1,4 +1,16 @@
 [test]
 preload = ["./packages/wouter/test/setup.ts"]
 coverageSkipTestFiles = true
-coveragePathIgnorePatterns = ["**/test/**"]
+coveragePathIgnorePatterns = [
+  "**/test/**",
+  # temporary copies of packages/wouter/src/* created by preact.test.tsx;
+  # already measured at their original path (react-deps.js is preact-specific and stays measured)
+  "packages/wouter-preact/src/index.js",
+  "packages/wouter-preact/src/paths.js",
+  "packages/wouter-preact/src/memory-location.js",
+  "packages/wouter-preact/src/use-browser-location.js",
+  "packages/wouter-preact/src/use-hash-location.js",
+  "packages/wouter-preact/src/use-sync-external-store.js",
+  "packages/wouter-preact/src/use-sync-external-store.native.js",
+]
+coverageThreshold = { lines = 0.99 }
