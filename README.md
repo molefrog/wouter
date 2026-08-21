@@ -12,11 +12,6 @@
   <a href="https://pr.new/molefrog/wouter"><img alt="Edit in StackBlitz IDE" src="https://img.shields.io/badge/StackBlitz-New%20PR-black?labelColor=888" /></a>
 </div>
 
-<div align="center">
-  <b>wouter</b> is a tiny router for modern React and Preact apps that relies on Hooks. <br />
-  A router you wanted so bad in your project!<br>
-</div>
-
 ## Features
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
@@ -46,6 +41,13 @@ Wouter provides a simple API that many developers and library authors appreciate
 projects that use wouter: **[Ultra](https://ultrajs.dev/)**,
 **[React-three-fiber](https://github.com/react-spring/react-three-fiber)**,
 **[Sunmao UI](https://sunmao-ui.com/)**, **[Million](https://million.dev/)** and many more.
+
+## One more thing
+Using AI agents for coding and personal tasks? Try [moi.computer](https://github.com/molefrog/moi), a new project
+by wouter authors. Moi is a skill that give your agent a fully extendable UI workspace. Build internal software, personal and company OS,
+dashboards and more.
+
+<a href="https://moi.computer"><img src="assets/moi.png" width="160" alt="moi computer" /></a>
 
 ## Table of Contents
 
@@ -1085,14 +1087,3 @@ Wouter illustrations and logos were made by [Katya Simacheva](https://simachevak
 [Katya Vakulenko](https://katyavakulenko.com/). Thank you to **[@jeetiss](https://github.com/jeetiss)**
 and all the amazing [contributors](https://github.com/molefrog/wouter/graphs/contributors) for
 helping with the development.
-
----
-
-<div align="center">
-  <a href="https://moi.computer"><img src="assets/moi.png" width="200" alt="moi computer" /></a>
-  <br /><br />
-  <sub>
-    Try <a href="https://github.com/molefrog/moi">moi</a> - a generative UI workspace where your agents build their own UI<br />
-    From the author of wouter
-  </sub>
-</div>
