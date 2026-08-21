@@ -12,6 +12,11 @@
   <a href="https://pr.new/molefrog/wouter"><img alt="Edit in StackBlitz IDE" src="https://img.shields.io/badge/StackBlitz-New%20PR-black?labelColor=888" /></a>
 </div>
 
+<div align="center">
+  <b>wouter</b> is a tiny router for modern React and Preact apps that relies on Hooks. <br />
+  A router you wanted so bad in your project!<br>
+</div>
+
 ## Features
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
