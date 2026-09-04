@@ -3,6 +3,28 @@ import { useSearch, Router } from "../src/index.js";
 import { navigate } from "../src/use-browser-location.js";
 import { memoryLocation } from "../src/memory-location.js";
 import { test, expect } from "bun:test";
+import { useState } from "react";
+
+test("revisits the initial search after a render-phase state update (#393)", () => {
+  history.replaceState(null, "", "/?tab=1");
+
+  const { result } = renderHook(() => {
+    const search = useSearch();
+    // Minimal equivalent of urql synchronizing query state during render.
+    // React 18 drops this update; fixed in React 19:
+    // https://github.com/facebook/react/pull/25578
+    const [previousSearch, setPreviousSearch] = useState(search);
+    if (previousSearch !== search) setPreviousSearch(search);
+    return search;
+  });
+
+  expect(result.current).toBe("tab=1");
+  for (const tab of [2, 1, 3, 1]) {
+    act(() => navigate(`/?tab=${tab}`));
+    expect(location.search).toBe(`?tab=${tab}`);
+    expect(result.current).toBe(`tab=${tab}`);
+  }
+});
 
 test("returns browser search string", () => {
   history.replaceState(null, "", "/users?active=true");
