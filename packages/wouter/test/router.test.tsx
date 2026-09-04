@@ -314,3 +314,51 @@ it("updates the context when settings are changed", () => {
   );
   expect(state.renders).toEqual(3); // nothing changed
 });
+
+it("updates inherited options after a customized option without mutating old routers", () => {
+  const customParser: Parser = () => ({ pattern: /(.*)/, keys: [] });
+  let parser: Parser | undefined = customParser;
+  let base = "/app";
+  let parent: ReturnType<typeof useRouter>;
+
+  const NestedRouter = ({ children }: ComponentProps<typeof Router>) => {
+    parent = useRouter();
+    return <Router parser={parser}>{children}</Router>;
+  };
+
+  const { result, rerender } = renderHook(() => useRouter(), {
+    wrapper: ({ children }) => (
+      <Router base={base}>
+        <NestedRouter>{children}</NestedRouter>
+      </Router>
+    ),
+  });
+
+  const initial = result.current;
+  const initialParent = parent!;
+  expect(initial.parser).toBe(customParser);
+  expect(initial.base).toBe("/app");
+
+  // `parser` is visited before `base` when the router inherits its options.
+  base = "/next";
+  rerender();
+
+  const updated = result.current;
+  expect(updated).not.toBe(initial);
+  expect(updated.parser).toBe(customParser);
+  expect(updated.base).toBe("/next");
+  expect(initial.base).toBe("/app");
+  expect(initialParent.base).toBe("/app");
+
+  rerender();
+  expect(result.current).toBe(updated);
+
+  parser = undefined;
+  rerender();
+  expect(result.current).toBe(parent!);
+  expect(updated.parser).toBe(customParser);
+
+  const inherited = result.current;
+  rerender();
+  expect(result.current).toBe(inherited);
+});

@@ -90,6 +90,20 @@ test("changes search and hash when contains ? symbol", () => {
   expect(location.hash).toBe("#/abc");
 });
 
+test("preserves the search for an empty query and ignores extra query segments", () => {
+  history.replaceState(null, "", "/foo?original#/app");
+  const { result } = renderHook(() => useHashLocation());
+  const [, navigate] = result.current;
+
+  act(() => navigate("#/empty?"));
+  expect(location.hash).toBe("#/empty");
+  expect(location.search).toBe("?original");
+
+  act(() => navigate("/next?first?ignored"));
+  expect(location.hash).toBe("#/next");
+  expect(location.search).toBe("?first");
+});
+
 test("creates a new history entry when navigating", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;

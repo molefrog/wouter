@@ -1,4 +1,3 @@
-import mitt from "mitt";
 import { useSyncExternalStore } from "./react-deps.js";
 
 /**
@@ -8,12 +7,11 @@ import { useSyncExternalStore } from "./react-deps.js";
 export const memoryLocation = ({
   path = "/",
   searchPath = "",
-  state = null,
+  state: initialState = null,
   static: staticLocation,
   record,
 } = {}) => {
   let initialPath = path;
-  const initialState = state;
   if (searchPath) {
     // join with & if path contains search query, and ? otherwise
     initialPath += path.split("?")[1] ? "&" : "?";
@@ -23,58 +21,56 @@ export const memoryLocation = ({
   let [currentPath, currentSearch = ""] = initialPath.split("?");
   let currentState = initialState;
   const history = [initialPath];
-  const emitter = mitt();
+  let listeners = [];
 
   const navigateImplementation = (path, { replace = false, state } = {}) => {
-    if (record) {
-      if (replace) {
-        history.splice(history.length - 1, 1, path);
-      } else {
-        history.push(path);
-      }
-    }
+    if (record)
+      history[replace && history.length ? history.length - 1 : history.length] =
+        path;
 
     [currentPath, currentSearch = ""] = path.split("?");
     if (state !== undefined) currentState = state;
-    emitter.emit("navigate", path);
+    listeners.forEach((cb) => cb());
   };
 
   const navigate = !staticLocation ? navigateImplementation : () => null;
 
+  // Copy on subscription changes instead of copying on every navigation.
   const subscribe = (cb) => {
-    emitter.on("navigate", cb);
-    return () => emitter.off("navigate", cb);
+    listeners = [...listeners, cb];
+    return () => {
+      listeners = listeners.filter((i) => i !== cb);
+    };
   };
 
+  const getPath = () => currentPath;
+  const getSearch = () => currentSearch;
+
   const useMemoryLocation = () => [
-    useSyncExternalStore(subscribe, () => currentPath),
+    useSyncExternalStore(subscribe, getPath),
     navigate,
   ];
 
-  const useMemoryQuery = () =>
-    useSyncExternalStore(subscribe, () => currentSearch);
+  const useMemoryQuery = () => useSyncExternalStore(subscribe, getSearch);
 
   // Attach searchHook to the location hook for auto-inheritance in Router
   useMemoryLocation.searchHook = useMemoryQuery;
 
   function reset() {
     // clean history array with mutation to preserve link
-    history.splice(0, history.length);
+    history.length = 0;
     navigateImplementation(initialPath, { state: initialState });
   }
 
-  const memoryLocationResult = {
-    hook: useMemoryLocation,
-    searchHook: useMemoryQuery,
-    navigate,
-    history: record ? history : undefined,
-    reset: record ? reset : undefined,
-  };
-
-  Object.defineProperty(memoryLocationResult, "state", {
-    enumerable: true,
-    get: () => currentState,
-  });
-
-  return memoryLocationResult;
+  return Object.defineProperty(
+    {
+      hook: useMemoryLocation,
+      searchHook: useMemoryQuery,
+      navigate,
+      history: record ? history : undefined,
+      reset: record ? reset : undefined,
+    },
+    "state",
+    { enumerable: true, get: () => currentState }
+  );
 };

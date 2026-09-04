@@ -209,3 +209,31 @@ test("should reset state to its initial value", () => {
 
   expect(memory.state).toStrictEqual({ from: "initial" });
 });
+
+test("replaces the last entry even after recorded history is cleared", () => {
+  const { history, navigate, reset } = memoryLocation({ record: true });
+  history.length = 0;
+
+  navigate("/replacement", { replace: true });
+  expect(history).toStrictEqual(["/replacement"]);
+
+  reset();
+  expect(history).toStrictEqual(["/"]);
+});
+
+test("keeps remaining location and query subscribers after unmounting", () => {
+  const memory = memoryLocation({ path: "/initial?foo=bar?ignored" });
+  const first = renderHook(() => memory.hook());
+  const second = renderHook(() => [memory.hook()[0], memory.searchHook()]);
+
+  expect(second.result.current).toEqual(["/initial", "foo=bar"]);
+  first.unmount();
+
+  act(() => memory.navigate("/next?key=value?ignored"));
+  expect(second.result.current).toEqual(["/next", "key=value"]);
+
+  second.unmount();
+  act(() => memory.navigate("/last"));
+  const last = renderHook(() => [memory.hook()[0], memory.searchHook()]);
+  expect(last.result.current).toEqual(["/last", ""]);
+});

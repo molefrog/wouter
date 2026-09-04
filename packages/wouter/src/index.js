@@ -63,7 +63,10 @@ export const useParams = () => useContext(ParamsCtx);
  * Part 1, Hooks API: useRoute and useLocation
  */
 
-// Internal version of useLocation to avoid redundant useRouter calls
+// Internal location hooks avoid redundant context reads and navigation callbacks.
+
+const usePathnameFromRouter = (router) =>
+  relativePath(router.base, router.hook(router)[0]);
 
 const useLocationFromRouter = (router) => {
   const [location, navigate] = router.hook(router);
@@ -89,53 +92,31 @@ export const useSearch = () => {
 export const matchRoute = (parser, route, path, loose) => {
   // if the input is a regexp, skip parsing
   const { pattern, keys } =
-    route instanceof RegExp
-      ? { keys: false, pattern: route }
-      : parser(route || "*", loose);
+    route instanceof RegExp ? { pattern: route } : parser(route || "*", loose);
 
-  // array destructuring loses keys, so this is done in two steps
-  const result = pattern.exec(path) || [];
+  const result = pattern.exec(path);
 
-  // when parser is in "loose" mode, `$base` is equal to the
-  // first part of the route that matches the pattern
-  // (e.g. for pattern `/a/:b` and path `/a/1/2/3` the `$base` is `a/1`)
-  // we use this for route nesting
-  const [$base, ...matches] = result;
+  if (!result) return [false, null];
 
-  return $base !== undefined
-    ? [
-        true,
+  // Keep positional captures as well as named params, with named params taking
+  // precedence (custom parsers can use numeric keys).
+  const params = {};
+  for (let i = 1; i < result.length; i++) params[i - 1] = result[i];
+  if (keys) {
+    for (let i = 0; i < keys.length; i++) params[keys[i]] = result[i + 1];
+  } else {
+    Object.assign(params, result.groups);
+  }
 
-        (() => {
-          // for regex paths, `keys` will always be false
-
-          // an object with parameters matched, e.g. { foo: "bar" } for "/:foo"
-          // we "zip" two arrays here to construct the object
-          // ["foo"], ["bar"] → { foo: "bar" }
-          const groups =
-            keys !== false
-              ? Object.fromEntries(keys.map((key, i) => [key, matches[i]]))
-              : result.groups;
-
-          // convert the array to an instance of object
-          // this makes it easier to integrate with the existing param implementation
-          let obj = { ...matches };
-
-          // merge named capture groups with matches array
-          groups && Object.assign(obj, groups);
-
-          return obj;
-        })(),
-
-        // the third value if only present when parser is in "loose" mode,
-        // so that we can extract the base path for nested routes
-        ...(loose ? [$base] : []),
-      ]
-    : [false, null];
+  // In loose mode the full match is the base for nested routes:
+  // pattern `/a/:b` and path `/a/1/2/3` give the base `/a/1`.
+  return loose ? [true, params, result[0]] : [true, params];
 };
 
-export const useRoute = (pattern) =>
-  matchRoute(useRouter().parser, pattern, useLocation()[0]);
+export const useRoute = (pattern) => {
+  const router = useRouter();
+  return matchRoute(router.parser, pattern, usePathnameFromRouter(router));
+};
 
 /*
  * Part 2, Low Carb Router API: Router, Route, Link, Switch
@@ -154,9 +135,10 @@ export const Router = ({ children, ...props }) => {
   // also, ensure ssrSearch is always defined when ssrPath is provided, so that
   // useSearch behavior matches usePathname (proper SSR hydration when client
   // renders <Router> without props after server rendered with ssrPath/ssrSearch)
-  const [path, search = props.ssrSearch ?? ""] =
-    props.ssrPath?.split("?") ?? [];
-  if (path) (props.ssrSearch = search), (props.ssrPath = path);
+  if (props.ssrPath) {
+    const [path, search = props.ssrSearch ?? ""] = props.ssrPath.split("?");
+    if (path) (props.ssrSearch = search), (props.ssrPath = path);
+  }
 
   // hooks can define their own `href` formatter (e.g. for hash location)
   props.hrefs = props.hrefs ?? props.hook?.hrefs;
@@ -174,7 +156,7 @@ export const Router = ({ children, ...props }) => {
   //   2) if the custom `hook` prop is provided, we always inherit from the
   //      default router instead. this resets all previously overridden options.
   //   3) when the router is customized here, it should stay stable between renders
-  let ref = useRef({}),
+  let ref = useRef(parent),
     prev = ref.current,
     next = prev;
 
@@ -185,17 +167,16 @@ export const Router = ({ children, ...props }) => {
           parent[k] + (props[k] ?? "")
         : props[k] ?? parent[k];
 
-    if (prev === next && option !== next[k]) {
-      ref.current = next = { ...next };
+    if (option !== next[k]) {
+      if (prev === next) ref.current = next = { ...next };
+      next[k] = option;
     }
-
-    next[k] = option;
 
     // the new router is no different from the parent or from the memoized value, use parent
     if (option !== parent[k] || option !== value[k]) value = next;
   }
 
-  return h(RouterCtx.Provider, { value, children });
+  return h(RouterCtx.Provider, { value }, children);
 };
 
 const h_route = ({ children, component }, params) => {
@@ -209,11 +190,12 @@ const h_route = ({ children, component }, params) => {
 // Cache params object between renders if values are shallow equal
 const useCachedParams = (value) => {
   let prev = useRef(Params0);
-  const curr = prev.current;
+  const curr = prev.current,
+    keys = Object.keys(value);
   return (prev.current =
     // Update cache if number of params changed or any value changed
-    Object.keys(value).length !== Object.keys(curr).length ||
-    Object.entries(value).some(([k, v]) => v !== curr[k])
+    keys.length !== Object.keys(curr).length ||
+    keys.some((k) => value[k] !== curr[k])
       ? value // Return new value if there are changes
       : curr); // Return cached value if nothing changed
 };
@@ -240,7 +222,7 @@ export function useSearchParams() {
 
 export const Route = ({ path, nest, match, ...renderProps }) => {
   const router = useRouter();
-  const [location] = useLocationFromRouter(router);
+  const location = usePathnameFromRouter(router);
 
   const [matches, routeParams, base] =
     // `match` is a special prop to give up control to the parent,
@@ -254,11 +236,13 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
 
   if (!matches) return null;
 
-  const children = base
-    ? h(Router, { base }, h_route(renderProps, params))
-    : h_route(renderProps, params);
+  const children = h_route(renderProps, params);
 
-  return h(ParamsCtx.Provider, { value: params, children });
+  return h(
+    ParamsCtx.Provider,
+    { value: params },
+    base ? h(Router, { base }, children) : children
+  );
 };
 
 export const Link = forwardRef((props, ref) => {
@@ -319,16 +303,17 @@ export const Link = forwardRef((props, ref) => {
       });
 });
 
-const flattenChildren = (children) =>
-  Array.isArray(children)
-    ? children.flatMap((c) =>
-        flattenChildren(c && c.type === Fragment ? c.props.children : c)
-      )
-    : [children];
+const flattenChildren = (children, result = []) => {
+  if (Array.isArray(children)) {
+    for (const c of children)
+      flattenChildren(c && c.type === Fragment ? c.props.children : c, result);
+  } else result.push(children);
+  return result;
+};
 
 export const Switch = ({ children, location }) => {
   const router = useRouter();
-  const [originalLocation] = useLocationFromRouter(router);
+  const originalLocation = usePathnameFromRouter(router);
 
   for (const element of flattenChildren(children)) {
     let match = 0;

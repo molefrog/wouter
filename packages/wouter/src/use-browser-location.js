@@ -59,7 +59,7 @@ export const navigate = (to, { replace = false, state = null } = {}) =>
 
 // the 2nd argument of the `useBrowserLocation` return value is a function
 // that allows to perform a navigation.
-export const useBrowserLocation = (opts = {}) => [usePathname(opts), navigate];
+export const useBrowserLocation = (opts) => [usePathname(opts), navigate];
 
 const patchKey = Symbol.for("wouter_v3");
 
