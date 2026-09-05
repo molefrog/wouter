@@ -310,6 +310,8 @@ const App = () => (
 );
 ```
 
+With `useHashLocation`, navigating to `/about` preserves the current search parameters. Include a query to replace them (`/about?tab=1`), or an explicit empty query to clear them (`/about?`). This also works with `Link` and keeps search parameters before the hash in the browser URL.
+
 Because these hooks have return values similar to `useState`, it is easy and fun to build your own location hooks: `useCrossTabLocation`, `useLocalStorage`, `useMicroFrontendLocation` and whatever routing logic you want to support in the app. Give it a try!
 
 ### `useParams`: extracting matched parameters

@@ -29,7 +29,7 @@ export const navigate = (to, { state = null, replace = false } = {}) => {
   // Works for ALL protocols including data:
   const url = new URL(oldURL);
   url.hash = `/${hash}`;
-  if (search) url.search = search;
+  if (search !== undefined) url.search = search;
   const newURL = url.href;
 
   history[replace ? "replaceState" : "pushState"](state, "", newURL);
