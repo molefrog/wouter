@@ -115,7 +115,7 @@ export const matchRoute = (parser, route, path, loose) => {
 
 export const useRoute = (pattern) => {
   const router = useRouter();
-  const absolute = typeof pattern === "string" && pattern.startsWith("~/");
+  const absolute = /^~\//.test(pattern);
   return matchRoute(
     router.parser,
     absolute ? pattern.slice(1) : pattern,
@@ -267,10 +267,10 @@ export const Link = forwardRef((props, ref) => {
     transition /* ignore nav props */,
     /* eslint-enable no-unused-vars */
 
-    ...restProps
+    ...linkProps
   } = props;
 
-  const onClick = useEvent((event) => {
+  linkProps.onClick = useEvent((event) => {
     // ignores the navigation when clicked using right mouse button or
     // by holding a special modifier key: ctrl, command, win, alt, shift
     if (
@@ -290,12 +290,11 @@ export const Link = forwardRef((props, ref) => {
   });
 
   // handle nested routers and absolute paths
-  const href = router.hrefs(
+  linkProps.href = router.hrefs(
     targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath,
     router // pass router as a second argument for convinience
   );
 
-  const linkProps = { ...restProps, onClick, href };
   // Omitted props should preserve the child's own className and ref.
   if (cls !== undefined)
     linkProps.className = cls?.call ? cls(currentPath === targetPath) : cls;
@@ -303,7 +302,7 @@ export const Link = forwardRef((props, ref) => {
 
   return asChild && isValidElement(children)
     ? cloneElement(children, linkProps)
-    : h("a", { ...linkProps, children });
+    : h("a", linkProps, children);
 });
 
 const flattenChildren = (children, result = []) => {

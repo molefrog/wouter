@@ -3,16 +3,7 @@ import { useSyncExternalStore } from "./react-deps.js";
 /**
  * History API docs @see https://developer.mozilla.org/en-US/docs/Web/API/History
  */
-const eventPopstate = "popstate";
-const eventPushState = "pushState";
-const eventReplaceState = "replaceState";
-const eventHashchange = "hashchange";
-const events = [
-  eventPopstate,
-  eventPushState,
-  eventReplaceState,
-  eventHashchange,
-];
+const events = ["popstate", "pushState", "replaceState", "hashchange"];
 
 let listeners = [];
 const onLocationChange = () => listeners.forEach((callback) => callback());
@@ -21,12 +12,12 @@ const onLocationChange = () => listeners.forEach((callback) => callback());
 // together so React can process parent and child updates in the same batch.
 const subscribeToLocationUpdates = (callback) => {
   if (listeners.push(callback) === 1)
-    for (const event of events) addEventListener(event, onLocationChange);
+    events.forEach((event) => addEventListener(event, onLocationChange));
 
   return () => {
     listeners = listeners.filter((listener) => listener !== callback);
     if (!listeners.length)
-      for (const event of events) removeEventListener(event, onLocationChange);
+      events.forEach((event) => removeEventListener(event, onLocationChange));
   };
 };
 
@@ -60,7 +51,7 @@ export const useHistoryState = () =>
   useLocationProperty(currentHistoryState, () => null);
 
 export const navigate = (to, { replace = false, state = null } = {}) =>
-  history[replace ? eventReplaceState : eventPushState](state, "", to);
+  history[replace ? "replaceState" : "pushState"](state, "", to);
 
 // the 2nd argument of the `useBrowserLocation` return value is a function
 // that allows to perform a navigation.
@@ -74,7 +65,7 @@ const patchKey = Symbol.for("wouter_v3");
 //
 // See https://stackoverflow.com/a/4585031
 if (typeof history !== "undefined" && typeof window[patchKey] === "undefined") {
-  for (const type of [eventPushState, eventReplaceState]) {
+  for (const type of ["pushState", "replaceState"]) {
     const original = history[type];
     // TODO: we should be using unstable_batchedUpdates to avoid multiple re-renders,
     // however that will require an additional peer dependency on react-dom.
