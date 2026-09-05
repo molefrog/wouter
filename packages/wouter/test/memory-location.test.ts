@@ -1,5 +1,6 @@
 import { test, expect } from "bun:test";
 import { renderHook, act } from "@testing-library/react";
+import { useState } from "react";
 import { memoryLocation } from "../src/memory-location.js";
 
 test("returns a hook that is compatible with location spec", () => {
@@ -237,3 +238,27 @@ test("keeps remaining location and query subscribers after unmounting", () => {
   const last = renderHook(() => [memory.hook()[0], memory.searchHook()]);
   expect(last.result.current).toEqual(["/last", ""]);
 });
+
+test.each([
+  ["path", "/initial", "/changed"],
+  ["query", "tab=1", "tab=2"],
+])(
+  "revisits the initial %s after a render-phase state update",
+  (kind, initial, changed) => {
+    const memory = memoryLocation({ path: "/initial?tab=1" });
+    const useValue =
+      kind === "path" ? () => memory.hook()[0] : memory.searchHook;
+    const { result } = renderHook(() => {
+      const value = useValue();
+      const [previous, setPrevious] = useState(value);
+      if (previous !== value) setPrevious(value);
+      return value;
+    });
+
+    expect(result.current).toBe(initial);
+    act(() => memory.navigate("/changed?tab=2"));
+    expect(result.current).toBe(changed);
+    act(() => memory.navigate("/initial?tab=1"));
+    expect(result.current).toBe(initial);
+  }
+);

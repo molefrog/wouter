@@ -43,15 +43,15 @@ export const memoryLocation = ({
     };
   };
 
-  const getPath = () => currentPath;
-  const getSearch = () => currentSearch;
-
+  // Fresh getters keep React 18's store cache current after render-phase updates.
+  // https://github.com/facebook/react/pull/25578
   const useMemoryLocation = () => [
-    useSyncExternalStore(subscribe, getPath),
+    useSyncExternalStore(subscribe, () => currentPath),
     navigate,
   ];
 
-  const useMemoryQuery = () => useSyncExternalStore(subscribe, getSearch);
+  const useMemoryQuery = () =>
+    useSyncExternalStore(subscribe, () => currentSearch);
 
   // Attach searchHook to the location hook for auto-inheritance in Router
   useMemoryLocation.searchHook = useMemoryQuery;
