@@ -21,10 +21,8 @@ test("names icon-only product navigation links", () => {
 
   expect(
     getByRole("link", { name: "Shopping cart, 7 items" })
-  ).toBeInTheDocument();
-  expect(
-    getByRole("link", { name: "Back to products" })
-  ).toBeInTheDocument();
+  ).toBeTruthy();
+  expect(getByRole("link", { name: "Back to products" })).toBeTruthy();
 });
 
 // Regression: ISSUE-007 — filters and sort omitted accessible state and purpose
@@ -35,15 +33,14 @@ test("exposes the selected category and sort control purpose", () => {
     "/?category=accessories&sort=price-desc"
   );
 
-  expect(getByRole("button", { name: "Accessories" })).toHaveAttribute(
-    "aria-pressed",
-    "true"
-  );
-  expect(getByRole("button", { name: "All" })).toHaveAttribute(
-    "aria-pressed",
-    "false"
-  );
-  expect(getByRole("combobox", { name: "Sort products" })).toHaveValue(
-    "price-desc"
-  );
+  expect(
+    getByRole("button", { name: "Accessories" }).getAttribute("aria-pressed")
+  ).toBe("true");
+  expect(
+    getByRole("button", { name: "All" }).getAttribute("aria-pressed")
+  ).toBe("false");
+  expect(
+    (getByRole("combobox", { name: "Sort products" }) as HTMLSelectElement)
+      .value
+  ).toBe("price-desc");
 });
