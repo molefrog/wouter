@@ -1,7 +1,12 @@
 import { Link } from "wouter";
 
 function Logo() {
-  return <i className="iconoir-spark-solid text-2xl text-indigo-500" />;
+  return (
+    <i
+      aria-hidden="true"
+      className="iconoir-spark-solid text-2xl text-indigo-500"
+    />
+  );
 }
 
 function NavLink({
@@ -33,6 +38,7 @@ export function Navbar({ cartCount }: { cartCount: number }) {
         <Link
           href="/"
           transition
+          aria-label="Home"
           className="flex items-center gap-2 hover:bg-neutral-200/50 rounded-md p-1"
         >
           <Logo />
@@ -46,10 +52,16 @@ export function Navbar({ cartCount }: { cartCount: number }) {
         <Link
           href="/cart"
           transition
+          aria-label={`Shopping cart, ${cartCount} ${
+            cartCount === 1 ? "item" : "items"
+          }`}
           className="relative flex items-center hover:bg-neutral-200/50 rounded-md p-1"
         >
-          <i className="iconoir-cart text-xl" />
-          <span className="absolute -top-1.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-semibold text-white">
+          <i aria-hidden="true" className="iconoir-cart text-xl" />
+          <span
+            aria-hidden="true"
+            className="absolute -top-1.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-semibold text-white"
+          >
             {cartCount}
           </span>
         </Link>

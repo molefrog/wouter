@@ -35,9 +35,10 @@ export function ProductPage({
       <Link
         href="/"
         transition
+        aria-label="Back to products"
         className=" inline-flex items-center gap-2  hover:bg-neutral-100/75 rounded-md p-1.5 hover:text-neutral-900 mb-2"
       >
-        <i className="iconoir-reply text-base" />
+        <i aria-hidden="true" className="iconoir-reply text-base" />
       </Link>
       <div className="grid grid-cols-2 md:grid-cols-3 md:gap-12 gap-6">
         <div
