@@ -747,7 +747,7 @@ return (
 
 If a trailing slash is important for your app's routing, you could specify a custom parser. Parser is a method that takes a pattern string and returns a RegExp and an array of parsed key. It uses the signature of a [`parse`](https://github.com/lukeed/regexparam?tab=readme-ov-file#regexparamparseinput-regexp) function from `regexparam`.
 
-Let's write a custom parser based on a popular [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) package that does support strict routes option.
+The example below requires [`path-to-regexp` v6](https://github.com/pillarjs/path-to-regexp/tree/v6.3.0), which supports the `strict` option and the three-argument `pathToRegexp` API used here. Install it with `bun add path-to-regexp@6`. Version 8 uses a different API.
 
 ```js
 import { pathToRegexp } from "path-to-regexp";
