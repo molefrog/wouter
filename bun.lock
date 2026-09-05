@@ -45,7 +45,7 @@
     },
     "packages/wouter": {
       "name": "wouter",
-      "version": "3.10.0",
+      "version": "3.11.0",
       "dependencies": {
         "regexparam": "^3.0.0",
         "use-sync-external-store": "^1.0.0",
@@ -56,7 +56,7 @@
     },
     "packages/wouter-preact": {
       "name": "wouter-preact",
-      "version": "3.10.0",
+      "version": "3.11.0",
       "dependencies": {
         "regexparam": "^3.0.0",
       },
