@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Helmet } from "@dr.pogodin/react-helmet";
-import { products, type Product } from "@/db/products";
+import type { Product } from "@/db/products";
 
-const cartItems: Array<{ product: Product; quantity: number }> = [
-  { product: products[4]!, quantity: 1 }, // Wouter Glasses
-  { product: products[5]!, quantity: 1 }, // Route Breaker Windbreaker
-  { product: products[0]!, quantity: 2 }, // Hook Keyring
-  { product: products[7]!, quantity: 3 }, // Keep Routing Poster
-];
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 function NotificationBanner({
   show,
@@ -33,7 +31,7 @@ function NotificationBanner({
   );
 }
 
-export function CartPage() {
+export function CartPage({ items }: { items: CartItem[] }) {
   const [location, navigate] = useLocation();
   const [showNotification, setShowNotification] = useState(false);
   const [addedItem, setAddedItem] = useState<string | null>(null);
@@ -67,9 +65,9 @@ export function CartPage() {
       </h1>
 
       <div className="space-y-3">
-        {cartItems.map((item, index) => (
+        {items.map((item) => (
           <div
-            key={index}
+            key={item.product.slug}
             className="flex items-start justify-between border-b border-gray-100 pb-4"
           >
             <div className="flex gap-4">
