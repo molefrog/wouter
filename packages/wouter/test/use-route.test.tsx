@@ -160,6 +160,58 @@ it("supports regex patterns", () => {
   assertRoute(/[/](?<param>[a-z]+)/, "/123", false);
 });
 
+it("matches absolute patterns without a base (#244)", () => {
+  assertRoute("~/users/:id", "/users/12", { 0: "12", id: "12" });
+  assertRoute("~/", "/", {});
+  assertRoute("~/users/:id", "/other/12", false);
+  assertRoute("/~user", "/~user", {});
+  assertRoute("~user", "/~user", {});
+  assertRoute("~", "/~", {});
+});
+
+it.each([
+  ["/app/team/users/12", "~/app/team/users/:id"],
+  ["/app/users/12", "~/app/users/:id"],
+  ["/other/users/12", "~/other/users/:id"],
+] as const)(
+  "matches absolute patterns across nested bases at %s",
+  (path, pattern) => {
+    const { result } = renderHook(() => useRoute(pattern), {
+      wrapper: (props) => (
+        <Router hook={memoryLocation({ path, static: true }).hook} base="/app">
+          <Router base="/team" {...props} />
+        </Router>
+      ),
+    });
+
+    expect(result.current).toStrictEqual([true, { 0: "12", id: "12" }]);
+  }
+);
+
+it("switches between relative, absolute and regex patterns", () => {
+  const { hook, navigate } = memoryLocation({ path: "/app/users/12" });
+  const { result, rerender } = renderHook(
+    ({ pattern }: { pattern: string | RegExp }) => useRoute(pattern),
+    {
+      initialProps: { pattern: "/users/:id" as string | RegExp },
+      wrapper: (props) => <Router hook={hook} base="/app" {...props} />,
+    }
+  );
+
+  expect(result.current).toStrictEqual([true, { 0: "12", id: "12" }]);
+  rerender({ pattern: "~/app/users/:id" });
+  expect(result.current).toStrictEqual([true, { 0: "12", id: "12" }]);
+  rerender({ pattern: /^\/users\/(?<id>[^/]+)$/ });
+  expect(result.current).toStrictEqual([true, { 0: "12", id: "12" }]);
+
+  act(() => navigate("/outside/users/34"));
+  expect(result.current).toStrictEqual([false, null]);
+  rerender({ pattern: "~/outside/users/:id" });
+  expect(result.current).toStrictEqual([true, { 0: "34", id: "34" }]);
+  act(() => navigate("/outside/users/56"));
+  expect(result.current).toStrictEqual([true, { 0: "56", id: "56" }]);
+});
+
 it("reacts to pattern updates", () => {
   const { result, rerender } = renderHook(
     ({ pattern }: { pattern: string }) => useRoute(pattern),

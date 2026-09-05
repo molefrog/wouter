@@ -192,6 +192,8 @@ Checks if the current location matches the pattern provided and returns an objec
 
 You can use `useRoute` to perform manual routing or implement custom logic, such as route transitions, etc.
 
+Patterns are relative to the current router's base. To match the full path from inside a nested router, prefix a string pattern with `~`: `useRoute("~/app/users/:id")`. This reads from the configured location hook, so it also works with hash and memory routing. The `~` prefix is handled by `useRoute`; use base-relative patterns for `Route` and `Switch`.
+
 ```js
 import { useRoute } from "wouter";
 
@@ -443,7 +445,7 @@ const App = () => (
 
 ### `<Route path={pattern} />`
 
-`Route` represents a piece of the app that is rendered conditionally based on a pattern `path`. Pattern has the same syntax as the argument you pass to [`useRoute`](#useroute-route-matching-and-parameters).
+`Route` represents a piece of the app that is rendered conditionally based on a pattern `path`. Patterns use the matching syntax described under [`useRoute`](#useroute-route-matching-and-parameters) and are relative to the current router's base.
 
 The library provides multiple ways to declare a route's body:
 
