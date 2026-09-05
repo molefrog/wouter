@@ -27,10 +27,7 @@ test("leaves the SSR status successful for an existing product", () => {
 
   renderToString(
     <HelmetProvider>
-      <Router
-        ssrPath="/products/hook-keyring-rvst"
-        ssrContext={ssrContext}
-      >
+      <Router ssrPath="/products/hook-keyring-rvst" ssrContext={ssrContext}>
         <App />
       </Router>
     </HelmetProvider>
