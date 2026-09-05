@@ -65,8 +65,8 @@ export const useParams = () => useContext(ParamsCtx);
 
 // Internal location hooks avoid redundant context reads and navigation callbacks.
 
-const usePathnameFromRouter = (router) =>
-  relativePath(router.base, router.hook(router)[0]);
+const usePathnameFromRouter = (router, base = router.base) =>
+  relativePath(base, router.hook(router)[0]);
 
 const useLocationFromRouter = (router) => {
   const [location, navigate] = router.hook(router);
@@ -115,7 +115,12 @@ export const matchRoute = (parser, route, path, loose) => {
 
 export const useRoute = (pattern) => {
   const router = useRouter();
-  return matchRoute(router.parser, pattern, usePathnameFromRouter(router));
+  const absolute = typeof pattern === "string" && pattern.startsWith("~/");
+  return matchRoute(
+    router.parser,
+    absolute ? pattern.slice(1) : pattern,
+    usePathnameFromRouter(router, absolute ? "" : router.base)
+  );
 };
 
 /*

@@ -51,3 +51,15 @@ test("infers parameters from the route path", () => {
     }>();
   }
 });
+
+test("infers parameters from absolute route patterns", () => {
+  const [match, params] = useRoute("~/app/users/:name?/:id");
+
+  if (match) {
+    expectTypeOf(params.id).toEqualTypeOf<string>();
+    expectTypeOf(params.name).toEqualTypeOf<string | undefined>();
+    expectTypeOf(params[0]).toEqualTypeOf<string | undefined>();
+  } else {
+    expectTypeOf(params).toEqualTypeOf<null>();
+  }
+});
