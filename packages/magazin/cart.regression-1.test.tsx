@@ -24,13 +24,13 @@ test("adds a new product and updates every cart summary", () => {
   fireEvent.click(getByRole("link", { name: "Add to Cart" }));
 
   expect(location.pathname).toBe("/cart");
-  expect(getByText("Silver OK Ring")).toBeInTheDocument();
-  expect(getByText("1 × $99")).toBeInTheDocument();
+  expect(getByText("Silver OK Ring")).toBeTruthy();
+  expect(getByText("1 × $99")).toBeTruthy();
   expect(
     getByRole("link", { name: "Shopping cart, 8 items" })
-  ).toBeInTheDocument();
-  expect(getByText("$1,174")).toBeInTheDocument();
-  expect(getByText("Silver OK Ring added to cart")).toBeInTheDocument();
+  ).toBeTruthy();
+  expect(getByText("$1,174")).toBeTruthy();
+  expect(getByText("Silver OK Ring added to cart")).toBeTruthy();
 });
 
 // Regression: ISSUE-003 — quantities were ignored by line and cart totals
@@ -43,10 +43,10 @@ test("increments an existing product and calculates quantity-aware totals", () =
 
   fireEvent.click(getByRole("link", { name: "Add to Cart" }));
 
-  expect(getByText("3 × $65")).toBeInTheDocument();
-  expect(getByText("$195")).toBeInTheDocument();
-  expect(getByText("$1,140")).toBeInTheDocument();
+  expect(getByText("3 × $65")).toBeTruthy();
+  expect(getByText("$195")).toBeTruthy();
+  expect(getByText("$1,140")).toBeTruthy();
   expect(
     getByRole("link", { name: "Shopping cart, 8 items" })
-  ).toBeInTheDocument();
+  ).toBeTruthy();
 });
