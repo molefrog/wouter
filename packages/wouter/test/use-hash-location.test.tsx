@@ -1,5 +1,5 @@
 import { test, expect, mock } from "bun:test";
-import { renderHook, render, act } from "@testing-library/react";
+import { renderHook, render, act, fireEvent } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { Router, Route, useLocation, Link } from "../src/index.js";
@@ -90,18 +90,55 @@ test("changes search and hash when contains ? symbol", () => {
   expect(location.hash).toBe("#/abc");
 });
 
-test("preserves the search for an empty query and ignores extra query segments", () => {
-  history.replaceState(null, "", "/foo?original#/app");
+test.each([false, true])(
+  "clears the search for an explicit empty query (replace: %s)",
+  (replace) => {
+    history.replaceState(null, "", "/foo?original#/app");
+    const initialLength = history.length;
+    const state = { source: "clear-search" };
+    const { result } = renderHook(() => useHashLocation());
+    const [, navigate] = result.current;
+
+    act(() => navigate("#/empty?", { replace, state }));
+
+    expect(location.pathname).toBe("/foo");
+    expect(location.hash).toBe("#/empty");
+    expect(location.search).toBe("");
+    expect(result.current[0]).toBe("/empty");
+    expect(history.state).toEqual(state);
+    expect(history.length).toBe(initialLength + (replace ? 0 : 1));
+  }
+);
+
+test("ignores extra query segments", () => {
   const { result } = renderHook(() => useHashLocation());
   const [, navigate] = result.current;
-
-  act(() => navigate("#/empty?"));
-  expect(location.hash).toBe("#/empty");
-  expect(location.search).toBe("?original");
-
   act(() => navigate("/next?first?ignored"));
   expect(location.hash).toBe("#/next");
   expect(location.search).toBe("?first");
+});
+
+test("Link can explicitly clear search parameters with hash routing (#473)", () => {
+  history.replaceState(null, "", "/foo?original#/app");
+  const initialLength = history.length;
+  const state = { source: "clear-search-link" };
+  const { getByText } = render(
+    <Router hook={useHashLocation}>
+      <Link href="/next?" replace state={state}>
+        Clear search
+      </Link>
+      <Route path="/next">Next page</Route>
+    </Router>
+  );
+
+  fireEvent.click(getByText("Clear search"));
+
+  expect(location.pathname).toBe("/foo");
+  expect(location.hash).toBe("#/next");
+  expect(location.search).toBe("");
+  expect(history.state).toEqual(state);
+  expect(history.length).toBe(initialLength);
+  expect(getByText("Next page")).toBeInTheDocument();
 });
 
 test("creates a new history entry when navigating", () => {
