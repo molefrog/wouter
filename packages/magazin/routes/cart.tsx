@@ -35,6 +35,10 @@ export function CartPage({ items }: { items: CartItem[] }) {
   const [location, navigate] = useLocation();
   const [showNotification, setShowNotification] = useState(false);
   const [addedItem, setAddedItem] = useState<string | null>(null);
+  const total = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
 
   useEffect(() => {
     const state = history.state as { addedItem?: string } | null;
@@ -86,7 +90,7 @@ export function CartPage({ items }: { items: CartItem[] }) {
               </div>
             </div>
             <span className="text-neutral-900 text-sm">
-              ${item.product.price}
+              ${(item.product.price * item.quantity).toLocaleString()}
             </span>
           </div>
         ))}
@@ -94,7 +98,9 @@ export function CartPage({ items }: { items: CartItem[] }) {
 
       <div className="text-right mt-4">
         <div className="text-sm text-right text-neutral-500">Total</div>
-        <div className="text-base font-semibold text-neutral-900">$643</div>
+        <div className="text-base font-semibold text-neutral-900">
+          ${total.toLocaleString()}
+        </div>
       </div>
 
       <NotificationBanner show={showNotification} message={addedItem} />
