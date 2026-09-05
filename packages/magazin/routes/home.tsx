@@ -52,12 +52,18 @@ function CategoryFilter({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="flex items-center gap-4">
+    <div
+      className="flex items-center gap-4"
+      role="group"
+      aria-label="Filter products by category"
+    >
       {categories.map((cat) => (
         <button
+          type="button"
           key={cat.value}
+          aria-pressed={value === cat.value}
           onClick={() => onChange(cat.value)}
-          className={`text-sm cursor-pointer ${
+          className={`rounded-sm text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 ${
             value === cat.value
               ? "text-neutral-900 underline underline-offset-4"
               : "text-neutral-500 hover:text-neutral-900"
@@ -80,9 +86,10 @@ function SortSelect({
   return (
     <div className="relative flex md:inline-flex items-center cursor-pointer w-full md:w-auto">
       <select
+        aria-label="Sort products"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none bg-transparent text-sm text-neutral-500 pr-4 cursor-pointer hover:text-neutral-900 focus:outline-none text-left md:text-right w-full md:w-auto"
+        className="appearance-none rounded-sm bg-transparent text-sm text-neutral-500 pr-4 cursor-pointer hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 text-left md:text-right w-full md:w-auto"
       >
         {sortOptions.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -90,7 +97,10 @@ function SortSelect({
           </option>
         ))}
       </select>
-      <i className="iconoir-nav-arrow-down absolute right-0 text-xs pointer-events-none text-neutral-500 cursor-pointer ml-1" />
+      <i
+        aria-hidden="true"
+        className="iconoir-nav-arrow-down absolute right-0 text-xs pointer-events-none text-neutral-500 cursor-pointer ml-1"
+      />
     </div>
   );
 }
