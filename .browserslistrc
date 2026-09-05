@@ -1,0 +1,13 @@
+# Fixed ES2022 browser baseline for Wouter 4; see specs/browser-support.md.
+# Packages ship source. This is a consumer/tooling target, not a build step.
+Chrome >= 94
+and_chr >= 94
+Edge >= 94
+Firefox >= 93
+and_ff >= 93
+Safari >= 16.4
+ios_saf >= 16.4
+Opera >= 80
+op_mob >= 66
+Samsung >= 17
+Android >= 94

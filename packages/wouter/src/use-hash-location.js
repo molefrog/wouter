@@ -34,12 +34,7 @@ export const navigate = (to, { state = null, replace = false } = {}) => {
 
   history[replace ? "replaceState" : "pushState"](state, "", newURL);
 
-  const event =
-    typeof HashChangeEvent !== "undefined"
-      ? new HashChangeEvent("hashchange", { oldURL, newURL })
-      : new Event("hashchange", { detail: { oldURL, newURL } });
-
-  dispatchEvent(event);
+  dispatchEvent(new HashChangeEvent("hashchange", { oldURL, newURL }));
 };
 
 export const useHashLocation = ({ ssrPath = "/" } = {}) => [

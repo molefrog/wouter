@@ -146,10 +146,10 @@ export const Router = ({ children, ...props }) => {
   }
 
   // hooks can define their own `href` formatter (e.g. for hash location)
-  props.hrefs = props.hrefs ?? props.hook?.hrefs;
+  props.hrefs ??= props.hook?.hrefs;
 
   // hooks can define their own search hook (e.g. for memory location)
-  props.searchHook = props.searchHook ?? props.hook?.searchHook;
+  props.searchHook ??= props.hook?.searchHook;
 
   // what is happening below: to avoid unnecessary rerenders in child components,
   // we ensure that the router object reference is stable, unless there are any
@@ -198,9 +198,9 @@ const useCachedParams = (value) => {
   const curr = prev.current,
     keys = Object.keys(value);
   return (prev.current =
-    // Update cache if number of params changed or any value changed
+    // Update cache if parameter names or values changed
     keys.length !== Object.keys(curr).length ||
-    keys.some((k) => value[k] !== curr[k])
+    keys.some((k) => !Object.hasOwn(curr, k) || value[k] !== curr[k])
       ? value // Return new value if there are changes
       : curr); // Return cached value if nothing changed
 };

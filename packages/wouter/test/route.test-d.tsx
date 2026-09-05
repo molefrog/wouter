@@ -109,11 +109,26 @@ describe("parameter inference", () => {
     </Route>;
   });
 
-  test("extract wildcard params into `wild` property", () => {
+  test("extracts wildcard params into the `*` property", () => {
     <Route path="/users/*/settings">
-      {({ wild }) => {
-        expectTypeOf(wild).toEqualTypeOf<string>();
-        return <div>The path is {wild}</div>;
+      {(params) => {
+        expectTypeOf(params["*"]).toEqualTypeOf<string>();
+        // @ts-expect-error wildcard captures are named `*`, not `wild`
+        params.wild;
+        return <div>The path is {params["*"]}</div>;
+      }}
+    </Route>;
+  });
+
+  test("infers optional parameters and file extensions", () => {
+    <Route path="/files/:name.:format/:revision?/*?">
+      {(params) => {
+        expectTypeOf(params.name).toEqualTypeOf<string>();
+        expectTypeOf(params.revision).toEqualTypeOf<string | undefined>();
+        expectTypeOf(params["*"]).toEqualTypeOf<string | undefined>();
+        // @ts-expect-error regexparam treats the extension as literal text
+        params.format;
+        return null;
       }}
     </Route>;
   });
@@ -127,11 +142,33 @@ describe("parameter inference", () => {
     </Route>;
   });
 
-  test("can't infer the type when the path isn't known at compile time", () => {
+  test("supports interface parameters without an index signature", () => {
+    interface UserParams {
+      id: string;
+      section?: string;
+    }
+
+    <Route<UserParams> path="/users/:id/:section?">
+      {(params) => {
+        expectTypeOf(params).toEqualTypeOf<UserParams>();
+        return params.id;
+      }}
+    </Route>;
+  });
+
+  test("uses optional string parameters for dynamic and any paths", () => {
+    const path: string = "/home/:section";
+
+    <Route path={path}>
+      {(params) => {
+        expectTypeOf(params.section).toEqualTypeOf<string | undefined>();
+        return <div />;
+      }}
+    </Route>;
+
     <Route path={JSON.parse('"/home/:section"')}>
       {(params) => {
-        // @ts-expect-error
-        params.section;
+        expectTypeOf(params.section).toEqualTypeOf<string | undefined>();
         return <div />;
       }}
     </Route>;

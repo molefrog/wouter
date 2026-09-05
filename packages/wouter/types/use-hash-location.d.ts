@@ -1,10 +1,11 @@
-import { Path } from "./location-hook.js";
+import type { Path } from "./location-hook.js";
+import type { NavigateOptions } from "./router.js";
 
-export function navigate<S = any>(
-  to: Path,
-  options?: { state?: S; replace?: boolean; transition?: boolean }
-): void;
+export function navigate<S = any>(to: Path, options?: NavigateOptions<S>): void;
 
-export function useHashLocation(options?: {
-  ssrPath?: Path;
-}): [Path, typeof navigate];
+export type HashLocationHook = {
+  (options?: { ssrPath?: Path }): [Path, typeof navigate];
+  hrefs: (href: Path) => Path;
+};
+
+export const useHashLocation: HashLocationHook;

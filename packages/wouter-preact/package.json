@@ -1,7 +1,7 @@
 {
   "name": "wouter-preact",
-  "version": "3.11.0",
-  "description": "Minimalist-friendly ~1.5KB router for Preact",
+  "version": "4.0.0-next.0",
+  "description": "Minimalist-friendly ~2.5KB router for Preact",
   "type": "module",
   "keywords": [
     "react",
@@ -38,7 +38,7 @@
   },
   "types": "types/index.d.ts",
   "typesVersions": {
-    ">=4.1": {
+    ">=5.2": {
       "types/index.d.ts": [
         "types/index.d.ts"
       ],
@@ -54,7 +54,7 @@
     }
   },
   "scripts": {
-    "prepublishOnly": "cp ../wouter/src/index.js ../wouter/src/memory-location.js ../wouter/src/paths.js ../wouter/src/use-browser-location.js ../wouter/src/use-hash-location.js ../wouter/src/use-sync-external-store.js ../wouter/src/use-sync-external-store.native.js src && cp ../../README.md ."
+    "prepublishOnly": "cp ../wouter/src/index.js ../wouter/src/memory-location.js ../wouter/src/paths.js ../wouter/src/use-browser-location.js ../wouter/src/use-hash-location.js src && cp ../../README.md ."
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": {

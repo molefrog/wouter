@@ -1,3 +1,5 @@
+import type { RouterObject } from "./router.js";
+
 /*
  * Foundation: useLocation and paths
  */
@@ -8,7 +10,7 @@ export type PathPattern = string | RegExp;
 
 export type SearchString = string;
 
-export type HrefsFormatter = (href: string, router?: any) => string;
+export type HrefsFormatter = (href: string, router: RouterObject) => string;
 
 // the base useLocation hook type. Any custom hook (including the
 // default one) should inherit from it.

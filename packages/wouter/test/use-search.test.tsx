@@ -11,7 +11,7 @@ test("revisits the initial search after a render-phase state update (#393)", () 
   const { result } = renderHook(() => {
     const search = useSearch();
     // Minimal equivalent of urql synchronizing query state during render.
-    // React 18 drops this update; fixed in React 19:
+    // React 18 drops this update without our fresh-snapshot-getter adapter:
     // https://github.com/facebook/react/pull/25578
     const [previousSearch, setPreviousSearch] = useState(search);
     if (previousSearch !== search) setPreviousSearch(search);

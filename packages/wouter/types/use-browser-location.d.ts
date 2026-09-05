@@ -1,10 +1,7 @@
-import { Path, SearchString } from "./location-hook.js";
+import type { Path, SearchString } from "./location-hook.js";
+import type { NavigateOptions } from "./router.js";
 
-type Primitive = string | number | bigint | boolean | null | undefined | symbol;
-export const useLocationProperty: <S extends Primitive>(
-  fn: () => S,
-  ssrFn?: () => S
-) => S;
+export const useLocationProperty: <S>(fn: () => S, ssrFn?: () => S) => S;
 
 export type BrowserSearchHook = (options?: {
   ssrSearch?: SearchString;
@@ -18,7 +15,7 @@ export const useHistoryState: <T = any>() => T;
 
 export const navigate: <S = any>(
   to: string | URL,
-  options?: { replace?: boolean; state?: S; transition?: boolean }
+  options?: NavigateOptions<S>
 ) => void;
 
 /*

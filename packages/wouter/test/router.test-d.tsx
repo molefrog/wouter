@@ -7,6 +7,7 @@ import {
   useRouter,
   Parser,
   Path,
+  RouterObject,
 } from "../src/index.js";
 
 test("should have at least one child", () => {
@@ -63,7 +64,9 @@ test("accepts `hrefs` function for transforming href strings", () => {
 
   <Router
     hrefs={(href, router) => {
-      expectTypeOf(router).toEqualTypeOf<typeof router>();
+      expectTypeOf(router).toEqualTypeOf<RouterObject>();
+      // @ts-expect-error This field does not exist on the router at runtime.
+      router.ownBase;
       return href + router.base;
     }}
   >
@@ -80,6 +83,14 @@ test("accepts `parser` function for generating regular expressions", () => {
   };
 
   <Router parser={parser}>this is a valid router</Router>;
+
+  <Router parser={() => ({ pattern: /(?<id>\w+)/ })}>Named groups</Router>;
+  <Router parser={() => ({ pattern: /(?<id>\w+)/, keys: false })}>
+    Named groups without keys
+  </Router>;
+  <Router parser={() => ({ pattern: /(\w+)/, keys: ["id"] as const })}>
+    Readonly parser keys
+  </Router>;
 });
 
 test("does not accept other props", () => {

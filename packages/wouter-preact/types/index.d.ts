@@ -1,14 +1,14 @@
-// Minimum TypeScript Version: 4.1
+// Minimum TypeScript Version: 5.2
 // tslint:disable:no-unnecessary-generics
 
-import {
+import type {
   JSX,
   FunctionComponent,
   ComponentType,
   ComponentChildren,
 } from "preact";
 
-import {
+import type {
   Path,
   PathPattern,
   BaseLocationHook,
@@ -16,23 +16,21 @@ import {
   HookNavigationOptions,
   BaseSearchHook,
 } from "./location-hook.js";
-import {
+import type {
   BrowserLocationHook,
   BrowserSearchHook,
 } from "./use-browser-location.js";
 
-import { RouterObject, RouterOptions, Parser } from "./router.js";
+import type { RouterObject, RouterOptions, Parser } from "./router.js";
 
-// these files only export types, so we can re-export them as-is
-// in TS 5.0 we'll be able to use `export type * from ...`
-export * from "./location-hook.js";
-export * from "./router.js";
+export type * from "./location-hook.js";
+export type * from "./router.js";
 
-import { RouteParams } from "regexparam";
+import type { ExtractRouteParams } from "./route-params.js";
 
-export type StringRouteParams<T extends string> = RouteParams<T> & {
-  [param: number]: string | undefined;
-};
+export type StringRouteParams<T extends string> = string extends T
+  ? DefaultParams
+  : ExtractRouteParams<T> & { [param: number]: string | undefined };
 export type RegexRouteParams = { [key: string | number]: string | undefined };
 
 /**
@@ -42,14 +40,23 @@ export interface DefaultParams {
   readonly [paramName: string | number]: string | undefined;
 }
 
-export type Params<T extends DefaultParams = DefaultParams> = T;
+export type Params<T extends object = DefaultParams> = T;
 
-export type MatchWithParams<T extends DefaultParams = DefaultParams> = [
+type RouteParamsFor<
+  T extends object | undefined,
+  P extends PathPattern
+> = T extends object
+  ? T
+  : P extends string
+  ? StringRouteParams<P>
+  : RegexRouteParams;
+
+export type MatchWithParams<T extends object = DefaultParams> = [
   true,
   Params<T>
 ];
 export type NoMatch = [false, null];
-export type Match<T extends DefaultParams = DefaultParams> =
+export type Match<T extends object = DefaultParams> =
   | MatchWithParams<T>
   | NoMatch;
 
@@ -57,38 +64,24 @@ export type Match<T extends DefaultParams = DefaultParams> =
  * Components: <Route />
  */
 
-export interface RouteComponentProps<T extends DefaultParams = DefaultParams> {
+export interface RouteComponentProps<T extends object = DefaultParams> {
   params: T;
 }
 
 export interface RouteProps<
-  T extends DefaultParams | undefined = undefined,
+  T extends object | undefined = undefined,
   RoutePath extends PathPattern = PathPattern
 > {
   children?:
-    | ((
-        params: T extends DefaultParams
-          ? T
-          : RoutePath extends string
-          ? StringRouteParams<RoutePath>
-          : RegexRouteParams
-      ) => ComponentChildren)
+    | ((params: RouteParamsFor<T, RoutePath>) => ComponentChildren)
     | ComponentChildren;
   path?: RoutePath;
-  component?: ComponentType<
-    RouteComponentProps<
-      T extends DefaultParams
-        ? T
-        : RoutePath extends string
-        ? StringRouteParams<RoutePath>
-        : RegexRouteParams
-    >
-  >;
+  component?: ComponentType<RouteComponentProps<RouteParamsFor<T, RoutePath>>>;
   nest?: boolean;
 }
 
 export function Route<
-  T extends DefaultParams | undefined = undefined,
+  T extends object | undefined = undefined,
   RoutePath extends PathPattern = PathPattern
 >(props: RouteProps<T, RoutePath>): ReturnType<FunctionComponent>;
 
@@ -125,13 +118,11 @@ export type RedirectProps<H extends BaseLocationHook = BrowserLocationHook> =
   };
 
 export function Redirect<H extends BaseLocationHook = BrowserLocationHook>(
-  props: RedirectProps<H>,
-  context?: any
+  props: RedirectProps<H>
 ): null;
 
 export function Link<H extends BaseLocationHook = BrowserLocationHook>(
-  props: LinkProps<H>,
-  context?: any
+  props: LinkProps<H>
 ): ReturnType<FunctionComponent>;
 
 /*
@@ -161,17 +152,9 @@ export const Router: FunctionComponent<RouterProps>;
 export function useRouter(): RouterObject;
 
 export function useRoute<
-  T extends DefaultParams | undefined = undefined,
+  T extends object | undefined = undefined,
   RoutePath extends PathPattern = PathPattern
->(
-  pattern: RoutePath
-): Match<
-  T extends DefaultParams
-    ? T
-    : RoutePath extends string
-    ? StringRouteParams<RoutePath>
-    : RegexRouteParams
->;
+>(pattern: RoutePath): Match<RouteParamsFor<T, RoutePath>>;
 
 export function useLocation<
   H extends BaseLocationHook = BrowserLocationHook
@@ -181,20 +164,36 @@ export function useSearch<
   H extends BaseSearchHook = BrowserSearchHook
 >(): ReturnType<H>;
 
-export type URLSearchParamsInit = ConstructorParameters<
-  typeof URLSearchParams
->[0];
+export type URLSearchParamsInit =
+  | ConstructorParameters<typeof URLSearchParams>[0]
+  | ReadonlyArray<readonly [string, string]>;
 
-export type SetSearchParams = (
-  nextInit:
-    | URLSearchParamsInit
-    | ((prev: URLSearchParams) => URLSearchParamsInit),
-  options?: { replace?: boolean; state?: any }
-) => void;
+// Preserve custom hooks' required options without accepting arguments that
+// useSearchParams does not forward to navigate.
+type SearchParamsNavigationArgs<H extends BaseLocationHook> = Extract<
+  Parameters<HookReturnValue<H>[1]>,
+  [unknown, unknown, ...unknown[]]
+> extends never
+  ? [options?: Parameters<HookReturnValue<H>[1]>[1]]
+  : HookReturnValue<H>[1] extends (to: Path, options: infer Options) => unknown
+  ? [options: Options]
+  : never;
 
-export function useSearchParams(): [URLSearchParams, SetSearchParams];
+export type SetSearchParams<H extends BaseLocationHook = BrowserLocationHook> =
+  (
+    nextInit:
+      | URLSearchParamsInit
+      | ((prev: URLSearchParams) => URLSearchParamsInit),
+    ...args: SearchParamsNavigationArgs<H>
+  ) => void;
 
-export function useParams<T = undefined>(): T extends string
+export function useSearchParams<
+  H extends BaseLocationHook = BrowserLocationHook
+>(): [URLSearchParams, SetSearchParams<H>];
+
+export function useParams<
+  T extends string | object | undefined = undefined
+>(): T extends string
   ? StringRouteParams<T>
   : T extends undefined
   ? DefaultParams
@@ -204,20 +203,46 @@ export function useParams<T = undefined>(): T extends string
  * Helpers
  */
 
+export type MatchWithBase<T extends object = DefaultParams> = [
+  true,
+  Params<T>,
+  string
+];
+// The optional slot lets TS 5.2 consumers destructure the base even on a miss.
+type NoMatchWithBase = [false, null, undefined?];
+export type LooseMatch<T extends object = DefaultParams> =
+  | MatchWithBase<T>
+  | NoMatchWithBase;
+type OptionalBaseMatch<T extends object> =
+  | [true, Params<T>, string?]
+  | NoMatchWithBase;
+
 export function matchRoute<
-  T extends DefaultParams | undefined = undefined,
+  T extends object | undefined = undefined,
   RoutePath extends PathPattern = PathPattern
 >(
   parser: Parser,
   pattern: RoutePath,
   path: string,
-  loose?: boolean
-): Match<
-  T extends DefaultParams
-    ? T
-    : RoutePath extends string
-    ? StringRouteParams<RoutePath>
-    : RegexRouteParams
->;
+  loose: true
+): LooseMatch<RouteParamsFor<T, RoutePath>>;
+export function matchRoute<
+  T extends object | undefined = undefined,
+  RoutePath extends PathPattern = PathPattern
+>(
+  parser: Parser,
+  pattern: RoutePath,
+  path: string,
+  loose?: false
+): Match<RouteParamsFor<T, RoutePath>>;
+export function matchRoute<
+  T extends object | undefined = undefined,
+  RoutePath extends PathPattern = PathPattern
+>(
+  parser: Parser,
+  pattern: RoutePath,
+  path: string,
+  loose: boolean | undefined
+): OptionalBaseMatch<RouteParamsFor<T, RoutePath>>;
 
 // tslint:enable:no-unnecessary-generics
