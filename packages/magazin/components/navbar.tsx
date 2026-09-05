@@ -26,7 +26,7 @@ function NavLink({
   );
 }
 
-export function Navbar() {
+export function Navbar({ cartCount }: { cartCount: number }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-white py-1.5">
       <div className="max-w-4xl mx-auto flex items-center justify-between px-6">
@@ -50,7 +50,7 @@ export function Navbar() {
         >
           <i className="iconoir-cart text-xl" />
           <span className="absolute -top-1.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-semibold text-white">
-            7
+            {cartCount}
           </span>
         </Link>
       </div>

@@ -1,8 +1,14 @@
 import { Link } from "wouter";
 import { Helmet } from "@dr.pogodin/react-helmet";
-import { getProductBySlug } from "@/db/products";
+import { getProductBySlug, type Product } from "@/db/products";
 
-export function ProductPage({ slug }: { slug: string }) {
+export function ProductPage({
+  slug,
+  onAddToCart,
+}: {
+  slug: string;
+  onAddToCart: (product: Product) => void;
+}) {
   const product = getProductBySlug(slug);
 
   if (!product) {
@@ -60,6 +66,7 @@ export function ProductPage({ slug }: { slug: string }) {
             <Link
               href="/cart"
               state={{ addedItem: product.name }}
+              onClick={() => onAddToCart(product)}
               className="bg-black text-white px-3 text-sm font-medium py-2 rounded-xl hover:bg-neutral-800 transition-colors shadow-sm cursor-pointer w-full inline-block text-center"
             >
               Add to Cart
