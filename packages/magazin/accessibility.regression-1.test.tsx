@@ -19,9 +19,7 @@ function renderAppAt(path: string) {
 test("names icon-only product navigation links", () => {
   const { getByRole } = renderAppAt("/products/silver-ok-ring");
 
-  expect(
-    getByRole("link", { name: "Shopping cart, 7 items" })
-  ).toBeTruthy();
+  expect(getByRole("link", { name: "Shopping cart, 7 items" })).toBeTruthy();
   expect(getByRole("link", { name: "Back to products" })).toBeTruthy();
 });
 
@@ -29,9 +27,7 @@ test("names icon-only product navigation links", () => {
 // Found by /qa on 2026-09-05
 // Report: .gstack/qa-reports/qa-report-localhost-3002-2026-09-05.md
 test("exposes the selected category and sort control purpose", () => {
-  const { getByRole } = renderAppAt(
-    "/?category=accessories&sort=price-desc"
-  );
+  const { getByRole } = renderAppAt("/?category=accessories&sort=price-desc");
 
   expect(
     getByRole("button", { name: "Accessories" }).getAttribute("aria-pressed")
