@@ -4,5 +4,3 @@ src/memory-location.js
 src/paths.js
 src/use-browser-location.js
 src/use-hash-location.js
-src/use-sync-external-store.js
-src/use-sync-external-store.native.js

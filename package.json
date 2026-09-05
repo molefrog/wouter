@@ -10,8 +10,10 @@
     "fix:p": "prettier --write \"./**/*.(js|ts){x,}\"",
     "test": "bun test",
     "test-types": "tsc --noEmit",
+    "test-types:consumer": "tsc -p tsconfig.consumer.json && tsc -p tsconfig.consumer.json --module NodeNext --moduleResolution NodeNext && tsc -p tsconfig.consumer.json --moduleResolution Node",
     "size": "size-limit",
-    "lint": "eslint packages/**/*.js",
+    "size:dependencies": "bun scripts/measure-size.ts",
+    "lint": "eslint packages/wouter/src/*.js packages/wouter-preact/src/react-deps.js",
     "build": ":"
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
@@ -30,40 +32,36 @@
   "size-limit": [
     {
       "path": "packages/wouter/src/index.js",
-      "limit": "2500 B",
+      "limit": "2200 B",
       "ignore": [
-        "react",
-        "use-sync-external-store"
+        "react"
       ]
     },
     {
       "path": "packages/wouter/src/use-browser-location.js",
-      "limit": "1000 B",
+      "limit": "400 B",
       "import": "{ useBrowserLocation }",
       "ignore": [
-        "react",
-        "use-sync-external-store"
+        "react"
       ]
     },
     {
       "path": "packages/wouter/src/memory-location.js",
-      "limit": "1000 B",
+      "limit": "550 B",
       "ignore": [
-        "react",
-        "use-sync-external-store"
+        "react"
       ]
     },
     {
       "path": "packages/wouter/src/use-hash-location.js",
-      "limit": "1000 B",
+      "limit": "500 B",
       "ignore": [
-        "react",
-        "use-sync-external-store"
+        "react"
       ]
     },
     {
       "path": "packages/wouter-preact/src/index.js",
-      "limit": "2500 B",
+      "limit": "2300 B",
       "ignore": [
         "preact",
         "preact/hooks"
@@ -71,7 +69,7 @@
     },
     {
       "path": "packages/wouter-preact/src/use-browser-location.js",
-      "limit": "1000 B",
+      "limit": "500 B",
       "import": "{ useBrowserLocation }",
       "ignore": [
         "preact",
@@ -80,7 +78,7 @@
     },
     {
       "path": "packages/wouter-preact/src/use-hash-location.js",
-      "limit": "1000 B",
+      "limit": "650 B",
       "ignore": [
         "preact",
         "preact/hooks"
@@ -88,7 +86,7 @@
     },
     {
       "path": "packages/wouter-preact/src/memory-location.js",
-      "limit": "1000 B",
+      "limit": "700 B",
       "ignore": [
         "preact",
         "preact/hooks"
@@ -97,19 +95,20 @@
   ],
   "husky": {
     "hooks": {
-      "commit-msg": "npm run fix:p"
+      "commit-msg": "bun run fix:p"
     }
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
+      "ecmaVersion": 2022,
       "sourceType": "module",
       "ecmaFeatures": {
         "jsx": true
       }
     },
     "env": {
-      "es2020": true,
+      "es2022": true,
       "browser": true,
       "node": true
     },
@@ -141,7 +140,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "copyfiles": "^2.4.1",
-    "eslint": "^7.19.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "happy-dom": "^20.0.10",
     "husky": "^4.3.0",
