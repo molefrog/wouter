@@ -3,6 +3,8 @@ preload = ["./packages/wouter/test/setup.ts"]
 coverageSkipTestFiles = true
 coveragePathIgnorePatterns = [
   "**/test/**",
+  # Magazin is a demo app; its behavior tests should not dilute library coverage.
+  "packages/magazin/**",
   # temporary copies of packages/wouter/src/* created by preact.test.tsx;
   # already measured at their original path (react-deps.js is preact-specific and stays measured)
   "packages/wouter-preact/src/index.js",
