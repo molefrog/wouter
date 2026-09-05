@@ -12,8 +12,6 @@ jobs:
           bun-version: latest
       - name: Install Dependencies
         run: bun install --frozen-lockfile
-      - name: Prepare wouter-preact (copy source files)
-        run: cd packages/wouter-preact && npm run prepublishOnly
       - name: Symlink npm to bun
         run: |
           sudo ln -sf $(which bun) /usr/local/bin/npm
@@ -22,4 +20,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_step: install
-          build_script: build
+          # Run after each checkout so the base comparison uses its own sources.
+          build_script: --cwd packages/wouter-preact prepublishOnly
