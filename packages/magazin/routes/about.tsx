@@ -21,7 +21,7 @@ export function AboutPage() {
         What is this?
       </h1>
       <p className="text-neutral-500 max-w-lg mb-16">
-        This is a simple SSR demo showcasing wouter v3.9.0, React 19 with
+        This is a simple SSR demo showcasing wouter v3.11.0, React 19 with
         server-side rendering and client-side hydration running on Bun.
       </p>
 
