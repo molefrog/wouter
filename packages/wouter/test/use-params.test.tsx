@@ -150,6 +150,25 @@ test("keeps the object ref the same if params haven't changed", () => {
   expect(result.current).toBe(firstRenderedParams);
 });
 
+test("updates parameter names when optional values remain undefined", () => {
+  const { hook } = memoryLocation({ path: "/" });
+  let path = "/:first?";
+
+  const { result, rerender } = renderHook(() => useParams(), {
+    wrapper: (props) => (
+      <Router hook={hook}>
+        <Route path={path}>{props.children}</Route>
+      </Router>
+    ),
+  });
+
+  expect(result.current).toStrictEqual({ 0: undefined, first: undefined });
+
+  path = "/:second?";
+  rerender();
+  expect(result.current).toStrictEqual({ 0: undefined, second: undefined });
+});
+
 test("works when the route becomes matching", () => {
   const { hook, navigate } = memoryLocation({ path: "/" });
 

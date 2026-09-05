@@ -37,6 +37,30 @@ describe("<Link />", () => {
     expect(refCallback).toHaveBeenCalledWith(element);
   });
 
+  test.each([false, true])(
+    "clears the callback ref on unmount (asChild: %s)",
+    (asChild) => {
+      const ref = mock<(element: HTMLAnchorElement | null) => void>();
+      const { getByRole, unmount } = render(
+        asChild ? (
+          <Link href="/" asChild ref={ref}>
+            <a>Home</a>
+          </Link>
+        ) : (
+          <Link href="/" ref={ref}>
+            Home
+          </Link>
+        )
+      );
+
+      expect(ref).toHaveBeenCalledWith(getByRole("link", { name: "Home" }));
+      expect(ref).toHaveBeenCalledTimes(1);
+      unmount();
+      expect(ref.mock.calls.at(-1)?.[0]).toBe(null);
+      expect(ref).toHaveBeenCalledTimes(2);
+    }
+  );
+
   test("still creates a plain link when nothing is passed", () => {
     const { getByTestId } = render(<Link href="/about" data-testid="link" />);
 

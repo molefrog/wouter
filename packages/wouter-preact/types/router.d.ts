@@ -1,4 +1,4 @@
-import {
+import type {
   Path,
   SearchString,
   BaseLocationHook,
@@ -9,7 +9,7 @@ import {
 export type Parser = (
   route: Path,
   loose?: boolean
-) => { pattern: RegExp; keys: string[] };
+) => { pattern: RegExp; keys?: readonly string[] | false | undefined };
 
 // Standard navigation options supported by all built-in location hooks
 export type NavigateOptions<S = any> = {
@@ -31,7 +31,6 @@ export interface RouterObject {
   readonly hook: BaseLocationHook;
   readonly searchHook: BaseSearchHook;
   readonly base: Path;
-  readonly ownBase: Path;
   readonly parser: Parser;
   readonly ssrPath?: Path;
   readonly ssrSearch?: SearchString;
