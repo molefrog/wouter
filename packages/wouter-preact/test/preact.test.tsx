@@ -14,7 +14,6 @@ import {
 } from "bun:test";
 import { render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
-import renderToString from "preact-render-to-string";
 import { copyFile, rm } from "fs/promises";
 import { join } from "path";
 import type * as WouterPreact from "../types/index.js";
@@ -27,8 +26,6 @@ const filesToCopy = [
   "paths.js",
   "use-browser-location.js",
   "use-hash-location.js",
-  "use-sync-external-store.js",
-  "use-sync-external-store.native.js",
   "index.js",
 ];
 
@@ -194,6 +191,60 @@ describe("Preact support", () => {
 });
 
 describe("useSyncExternalStore shim", () => {
+  beforeEach(setupRerender);
+  afterEach(teardown);
+
+  test("ignores repeated NaN snapshots but observes signed zero changes", async () => {
+    const { useSyncExternalStore } = (await import(
+      // @ts-expect-error - the internal hook mirrors React's signature
+      "../src/react-deps.js"
+    )) as {
+      useSyncExternalStore: <T>(
+        subscribe: (cb: () => void) => () => void,
+        getSnapshot: () => T
+      ) => T;
+    };
+    let value = NaN;
+    const listeners = new Set<() => void>();
+    const subscribe = (callback: () => void) => {
+      listeners.add(callback);
+      return () => listeners.delete(callback);
+    };
+    const snapshots: number[] = [];
+    const Reader = () => {
+      const snapshot = useSyncExternalStore(subscribe, () => value);
+      snapshots.push(snapshot);
+      return <>{String(snapshot)}</>;
+    };
+    const container = document.body.appendChild(document.createElement("div"));
+    const update = (next: number) => {
+      act(() => {
+        value = next;
+        listeners.forEach((callback) => callback());
+      });
+    };
+
+    try {
+      act(() => render(<Reader />, container));
+      expect(snapshots).toHaveLength(1);
+      update(NaN);
+      expect(snapshots).toHaveLength(1);
+      update(0);
+      expect(snapshots).toHaveLength(2);
+      expect(Object.is(snapshots[1], 0)).toBe(true);
+      update(-0);
+      expect(snapshots).toHaveLength(3);
+      expect(Object.is(snapshots[2], -0)).toBe(true);
+      update(NaN);
+      expect(snapshots).toHaveLength(4);
+      update(NaN);
+      expect(snapshots).toHaveLength(4);
+    } finally {
+      act(() => render(null, container));
+      container.remove();
+    }
+  });
+
   test("re-renders when the store mutates between render and layout effect", async () => {
     // the internal shim is untyped, it mirrors the React useSyncExternalStore signature
     const { useSyncExternalStore } = (await import(
@@ -244,20 +295,25 @@ describe("useSyncExternalStore shim", () => {
 });
 
 describe("Preact SSR", () => {
-  test.skip("supports SSR (fix: useSyncExternalStore polyfill in Bun)", async () => {
-    const { Router, useLocation } = await loadPreact();
-
-    const LocationPrinter = () => {
-      const [location] = useLocation();
-      return <>location = {location}</>;
-    };
-
-    const rendered = renderToString(
-      <Router ssrPath="/ssr/preact">
-        <LocationPrinter />
-      </Router>
+  test("imports and renders browser and hash routes without browser globals", async () => {
+    // A plain Bun process does not load the test suite's happy-dom preload.
+    const child = Bun.spawn(
+      [process.execPath, join(import.meta.dir, "fixtures/ssr.tsx")],
+      { stdout: "pipe", stderr: "pipe" }
     );
+    const [output, errors, exitCode] = await Promise.all([
+      new Response(child.stdout).text(),
+      new Response(child.stderr).text(),
+      child.exited,
+    ]);
 
-    expect(rendered).toContain("/ssr/preact");
+    expect(errors).toBe("");
+    expect(exitCode).toBe(0);
+    expect(JSON.parse(output)).toEqual({
+      browserGlobals: ["undefined", "undefined", "undefined", "undefined"],
+      browser: "<p>/ssr/preact?from=path</p>",
+      search: "<p>/ssr/search?from=search</p>",
+      hash: "<p>/ssr/hash?from=hash</p>",
+    });
   });
 });

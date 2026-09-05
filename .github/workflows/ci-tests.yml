@@ -25,7 +25,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Prepare wouter-preact (copy source files)
-        run: cd packages/wouter-preact && npm run prepublishOnly
+        run: bun run --cwd packages/wouter-preact prepublishOnly
 
       - name: Run test
         run: bun test --coverage --coverage-reporter=lcov --coverage-reporter=text
@@ -40,3 +40,39 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           file: ./coverage/lcov.info
+
+  react-compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react: ["18.2.0", "18.3.1", "19.0.0"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Install the React version under test
+        run: bun add --dev --exact react@${{ matrix.react }} react-dom@${{ matrix.react }}
+      - name: Test supported React versions
+        run: bun test packages/wouter/test
+
+  typescript-consumers:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        typescript: ["5.2.2", "workspace"]
+        react-types: ["18", "19"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Install React declarations under test
+        run: bun add --dev @types/react@${{ matrix.react-types }} @types/react-dom@${{ matrix.react-types }}
+      - name: Install the minimum supported TypeScript version
+        if: matrix.typescript != 'workspace'
+        run: bun add --dev --exact typescript@${{ matrix.typescript }}
+      - name: Check strict React and Preact consumers
+        run: bun run test-types:consumer

@@ -10,7 +10,5 @@ coveragePathIgnorePatterns = [
   "packages/wouter-preact/src/memory-location.js",
   "packages/wouter-preact/src/use-browser-location.js",
   "packages/wouter-preact/src/use-hash-location.js",
-  "packages/wouter-preact/src/use-sync-external-store.js",
-  "packages/wouter-preact/src/use-sync-external-store.native.js",
 ]
 coverageThreshold = { lines = 0.99 }

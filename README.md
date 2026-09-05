@@ -21,8 +21,7 @@
 
 <img src="assets/wouter.svg" align="right" width="250" alt="by Katya Simacheva" />
 
-- Minimum dependencies, only **2.1 KB** gzipped vs 18.7KB
-  [React Router](https://github.com/ReactTraining/react-router).
+- Minimum dependencies, about **2.4 kB** minified and gzipped (React excluded).
 - Supports both **React** and **[Preact](https://preactjs.com/)**! Read
   _["Preact support" section](#preact-support)_ for more details.
 - No top-level `<Router />` component, it is **fully optional**.
@@ -135,7 +134,11 @@ const App = () => (
 
 ### Browser Support
 
-This library is designed for **ES2020+** compatibility. If you need to support older browsers, make sure that you transpile `node_modules`. Additionally, the minimum supported TypeScript version is 4.1 in order to support route parameter inference.
+Wouter targets modern browsers with **ES2022 support** and native URL, History,
+and DOM event APIs. Packages ship as ES modules without transpilation or polyfills.
+
+Requires **React 18.2+** or **Preact 10.x** with `wouter-preact`.
+TypeScript projects require **TypeScript 5.2+** and matching framework types.
 
 ## Wouter API
 
@@ -814,8 +817,48 @@ It's the same function that is used internally.
 
 ### Can I use _wouter_ in my TypeScript project?
 
-Yes! Although the project isn't written in TypeScript, the type definition files are bundled with
-the package.
+Yes! Both packages include declarations for TypeScript 5.2+. Route literals infer
+required and optional parameters, filename suffixes, and wildcard captures:
+
+```tsx
+import { useRoute } from "wouter";
+
+const [matches, params] = useRoute("/files/:name.txt/*?");
+if (matches) {
+  params.name; // string
+  params["*"]; // string | undefined
+}
+```
+
+You can also provide a parameter interface to `useRoute`, `useParams`, or `Route`.
+This is an assertion about your route or custom parser, not runtime validation.
+For paths only known at runtime, named parameter lookups return `string | undefined`.
+
+Custom location hooks retain their navigation options and state types when supplied
+as the hook's type argument. For example, inside a router using this memory hook:
+
+```tsx
+import { useSearchParams } from "wouter";
+import { memoryLocation } from "wouter/memory-location";
+
+const memory = memoryLocation<{ from: string }>();
+
+function SearchControls() {
+  const [, setSearch] = useSearchParams<typeof memory.hook>();
+  return (
+    <button onClick={() => setSearch([["q", "hello"]] as const, {
+      state: { from: "/files" },
+    })}>
+      Search
+    </button>
+  );
+}
+```
+
+Use the same type argument with `useLocation`, `Link`, and `Redirect`. The router
+context does not automatically infer a custom hook's types in child components.
+The declarations are checked with bundler, NodeNext, and legacy node resolution,
+including `exactOptionalPropertyTypes` and `noUncheckedIndexedAccess`.
 
 ### How can add animated route transitions?
 
@@ -1094,7 +1137,15 @@ Wouter's motto is **"Minimalist-friendly"**.
 - `wouter-preact` reuses the same source except for `react-deps.js` (Preact-specific hooks)
 - Type definitions are duplicated between packages (not ideal, but works for now)
 
-**Development:** Tests run directly from source files (no build required). Run `npm run test` for interactive mode or `npm run test -- --run` for a single run. Use `npm run build` to build the distributable package before publishing.
+**Development:** Run `bun install`, then `bun test` (or `bun test --watch`),
+`bun run test-types`, and `bun run lint`. Type tests live alongside runtime tests
+in `packages/*/test/*.test-d.ts` and `*.test-d.tsx`. Run
+`bun run test-types:consumer` for the stricter public API checks under all three
+module resolution modes. Tests and published packages use the
+source files directly; no compilation step is required. After tests, run
+`bun run --cwd packages/wouter-preact prepublishOnly` to refresh Preact's shared
+sources before `bun run size` or packaging. `bun run size:dependencies` reports
+raw, gzip, and Brotli sizes including non-peer dependencies.
 
 ## Acknowledgements
 
