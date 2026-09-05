@@ -59,12 +59,12 @@ Bun.serve({
     // Check if this is a request for a built asset
     const asset = assets.get(url.pathname);
     if (asset) {
-      const headers = isProduction
-        ? {
-            // Built assets have content hashes, so they can be cached indefinitely
-            "Cache-Control": "public, max-age=31536000, immutable",
-          }
-        : {};
+      const headers = new Headers();
+
+      // Built assets have content hashes, so they can be cached indefinitely
+      if (isProduction) {
+        headers.set("Cache-Control", "public, max-age=31536000, immutable");
+      }
 
       return new Response(asset, { headers });
     }
