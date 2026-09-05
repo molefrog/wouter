@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Helmet } from "@dr.pogodin/react-helmet";
 import { getProductBySlug, type Product } from "@/db/products";
+import { WithStatusCode } from "@/components/with-status-code";
 
 export function ProductPage({
   slug,
@@ -13,17 +14,19 @@ export function ProductPage({
 
   if (!product) {
     return (
-      <div className="text-center py-12">
-        <Helmet>
-          <title>Product Not Found</title>
-        </Helmet>
-        <h1 className="text-2xl font-semibold text-neutral-900 mb-2">
-          Product not found
-        </h1>
-        <Link href="/" className="text-sm text-neutral-500 hover:underline">
-          Back to home
-        </Link>
-      </div>
+      <WithStatusCode code={404}>
+        <div className="text-center py-12">
+          <Helmet>
+            <title>Product Not Found</title>
+          </Helmet>
+          <h1 className="text-2xl font-semibold text-neutral-900 mb-2">
+            Product not found
+          </h1>
+          <Link href="/" className="text-sm text-neutral-500 hover:underline">
+            Back to home
+          </Link>
+        </div>
+      </WithStatusCode>
     );
   }
 
