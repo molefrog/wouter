@@ -642,7 +642,9 @@ available options:
 
 - `hrefs: (href: boolean) => string` — a function for transforming `href` attribute of an `<a />` element rendered by `Link`. It is used to support hash-based routing. By default, `href` attribute is the same as the `href` or `to` prop of a `Link`. A location hook can also define a `hook.hrefs` property, in this case the `href` will be inferred.
 
-- **`aroundNav: (navigate, to, options) => void`** — a handler that wraps all navigation calls. Use this to intercept navigation and perform custom logic before and after the navigation occurs. You can modify navigation parameters, add side effects, or prevent navigation entirely. This is particularly useful for implementing [view transitions](#how-do-i-add-view-transitions-to-my-app). By default, it simply calls `navigate(to, options)`.
+- **`aroundNav: (navigate, to, options) => void`** — a handler that wraps navigation through `useLocation`, including `Link` and `Redirect`. Use it to modify navigation parameters, add side effects, or cancel a navigation by not calling `navigate`. This is particularly useful for implementing [view transitions](#how-do-i-use-wouter-with-view-transitions-api). By default, it calls `navigate(to, options)`.
+
+  Browser Back/Forward navigation, direct History API calls, and calls to the low-level `navigate` exported from `wouter/use-browser-location` bypass this handler.
 
   ```js
   const aroundNav = (navigate, to, options) => {
