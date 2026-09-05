@@ -14,14 +14,19 @@ const events = [
   eventHashchange,
 ];
 
+let listeners = [];
+const onLocationChange = () => listeners.forEach((callback) => callback());
+
+// Native events can run microtasks between listeners. Notify all subscribers
+// together so React can process parent and child updates in the same batch.
 const subscribeToLocationUpdates = (callback) => {
-  for (const event of events) {
-    addEventListener(event, callback);
-  }
+  if (listeners.push(callback) === 1)
+    for (const event of events) addEventListener(event, onLocationChange);
+
   return () => {
-    for (const event of events) {
-      removeEventListener(event, callback);
-    }
+    listeners = listeners.filter((listener) => listener !== callback);
+    if (!listeners.length)
+      for (const event of events) removeEventListener(event, onLocationChange);
   };
 };
 
