@@ -112,7 +112,10 @@ type HTMLLinkAttributes = Omit<JSX.HTMLAttributes, "className"> & {
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> &
     AsChildProps<
-      { children: ComponentChildren; onClick?: JSX.MouseEventHandler<Element> },
+      Omit<HTMLLinkAttributes, "onClick" | "ref"> & {
+        children: ComponentChildren;
+        onClick?: JSX.MouseEventHandler<Element>;
+      },
       HTMLLinkAttributes
     >;
 

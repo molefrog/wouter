@@ -130,7 +130,11 @@ type HTMLLinkAttributes = Omit<
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> &
     AsChildProps<
-      { children: ReactElement; onClick?: MouseEventHandler },
+      Omit<HTMLLinkAttributes, "onClick"> &
+        RefAttributes<HTMLElement> & {
+          children: ReactElement;
+          onClick?: MouseEventHandler;
+        },
       HTMLLinkAttributes & RefAttributes<HTMLAnchorElement>
     >;
 

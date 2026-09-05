@@ -61,7 +61,8 @@ export function useSyncExternalStore(subscribe, getSnapshot, getSSRSnapshot) {
 
 // provide forwardRef stub for preact
 export function forwardRef(component) {
-  return component;
+  // Preact passes legacy context as the second argument, not a forwarded ref.
+  return (props) => component(props);
 }
 
 // Userland polyfill while we wait for the forthcoming

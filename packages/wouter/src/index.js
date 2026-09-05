@@ -290,17 +290,15 @@ export const Link = forwardRef((props, ref) => {
     router // pass router as a second argument for convinience
   );
 
+  const linkProps = { ...restProps, onClick, href };
+  // Omitted props should preserve the child's own className and ref.
+  if (cls !== undefined)
+    linkProps.className = cls?.call ? cls(currentPath === targetPath) : cls;
+  if (ref) linkProps.ref = ref;
+
   return asChild && isValidElement(children)
-    ? cloneElement(children, { onClick, href })
-    : h("a", {
-        ...restProps,
-        onClick,
-        href,
-        // `className` can be a function to apply the class if this link is active
-        className: cls?.call ? cls(currentPath === targetPath) : cls,
-        children,
-        ref,
-      });
+    ? cloneElement(children, linkProps)
+    : h("a", { ...linkProps, children });
 });
 
 const flattenChildren = (children, result = []) => {

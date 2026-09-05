@@ -130,13 +130,11 @@ describe("<Link /> with `asChild` prop", () => {
     </Link>;
   });
 
-  test("does not allow other props", () => {
-    // @ts-expect-error
+  test("accepts forwarded attributes and refs", () => {
     <Link to="/" asChild className="">
       <a>Hello</a>
     </Link>;
 
-    // @ts-expect-error
     <Link to="/" asChild style={{}}>
       <a>Hello</a>
     </Link>;
@@ -146,9 +144,17 @@ describe("<Link /> with `asChild` prop", () => {
       <a>Hello</a>
     </Link>;
 
-    // @ts-expect-error
     <Link to="/" asChild ref={null}>
       <a>Hello</a>
+    </Link>;
+
+    <Link
+      to="/"
+      asChild
+      ref={React.createRef<HTMLButtonElement>()}
+      className={(active) => (active ? "active" : undefined)}
+    >
+      <button>Hello</button>
     </Link>;
   });
 
