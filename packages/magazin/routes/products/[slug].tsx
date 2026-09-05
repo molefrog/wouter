@@ -41,7 +41,7 @@ export function ProductPage({
       </Link>
       <div className="grid grid-cols-2 md:grid-cols-3 md:gap-12 gap-6">
         <div
-          className="bg-stone-100/75 rounded-lg aspect-square md:col-span-2 p-12"
+          className="bg-stone-100/75 rounded-lg aspect-square md:col-span-2 p-4 md:p-12"
           style={{ viewTransitionName: `product-image-${product.slug}` }}
         >
           <img
