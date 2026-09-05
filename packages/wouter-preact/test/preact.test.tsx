@@ -66,6 +66,42 @@ describe("Preact support", () => {
     teardown();
   });
 
+  test("asChild forwards props and preserves the child's ref (#536)", async () => {
+    const { Link, Router } = await loadPreact();
+    const container = document.body.appendChild(document.createElement("div"));
+    const childRef = mock();
+    try {
+      act(() => {
+        render(
+          <Router base="/app">
+            <Link
+              href="/about"
+              asChild
+              className="parent"
+              style={{ color: "red" }}
+              aria-label="About us"
+            >
+              <a ref={childRef} className="child" title="Child title">
+                About
+              </a>
+            </Link>
+          </Router>,
+          container
+        );
+      });
+      const link = container.querySelector("a")!;
+      expect(link.getAttribute("href")).toBe("/app/about");
+      expect(link.className).toBe("parent");
+      expect(link.style.color).toBe("red");
+      expect(link.getAttribute("aria-label")).toBe("About us");
+      expect(link.title).toBe("Child title");
+      expect(childRef).toHaveBeenCalledWith(link);
+    } finally {
+      act(() => render(null, container));
+      container.remove();
+    }
+  });
+
   describe("useRoute", () => {
     test("should only accept strings", async () => {
       const { useRoute } = await loadPreact();

@@ -255,6 +255,76 @@ describe("active links", () => {
 });
 
 describe("<Link /> with `asChild` prop", () => {
+  test("forwards attributes, styles, events and ref to its child (#536)", () => {
+    const ref = mock<(element: HTMLAnchorElement) => void>();
+    const onFocus = mock();
+    const { getByRole } = render(
+      <Link
+        href="/about"
+        asChild
+        className="parent-class"
+        style={{ color: "red" }}
+        aria-label="About us"
+        data-tracking="about"
+        onFocus={onFocus}
+        ref={ref}
+        replace
+        state={{ source: "link" }}
+      >
+        <a className="child-class" title="Child title">
+          About
+        </a>
+      </Link>
+    );
+    const link = getByRole("link", { name: "About us" });
+    expect(link).toHaveClass("parent-class");
+    expect(link).not.toHaveClass("child-class");
+    expect(link).toHaveStyle({ color: "red" });
+    expect(link).toHaveAttribute("data-tracking", "about");
+    expect(link).toHaveAttribute("title", "Child title");
+    expect(link).not.toHaveAttribute("replace");
+    expect(link).not.toHaveAttribute("state");
+    expect(ref).toHaveBeenCalledWith(link);
+    fireEvent.focus(link);
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    fireEvent.click(link);
+    expect(location.pathname).toBe("/about");
+  });
+
+  test("preserves the child's className and ref when Link omits them", () => {
+    const childRef = mock<(element: HTMLAnchorElement) => void>();
+    const { getByText } = render(
+      <Link href="/about" asChild>
+        <a ref={childRef} className="child-class">
+          About
+        </a>
+      </Link>
+    );
+    const link = getByText("About");
+    expect(link).toHaveClass("child-class");
+    expect(childRef).toHaveBeenCalledWith(link);
+  });
+
+  test("updates the child's active className after navigation", () => {
+    const { hook, navigate } = memoryLocation({ path: "/about" });
+    const { getByText } = render(
+      <Router hook={hook}>
+        <Link
+          href="/about"
+          asChild
+          className={(active) => (active ? "active" : undefined)}
+        >
+          <a className="child-class">About</a>
+        </Link>
+      </Router>
+    );
+    const link = getByText("About");
+    expect(link).toHaveClass("active");
+    act(() => navigate("/other"));
+    expect(link).not.toHaveClass("active");
+    expect(link).not.toHaveClass("child-class");
+  });
+
   test("when `asChild` is not specified, wraps the children in an <a />", () => {
     const { getByText } = render(
       <Link href="/about">

@@ -525,6 +525,8 @@ import { Link } from "wouter"
 
 Link will always wrap its children in an `<a />` tag, unless `asChild` prop is provided. Use this when you need to have a custom component that renders an `<a />` under the hood.
 
+With `asChild`, attributes such as `className`, `style`, and `aria-label` are forwarded to the child. Props supplied to `Link` override the child's corresponding props; omitted props are preserved. A `className` function receives the same active flag as a regular link. In React, `Link` also forwards its ref; with `wouter-preact`, place the ref on the child.
+
 ```jsx
 // use this instead
 <Link to="/" asChild>
