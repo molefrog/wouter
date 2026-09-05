@@ -865,6 +865,8 @@ More complex examples involve using `useRoutes` hook (similar to how React Route
 
 Wouter works seamlessly with the [View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API), but you'll need to manually activate it. This is because view transitions require synchronous DOM rendering and must be wrapped in `flushSync` from `react-dom`. Following wouter's philosophy of staying lightweight and avoiding unnecessary dependencies, view transitions aren't built-in. However, there's a simple escape hatch to enable them: the `aroundNav` prop.
 
+This recipe uses the browser's `document.startViewTransition` API. React's [`<ViewTransition>` component](https://react.dev/reference/react/ViewTransition) has different requirements: the default location hook uses `useSyncExternalStore`, whose updates [cannot be marked as React transitions](https://react.dev/reference/react/useSyncExternalStore#caveats). Wrapping `navigate` in `startTransition` therefore does not enable React `<ViewTransition>` animations for these route updates.
+
 ```jsx
 import { flushSync } from "react-dom";
 import { Router, type AroundNavHandler } from "wouter";
