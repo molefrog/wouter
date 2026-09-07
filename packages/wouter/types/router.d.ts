@@ -59,3 +59,6 @@ export type RouterOptions = {
   hrefs?: HrefsFormatter;
   aroundNav?: AroundNavHandler;
 };
+
+export const defaultParser: Parser;
+export const defaultRouter: RouterObject;
