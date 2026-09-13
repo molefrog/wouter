@@ -11,6 +11,10 @@ test.each([
   ["", "/hello%20world%", "/hello%20world%"],
   ["/hello%20world%", "/hello%20world%/users", "/users"],
   ["/app", "/app%2Fusers", "%2Fusers"],
+  ["/app", "/app", "/"],
+  ["/app", "/application", "~/application"],
+  ["/app", "/apple", "~/apple"],
+  ["/APP", "/app/users", "/users"],
   ["/ΟΣ", "/ΟΣΑ", "~/ΟΣΑ"],
   ["/İ", "/i\u0307/users", "\u0307/users"],
 ])("normalizes base %j and location %j to %j", (base, path, expected) => {
