@@ -14,9 +14,8 @@ export const relativePath = (base, path) => {
   base = unescape(baseDefaults(base));
   path = unescape(path);
 
-  const b = base.toLowerCase();
-  const p = path.toLowerCase();
-  return !base || p === b || p.startsWith(b + "/") || p.startsWith(b + "%2f")
+  return !base ||
+    (path.toLowerCase() + "/").startsWith(base.toLowerCase() + "/")
     ? path.slice(base.length) || "/"
     : "~" + path;
 };
