@@ -10,7 +10,7 @@ test.each([
   ["/", "/users", "/users"],
   ["", "/hello%20world%", "/hello%20world%"],
   ["/hello%20world%", "/hello%20world%/users", "/users"],
-  ["/app", "/app%2Fusers", "%2Fusers"],
+  ["/app", "/app%2Fusers", "~/app%2Fusers"],
   ["/app", "/app", "/"],
   ["/app", "/application", "~/application"],
   ["/app", "/apple", "~/apple"],
