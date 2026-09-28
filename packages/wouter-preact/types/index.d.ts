@@ -6,6 +6,7 @@ import {
   FunctionComponent,
   ComponentType,
   ComponentChildren,
+  Ref,
 } from "preact";
 
 import {
@@ -105,16 +106,30 @@ type AsChildProps<ComponentProps, DefaultElementProps> =
   | ({ asChild?: false } & DefaultElementProps)
   | ({ asChild: true } & ComponentProps);
 
-type HTMLLinkAttributes = Omit<JSX.HTMLAttributes, "className"> & {
+// Preact 11 no longer exposes DOM attribute and event handler types on the
+// `JSX` namespace, so derive them in a way that works with Preact 10 and 11.
+type HTMLLinkAttributes = Omit<
+  JSX.IntrinsicElements["a"],
+  "className" | "ref"
+> & {
   className?: string | undefined | ((isActive: boolean) => string | undefined);
+  ref?: Ref<EventTarget>;
 };
+
+type ElementMouseEventHandler = {
+  bivarianceHack(
+    event: Omit<MouseEvent, "currentTarget"> & {
+      readonly currentTarget: Element;
+    }
+  ): void;
+}["bivarianceHack"];
 
 export type LinkProps<H extends BaseLocationHook = BrowserLocationHook> =
   NavigationalProps<H> &
     AsChildProps<
       Omit<HTMLLinkAttributes, "onClick" | "ref"> & {
         children: ComponentChildren;
-        onClick?: JSX.MouseEventHandler<Element>;
+        onClick?: ElementMouseEventHandler;
       },
       HTMLLinkAttributes
     >;
