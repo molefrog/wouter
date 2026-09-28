@@ -63,7 +63,7 @@
   },
   "license": "Unlicense",
   "peerDependencies": {
-    "preact": "^10.0.0"
+    "preact": "^10.0.0 || ^11.0.0-0"
   },
   "dependencies": {
     "regexparam": "^3.0.0"
