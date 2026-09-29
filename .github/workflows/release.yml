@@ -1,0 +1,117 @@
+name: Publish packages
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag (for example v3.12.0 or v3.12.0-next.0)
+        required: true
+        type: string
+      dry_run:
+        description: Validate and pack without publishing
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+
+      # npm >= 11.5.1 supports OIDC. Bun handles installs and checks.
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm install --global npm@11.17.0
+
+      - name: Check release tag and package versions
+        id: release
+        run: |
+          git merge-base --is-ancestor HEAD origin/main
+          bun - <<'JS'
+          import { appendFileSync } from "node:fs";
+          const tag = process.env.RELEASE_TAG;
+          const number = "(?:0|[1-9]\\d*)";
+          const identifier = "(?:0|[1-9]\\d*|\\d*[A-Za-z-][\\dA-Za-z-]*)";
+          const pattern = new RegExp(`^v${number}\\.${number}\\.${number}(?:-${identifier}(?:\\.${identifier})*)?$`);
+          if (!pattern.test(tag)) throw new Error(`Invalid release tag: ${tag}`);
+          const version = tag.slice(1);
+          for (const name of ["wouter", "wouter-preact"]) {
+            const pkg = await Bun.file(`packages/${name}/package.json`).json();
+            if (pkg.name !== name || pkg.version !== version || pkg.private) {
+              throw new Error(`${name} must be public and have version ${version}`);
+            }
+          }
+          appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\ndist_tag=${version.includes("-") ? "next" : "latest"}\n`);
+          JS
+
+      - run: bun install --frozen-lockfile
+      - run: bun test --coverage
+
+      # Tests remove copied Preact sources, so prepare packages after testing.
+      - name: Prepare packages
+        run: |
+          bun run --cwd packages/wouter prepublishOnly
+          bun run --cwd packages/wouter-preact prepublishOnly
+      - run: bun run test-types
+      - run: bun run lint
+      - run: bun run size
+
+      - name: Pack and inspect both packages
+        run: |
+          mkdir -p "$RUNNER_TEMP/packages"
+          npm pack --workspace wouter --workspace wouter-preact --ignore-scripts --json --pack-destination "$RUNNER_TEMP/packages" > "$RUNNER_TEMP/packages.json"
+          bun - <<'JS'
+          const packed = await Bun.file(`${process.env.RUNNER_TEMP}/packages.json`).json();
+          if (packed.length !== 2) throw new Error("Expected both packages");
+          for (const pkg of packed) {
+            const manifest = await Bun.file(`packages/${pkg.name}/package.json`).json();
+            const files = new Set(pkg.files.map(file => file.path));
+            const required = ["README.md", "src/react-deps.js", "src/paths.js", ...Object.values(manifest.exports).flatMap(entry => Object.values(entry))];
+            for (const path of required) {
+              if (!files.has(path.replace(/^\.\//, ""))) throw new Error(`${pkg.name} is missing ${path}`);
+            }
+          }
+          JS
+
+      - name: Publish missing versions to npm
+        if: ${{ !inputs.dry_run }}
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          DIST_TAG: ${{ steps.release.outputs.dist_tag }}
+        run: |
+          for package in wouter wouter-preact; do
+            # Allow recovery when only one package was published on a previous run.
+            if npm view "$package@$VERSION" version --json > "$RUNNER_TEMP/version.json"; then
+              echo "$package@$VERSION already exists; skipping"
+              continue
+            elif ! jq -e '.error.code == "E404"' "$RUNNER_TEMP/version.json" > /dev/null; then
+              echo "::error::Could not check $package@$VERSION on npm"
+              exit 1
+            fi
+            npm publish "$RUNNER_TEMP/packages/$package-$VERSION.tgz" --ignore-scripts --access public --tag "$DIST_TAG"
+          done
