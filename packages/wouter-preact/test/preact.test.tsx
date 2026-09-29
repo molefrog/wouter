@@ -160,7 +160,8 @@ describe("Preact support", () => {
       );
     };
 
-    let node = render(<App />, container);
+    // render inside `act` so that effects run and routes subscribe to location updates
+    act(() => render(<App />, container));
 
     const routesEl = container.querySelector('[data-testid="routes"]')!;
     const indexLinkEl = container.querySelector('[data-testid="index-link"]')!;
@@ -190,6 +191,12 @@ describe("Preact support", () => {
 
     // Link accepts an `onClick` prop, fired after the navigation
     expect(fn).toHaveBeenCalledTimes(1);
+
+    // subscribed routes re-render with the new location
+    expect(routesEl.textContent).toBe("Rolling Stones Best 100 Albums");
+
+    act(() => render(null, container));
+    container.remove();
   });
 });
 
