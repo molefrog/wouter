@@ -1,8 +1,0 @@
----
-description: Publishing wouter and wouter-preact
-alwaysApply: true
----
-
-Follow [RELEASING.md](../../RELEASING.md) for npm setup and releases.
-Both packages are published by `.github/workflows/release.yml`, triggered by a
-version tag or a manual Actions run. Do not publish from a local npm session.

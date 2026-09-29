@@ -3,6 +3,9 @@
 Small, hook-based routing for React and Preact. Keep changes focused and avoid
 adding runtime dependencies or unnecessary bytes.
 
+This file is the shared source of instructions for coding agents. Keep guidance
+here or in linked Markdown documents, rather than editor-specific rule files.
+
 ## Layout and commands
 
 - `packages/wouter/src/` is the shared JavaScript implementation; types live in
@@ -16,6 +19,17 @@ adding runtime dependencies or unnecessary bytes.
 - Packages ship source files directly. There is no separate bundle build.
 - For releases, follow [RELEASING.md](RELEASING.md). npm is used only for packing
   and publishing through GitHub Actions with trusted publishing.
+
+## Development principles
+
+- Preserve backward compatibility. Update both packages' type definitions and the
+  README when changing a public API.
+- Use hooks and functions; preserve stable references where callers rely on them
+  to avoid unnecessary renders.
+- Add focused regression tests for behavior changes. Use `memoryLocation` for
+  isolated routing tests; check React, Preact, and SSR when relevant.
+- Check bundle size for runtime changes. Support performance claims with a
+  before-and-after measurement.
 
 ## Pull request descriptions
 
