@@ -34,6 +34,10 @@
     "./memory-location": {
       "types": "./types/memory-location.d.ts",
       "default": "./src/memory-location.js"
+    },
+    "./url-pattern": {
+      "types": "./types/url-pattern.d.ts",
+      "default": "./src/url-pattern.js"
     }
   },
   "types": "types/index.d.ts",
@@ -50,11 +54,14 @@
       ],
       "memory-location": [
         "types/memory-location.d.ts"
+      ],
+      "url-pattern": [
+        "types/url-pattern.d.ts"
       ]
     }
   },
   "scripts": {
-    "prepublishOnly": "cp ../wouter/src/index.js ../wouter/src/memory-location.js ../wouter/src/paths.js ../wouter/src/use-browser-location.js ../wouter/src/use-hash-location.js ../wouter/src/use-sync-external-store.js ../wouter/src/use-sync-external-store.native.js src && cp ../../README.md ."
+    "prepublishOnly": "cp ../wouter/src/index.js ../wouter/src/memory-location.js ../wouter/src/paths.js ../wouter/src/url-pattern.js ../wouter/src/use-browser-location.js ../wouter/src/use-hash-location.js ../wouter/src/use-sync-external-store.js ../wouter/src/use-sync-external-store.native.js src && cp ../../README.md ."
   },
   "author": "Alexey Taktarov <molefrog@gmail.com>",
   "repository": {

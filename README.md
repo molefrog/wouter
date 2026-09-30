@@ -77,6 +77,7 @@ dashboards and more.
   - [`<Switch />`](#switch-)
   - [`<Redirect to={path} />`](#redirect-topath-)
   - [`<Router hook={hook} parser={fn} base={basepath} />`](#router-hookhook-parserfn-basebasepath-hrefsfn-)
+    - [URLPattern route matching](#urlpattern-route-matching)
 
 - [FAQ and Code Recipes](#faq-and-code-recipes)
   - [I deploy my app to the subfolder. Can I specify a base path?](#i-deploy-my-app-to-the-subfolder-can-i-specify-a-base-path)
@@ -637,8 +638,8 @@ available options:
   application routes will be relative to that path. To navigate out to an absolute path, prefix your path with an `~`. [See the FAQ](#are-relative-routes-and-links-supported).
 
 - **`parser: (path: string, loose?: boolean) => { pattern, keys }`** — a pattern parsing
-  function. Produces a RegExp for matching the current location against the user-defined patterns like
-  `/app/users/:id`. Has the same interface as the [`parse`](https://github.com/lukeed/regexparam?tab=readme-ov-file#regexparamparseinput-regexp) function from `regexparam`. See [this example](#are-strict-routes-supported) that demonstrates custom parser feature.
+  function. Produces a RegExp or an object with a compatible `exec` method for matching the current location against user-defined patterns like
+  `/app/users/:id`. `keys` can be omitted when matches provide named `groups`. The default parser is [`parse`](https://github.com/lukeed/regexparam?tab=readme-ov-file#regexparamparseinput-regexp) from `regexparam`. See [this example](#are-strict-routes-supported) that demonstrates custom parser feature.
 
 - **`ssrPath: string`** and **`ssrSearch: string`** use these when [rendering your app on the server](#server-side-rendering-support-ssr).
 
@@ -655,6 +656,26 @@ available options:
     // do something after navigation
   };
   ```
+
+### URLPattern route matching
+
+To use native [URLPattern](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern) syntax for string routes, opt in with the separate `wouter/url-pattern` module. It requires a browser or runtime with `URLPattern` support:
+
+```jsx
+import { Router, Route } from "wouter";
+import { urlPatternParser } from "wouter/url-pattern";
+
+<Router parser={urlPatternParser}>
+  {/* Matches /users and /users/42 */}
+  <Route path="/users{/:id}?">
+    {(params) => <>User: {params.id ?? "all"}</>}
+  </Route>
+</Router>;
+```
+
+For Preact, import from `wouter-preact/url-pattern`. The adapter matches only the pathname and supports nested routes with `nest`. It follows native URLPattern semantics: matching is case-sensitive, and `/users` and `/users/` are distinct. Parameters are the native pathname groups, including numeric names for unnamed groups, and their values remain URL-encoded. Regular expression routes still work. The default parser and its syntax remain unchanged unless you select this adapter.
+
+TypeScript's automatic parameter inference follows the default parser's syntax. For more complex URLPattern patterns, specify parameter types explicitly, such as `useRoute<{ id?: string }>("/users{/:id}?")` or `<Route<{ id?: string }> path="/users{/:id}?">`. You can also use the exported `DefaultParams` type for arbitrary parameter names.
 
 ## FAQ and Code Recipes
 

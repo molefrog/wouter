@@ -30,6 +30,7 @@ const filesToCopy = [
   "use-sync-external-store.js",
   "use-sync-external-store.native.js",
   "index.js",
+  "url-pattern.js",
 ];
 
 async function loadPreact(): Promise<typeof WouterPreact> {
@@ -197,6 +198,45 @@ describe("Preact support", () => {
 
     act(() => render(null, container));
     container.remove();
+  });
+
+  test("URLPattern routes inherit nested params and react to navigation", async () => {
+    const { Router, Route, Switch, useParams, useRouter } = await loadPreact();
+    const { urlPatternParser } = await import("wouter-preact/url-pattern");
+    const { memoryLocation } = await import("wouter-preact/memory-location");
+    const { hook, navigate } = memoryLocation({
+      path: "/app/users/42/posts/7",
+    });
+    const container = document.body.appendChild(document.createElement("div"));
+    const Post = () => {
+      const { id, post } = useParams<{ id: string; post: string }>();
+      return <>{`${id}:${post}:${useRouter().base}`}</>;
+    };
+    try {
+      act(() => {
+        render(
+          <Router parser={urlPatternParser} base="/app" hook={hook}>
+            <Switch>
+              <Route path={"/users/:id(\\d+)"} nest>
+                <Route path="/posts/:post">
+                  <Post />
+                </Route>
+              </Route>
+              <Route>Fallback</Route>
+            </Switch>
+          </Router>,
+          container
+        );
+      });
+      expect(container.textContent).toBe("42:7:/app/users/42");
+      act(() => navigate("/app/users/42/posts/8"));
+      expect(container.textContent).toBe("42:8:/app/users/42");
+      act(() => navigate("/app/users/alex/posts/8"));
+      expect(container.textContent).toBe("Fallback");
+    } finally {
+      act(() => render(null, container));
+      container.remove();
+    }
   });
 });
 
