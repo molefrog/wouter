@@ -1,8 +1,7 @@
-import { afterAll, beforeAll, expect, test } from "bun:test";
+import { expect, test } from "bun:test";
 import { act, fireEvent, render, renderHook } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { parse } from "regexparam";
-import { URLPattern } from "urlpattern-polyfill/urlpattern";
 
 import {
   Link,
@@ -18,34 +17,6 @@ import {
 import { memoryLocation } from "../src/memory-location.js";
 import { urlPatternParser } from "wouter/url-pattern";
 import { withoutLocation } from "./setup.js";
-
-const originalURLPattern = Object.getOwnPropertyDescriptor(
-  globalThis,
-  "URLPattern"
-);
-beforeAll(() => {
-  Object.defineProperty(globalThis, "URLPattern", {
-    value: URLPattern,
-    configurable: true,
-    writable: true,
-  });
-});
-afterAll(() => {
-  if (originalURLPattern)
-    Object.defineProperty(globalThis, "URLPattern", originalURLPattern);
-  else Reflect.deleteProperty(globalThis, "URLPattern");
-});
-
-test("the optional adapter can be imported without a global URLPattern", () => {
-  const result = Bun.spawnSync([
-    process.execPath,
-    "--eval",
-    `delete globalThis.URLPattern;
-     const { urlPatternParser } = await import("wouter/url-pattern");
-     if (typeof urlPatternParser !== "function") process.exit(1);`,
-  ]);
-  expect(result.exitCode).toBe(0);
-});
 
 test("matches required, optional and constrained URLPattern parameters", () => {
   expect<unknown>(

@@ -659,7 +659,7 @@ available options:
 
 ### URLPattern route matching
 
-To use native [URLPattern](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern) syntax for string routes, opt in with the separate `wouter/url-pattern` module:
+To use native [URLPattern](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern) syntax for string routes, opt in with the separate `wouter/url-pattern` module. It requires a browser or runtime with `URLPattern` support:
 
 ```jsx
 import { Router, Route } from "wouter";
@@ -674,8 +674,6 @@ import { urlPatternParser } from "wouter/url-pattern";
 ```
 
 For Preact, import from `wouter-preact/url-pattern`. The adapter matches only the pathname and supports nested routes with `nest`. It follows native URLPattern semantics: matching is case-sensitive, and `/users` and `/users/` are distinct. Parameters are the native pathname groups, including numeric names for unnamed groups, and their values remain URL-encoded. Regular expression routes still work. The default parser and its syntax remain unchanged unless you select this adapter.
-
-If your browser or SSR runtime lacks `URLPattern`, load a polyfill such as [`urlpattern-polyfill`](https://github.com/kenchris/urlpattern-polyfill) that defines `globalThis.URLPattern` before matching routes. The adapter includes no polyfill.
 
 TypeScript's automatic parameter inference follows the default parser's syntax. For more complex URLPattern patterns, specify parameter types explicitly, such as `useRoute<{ id?: string }>("/users{/:id}?")` or `<Route<{ id?: string }> path="/users{/:id}?">`. You can also use the exported `DefaultParams` type for arbitrary parameter names.
 

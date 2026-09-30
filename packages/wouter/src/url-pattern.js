@@ -1,6 +1,6 @@
 /* global URLPattern */
 
-// Opt-in URLPattern adapter. Load a polyfill before using it where needed.
+// Opt-in adapter for the native URLPattern API.
 export const urlPatternParser = (route, loose) => {
   const pattern = new URLPattern({ pathname: route });
 

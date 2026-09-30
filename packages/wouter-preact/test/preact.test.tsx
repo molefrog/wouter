@@ -15,7 +15,6 @@ import {
 import { render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
 import renderToString from "preact-render-to-string";
-import { URLPattern } from "urlpattern-polyfill/urlpattern";
 import { copyFile, rm } from "fs/promises";
 import { join } from "path";
 import type * as WouterPreact from "../types/index.js";
@@ -34,11 +33,6 @@ const filesToCopy = [
   "url-pattern.js",
 ];
 
-const originalURLPattern = Object.getOwnPropertyDescriptor(
-  globalThis,
-  "URLPattern"
-);
-
 async function loadPreact(): Promise<typeof WouterPreact> {
   // Import from the copied files in src/ directory
   const module = (await import(
@@ -48,11 +42,6 @@ async function loadPreact(): Promise<typeof WouterPreact> {
 }
 
 beforeAll(async () => {
-  Object.defineProperty(globalThis, "URLPattern", {
-    value: URLPattern,
-    configurable: true,
-    writable: true,
-  });
   const wouterSrc = join(import.meta.dir, "../../wouter/src");
   const preactSrc = join(import.meta.dir, "../src");
 
@@ -62,9 +51,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  if (originalURLPattern)
-    Object.defineProperty(globalThis, "URLPattern", originalURLPattern);
-  else Reflect.deleteProperty(globalThis, "URLPattern");
   const preactSrc = join(import.meta.dir, "../src");
 
   for (const file of filesToCopy) {

@@ -160,7 +160,6 @@
     "react": "^19",
     "react-dom": "^19",
     "size-limit": "^11.2.0",
-    "typescript": "^5.8.0",
-    "urlpattern-polyfill": "^10.1.0"
+    "typescript": "^5.8.0"
   }
 }
