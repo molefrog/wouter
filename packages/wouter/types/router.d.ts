@@ -9,7 +9,7 @@ import {
 export type Parser = (
   route: Path,
   loose?: boolean
-) => { pattern: RegExp; keys: string[] };
+) => { pattern: Pick<RegExp, "exec">; keys?: string[] };
 
 // Standard navigation options supported by all built-in location hooks
 export type NavigateOptions<S = any> = {

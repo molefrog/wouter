@@ -15,6 +15,7 @@ import {
 import { render } from "preact";
 import { act, setupRerender, teardown } from "preact/test-utils";
 import renderToString from "preact-render-to-string";
+import { URLPattern } from "urlpattern-polyfill/urlpattern";
 import { copyFile, rm } from "fs/promises";
 import { join } from "path";
 import type * as WouterPreact from "../types/index.js";
@@ -30,7 +31,13 @@ const filesToCopy = [
   "use-sync-external-store.js",
   "use-sync-external-store.native.js",
   "index.js",
+  "url-pattern.js",
 ];
+
+const originalURLPattern = Object.getOwnPropertyDescriptor(
+  globalThis,
+  "URLPattern"
+);
 
 async function loadPreact(): Promise<typeof WouterPreact> {
   // Import from the copied files in src/ directory
@@ -41,6 +48,11 @@ async function loadPreact(): Promise<typeof WouterPreact> {
 }
 
 beforeAll(async () => {
+  Object.defineProperty(globalThis, "URLPattern", {
+    value: URLPattern,
+    configurable: true,
+    writable: true,
+  });
   const wouterSrc = join(import.meta.dir, "../../wouter/src");
   const preactSrc = join(import.meta.dir, "../src");
 
@@ -50,6 +62,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  if (originalURLPattern)
+    Object.defineProperty(globalThis, "URLPattern", originalURLPattern);
+  else Reflect.deleteProperty(globalThis, "URLPattern");
   const preactSrc = join(import.meta.dir, "../src");
 
   for (const file of filesToCopy) {
@@ -197,6 +212,45 @@ describe("Preact support", () => {
 
     act(() => render(null, container));
     container.remove();
+  });
+
+  test("URLPattern routes inherit nested params and react to navigation", async () => {
+    const { Router, Route, Switch, useParams, useRouter } = await loadPreact();
+    const { urlPatternParser } = await import("wouter-preact/url-pattern");
+    const { memoryLocation } = await import("wouter-preact/memory-location");
+    const { hook, navigate } = memoryLocation({
+      path: "/app/users/42/posts/7",
+    });
+    const container = document.body.appendChild(document.createElement("div"));
+    const Post = () => {
+      const { id, post } = useParams<{ id: string; post: string }>();
+      return <>{`${id}:${post}:${useRouter().base}`}</>;
+    };
+    try {
+      act(() => {
+        render(
+          <Router parser={urlPatternParser} base="/app" hook={hook}>
+            <Switch>
+              <Route path={"/users/:id(\\d+)"} nest>
+                <Route path="/posts/:post">
+                  <Post />
+                </Route>
+              </Route>
+              <Route>Fallback</Route>
+            </Switch>
+          </Router>,
+          container
+        );
+      });
+      expect(container.textContent).toBe("42:7:/app/users/42");
+      act(() => navigate("/app/users/42/posts/8"));
+      expect(container.textContent).toBe("42:8:/app/users/42");
+      act(() => navigate("/app/users/alex/posts/8"));
+      expect(container.textContent).toBe("Fallback");
+    } finally {
+      act(() => render(null, container));
+      container.remove();
+    }
   });
 });
 

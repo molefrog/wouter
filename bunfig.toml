@@ -7,6 +7,7 @@ coveragePathIgnorePatterns = [
   # already measured at their original path (react-deps.js is preact-specific and stays measured)
   "packages/wouter-preact/src/index.js",
   "packages/wouter-preact/src/paths.js",
+  "packages/wouter-preact/src/url-pattern.js",
   "packages/wouter-preact/src/memory-location.js",
   "packages/wouter-preact/src/use-browser-location.js",
   "packages/wouter-preact/src/use-hash-location.js",

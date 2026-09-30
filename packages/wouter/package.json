@@ -34,6 +34,10 @@
     "./memory-location": {
       "types": "./types/memory-location.d.ts",
       "default": "./src/memory-location.js"
+    },
+    "./url-pattern": {
+      "types": "./types/url-pattern.d.ts",
+      "default": "./src/url-pattern.js"
     }
   },
   "types": "types/index.d.ts",
@@ -50,6 +54,9 @@
       ],
       "memory-location": [
         "types/memory-location.d.ts"
+      ],
+      "url-pattern": [
+        "types/url-pattern.d.ts"
       ]
     }
   },

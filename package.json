@@ -54,6 +54,10 @@
       ]
     },
     {
+      "path": "packages/wouter/src/url-pattern.js",
+      "limit": "500 B"
+    },
+    {
       "path": "packages/wouter/src/use-hash-location.js",
       "limit": "1000 B",
       "ignore": [
@@ -93,6 +97,10 @@
         "preact",
         "preact/hooks"
       ]
+    },
+    {
+      "path": "packages/wouter-preact/src/url-pattern.js",
+      "limit": "500 B"
     }
   ],
   "husky": {
@@ -152,6 +160,7 @@
     "react": "^19",
     "react-dom": "^19",
     "size-limit": "^11.2.0",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "urlpattern-polyfill": "^10.1.0"
   }
 }
