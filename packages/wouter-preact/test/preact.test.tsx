@@ -202,8 +202,12 @@ describe("Preact support", () => {
 
   test("URLPattern routes inherit nested params and react to navigation", async () => {
     const { Router, Route, Switch, useParams, useRouter } = await loadPreact();
-    const { urlPatternParser } = await import("wouter-preact/url-pattern");
-    const { memoryLocation } = await import("wouter-preact/memory-location");
+    const { urlPatternParser } = await import(
+      join(import.meta.dir, "../src/url-pattern.js")
+    );
+    const { memoryLocation } = await import(
+      join(import.meta.dir, "../src/memory-location.js")
+    );
     const { hook, navigate } = memoryLocation({
       path: "/app/users/42/posts/7",
     });
