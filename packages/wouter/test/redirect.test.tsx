@@ -31,7 +31,7 @@ test("supports `base` routers with absolute path", () => {
     </Router>
   );
 
-  expect(location.pathname).toBe("/absolute");
+  expect(location.pathname).toBe("/app/absolute");
 });
 
 test("supports replace navigation", () => {

@@ -3,8 +3,10 @@
  */
 const baseDefaults = (base = "") => (base === "/" ? "" : base);
 
-export const absolutePath = (to, base) =>
-  to[0] === "~" ? to.slice(1) : baseDefaults(base) + to;
+export const absolutePath = (to, base, explicitBase) =>
+  to[0] === "~"
+    ? baseDefaults(explicitBase ?? base) + to.slice(1)
+    : baseDefaults(base) + to;
 
 /*
  * Transforms `path` into its relative `base` version

@@ -175,7 +175,7 @@ test("Switch, inherited params and links work with nested URLPattern routes", ()
   );
   const [next, outside] = Array.from(container.querySelectorAll("a"));
   expect(next.getAttribute("href")).toBe("/app/users/42/posts/8");
-  expect(outside.getAttribute("href")).toBe("/outside");
+  expect(outside.getAttribute("href")).toBe("/app/outside");
   fireEvent.click(next);
   expect(container.querySelector("span")?.textContent).toBe(
     "42:8:/app/users/42:/posts/8"

@@ -140,7 +140,7 @@ describe("<Link />", () => {
     expect(link.getAttribute("href")).toBe("/app/dashboard");
   });
 
-  test("renders `href` with absolute links", () => {
+  test("renders `href` with absolute links respecting base", () => {
     const { getByTestId } = render(
       <Router base="/app">
         <Link href="~/home" data-testid="link" />
@@ -148,7 +148,20 @@ describe("<Link />", () => {
     );
 
     const element = getByTestId("link");
-    expect(element).toHaveAttribute("href", "/home");
+    expect(element).toHaveAttribute("href", "/app/home");
+  });
+
+  test("renders `href` with absolute links in nested routes", () => {
+    const { getByTestId } = render(
+      <Router base="/app">
+        <Router base="/schedule">
+          <Link href="~/home" data-testid="link" />
+        </Router>
+      </Router>
+    );
+
+    const element = getByTestId("link");
+    expect(element.getAttribute("href")).toBe("/app/home");
   });
 
   test("supports history state", () => {
@@ -180,9 +193,9 @@ describe("<Link />", () => {
       </>
     );
 
-    expect(getByTestId("root")).toHaveAttribute("href", "#/");
-    expect(getByTestId("home")).toHaveAttribute("href", "#/home");
-    expect(getByTestId("absolute")).toHaveAttribute("href", "#/home");
+    expect(getByTestId("root").getAttribute("href")).toBe("#/");
+    expect(getByTestId("home").getAttribute("href")).toBe("#/home");
+    expect(getByTestId("absolute").getAttribute("href")).toBe("#/app/home");
   });
 });
 
@@ -402,5 +415,48 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link.tagName).toBe("A");
     expect(link).toHaveAttribute("href", undefined);
     expect(link).toHaveTextContent("Click Me");
+  });
+
+  test("issue #558: ~ paths respect base in nested routes", () => {
+    const memLoc = memoryLocation({
+      path: "/app/schedule/2026-02-11",
+    });
+
+    const ScheduleDetail = () => (
+      <div>
+        <h1>Schedule Detail</h1>
+        <Link href="~/schedule" data-testid="back-link">
+          Back to Overview
+        </Link>
+      </div>
+    );
+
+    const { getByTestId } = render(
+      <Router base="/app" hook={memLoc.hook}>
+        <Router base="/schedule">
+          <ScheduleDetail />
+        </Router>
+      </Router>
+    );
+
+    const backLink = getByTestId("back-link");
+    expect(backLink.getAttribute("href")).toBe("/app/schedule");
+
+    fireEvent.click(backLink);
+    
+    // The navigate function will trigger, and we can verify by rendering a component
+    // that uses the location hook
+    const LocationDisplay = () => {
+      const [location] = memLoc.hook();
+      return <div data-testid="location">{location}</div>;
+    };
+    
+    const { getByTestId: getByTestId2 } = render(
+      <Router hook={memLoc.hook}>
+        <LocationDisplay />
+      </Router>
+    );
+    
+    expect(getByTestId2("location").textContent).toBe("/app/schedule");
   });
 });
