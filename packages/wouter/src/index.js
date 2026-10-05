@@ -33,6 +33,8 @@ const defaultRouter = {
   searchHook: useBrowserSearch,
   parser: parsePattern,
   base: "",
+  // tracks only explicit Router base props (not nested route bases)
+  explicitBase: "",
   // this option is used to override the current location during SSR
   ssrPath: undefined,
   ssrSearch: undefined,
@@ -77,7 +79,11 @@ const useLocationFromRouter = (router) => {
   return [
     relativePath(router.base, location),
     useEvent((to, opts) =>
-      router.aroundNav(navigate, absolutePath(to, router.base), opts)
+      router.aroundNav(
+        navigate,
+        absolutePath(to, router.base, router.explicitBase),
+        opts
+      )
     ),
   ];
 };
@@ -170,7 +176,16 @@ export const Router = ({ children, ...props }) => {
       k === "base"
         ? /* base is special case, it is appended to the parent's base */
           parent[k] + (props[k] ?? "")
-        : props[k] ?? parent[k];
+        : k === "explicitBase"
+          ? /* explicitBase tracks the root explicit Router base and is inherited unchanged */
+            parent[k] === ""
+            ? /* if parent has no explicit base, use this Router's base (if not nested) */
+              props.base !== undefined && !props._nested
+              ? props.base
+              : ""
+            : /* otherwise inherit parent's explicit base unchanged */
+              parent[k]
+          : props[k] ?? parent[k];
 
     if (option !== next[k]) {
       if (prev === next) ref.current = next = { ...next };
@@ -246,7 +261,7 @@ export const Route = ({ path, nest, match, ...renderProps }) => {
   return h(
     ParamsCtx.Provider,
     { value: params },
-    base ? h(Router, { base }, children) : children
+    base ? h(Router, { base, _nested: true }, children) : children
   );
 };
 
@@ -291,7 +306,9 @@ export const Link = forwardRef((props, ref) => {
 
   // handle nested routers and absolute paths
   linkProps.href = router.hrefs(
-    targetPath[0] === "~" ? targetPath.slice(1) : router.base + targetPath,
+    targetPath[0] === "~"
+      ? (router.explicitBase || "") + targetPath.slice(1)
+      : router.base + targetPath,
     router // pass router as a second argument for convinience
   );
 
