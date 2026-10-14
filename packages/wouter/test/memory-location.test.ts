@@ -3,6 +3,20 @@ import { renderHook, act } from "@testing-library/react";
 import { useState } from "react";
 import { memoryLocation } from "../src/memory-location.js";
 
+test("appends searchPath after an empty query delimiter", () => {
+  const memory = memoryLocation({
+    path: "/search?",
+    searchPath: "page=2",
+    record: true,
+  });
+  const { result } = renderHook(() => [memory.hook()[0], memory.searchHook()]);
+  expect(result.current).toEqual(["/search", "page=2"]);
+  expect(memory.history).toEqual(["/search?page=2"]);
+  act(() => memory.navigate("/other"));
+  act(() => memory.reset!());
+  expect(result.current).toEqual(["/search", "page=2"]);
+});
+
 test("returns a hook that is compatible with location spec", () => {
   const { hook } = memoryLocation();
 
