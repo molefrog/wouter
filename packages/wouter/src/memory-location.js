@@ -13,8 +13,7 @@ export const memoryLocation = ({
 } = {}) => {
   let initialPath = path;
   if (searchPath) {
-    // join with & if path contains search query, and ? otherwise
-    initialPath += path.split("?")[1] ? "&" : "?";
+    initialPath += path.includes("?") ? (path.split("?")[1] ? "&" : "") : "?";
     initialPath += searchPath;
   }
 
