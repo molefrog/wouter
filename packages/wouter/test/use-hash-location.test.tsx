@@ -2,7 +2,7 @@ import { test, expect, mock } from "bun:test";
 import { renderHook, render, act, fireEvent } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Router, Route, useLocation, Link } from "../src/index.js";
+import { Router, Route, useLocation, useSearch, Link } from "../src/index.js";
 import { useHashLocation } from "../src/use-hash-location.js";
 
 import { waitForHashChangeEvent } from "./test-utils";
@@ -376,4 +376,38 @@ test("uses string URLs as hashchange event payload", () => {
   expect(changeEvent?.oldURL).toBe(`${baseURL}${relativeOldPath}`);
 
   removeEventListener("hashchange", hashChangeFn);
+});
+
+test("Link href keeps a query before the hash so opening it matches the route", () => {
+  history.replaceState(null, "", "/app#/home");
+
+  const { getByRole, unmount } = render(
+    <Router hook={useHashLocation}>
+      <Link href="/settings?tab=profile">Settings</Link>
+    </Router>
+  );
+
+  const href = getByRole("link", { name: "Settings" }).getAttribute("href");
+  expect(href).toBe("?tab=profile#/settings");
+  unmount();
+
+  const opened = new URL(href!, "https://example.test/app");
+  history.replaceState(null, "", opened.pathname + opened.search + opened.hash);
+
+  const Settings = () => {
+    const search = useSearch();
+    return <>Settings page {search}</>;
+  };
+
+  const { getByText, queryByText } = render(
+    <Router hook={useHashLocation}>
+      <Route path="/settings">
+        <Settings />
+      </Route>
+      <Route path="/home">Home</Route>
+    </Router>
+  );
+
+  expect(queryByText("Home")).not.toBeInTheDocument();
+  expect(getByText("Settings page tab=profile")).toBeInTheDocument();
 });

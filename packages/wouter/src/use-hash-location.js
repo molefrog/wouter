@@ -51,4 +51,11 @@ export const useHashLocation = ({ ssrPath = "/" } = {}) => [
   navigate,
 ];
 
-useHashLocation.hrefs = (href) => "#" + href;
+// Search stays before the hash, matching `navigate`. A query inside the hash
+// (`#/settings?tab=1`) is not a separate search and fails route matching.
+useHashLocation.hrefs = (href) => {
+  const queryAt = href.indexOf("?");
+  return queryAt < 0
+    ? "#" + href
+    : href.slice(queryAt) + "#" + href.slice(0, queryAt);
+};
