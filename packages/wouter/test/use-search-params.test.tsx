@@ -67,6 +67,7 @@ it("does not add question mark when search string is empty", () => {
 });
 
 it("does not double-decode search params", () => {
+  
   history.replaceState(null, "", "/?q=%25action");
 
   const { result } = renderHook(() => useSearchParams());
