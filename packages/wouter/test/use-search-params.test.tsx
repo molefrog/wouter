@@ -65,3 +65,12 @@ it("does not add question mark when search string is empty", () => {
   act(() => result.current[1]({}));
   expect(location.href).toBe("https://wouter.dev/");
 });
+
+it("does not double-decode search params", () => {
+  
+  history.replaceState(null, "", "/?q=%25action");
+
+  const { result } = renderHook(() => useSearchParams());
+
+  expect(result.current[0].get("q")).toBe("%action");
+});
