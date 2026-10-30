@@ -208,7 +208,8 @@ const useCachedParams = (value) => {
 export function useSearchParams() {
   const [location, navigate] = useLocation();
 
-  const search = useSearch();
+  const router = useRouter();
+  const search = router.searchHook(router);
   const searchParams = useMemo(() => new URLSearchParams(search), [search]);
 
   // cached value before next render, so you can call setSearchParams multiple times
