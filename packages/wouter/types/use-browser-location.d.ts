@@ -33,3 +33,11 @@ export type BrowserLocationHook = (options?: {
 }) => [Path, typeof navigate];
 
 export const useBrowserLocation: BrowserLocationHook;
+
+/** Browser location hooks bound to a window, such as a same-origin iframe. */
+export const browserLocation: (options?: { window?: Window }) => {
+  hook: BrowserLocationHook & { searchHook: BrowserSearchHook };
+  searchHook: BrowserSearchHook;
+  navigate: typeof navigate;
+  useHistoryState: typeof useHistoryState;
+};
