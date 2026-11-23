@@ -17,6 +17,7 @@ import { act, setupRerender, teardown } from "preact/test-utils";
 import renderToString from "preact-render-to-string";
 import { copyFile, rm } from "fs/promises";
 import { join } from "path";
+import { Window as HappyWindow } from "happy-dom";
 import type * as WouterPreact from "../types/index.js";
 
 const assertType = <T,>(_value: T): void => {};
@@ -65,6 +66,68 @@ describe("Preact support", () => {
 
   afterEach(() => {
     teardown();
+  });
+
+  test("scoped browser hooks route and navigate independently of the global window", async () => {
+    const { Router, Link, useLocation, useSearch } = await loadPreact();
+    const { browserLocation } = (await import(
+      join(import.meta.dir, "../src/use-browser-location.js")
+    )) as typeof import("../types/use-browser-location.js");
+    const target = new HappyWindow({
+      url: "https://wouter.dev/app/start?q=first",
+    });
+    const scoped = browserLocation({ window: target as unknown as Window });
+    const container = document.body.appendChild(document.createElement("div"));
+    const Page = () => {
+      const [path] = useLocation();
+      const search = useSearch();
+      const state = scoped.useHistoryState<{ page: number } | null>();
+      return (
+        <>
+          <output>{`${path}|${search}|${state?.page ?? "none"}`}</output>
+          <Link href="/next?q=second" state={{ page: 2 }}>
+            Next
+          </Link>
+        </>
+      );
+    };
+    try {
+      act(() =>
+        render(
+          <Router base="/app" hook={scoped.hook}>
+            <Page />
+          </Router>,
+          container
+        )
+      );
+      expect(container.querySelector("output")!.textContent).toBe(
+        "/start|q=first|none"
+      );
+      act(() => {
+        container.querySelector("a")!.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            button: 0,
+          })
+        );
+      });
+      expect(container.querySelector("output")!.textContent).toBe(
+        "/next|q=second|2"
+      );
+      expect(target.location.pathname).toBe("/app/next");
+      expect(location.pathname).toBe("/");
+      act(() =>
+        target.history.replaceState({ page: 3 }, "", "/app/raw?q=third")
+      );
+      expect(container.querySelector("output")!.textContent).toBe(
+        "/raw|q=third|3"
+      );
+    } finally {
+      act(() => render(null, container));
+      container.remove();
+      await target.happyDOM.abort();
+    }
   });
 
   test("asChild forwards props and preserves the child's ref (#536)", async () => {

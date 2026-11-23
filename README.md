@@ -158,6 +158,7 @@ These can be used separately from the main module and have an interface similar 
 
 - **[`import { useBrowserLocation } from "wouter/use-browser-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-browser-location.js)** —
   allows to manipulate current location in the browser's address bar, a tiny wrapper around the History API.
+- **[`import { browserLocation } from "wouter/use-browser-location"`](#how-do-i-use-a-different-browser-window)** — initializes browser location hooks for a supplied window, such as a same-origin iframe or an isolated Happy DOM window.
 - **[`import { useHashLocation } from "wouter/use-hash-location"`](https://github.com/molefrog/wouter/blob/v3/packages/wouter/src/use-hash-location.js)** — similarly, gets location from the hash part of the address, i.e. the string after a `#`.
 - **[`import { memoryLocation } from "wouter/memory-location"`](#uselocation-working-with-the-history)** — an in-memory location hook with history support, external navigation and immutable mode for testing. **Note** the module name because it is a high-order hook. See how memory location can be used in [testing](#how-do-i-configure-the-router-to-render-a-specific-route-in-tests).
 
@@ -1085,6 +1086,43 @@ it("performs a redirect", () => {
   expect(history).toStrictEqual(["/", "/unknown/route", "/orders"]);
 });
 ```
+
+### How do I use a different browser window?
+
+Use `browserLocation({ window })` when your router should read and navigate a
+window other than the global one. This is useful for same-origin iframes and
+tests that create their own Happy DOM window while still using the History API.
+
+```jsx
+import { Router } from "wouter";
+import { browserLocation } from "wouter/use-browser-location";
+
+// Initialize after the iframe has loaded, using its current contentWindow.
+const preview = browserLocation({ window: iframe.contentWindow });
+
+root.render(
+  <Router hook={preview.hook}>
+    <App />
+  </Router>
+);
+
+preview.navigate("/products?sort=price", { state: { page: 2 } });
+```
+
+The initializer returns `hook`, `searchHook`, `navigate`, and `useHistoryState`.
+The router automatically inherits `hook.searchHook`, so `useLocation()`, links,
+`useSearch()`, and `useSearchParams()` all use the supplied window. Use
+`preview.useHistoryState()` to read that window's history state. Navigation and
+raw `pushState`/`replaceState` calls notify only subscribers to that window;
+`popstate` and `hashchange` events are also observed there.
+
+Initialize once for each window. Repeated calls for the same supplied window
+reuse its hooks and subscriptions, and event listeners are removed when the last
+subscriber unmounts. The window must be accessible from the calling page (for
+example, a same-origin iframe). Reinitialize after an iframe loads a different
+document. The hooks accept the existing `ssrPath` and `ssrSearch` snapshots for
+server rendering. With no `window` option, the initializer uses the default
+browser hooks. For Preact, import from `wouter-preact/use-browser-location`.
 
 ### 1KB is too much, I can't afford it!
 
