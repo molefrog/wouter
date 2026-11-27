@@ -118,6 +118,44 @@ describe("<Link />", () => {
     expect(location.pathname).toBe("/");
   });
 
+  test("lets the browser handle links with a `target` other than `_self`", () => {
+    const clickHandler = mock();
+    const { getByTestId } = render(
+      <Link
+        href="/users"
+        target="_blank"
+        onClick={clickHandler}
+        data-testid="link"
+      >
+        click
+      </Link>
+    );
+
+    let defaultPrevented: boolean | undefined;
+    // window listeners run after Link's handler
+    addEventListener(
+      "click",
+      (event) => (defaultPrevented = event.defaultPrevented),
+      { once: true }
+    );
+
+    fireEvent.click(getByTestId("link"));
+    expect(clickHandler).toHaveBeenCalledTimes(1);
+    expect(defaultPrevented).toBe(false);
+    expect(location.pathname).toBe("/");
+  });
+
+  test("performs a navigation when the target is `_self`", () => {
+    const { getByTestId } = render(
+      <Link href="/users" target="_self" data-testid="link">
+        click
+      </Link>
+    );
+
+    fireEvent.click(getByTestId("link"));
+    expect(location.pathname).toBe("/users");
+  });
+
   test("accepts an `onClick` prop, fired before the navigation", () => {
     const clickHandler = mock();
 
@@ -389,6 +427,26 @@ describe("<Link /> with `asChild` prop", () => {
     expect(link).toHaveClass("link--wannabe");
     expect(link).toHaveAttribute("href", "/about");
     expect(link).toHaveTextContent("Click Me");
+  });
+
+  test("lets the browser handle the child's own `target`", () => {
+    const { getByText } = render(
+      <Link href="/about" asChild>
+        <a target="_blank">About</a>
+      </Link>
+    );
+
+    let defaultPrevented: boolean | undefined;
+    // window listeners run after Link's handler
+    addEventListener(
+      "click",
+      (event) => (defaultPrevented = event.defaultPrevented),
+      { once: true }
+    );
+
+    fireEvent.click(getByText("About"));
+    expect(defaultPrevented).toBe(false);
+    expect(location.pathname).toBe("/");
   });
 
   test("missing href or to won't crash", () => {
