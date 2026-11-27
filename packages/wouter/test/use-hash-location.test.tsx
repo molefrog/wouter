@@ -273,6 +273,26 @@ test("defines a custom way of rendering link hrefs", () => {
   expect(getByTestId("link")).toHaveAttribute("href", "#/app");
 });
 
+test("doesn't add a second # when href already starts with one", () => {
+  const { getByTestId } = render(
+    <Router hook={useHashLocation}>
+      <Link href="#/app" data-testid="link" />
+    </Router>
+  );
+
+  expect(getByTestId("link")).toHaveAttribute("href", "#/app");
+});
+
+test("preserves anchors in link hrefs", () => {
+  const { getByTestId } = render(
+    <Router hook={useHashLocation}>
+      <Link href="/app#anchor" data-testid="link" />
+    </Router>
+  );
+
+  expect(getByTestId("link")).toHaveAttribute("href", "#/app#anchor");
+});
+
 test("handles navigation with data: protocol", async () => {
   const originalHref = location.href;
   location.href = "data:text/html,content";
