@@ -51,4 +51,4 @@ export const useHashLocation = ({ ssrPath = "/" } = {}) => [
   navigate,
 ];
 
-useHashLocation.hrefs = (href) => `${!href.startsWith("#") ? "#" : ""}${href}`;
+useHashLocation.hrefs = (href) => href.replace(/^#?/, "#");
