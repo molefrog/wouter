@@ -283,7 +283,11 @@ export const Link = forwardRef((props, ref) => {
       return;
 
     _onClick?.(event);
-    if (!event.defaultPrevented) {
+    if (
+      !event.defaultPrevented &&
+      // let the browser handle links that open elsewhere, e.g. `target="_blank"`
+      (event.currentTarget.getAttribute("target") || "_self") === "_self"
+    ) {
       event.preventDefault();
       navigate(targetPath, props);
     }

@@ -526,6 +526,10 @@ import { Link } from "wouter"
 
 // all location hook options are supported
 <Link href="/" replace state={{ animate: true }} />
+
+// a `target` other than `_self` is left to the browser (e.g. a new tab),
+// while `href` still includes the router's base path
+<Link href="/report" target="_blank">Report</Link>
 ```
 
 Link will always wrap its children in an `<a />` tag, unless `asChild` prop is provided. Use this when you need to have a custom component that renders an `<a />` under the hood.
